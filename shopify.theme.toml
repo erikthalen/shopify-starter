@@ -1,0 +1,8 @@
+[environments.development]
+store = "ss-dev-1"
+theme = "124641968212"
+
+[environments.production]
+store = "ss-dev-1"
+theme = "124641968212"
+ignore = ["templates/*", "config/*"]

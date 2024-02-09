@@ -1,0 +1,18 @@
+<h1>{{ product.title }}</h1>
+
+<p>{{ product.description }}</p>
+
+{% render 'image' image: product.featured_image %}
+
+<ul>
+  {% for variant in product.variants %}
+    <li>
+      {{ variant.title }} - {{ variant.price | money_with_currency }}
+      {% render 'image' image: variant.featured_image %}
+    </li>
+  {% endfor %}
+</ul>
+
+<script>
+console.log({{ product | json }})
+</script>

@@ -1,0 +1,4 @@
+MissingTemplate:
+  enabled: true
+  ignore_missing:
+  - /snippets/vite.liquid

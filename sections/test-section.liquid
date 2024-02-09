@@ -1,0 +1,22 @@
+<div class="test-section">
+  <p>This is a test section</p>
+  <h1>{{ section.settings.text }}</h1>
+</div>
+
+{% schema %}
+{
+  "name": "Test section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Test section"
+    }
+  ]
+}
+{% endschema %}
