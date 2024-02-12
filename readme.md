@@ -20,7 +20,7 @@ yarn
 
 2. Add/update environment
 
-```toml
+```yaml
 # shopify.theme.toml
 [environments.development]
 store = "my-store"
