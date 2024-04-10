@@ -13,7 +13,7 @@ export default ({
   watch = false,
   asArray = false,
   exclude = null,
-}: any = {}) => {
+} = {}) => {
   if (!(root instanceof HTMLElement)) {
     console.warn('{ root } has to be an element')
     return
@@ -28,8 +28,8 @@ export default ({
 }
 
 function _refs(root: HTMLElement, exclude = null, asArray = false, namespaced = false) {
-  const camelCase = (s: string | undefined) => s ? s.replace(/-./g, x => x[1].toUpperCase()) : ''
-  const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+  const camelCase = s => s ? s.replace(/-./g, x => x[1].toUpperCase()) : ''
+  const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
 
   const attribute = namespaced ? `data-ref-${root.dataset.ref}` : 'data-ref'
   const elements = root.querySelectorAll(`[${attribute}]`)
@@ -40,7 +40,7 @@ function _refs(root: HTMLElement, exclude = null, asArray = false, namespaced = 
     if (exclude && element.closest(exclude)) return
 
     const dataset = 'ref' + (namespaced ? capitalize(camelCase(root.dataset.ref)) : '')
-    const keys = (camelCase((element as HTMLElement).dataset[dataset]) || 'item').split(' ')
+    const keys = (camelCase((element).dataset[dataset]) || 'item').split(' ')
 
     keys.forEach(key => {
       if (refs.has(key)) {
