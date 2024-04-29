@@ -8,6 +8,8 @@ With added functions (inside `/frontend/framework`) making some annoying aspects
 
 ## Getting started
 
+### Code
+
 1. Add this theme to your store
 
 Follow Shopify documentation on how. Typically zip this folder and upload it as a new theme.
@@ -15,7 +17,7 @@ Follow Shopify documentation on how. Typically zip this folder and upload it as 
 2. Install packages
 
 ```bash
-yarn
+pnpm install
 ```
 
 2. Add/update environment
@@ -25,12 +27,12 @@ yarn
 [environments.development]
 store = "my-store"
 theme = "123456789"
-ignore = ["templates/*", "config/*", "locales/*"]
+ignore = ["templates/*", "config/settings_data.json", "locales/*"]
 
 [environments.production]
 store = "my-store"
 theme = "123456789"
-ignore = ["templates/*", "config/*", "locales/*"]
+ignore = ["templates/*", "config/settings_data.json", "locales/*"]
 ```
 
 Where `theme` is the id you get from step 1.
@@ -40,7 +42,11 @@ Per default the scripts in `package.json` is setup to handle one `development` a
 3. Run dev server
 
 ```bash
-yarn dev
+pnpm run dev
 ```
 
 Site is now running locally on `http://127.0.0.1:9292`
+
+### Content
+
+The theme is setup to handle a dark and a light favicon, and a browser color theme. This is edited in theme settings.
