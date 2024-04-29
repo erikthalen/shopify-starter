@@ -25,11 +25,12 @@ yarn
 [environments.development]
 store = "my-store"
 theme = "123456789"
+ignore = ["templates/*", "config/*", "locales/*"]
 
 [environments.production]
 store = "my-store"
 theme = "123456789"
-ignore = ["templates/*", "config/*"]
+ignore = ["templates/*", "config/*", "locales/*"]
 ```
 
 Where `theme` is the id you get from step 1.
