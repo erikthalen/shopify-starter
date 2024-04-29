@@ -33,6 +33,7 @@ useHydrate(globals).hydrate(refs)
 const hydration = useHydrate(components).hydrate(refs)
 
 barba.init({
+  // prefetchIgnore: true,
   prevent: () => (window as any).Shopify.designMode,
   transitions: useTransition({
     transitions: {

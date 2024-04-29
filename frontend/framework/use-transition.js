@@ -89,6 +89,15 @@ export default ({ transitions, globals }) => {
         runGlobalHook('leave', data)
       },
       async enter(data) {
+        // bug: chrome doesn't scroll to top if new page is prefetched and cached.
+        if (
+          typeof data.trigger !== 'string' &&
+          data.trigger !== 'back' &&
+          data.trigger !== 'forward'
+        ) {
+          window.scrollTo(0, 0)
+        }
+
         await runCurrentHook('enter', data)
         runGlobalHook('enter', data)
 
