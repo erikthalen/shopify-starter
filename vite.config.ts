@@ -1,4 +1,4 @@
-import { resolve } from 'node:path'
+// import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import shopify from 'vite-plugin-shopify'
 import pageReload from 'vite-plugin-page-reload'
@@ -12,8 +12,8 @@ export default defineConfig({
   publicDir: 'public',
   resolve: {
     alias: {
-      '~resources': resolve('resources/js'),
-      '~modules': resolve('frontend/modules')
+      // '~resources': resolve('resources/js'),
+      // '~modules': resolve('frontend/modules')
     }
   },
   plugins: [
@@ -21,8 +21,8 @@ export default defineConfig({
     shopify({
       snippetFile: 'vite.liquid',
       additionalEntrypoints: [
-        'frontend/modules/**/*.ts',
-        'resources/**/*.js' // relative to themeRoot
+        // 'frontend/modules/**/*.ts',
+        // 'resources/**/*.js' // relative to themeRoot
       ]
     }),
     pageReload('/tmp/theme.update', {

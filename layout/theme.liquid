@@ -14,8 +14,6 @@
     {%- liquid
       render 'vite' with 'theme.css', preload_stylesheet: true
       render 'vite' with 'theme.ts'
-      render 'vite' with '/resources/js/baz.js'
-      render 'vite' with '@modules/qux.ts'
     -%}
 
     {{ content_for_header }}
@@ -23,9 +21,8 @@
 
   <body data-barba="wrapper">
     {% render 'site-header' %}
-    
+
     <main data-barba="container" data-barba-namespace="main" role="main">
-      {% comment %} {%- section 'cart-drawer' -%} {% endcomment %}
       {{ content_for_layout }}
     </main>
   </body>

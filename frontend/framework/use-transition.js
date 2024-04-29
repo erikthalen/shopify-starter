@@ -1,10 +1,4 @@
-let defaultTransition = null
 let currentTransition = null
-
-// run this once in your app, to set the transition to run when no other is defined
-export const setDefaultTransition = name => {
-  defaultTransition = name
-}
 
 // run this anytime you want to set a specific transition to run on the next page shift
 export const setTransition = name => {
@@ -16,6 +10,8 @@ export const setTransition = name => {
  * and the value is any of the barba js hooks to run to perform the transition
  */
 export default ({ transitions, globals }) => {
+  const [defaultTransition] = Object.keys(transitions)
+
   const runCurrentHook = async (hook, data) => {
     const currentHooks = transitions[currentTransition]
 
@@ -26,18 +22,20 @@ export default ({ transitions, globals }) => {
       /**
        * run nothing if not even the default-transition exists..
        */
-      if (!transitions.default[hook]) {
+      if (!transitions[defaultTransition][hook]) {
         return Promise.resolve()
       }
 
       /**
        * run default-transition.
        */
-      if (data.trigger === 'back') {
-        return transitions.defaultBack[hook](data)
-      } else {
-        return transitions.default[hook](data)
-      }
+      // if (data.trigger === 'back') {
+      //   return transitions.defaultBack[hook](data)
+      // } else {
+      //   return transitions.default[hook](data)
+      // }
+
+      return transitions[defaultTransition][hook](data)
     }
 
     /**

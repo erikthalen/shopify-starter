@@ -3,6 +3,7 @@
 
 export default {
   window: {
+    load: 'window.load',
     scroll: 'window.scroll',
     navigation: 'window.navigation'
   }

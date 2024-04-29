@@ -1,7 +1,8 @@
-{%- render 'vite' with '~/css/components/site-header.css' -%}
-
 <header class="site-header">
-  <a href="/">Home</a>
-  |
-  <a href="/collections">Collections</a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/collections">Collections</a>
+  </nav>
+
+  {% render 'emoji' %}
 </header>

@@ -16,7 +16,7 @@ export default {
    * @param {object} [options] - { global: true } never remove listener
    */
   listen: (name, cb, { global } = {}) => {
-    const ops = global ? {} : { signal: makeSignal() }
+    const ops = global ? {} : { signal: _makeSignal() }
     window.addEventListener(name, cb, ops)
   },
 
@@ -44,7 +44,7 @@ export default {
   },
 }
 
-function makeSignal() {
+function _makeSignal() {
   const abortController = new AbortController()
   const signal = abortController.signal
 

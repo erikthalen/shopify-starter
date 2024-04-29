@@ -1,4 +1,16 @@
 .site-header {
   position: fixed;
   z-index: 10;
+
+  display: flex;
+  gap: 20px;
+
+  nav {
+    display: flex;
+    gap: 20px;
+
+    @media (--sm) {
+      background: grey;
+    }
+  }
 }

@@ -1,3 +1,6 @@
+@import '../css/sections/main-product.css';
+@import '../css/snippets/site-header.css';
+
 @font-face {
   font-family: 'Martian';
   font-style: normal;

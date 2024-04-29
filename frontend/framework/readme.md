@@ -1,9 +1,5 @@
 # `/framework`
 
-## `dev-grid`
-
-Append `?grid` to the url to see a grid. Setup the grid according to the project in `/frontend/framework/dev-grid.css`
-
 ## `useEvent`
 
 Used to send [CustomEvents](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent) between components, has three methods:
@@ -108,12 +104,21 @@ barba.init({
   }),
 })
 
-// one time in your app
-setDefaultTransition('myTransition')
-
 // somewhere in your app, when you want some other than default-transition to run
 setTransition('myOtherTransition') // -> logs 'leaving' and 'entering' next time a navigation happens
 ```
 
+If no transition is set before a page shift happens, the first one in { transitions } will be used. So any "default" page transition must be put as the first key in the object, when instantiating useTransition.
+
 - `globals`: Runs on every page shift, no matter the transition.
 - `transitions`: Objects containing { name: { hooks } } for your transitions
+
+## Utils
+
+### `createDevGrid`
+
+Append `?grid` to the url to see a grid.
+
+### `createBarbaScrollPersist`
+
+Makes so that the native browser scroll persisting be used

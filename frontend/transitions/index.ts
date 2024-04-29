@@ -1,5 +1,1 @@
-import defaultTransition from './default'
-
-export default {
-  default: defaultTransition,
-}
+export { default as defaultTransition } from './default'

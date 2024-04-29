@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @param {HTMLElement} [target=document.body] - Element to querySelect in
  * @param {boolean} [namespaced] - Only get children with data-ref-parent-ref
  * @param {string} [exclude] - Selector or element who's children wont be selected
@@ -23,12 +23,12 @@ export default ({
     root,
     ...(watch
       ? _watched(root, watch, exclude, asArray, namespaced)
-      : _refs(root, exclude, asArray, namespaced))
+      : _refs(root, exclude, asArray, namespaced)),
   }
 }
 
-function _refs(root: HTMLElement, exclude = null, asArray = false, namespaced = false) {
-  const camelCase = s => s ? s.replace(/-./g, x => x[1].toUpperCase()) : ''
+function _refs(root, exclude = null, asArray = false, namespaced = false) {
+  const camelCase = s => (s ? s.replace(/-./g, x => x[1].toUpperCase()) : '')
   const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
 
   const attribute = namespaced ? `data-ref-${root.dataset.ref}` : 'data-ref'
@@ -39,8 +39,9 @@ function _refs(root: HTMLElement, exclude = null, asArray = false, namespaced = 
   elements.forEach(element => {
     if (exclude && element.closest(exclude)) return
 
-    const dataset = 'ref' + (namespaced ? capitalize(camelCase(root.dataset.ref)) : '')
-    const keys = (camelCase((element).dataset[dataset]) || 'item').split(' ')
+    const dataset =
+      'ref' + (namespaced ? capitalize(camelCase(root.dataset.ref)) : '')
+    const keys = (camelCase(element.dataset[dataset]) || 'item').split(' ')
 
     keys.forEach(key => {
       if (refs.has(key)) {
@@ -54,7 +55,7 @@ function _refs(root: HTMLElement, exclude = null, asArray = false, namespaced = 
   return Object.fromEntries(refs)
 }
 
-function _watched(root: HTMLElement, onChange: ((args?: any) => any) | boolean, ...args: any[]) {
+function _watched(root, onChange, ...args) {
   const ref = { current: _refs(root, ...args) }
 
   const observer = new MutationObserver(() => {
