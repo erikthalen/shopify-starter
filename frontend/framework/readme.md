@@ -85,7 +85,9 @@ barba.init({
     transitions: {
       myTransition: {
         // any barba hooks
-        enter() {}
+        enter() {
+          console.log('i will run if nothing else is set with setTransition')
+        }
       }
       myOtherTransition: {
         leave() {
@@ -98,13 +100,16 @@ barba.init({
     },
     globals: {
       // any barba hooks
-      leave() {},
+      leave() {
+        console.log('i will run on every page shift, no matter what transition is active')
+      },
       enter() {},
     },
   }),
 })
 
 // somewhere in your app, when you want some other than default-transition to run
+// preferably triggered by an click event of a link
 setTransition('myOtherTransition') // -> logs 'leaving' and 'entering' next time a navigation happens
 ```
 

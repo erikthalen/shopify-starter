@@ -43,7 +43,3 @@ yarn dev
 ```
 
 Site is now running locally on `http://127.0.0.1:9292`
-
-## CSS
-
-All files matching `/frontend/css/**/*.css` will be auto imported and bundled. Refer to Vite documentation on what comes pre-installed (postcss and postcss-nested at least?).
