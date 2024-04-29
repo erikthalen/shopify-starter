@@ -1,5 +1,5 @@
 import 'vite/modulepreload-polyfill'
-import "@virtualstate/navigation/polyfill"
+// import "@virtualstate/navigation/polyfill"
 
 import barba from '@barba/core'
 
@@ -17,7 +17,11 @@ import { globals, components } from '~/components'
 import events from '~/events'
 
 // visit ?grid to show visual grid
-createDevGrid()
+createDevGrid({
+  cols: 12,
+  bleed: 'var(--grid-bleed, 32px)',
+  gap: 'var(--grid-gap, 16px)',
+})
 
 // persist scroll position across navigation
 createBarbaScrollPersist()
@@ -35,9 +39,6 @@ barba.init({
       defaultTransition
     },
     globals: {
-      once() {
-        useEvent.dispatch(events.window.load)
-      },
       leave() {
         useEvent.dispatch(events.window.navigation)
         useEvent.dehydrate()

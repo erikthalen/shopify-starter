@@ -22,7 +22,7 @@ export default {
         next.container.style.translate = '0 0'
 
         setTimeout(resolve, duration)
-      })
+      }, 50)
     })
   },
 }

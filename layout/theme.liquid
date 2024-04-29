@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="{{ shop.locale }}">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="theme-color" content="">
-    <link rel="canonical" href="{{ canonical_url }}">
+    <title>
+      {{ page_title }}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
 
-    <title>{{ shop.name }}</title>
+    <link rel="icon" media="(prefers-color-scheme: light)" href="{{ settings.favicon_dark | image_url: width: 512, crop: false }}">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="{{ settings.favicon_light | image_url: width: 512, crop: false }}">
 
-    <meta name="description" content="">
+    {% render 'meta-tags' %}
 
     {%- liquid
       render 'vite' with 'theme.css', preload_stylesheet: true

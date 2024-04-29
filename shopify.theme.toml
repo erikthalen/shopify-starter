@@ -1,9 +1,9 @@
 [environments.development]
 store = "ss-dev-1"
 theme = "124641968212"
-ignore = ["templates/*", "config/*"]
+ignore = ["templates/*", "config/settings_data.json", "locales/*"]
 
 [environments.production]
 store = "ss-dev-1"
 theme = "124641968212"
-ignore = ["templates/*", "config/*"]
+ignore = ["templates/*", "config/settings_data.json", "locales/*"]

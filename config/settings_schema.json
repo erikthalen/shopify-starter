@@ -1,10 +1,33 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Skeleton theme",
+    "theme_name": "Shopify starter",
     "theme_version": "1.0.0",
-    "theme_author": "THEME_AUTHOR",
-    "theme_documentation_url": "https:\/\/THEME_DOCUMENTATION_URL.com\/",
-    "theme_support_url": "https:\/\/THEME_SUPPORT_URL.com\/"
+    "theme_author": "Spring/Summer",
+    "theme_documentation_url": "https:\/\/github.com\/SPRNGSMMR",
+    "theme_support_url": "https:\/\/springsummer.dk\/"
+  },
+  {
+    "name": "General",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon_light",
+        "label": "Favicon - Light",
+        "info": "Will be used on browsers with dark theme"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon_dark",
+        "label": "Favicon - Dark",
+        "info": "Will be used on browsers with light theme"
+      },
+      {
+        "type": "color",
+        "id": "theme_color",
+        "label": "Theme color",
+        "default": "#ffffff"
+      }
+    ]
   }
 ]

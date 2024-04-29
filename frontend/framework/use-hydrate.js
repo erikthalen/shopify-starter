@@ -13,8 +13,7 @@ export default function (components) {
   return {
     /**
      * runs though all init functions and saves their return value in an array
-     * @param {*} refs - a payload sent to the functions, typically a ref-object
-     * @param {*} __devmode - a boolean passed to each component
+     * @param {any[]} args - any arguments that should be passed to the components
      */
     hydrate(...args) {
       // teardown any previously hydrated components

@@ -1,13 +1,21 @@
+/**
+ * createDevGrid
+ * @param {number} cols - amount of columns
+ * @param {string} bleed - distance of horizontal margin outside the grid
+ * @param {string} gap - distance between the columns
+ * @param {string} color - css hsl string defining the color of the grid
+ */
 export const createDevGrid = ({
   cols = 12,
   bleed = '32px',
   gap = '16px',
+  color = '210 100% 56%'
 } = {}) => {
   if (!location.search.includes('grid')) return
 
   const container = document.createElement('div')
 
-  container.style.setProperty('--helper-color', '210 100% 56%')
+  container.style.setProperty('--helper-color', color)
   container.style.setProperty('--cols', cols.toString())
   container.style.setProperty('--bleed', bleed.toString())
   container.style.setProperty('--gap', gap.toString())
