@@ -12,11 +12,7 @@ export const createDevGrid = ({
   if (!location.search.includes('grid')) return
 
   const container = document.createElement('div')
-
-  container.style.setProperty('--helper-color', color)
-  container.style.setProperty('--cols', cols.toString())
-  container.style.setProperty('--bleed', bleed.toString())
-  container.style.setProperty('--gap', gap.toString())
+  container.classList.add('dev-grid')
 
   Object.assign(container.style, {
     position: 'fixed',
@@ -27,9 +23,9 @@ export const createDevGrid = ({
     left: '0',
     boxSizing: 'border-box',
     display: 'grid',
-    gridTemplateColumns: 'repeat(var(--cols), 1fr)',
-    padding: '0 var(--bleed)',
-    gap: 'var(--gap)',
+    gridTemplateColumns: `repeat(${cols}, 1fr)`,
+    padding: `0 ${bleed}`,
+    gap: gap,
     pointerEvents: 'none',
     userSelect: 'none',
   })
@@ -39,13 +35,13 @@ export const createDevGrid = ({
     column.textContent = i + 1
 
     Object.assign(column.style, {
-      color: 'hsla(var(--helper-color) / 0.4)',
+      color: `hsla(${color} / 0.4)`,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',
-      background: 'hsla(var(--helper-color) / 0.05)',
-      borderInline: '1px solid hsla(var(--helper-color) / 0.4)',
+      background: `hsla(${color} / 0.05)`,
+      borderInline: `1px solid hsla(${color} / 0.4)`,
     })
 
     container.append(column)
