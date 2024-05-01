@@ -27,27 +27,28 @@ createDevGrid({
 createBarbaScrollPersist()
 
 let refs = useRefs({ asArray: true })
-
-useHydrate(globals).hydrate(refs)
-
-const hydration = useHydrate(components).hydrate(refs)
+const globalComponents = useHydrate(globals)
+const pageComponents = useHydrate(components)
 
 barba.init({
-  debug: (window as any).location.origin.includes('127.0.0.1'),
+  debug: location.origin.includes('127.0.0.1'),
   prevent: () => (window as any).Shopify.designMode,
   transitions: useTransition({
-    transitions: {
+    page: {
       defaultTransition
     },
-    globals: {
+    global: {
+      once() {
+        globalComponents.hydrate(refs)
+        pageComponents.hydrate(refs)
+      },
       leave() {
         useEvent.dispatch(events.window.navigation)
         useEvent.dehydrate()
       },
       enter({ current }) {
-        current.container.classList.add('old-page')
-        refs = useRefs({ exclude: '.old-page', asArray: true })
-        hydration.hydrate(refs)
+        refs = useRefs({ exclude: current.container, asArray: true })
+        pageComponents.hydrate(refs)
       },
     },
   }),

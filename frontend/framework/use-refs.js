@@ -1,14 +1,14 @@
 /**
  * @function useRefs
- * @param [options] - Options controlling how elements are querySelected
+ * @param {object} [options] - Options object
  * @param {HTMLElement} [options.root=document.body] - Element to querySelect in
  * @param {boolean} [options.namespaced] - Only get children with data-ref-parent-ref
- * @param {string} [options.exclude] - Selector or element who's children wont be selected
+ * @param {HTMLElement} [options.exclude] - Element and elements children wont be selected
  * @param {boolean | function} [options.watch] - Watches DOM and updates refs on mutation
  * @param {boolean} [options.asArray] - Saves all refs in arrays, also single elements
  * @return {Object} { myRef: div, another: [button, span] }
  */
-export default ({
+export const useRefs = ({
   root = document.body,
   namespaced,
   watch,
@@ -38,7 +38,7 @@ function _refs(root, exclude = null, asArray = false, namespaced = false) {
   const refs = new Map()
 
   elements.forEach(element => {
-    if (exclude && element.closest(exclude)) return
+    if (exclude && (exclude === element || exclude.contains(element))) return
 
     const dataset =
       'ref' + (namespaced ? capitalize(camelCase(root.dataset.ref)) : '')

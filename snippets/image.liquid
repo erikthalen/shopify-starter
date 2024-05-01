@@ -4,9 +4,19 @@
   {% render 'image', image: product.featured_image, size: '100,50' %}
 
   "size" - what transformation/size of image to fetch. good for performance, to not load a to big image
+  "placeholder" - one of shopify's placeholder_svg_tags's images
 {% endcomment %}
 
-{% if image != blank %}
+{% assign placeholder_image = 'hero-apparel-1' %}
+{% if placeholder != blank %}
+  {% assign placeholder_image = placeholder %}
+{% endif %}
+
+{% if request.visual_preview_mode %}
+  <div class="image">
+    {{ placeholder_image | placeholder_svg_tag: 'placeholder-svg' }}
+  </div>
+{% else %}
   {% assign url = image | image_url %}
 
   {% if img_size != blank %}
@@ -40,9 +50,4 @@
     class="image{% if url contains '.png' %} png{% endif %} {{ class }}"
     style="object-position: {{ focal_point }}"
   >
-
-{% else %}
-  <div class="image">
-    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
-  </div>
 {% endif %}

@@ -1,5 +1,7 @@
 <div class="test-section" data-ref="test-section" style="{% render '_color-scheme' %}">
   <p>{{ section.settings.text }}</p>
+
+  {% render 'image', image: section.settings.image %}
 </div>
 
 {% render '_preview-trigger' %}
@@ -20,6 +22,11 @@
       "id": "color_scheme",
       "label": "Color Scheme",
       "default": "scheme_1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
     }
   ],
   "presets": [

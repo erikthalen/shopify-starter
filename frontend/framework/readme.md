@@ -82,7 +82,7 @@ Used to trigger and run specific transitions not tied to specific routes (as is 
 ```javascript
 barba.init({
   transitions: useTransition({
-    transitions: {
+    page: {
       myTransition: {
         // any barba hooks
         enter() {
@@ -98,7 +98,7 @@ barba.init({
         }
       }
     },
-    globals: {
+    global: {
       // any barba hooks
       leave() {
         console.log('i will run on every page shift, no matter what transition is active')
@@ -113,10 +113,10 @@ barba.init({
 setTransition('myOtherTransition') // -> logs 'leaving' and 'entering' next time a navigation happens
 ```
 
-If no transition is set before a page shift happens, the first one in { transitions } will be used. So any "default" page transition must be put as the first key in the object, when instantiating useTransition.
+If no transition is set before a page shift happens, the first one in { page } will be used. So any "default" page transition must be put as the first key in the object, when running useTransition.
 
-- `globals`: Runs on every page shift, no matter the transition.
-- `transitions`: Objects containing { name: { hooks } } for your transitions
+- `page`: Objects containing { transitionName: { ...hooks } } for your transitions
+- `global`: Runs on every page shift, no matter the transition.
 
 ## Utils
 

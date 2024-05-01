@@ -1,10 +1,5 @@
 @import '../css/main';
 
-@import '../css/sections/main-product';
-@import '../css/sections/test-section';
-
-@import '../css/snippets/site-header';
-
 * {
   box-sizing: border-box;
 }

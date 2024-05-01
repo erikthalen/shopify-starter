@@ -1,3 +1,6 @@
+@import '../css/sections/test-section';
+@import '../css/snippets/site-header';
+
 @font-face {
   font-family: 'Martian';
   font-style: normal;

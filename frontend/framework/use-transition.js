@@ -1,5 +1,3 @@
-/** @module useTransition */
-
 /**
  * @private
  * The key of the set of hooks that will run on next page shift
@@ -7,37 +5,36 @@
 let currentTransition = null
 
 /**
- * @global
+ * @function
  * @description Run this anytime you want to set a specific transition to run on the next page shift
- * @param {string} - The key of a set of hooks to run next page shift
+ * @param {string} name - The key of a set of hooks to run next page shift
  */
 export const setTransition = name => {
   currentTransition = name
 }
 
 /**
- * @function
- * @description transitions is an object where the key is the name to be used for triggering the transition, and the value is any of the barba js hooks to run to perform the transition
- * @param options
- * @param {object} options.transitions - An object where each key is a set of any Barba hooks
- * @param {object} options.globals - A set of any Barba hooks
+ * @function useTransition
+ * @param {object} options - Options object
+ * @param {object} options.page - An object where each key is a set of any Barba hooks
+ * @param {object} options.global - A set of any Barba hooks
  * @param {object} options.barbaOptions - Any overwriting Barba options
  */
-export default ({ transitions, globals }) => {
+export const useTransition = ({ page, global }) => {
   const _runCurrentHook = async (hook, data) => {
-    const currentHooks = transitions[currentTransition]
+    const currentHooks = page[currentTransition]
 
     // no transition set, or the name doesn't exist
     if (!currentTransition || !currentHooks) {
-      const [defaultTransition] = Object.keys(transitions)
+      const [defaultTransition] = Object.keys(page)
 
       // run nothing if not even the default-transition exists..
-      if (!transitions[defaultTransition][hook]) {
+      if (!page[defaultTransition][hook]) {
         return Promise.resolve()
       }
 
       // run default-transition
-      return transitions[defaultTransition][hook](data)
+      return page[defaultTransition][hook](data)
     }
 
     // a transition was set, but doesn't exist
@@ -50,8 +47,8 @@ export default ({ transitions, globals }) => {
   }
 
   const _runGlobalHook = (hook, data) => {
-    if (typeof globals[hook] === 'function') {
-      return globals[hook](data)
+    if (typeof global[hook] === 'function') {
+      return global[hook](data)
     }
   }
 
