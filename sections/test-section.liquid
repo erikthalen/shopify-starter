@@ -1,20 +1,25 @@
-{% if request.visual_preview_mode %}
-  <h1>I'm a preview!</h1>
-{% endif %}
-
-<div class="test-section" data-ref="test-section">
-  <p>This is a test section</p>
-  <h1>{{ section.settings.text }}</h1>
+<div class="test-section" data-ref="test-section" style="{% render '_color-scheme' %}">
+  <p>{{ section.settings.text }}</p>
 </div>
+
+{% render '_preview-trigger' %}
 
 {% schema %}
 {
   "name": "Test section",
+  "tag": "section",
   "settings": [
     {
       "type": "text",
       "id": "text",
-      "label": "Text"
+      "label": "Text",
+      "default": "This is a test section"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme_1"
     }
   ],
   "presets": [

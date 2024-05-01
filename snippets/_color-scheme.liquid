@@ -1,0 +1,27 @@
+{%- comment -%}
+  Used to output a color scheme as inline css variables
+
+  In a section that uses this, add:
+  
+  {
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "default": "scheme_1",
+        "label": "Color Scheme"
+      }
+    ]
+  }
+
+  and apply it to the dom like:
+  
+  <div style="{% render '_color-scheme' %}">
+    ...
+  </div>
+{%- endcomment -%}
+{%- assign scheme = section.settings.color_scheme.settings -%}
+{%- if scheme.background != blank -%}--color-background: {{ scheme.background }};{%- endif -%}
+{%- if scheme.text != blank -%}--color-text: {{ scheme.text }};{%- endif -%}
+{%- if scheme.primary != blank -%}--color-primary: {{ scheme.primary }};{%- endif -%}
+{%- if scheme.secondary != blank -%}--color-secondary: {{ scheme.secondary }};{%- endif -%}

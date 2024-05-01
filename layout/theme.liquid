@@ -1,10 +1,7 @@
 <!doctype html>
 <html lang="{{ shop.locale }}">
   <head>
-    <title>
-      {{ page_title }}
-      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
-    </title>
+    <title>{{ page_title }}{%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}</title>
 
     <link rel="icon" media="(prefers-color-scheme: light)" href="{{ settings.favicon_dark | image_url: width: 512, crop: false }}">
     <link rel="icon" media="(prefers-color-scheme: dark)" href="{{ settings.favicon_light | image_url: width: 512, crop: false }}">

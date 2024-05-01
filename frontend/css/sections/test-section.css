@@ -1,0 +1,8 @@
+.test-section {
+  display: grid;
+  gap: 10px;
+  font-size: 5vw;
+
+  background-color: var(--color-background, #fff);
+  color: var(--color-text, #111);
+}

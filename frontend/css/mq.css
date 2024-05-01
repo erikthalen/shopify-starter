@@ -1,2 +1,2 @@
-@custom-media --sm (max-width: 30em);
-@custom-media --md (max-width: 80em);
+@custom-media --sm (min-width: 600px);
+@custom-media --md (min-width: 1000px);

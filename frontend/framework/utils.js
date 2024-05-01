@@ -1,15 +1,13 @@
 /**
- * createDevGrid
- * @param {number} cols - amount of columns
- * @param {string} bleed - distance of horizontal margin outside the grid
- * @param {string} gap - distance between the columns
- * @param {string} color - css hsl string defining the color of the grid
+ * @function createDevGrid
+ * @description Appends some fixed divs to the `<body>`, which are styled to look like a grid.
+ * @param {{ cols: number, bleed: string, gap: string, color: string }} options - changes the appearance of the grid
  */
 export const createDevGrid = ({
   cols = 12,
   bleed = '32px',
   gap = '16px',
-  color = '210 100% 56%'
+  color = '210 100% 56%',
 } = {}) => {
   if (!location.search.includes('grid')) return
 
@@ -56,6 +54,10 @@ export const createDevGrid = ({
   document.body.append(container)
 }
 
+/**
+ * @function
+ * @description An attempt to make the content not jump around on the screen while a page navigation is running
+ */
 export const createBarbaScrollPersist = () => {
   /**
    * polyfill: @virtualstate/navigation

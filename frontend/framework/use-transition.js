@@ -1,59 +1,68 @@
+/** @module useTransition */
+
+/**
+ * @private
+ * The key of the set of hooks that will run on next page shift
+ */
 let currentTransition = null
 
-// run this anytime you want to set a specific transition to run on the next page shift
+/**
+ * @global
+ * @description Run this anytime you want to set a specific transition to run on the next page shift
+ * @param {string} - The key of a set of hooks to run next page shift
+ */
 export const setTransition = name => {
   currentTransition = name
 }
 
 /**
- * transitions is an object where the key is the name to be used for triggering the transition,
- * and the value is any of the barba js hooks to run to perform the transition
+ * @function
+ * @description transitions is an object where the key is the name to be used for triggering the transition, and the value is any of the barba js hooks to run to perform the transition
+ * @param options
+ * @param {object} options.transitions - An object where each key is a set of any Barba hooks
+ * @param {object} options.globals - A set of any Barba hooks
+ * @param {object} options.barbaOptions - Any overwriting Barba options
  */
 export default ({ transitions, globals }) => {
-  const [defaultTransition] = Object.keys(transitions)
-
-  const runCurrentHook = async (hook, data) => {
+  const _runCurrentHook = async (hook, data) => {
     const currentHooks = transitions[currentTransition]
 
-    /**
-     * no transition set, or the name doesn't exist.
-     */
+    // no transition set, or the name doesn't exist
     if (!currentTransition || !currentHooks) {
-      /**
-       * run nothing if not even the default-transition exists..
-       */
+      const [defaultTransition] = Object.keys(transitions)
+
+      // run nothing if not even the default-transition exists..
       if (!transitions[defaultTransition][hook]) {
         return Promise.resolve()
       }
 
-      /**
-       * run default-transition.
-       */
-      // if (data.trigger === 'back') {
-      //   return transitions.defaultBack[hook](data)
-      // } else {
-      //   return transitions.default[hook](data)
-      // }
-
+      // run default-transition
       return transitions[defaultTransition][hook](data)
     }
 
-    /**
-     * a transition was set, but doesn't exist
-     */
+    // a transition was set, but doesn't exist
     if (typeof currentHooks[hook] !== 'function') {
       return Promise.resolve()
     }
 
-    /**
-     * a transition was set, and exists, run it
-     */
+    // a transition was set, and exists, run it
     return currentHooks[hook](data)
   }
 
-  const runGlobalHook = (hook, data) => {
+  const _runGlobalHook = (hook, data) => {
     if (typeof globals[hook] === 'function') {
       return globals[hook](data)
+    }
+  }
+
+  // bug: chrome doesn't scroll to top if new page is prefetched and cached.
+  function maybeScrollBackToTop(trigger) {
+    if (
+      typeof trigger !== 'string' &&
+      trigger !== 'back' &&
+      trigger !== 'forward'
+    ) {
+      window.scrollTo(0, 0)
     }
   }
 
@@ -78,33 +87,24 @@ export default ({ transitions, globals }) => {
       ...ALL_BARBA_HOOKS.reduce((acc, hook) => {
         return {
           ...acc,
-          [hook](data) {
-            runCurrentHook(hook, data)
-            runGlobalHook(hook, data)
+          async [hook](data) {
+            await _runCurrentHook(hook, data)
+            _runGlobalHook(hook, data)
           },
         }
       }, {}),
       async leave(data) {
-        await runCurrentHook('leave', data)
-        runGlobalHook('leave', data)
+        await _runCurrentHook('leave', data)
+        _runGlobalHook('leave', data)
       },
       async enter(data) {
-        // bug: chrome doesn't scroll to top if new page is prefetched and cached.
-        if (
-          typeof data.trigger !== 'string' &&
-          data.trigger !== 'back' &&
-          data.trigger !== 'forward'
-        ) {
-          window.scrollTo(0, 0)
-        }
+        maybeScrollBackToTop(data.trigger)
 
-        await runCurrentHook('enter', data)
-        runGlobalHook('enter', data)
+        await _runCurrentHook('enter', data)
+        _runGlobalHook('enter', data)
 
-        /**
-         * cleanup any transition
-         */
-        setTransition(defaultTransition)
+        // cleanup
+        setTransition(null)
         data.next.container.removeAttribute('style')
       },
     },

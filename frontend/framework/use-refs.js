@@ -1,18 +1,19 @@
 /**
- *
- * @param {HTMLElement} [target=document.body] - Element to querySelect in
- * @param {boolean} [namespaced] - Only get children with data-ref-parent-ref
- * @param {string} [exclude] - Selector or element who's children wont be selected
- * @param {boolean | function} [watch] - Watches DOM and updates refs on mutation
- * @param {boolean} [asArray] - Saves all refs in arrays, also single elements
- * @returns {Object} { myRef: div, another: [button, span] }
+ * @function useRefs
+ * @param [options] - Options controlling how elements are querySelected
+ * @param {HTMLElement} [options.root=document.body] - Element to querySelect in
+ * @param {boolean} [options.namespaced] - Only get children with data-ref-parent-ref
+ * @param {string} [options.exclude] - Selector or element who's children wont be selected
+ * @param {boolean | function} [options.watch] - Watches DOM and updates refs on mutation
+ * @param {boolean} [options.asArray] - Saves all refs in arrays, also single elements
+ * @return {Object} { myRef: div, another: [button, span] }
  */
 export default ({
   root = document.body,
-  namespaced = false,
-  watch = false,
-  asArray = false,
-  exclude = null,
+  namespaced,
+  watch,
+  asArray,
+  exclude,
 } = {}) => {
   if (!(root instanceof HTMLElement)) {
     console.warn('{ root } has to be an element')

@@ -1,13 +1,12 @@
-{% comment %} 
+{% comment %}
   example usage:
 
   {% render 'image', image: product.featured_image, size: '100,50' %}
 
   "size" - what transformation/size of image to fetch. good for performance, to not load a to big image
-
 {% endcomment %}
 
-{% if image %}
+{% if image != blank %}
   {% assign url = image | image_url %}
 
   {% if img_size != blank %}
@@ -15,12 +14,6 @@
   {% else %}
     {% assign sizes = '100,100' | split: ',' %}
   {% endif %}
-
-  {% comment %}
-    {% unless url contains '.png' %}
-      style="background-image: url('{{ image | image_url: width: 1 }}'); background-size: 100%;"
-    {% endunless %}
-  {% endcomment %}
 
   {% assign image_name = url | split: '/' | last | split: '?' | first %}
   {% assign focal_point = images[image_name].presentation.focal_point %}
@@ -47,4 +40,9 @@
     class="image{% if url contains '.png' %} png{% endif %} {{ class }}"
     style="object-position: {{ focal_point }}"
   >
+
+{% else %}
+  <div class="image">
+    {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+  </div>
 {% endif %}

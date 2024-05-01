@@ -1,5 +1,5 @@
 import 'vite/modulepreload-polyfill'
-// import "@virtualstate/navigation/polyfill"
+import "@virtualstate/navigation/polyfill"
 
 import barba from '@barba/core'
 
@@ -33,7 +33,7 @@ useHydrate(globals).hydrate(refs)
 const hydration = useHydrate(components).hydrate(refs)
 
 barba.init({
-  // prefetchIgnore: true,
+  debug: (window as any).location.origin.includes('127.0.0.1'),
   prevent: () => (window as any).Shopify.designMode,
   transitions: useTransition({
     transitions: {

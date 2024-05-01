@@ -31,7 +31,7 @@ ignore = ["templates/*", "config/settings_data.json", "locales/*"]
 
 [environments.production]
 store = "my-store"
-theme = "123456789"
+theme = "987654321"
 ignore = ["templates/*", "config/settings_data.json", "locales/*"]
 ```
 
@@ -39,7 +39,9 @@ Where `theme` is the id you get from step 1.
 
 Per default the scripts in `package.json` is setup to handle one `development` and one `production` environment. Update this to your needs.
 
-3. Run dev server
+It seems Shopify syncs files with the currently deployed codebase when running `shopify theme dev`. Because the project's built files are hashed, the "live" site doesn't seem to be able to find the correct css/js, while developing. To prevent any risk, setup two themes where one is used to run `shopify theme dev` against, and the other is connected to `shopify theme push`.
+
+1. Run dev server
 
 ```bash
 pnpm run dev

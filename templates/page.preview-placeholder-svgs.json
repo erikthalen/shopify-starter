@@ -1,7 +1,7 @@
 {
   "sections": {
     "default": {
-      "type": "space"
+      "type": "preview-placeholder-svg-tags"
     }
   },
   "order": ["default"]
