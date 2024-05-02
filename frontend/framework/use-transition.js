@@ -5,22 +5,14 @@
 let currentTransition = null
 
 /**
- * @function
- * @description Run this anytime you want to set a specific transition to run on the next page shift
- * @param {string} name - The key of a set of hooks to run next page shift
- */
-export const setTransition = name => {
-  currentTransition = name
-}
-
-/**
  * @function useTransition
+ * @description Used to trigger and run specific transitions not tied to specific routes (as is Barba default behavior).
  * @param {object} options - Options object
  * @param {object} options.page - An object where each key is a set of any Barba hooks
  * @param {object} options.global - A set of any Barba hooks
  * @param {object} options.barbaOptions - Any overwriting Barba options
  */
-export const useTransition = ({ page, global }) => {
+export default ({ page, global }) => {
   const _runCurrentHook = async (hook, data) => {
     const currentHooks = page[currentTransition]
 
@@ -28,28 +20,28 @@ export const useTransition = ({ page, global }) => {
     if (!currentTransition || !currentHooks) {
       const [defaultTransition] = Object.keys(page)
 
-      // run nothing if not even the default-transition exists..
+      // run nothing if the default transition has current hook registered
       if (!page[defaultTransition][hook]) {
         return Promise.resolve()
       }
 
-      // run default-transition
+      // run defaultTransition's hook
       return page[defaultTransition][hook](data)
     }
 
-    // a transition was set, but doesn't exist
+    // a currentTransition doesn't have currentHook registered
     if (typeof currentHooks[hook] !== 'function') {
       return Promise.resolve()
     }
 
-    // a transition was set, and exists, run it
+    // currentTransition has currentHook registered, run it
     return currentHooks[hook](data)
   }
 
   const _runGlobalHook = (hook, data) => {
-    if (typeof global[hook] === 'function') {
-      return global[hook](data)
-    }
+    if (typeof global[hook] !== 'function') return
+
+    return global[hook](data)
   }
 
   // bug: chrome doesn't scroll to top if new page is prefetched and cached.
@@ -106,4 +98,13 @@ export const useTransition = ({ page, global }) => {
       },
     },
   ]
+}
+
+/**
+ * @function
+ * @description Run this anytime you want to set a specific transition to run on the next page shift
+ * @param {string} name - The key of a set of hooks to run next page shift
+ */
+export const setTransition = name => {
+  currentTransition = name
 }

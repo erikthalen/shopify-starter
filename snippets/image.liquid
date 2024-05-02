@@ -3,20 +3,22 @@
 
   {% render 'image', image: product.featured_image, size: '100,50' %}
 
+  "preload" - Change [loading] to eager
   "size" - what transformation/size of image to fetch. good for performance, to not load a to big image
   "placeholder" - one of shopify's placeholder_svg_tags's images
 {% endcomment %}
 
-{% assign placeholder_image = 'hero-apparel-1' %}
-{% if placeholder != blank %}
-  {% assign placeholder_image = placeholder %}
-{% endif %}
-
 {% if request.visual_preview_mode %}
+  {% if placeholder != blank %}
+    {% assign placeholder_image = placeholder %}
+  {% else %}
+    {% assign placeholder_image = 'hero-apparel-1' %}
+  {% endif %}
+
   <div class="image">
     {{ placeholder_image | placeholder_svg_tag: 'placeholder-svg' }}
   </div>
-{% else %}
+{% elsif image != blank %}
   {% assign url = image | image_url %}
 
   {% if img_size != blank %}

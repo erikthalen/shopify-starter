@@ -1,17 +1,18 @@
 /**
  * @function useHydrate
+ * @description Used to initialize components, for when the window doesn't reload fully.
  * @param {function[]} - Array of function run loop through
- * @return {useHydrate~hydrate} - the returned function
- * @return {useHydrate~dehydrate} - the returned function again
+ * @returns {useHydrate~hydrate} - the returned function
+ * @returns {useHydrate~dehydrate} - the returned function again
  */
-export function useHydrate(components) {
+export default components => {
   let teardownFunctions = null
 
   return {
     /**
      * @memberof useHydrate
+     * @description Runs all the passed functions. Any arguments passed will be passed on to the components
      * @param {*} ...args - n arguments that should be passed to the components
-     * @description runs though all init functions and saves their return value in an array
      */
     hydrate(...args) {
       // teardown any previously hydrated components
@@ -35,7 +36,7 @@ export function useHydrate(components) {
 
     /**
      * @memberof useHydrate
-     * runs though previously saved return values
+     * @description Runs any/all the returned functions returned from the `hydrate`
      */
     dehydrate() {
       teardownFunctions?.map(teardown => {

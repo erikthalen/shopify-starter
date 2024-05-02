@@ -1,5 +1,6 @@
 /**
  * @function useRefs
+ * @description Collect all dom elements with the attribute [data-ref]
  * @param {object} [options] - Options object
  * @param {HTMLElement} [options.root=document.body] - Element to querySelect in
  * @param {boolean} [options.namespaced] - Only get children with data-ref-parent-ref
@@ -8,7 +9,7 @@
  * @param {boolean} [options.asArray] - Saves all refs in arrays, also single elements
  * @return {Object} { myRef: div, another: [button, span] }
  */
-export const useRefs = ({
+export default ({
   root = document.body,
   namespaced,
   watch,

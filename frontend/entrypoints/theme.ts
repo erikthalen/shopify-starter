@@ -1,8 +1,6 @@
 import 'vite/modulepreload-polyfill'
 import "@virtualstate/navigation/polyfill"
-
 import barba from '@barba/core'
-
 import {
   useEvent,
   useHydrate,
@@ -11,10 +9,10 @@ import {
   createDevGrid,
   createBarbaScrollPersist
 } from '~/framework'
-
-import { defaultTransition } from '~/transitions'
+import * as pageTransitions from '~/transitions'
 import { globals, components } from '~/components'
-import events from '~/events'
+
+console.log(pageTransitions)
 
 // visit ?grid to show visual grid
 createDevGrid({
@@ -34,16 +32,14 @@ barba.init({
   debug: location.origin.includes('127.0.0.1'),
   prevent: () => (window as any).Shopify.designMode,
   transitions: useTransition({
-    page: {
-      defaultTransition
-    },
+    page: pageTransitions,
     global: {
       once() {
         globalComponents.hydrate(refs)
         pageComponents.hydrate(refs)
       },
       leave() {
-        useEvent.dispatch(events.window.navigation)
+        useEvent.dispatch('window.navigation')
         useEvent.dehydrate()
       },
       enter({ current }) {
