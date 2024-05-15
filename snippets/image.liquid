@@ -15,9 +15,10 @@
     {% assign placeholder_image = 'hero-apparel-1' %}
   {% endif %}
 
-  <div class="image">
+  <img class="image" src="{{ 'placeholder.png' | asset_img_url }}" width="1000" height="1000">
+  {% comment %} <div class="image">
     {{ placeholder_image | placeholder_svg_tag: 'placeholder-svg' }}
-  </div>
+  </div> {% endcomment %}
 {% elsif image != blank %}
   {% assign url = image | image_url %}
 

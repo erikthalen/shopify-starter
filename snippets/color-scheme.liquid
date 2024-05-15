@@ -2,27 +2,26 @@
   Used to output a color scheme as inline css variables
   Loops through all/any colors defined in the current scheme of a section
 
-  In a section that uses this, add:
+  usage:
 
-  {
-    "settings": [
-      {
-        "type": "color_scheme",
-        "id": "color_scheme",
-        "default": "scheme_1",
-        "label": "Color Scheme"
-      }
-    ]
-  }
-
-  and apply it to the dom like:
-
-  <div style="{% render '_color-scheme' %}">
+  <div style="{% render 'color-scheme' %}">
     ...
   </div>
+
+  Defaults to finding a scheme under the key "section.settings.color_scheme"
+  overwrite this with "color_scheme":
+  
+  <div style="{% render 'color-scheme', color_scheme: block.settings.my_scheme %}"></div>
+
 {%- endcomment -%}
 
-{%- assign colors = section.settings.color_scheme.settings | remove_first: '{' | remove_last: '}' | split: ', ' -%}
+{%- assign scheme = section.settings.color_scheme -%}
+
+{%- if color_scheme != blank -%}
+  {%- assign scheme = color_scheme -%}
+{%- endif -%}
+
+{%- assign colors = scheme.settings | remove_first: '{' | remove_last: '}' | split: ', ' -%}
 
 {%- for color in colors -%}
   {%- assign key_value = color | split: '=>' -%}
@@ -34,5 +33,4 @@
 
     --scheme-{{ color_name }}:{{ color_value }};
   {%- endif -%}
-
 {%- endfor -%}

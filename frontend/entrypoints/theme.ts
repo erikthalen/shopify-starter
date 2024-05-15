@@ -12,8 +12,6 @@ import {
 import * as pageTransitions from '~/transitions'
 import { globals, components } from '~/components'
 
-console.log(pageTransitions)
-
 // visit ?grid to show visual grid
 createDevGrid({
   cols: 12,

@@ -1,9 +1,11 @@
 <h1>All collections</h1>
 
-<ul>
-{% for collection in collections %}
-  <li>
-    <a href="{{ collection.url }}">{{ collection.title }}</a>
-  </li>  
-{% endfor %}
-</ul>
+<ol>
+  {% paginate collections by 1000 %}
+    {% for collection in collections %}
+      <li>
+        <a href="{{ collection.url }}">{{ collection.title }}</a>
+      </li>
+    {% endfor %}
+  {% endpaginate %}
+</ol>

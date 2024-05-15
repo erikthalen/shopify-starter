@@ -8,9 +8,5 @@
   nav {
     display: flex;
     gap: 20px;
-
-    @media (--sm) {
-      font-size: 1.5em;
-    }
   }
 }
