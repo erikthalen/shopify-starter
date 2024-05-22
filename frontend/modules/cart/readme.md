@@ -13,7 +13,7 @@ Initialize the cart() with a selector of the whole cart-section. Any form within
 <section class="my-cart">
   <!-- This will be listened on for changes -->
   <form action="{{ routes.cart_url }}" method="post" id="cart">
-    <div>
+    {%- for item in cart.items -%}
       <!-- normal links are ignored by script -->
       <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
 
@@ -28,7 +28,7 @@ Initialize the cart() with a selector of the whole cart-section. Any form within
         id="{{ item.variant.id }}"
         min="0"
       >
-    </div>
+    {% endfor %}
   </form>
 
   <!-- submit is ignored by script -->
