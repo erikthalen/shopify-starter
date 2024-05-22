@@ -1,5 +1,7 @@
+@import '../css/sections/main-cart';
 @import '../css/sections/test-section';
 @import '../css/snippets/site-header';
+@import '../css/snippets/cart-notification';
 
 @font-face {
   font-family: 'Martian';
@@ -34,7 +36,11 @@ body {
 }
 
 main {
-  padding-top: 100px;
+  padding: 100px 30px 200px;
+}
+
+img {
+  max-width: 400px;
 }
 
 @media (prefers-color-scheme: light) {

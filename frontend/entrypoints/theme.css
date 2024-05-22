@@ -4,14 +4,14 @@
   box-sizing: border-box;
 }
 
-img {
+:where(img) {
   object-fit: cover;
   height: auto;
   max-width: 100%;
   vertical-align: middle;
 }
 
-svg {
+:where(svg) {
   height: 100%;
   width: 100%;
 }

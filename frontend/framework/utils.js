@@ -64,15 +64,12 @@ export const createBarbaScrollPersist = () => {
    */
   if (!window.navigation) return
 
-  let pageLoad = true
-
-  window.navigation.addEventListener('navigate', () => {
+  window.navigation.addEventListener('navigate', e => {
     const scrollY = window.scrollY
+    const { pathname } = new URL(e.destination.url)
 
-    if (pageLoad) {
-      pageLoad = false
-      return
-    }
+    // bail if the new page is the old page (page load or changing query params)
+    if (window.location.pathname === pathname) return
 
     const container = document.querySelector('main')
 

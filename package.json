@@ -1,5 +1,6 @@
 {
   "name": "shopify-starter",
+  "version": "0.0.0-beta",
   "private": true,
   "type": "module",
   "scripts": {

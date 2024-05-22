@@ -1,10 +1,26 @@
 <!doctype html>
 <html lang="{{ shop.locale }}">
   <head>
-    <title>{{ page_title }}{%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}</title>
+    <title>
+      {{ page_title }}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
 
-    <link rel="icon" media="(prefers-color-scheme: light)" href="{{ settings.favicon_dark | image_url: width: 512, crop: false }}">
-    <link rel="icon" media="(prefers-color-scheme: dark)" href="{{ settings.favicon_light | image_url: width: 512, crop: false }}">
+    {% if settings.favicon_dark != blank %}
+      <link
+        rel="icon"
+        media="(prefers-color-scheme: light)"
+        href="{{ settings.favicon_dark | image_url: width: 512, crop: false }}"
+      >
+    {% endif %}
+    
+    {% if settings.favicon_light != blank %}
+      <link
+        rel="icon"
+        media="(prefers-color-scheme: dark)"
+        href="{{ settings.favicon_light | image_url: width: 512, crop: false }}"
+      >
+    {% endif %}
 
     {% render 'meta-tags' %}
 
@@ -17,6 +33,8 @@
   </head>
 
   <body data-barba="wrapper">
+    <button data-ref="close-drawer">Close drawer</button>
+    {% render 'cart-notification' %}
     {% render 'site-header' %}
 
     <main data-barba="container" data-barba-namespace="main" role="main">
