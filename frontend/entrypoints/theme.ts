@@ -11,7 +11,7 @@ import {
 } from '~/framework'
 import * as pageTransitions from '~/transitions'
 import { globals, components } from '~/components'
-import cart from '~/modules/cart'
+import useALaCart from '~/modules/a-la-cart'
 
 // visit ?grid to show visual grid
 createDevGrid({
@@ -28,7 +28,7 @@ const globalComponents = useHydrate(globals)
 const pageComponents = useHydrate(components)
 
 function runExternalModules() {
-  cart()
+  useALaCart()
 }
 
 barba.init({
