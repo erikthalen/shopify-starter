@@ -33,10 +33,9 @@
   </head>
 
   <body data-barba="wrapper">
-    <button data-ref="close-drawer">Close drawer</button>
     {% render 'cart-notification' %}
     {% render 'site-header' %}
-
+    
     <main data-barba="container" data-barba-namespace="main" role="main">
       {{ content_for_layout }}
     </main>

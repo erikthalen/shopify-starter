@@ -37,7 +37,7 @@ function debounce(callback, delay) {
 
 function dispatchLoadingEvent(loadingState) {
   window.dispatchEvent(
-    new CustomEvent('cart.is-updating', { detail: loadingState })
+    new CustomEvent('a-la-cart.is-updating', { detail: loadingState })
   )
 }
 
@@ -168,7 +168,7 @@ async function commitAddToCart(data) {
     const json = await res.json()
 
     window.dispatchEvent(
-      new CustomEvent('cart.product-added', { detail: json })
+      new CustomEvent('a-la-cart.product-added', { detail: json })
     )
   } catch (error) {
     console.log(`Couldn't add to card: `, error)
@@ -185,17 +185,14 @@ async function fetchAndOpenDrawerCart(cartSelector, drawerContainer) {
 
   // runs itself again, when the markup changes
   async function rehydrateOnUpdate(cartForm) {
-    const newCartForm = await updateCartOnCartChange(
-      cartSelector,
-      cartForm
-    )
+    const newCartForm = await updateCartOnCartChange(cartSelector, cartForm)
     rehydrateOnUpdate(newCartForm)
   }
 
   rehydrateOnUpdate(cart.querySelector('form'))
 }
 
-let cartAbortController = null
+let globalAbortController = null
 
 export default async ({
   cartSectionFileName = 'main-cart',
@@ -211,8 +208,8 @@ export default async ({
   const productForm = document.querySelector(productFormSelector)
 
   // remove any old loading listeners
-  cartAbortController?.abort()
-  cartAbortController = new AbortController()
+  globalAbortController?.abort()
+  globalAbortController = new AbortController()
 
   if (drawerContainer) {
     const url = new URL(window.location)
@@ -232,7 +229,7 @@ export default async ({
         url.searchParams.set('cart', '')
         window.history.replaceState({}, null, url.href)
       },
-      { signal: cartAbortController.signal }
+      { signal: globalAbortController.signal }
     )
   }
 
@@ -241,10 +238,7 @@ export default async ({
 
     // runs itself again, when the markup changes
     async function rehydrateOnUpdate(cartForm) {
-      const newCartForm = await updateCartOnCartChange(
-        cartSelector,
-        cartForm
-      )
+      const newCartForm = await updateCartOnCartChange(cartSelector, cartForm)
       rehydrateOnUpdate(newCartForm)
     }
 
@@ -254,19 +248,20 @@ export default async ({
   if (productForm) {
     updateUrlOnVariantChange(productForm)
 
+    function defaultParser(form) {
+      const formData = new FormData(form)
+      const [id] = formData.getAll('id')
+      const quantity = parseInt(formData.getAll('quantity'))
+
+      return {
+        items: [{ id, quantity }],
+      }
+    }
+
     productForm.addEventListener(
       'submit',
       async e => {
         e.preventDefault()
-        function defaultParser(form) {
-          const formData = new FormData(form)
-          const [id] = formData.getAll('id')
-          const quantity = parseInt(formData.getAll('quantity'))
-
-          return {
-            items: [{ id, quantity }],
-          }
-        }
 
         const data =
           typeof productFormParser === 'function'
@@ -275,9 +270,7 @@ export default async ({
 
         await commitAddToCart(data)
       },
-      {
-        signal: cartAbortController.signal,
-      }
+      { signal: globalAbortController.signal }
     )
   }
 
@@ -285,24 +278,14 @@ export default async ({
    * external events
    */
   window.addEventListener(
-    'cart.is-updating',
-    e => {
-      const cartSection = document.querySelector(cartSelector)
-      const cartForm = cartSection.querySelector('form')
-      cartForm.classList.toggle('loading', e.detail)
-    },
-    { signal: cartAbortController.signal }
-  )
-
-  window.addEventListener(
-    'cart.close-drawer',
+    'a-la-cart.close-drawer',
     e => {
       const url = new URL(window.location)
       url.searchParams.delete('cart')
       window.history.replaceState({}, null, url.href)
       const cartDrawer = drawerContainer.querySelector(cartSelector)
-      cartDrawer.remove()
+      cartDrawer?.remove()
     },
-    { signal: cartAbortController.signal }
+    { signal: globalAbortController.signal }
   )
 }

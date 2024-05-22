@@ -1,4 +1,4 @@
-# ❤️🛒
+# A la Cart
 
 Made to be a more or less drop-in replacement to the Dawn cart. Has options and functions to make it dynamic enough to work in most situations.
 
@@ -8,12 +8,12 @@ Cart can be either a normal page, or a drawer-cart that renders in the current p
 
 ## Installation
 
-Run the default export after pageload, and after navigation.
+Run the default export after page load, and after navigation.
 
 ```js
-import cart from './cart'
+import useALaCart from './a-la-cart'
 
-cart(/* options */)
+useALaCart(/* options */)
 ```
 
 ## parameters
@@ -31,7 +31,7 @@ cart(/* options */)
 
 Will automatically listen on- and update the cart page, on user interaction.
 
-Initialize the cart() with a selector of the whole cart-section. Any `<form>` within this element will be listened on for changes.
+Initialize the useHeartCart() with a selector of the whole cart-section. Any `<form>` within this element will be listened on for changes.
 
 ```twig
 <!-- This will be re-rendered on change -->
@@ -62,9 +62,9 @@ Initialize the cart() with a selector of the whole cart-section. Any `<form>` wi
 ```
 
 ```js
-import cart from './cart'
+import useALaCart from './a-la-cart'
 
-cart({
+useALaCart({
   cartSelector: '.my-cart',
 })
 ```
@@ -95,9 +95,9 @@ Will automatically listen on- and update the PDP add to cart form.
 Depending on project, the product form probably need specific parsing. Add your custom parser that returns a shopify add-to-cart-body
 
 ```js
-import cart from './cart'
+import useALaCart from './a-la-cart'
 
-cart({
+useALaCart({
   productFormParser: form => {
     const data = new FormData(form)
     const [size] = data.getAll('size')
@@ -105,14 +105,16 @@ cart({
 
     // https://shopify.dev/docs/api/ajax/reference/cart
     return {
-      items: [{ id: VARIANT_IDS[size], quantity: 1 }],
+      items: [{
+        id: VARIANT_IDS[size],
+        quantity: 1
+      }],
     }
   },
 })
 ```
 
-
-## events
+## Events
 
 ### cart.is-updating
 
@@ -121,7 +123,7 @@ Useful for managing loading state.
 
 ```js
 // my-component.js
-window.addEventListener('cart.is-updating', e => {
+window.addEventListener('a-la-cart.is-updating', e => {
   console.log('Product is being added to cart: ', e.detail)
 })
 ```
@@ -133,7 +135,7 @@ Useful for showing notifications etc.
 
 ```js
 // my-component.js
-window.addEventListener('cart.product-added', e => {
+window.addEventListener('a-la-cart.product-added', e => {
   console.log('Product added to cart: ', e.detail)
 })
 ```
@@ -145,6 +147,6 @@ Listened on by script. Fire this event to remove/close the drawer, when drawer-c
 ```js
 // my-component.js
 myCloseButton.addEventListener('click', () => {
-  window.dispatchEvent(new CustomEvent('cart.close-drawer'))
+  window.dispatchEvent(new CustomEvent('a-la-cart.close-drawer'))
 })
 ```
