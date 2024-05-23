@@ -30,7 +30,7 @@ useALaCart(/* options */)
 
 Will automatically listen on- and update the cart page, on user interaction.
 
-Initialize the useHeartCart() with a selector of the whole cart-section. Any `<form>` within this element will be listened on for changes.
+Initialize the A la Cart with a selector of the whole cart-section. Any `<form>` within this element will be listened on for changes.
 
 ```twig
 <!-- This will be re-rendered on change -->
