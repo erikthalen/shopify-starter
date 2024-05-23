@@ -51,6 +51,7 @@ barba.init({
       enter({ current, next }) {
         refs = useRefs({ exclude: current.container, asArray: true })
         pageComponents.hydrate(refs)
+        runExternalModules()
 
         // if there for some reason are <script>'s that need to run in the new <main>
         next.container.querySelectorAll('script').forEach(script => {
@@ -60,9 +61,6 @@ barba.init({
           script.remove()
         })
       },
-      after() {
-        runExternalModules()
-      }
     },
   }),
 })

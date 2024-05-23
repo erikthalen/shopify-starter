@@ -6,7 +6,7 @@ export const globals = [
   ref => {
     if (!ref.cartNotification) return
 
-    window.addEventListener('cart.product-added', (e: CustomEvent) => {
+    window.addEventListener('a-la-cart.product-added', (e: CustomEvent) => {
       ref.cartNotification[0].querySelector('.content').innerHTML = JSON.stringify(e.detail, null, 2)
       ref.cartNotification[0].classList.add('active')
 
@@ -38,7 +38,7 @@ export const components = [
   },
   (ref) => {
     ref.closeDrawer[0].addEventListener('click', () => {
-      useEvent.dispatch('cart.close-drawer')
+      useEvent.dispatch('a-la-cart.close-drawer')
     })
   }
 ]

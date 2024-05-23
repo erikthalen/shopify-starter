@@ -13,7 +13,7 @@
         href="{{ settings.favicon_dark | image_url: width: 512, crop: false }}"
       >
     {% endif %}
-    
+
     {% if settings.favicon_light != blank %}
       <link
         rel="icon"
@@ -35,7 +35,7 @@
   <body data-barba="wrapper">
     {% render 'cart-notification' %}
     {% render 'site-header' %}
-    
+
     <main data-barba="container" data-barba-namespace="main" role="main">
       {{ content_for_layout }}
     </main>

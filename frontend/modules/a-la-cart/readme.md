@@ -21,10 +21,9 @@ useALaCart(/* options */)
 | Param                         | Type        | Default                 | Description                                             |
 | ----------------------------- | ----------- | ----------------------- | ------------------------------------------------------- |
 | [options]                     |             |                         | Options object                                          |
-| [options.cartSectionFileName] | string      | 'main-cart'             | The name of the liquid file, that renders the cart      |
-| [options.cartSelector]        | string      | '.main-cart'            | Selector of the cart, this is what's getting rerendered |
+| [options.cartSectionSelector] | string      | '.main-cart'            | Selector of the cart, this is what's getting rerendered |
 | [options.productFormSelector] | string      | '.shopify-product-form' | Selector of the PDP form, to add to cart                |
-| [options.productFormParser]   | function    |                         | Should be a function returning a add-to-cart object     |
+| [options.productFormParser]   | function    |                         | A function returning a add-to-cart object               |
 | [options.drawerContainer]     | HTMLElement |                         | Will make the cart render inside this element           |
 
 ## Cart
@@ -69,6 +68,30 @@ useALaCart({
 })
 ```
 
+## Drawer
+
+Pass an element as `drawerContainer` to make the cart render in this element. In the current page.
+
+```html
+<html>
+  <body>
+    <div id="drawer-cart">
+      <!-- render cart here -->
+    </div>
+
+    <!-- other content -->
+  </body>
+</html>
+```
+
+```js
+import useALaCart from './a-la-cart'
+
+useALaCart({
+  drawerContainer: document.getElementById('drawer-cart'),
+})
+```
+
 ## Product form
 
 Will automatically listen on- and update the PDP add to cart form.
@@ -92,7 +115,7 @@ Will automatically listen on- and update the PDP add to cart form.
 {%- endform -%}
 ```
 
-Depending on project, the product form probably need specific parsing. Add your custom parser that returns a shopify add-to-cart-body
+Depending on project, the product form probably need specific parsing. Add your custom parser that returns a [shopify add-to-cart-body](https://shopify.dev/docs/api/ajax/reference/cart)
 
 ```js
 import useALaCart from './a-la-cart'
@@ -103,12 +126,13 @@ useALaCart({
     const [size] = data.getAll('size')
     const VARIANT_IDS = { S: '1234', M: '4321', L: '6789' }
 
-    // https://shopify.dev/docs/api/ajax/reference/cart
     return {
-      items: [{
-        id: VARIANT_IDS[size],
-        quantity: 1
-      }],
+      items: [
+        {
+          id: VARIANT_IDS[size],
+          quantity: 1,
+        },
+      ],
     }
   },
 })
@@ -116,9 +140,9 @@ useALaCart({
 
 ## Events
 
-### cart.is-updating
+### a-la-cart.is-updating
 
-Fired by script when a fetch is pending.
+Dispatched by script when a fetch is pending.
 Useful for managing loading state.
 
 ```js
@@ -128,9 +152,9 @@ window.addEventListener('a-la-cart.is-updating', e => {
 })
 ```
 
-### cart.product-added
+### a-la-cart.product-added
 
-Fired when a product was successfully added to the cart.
+Dispatched when a product was successfully added to the cart.
 Useful for showing notifications etc.
 
 ```js
@@ -140,7 +164,18 @@ window.addEventListener('a-la-cart.product-added', e => {
 })
 ```
 
-### cart.close-drawer
+### a-la-cart.drawer-opened
+
+Dispatched when the drawer-cart is successfully fetched and opened.
+
+```js
+// my-component.js
+window.addEventListener('a-la-cart.drawer-opened', () => {
+  console.log('Drawer is open')
+})
+```
+
+### a-la-cart.close-drawer
 
 Listened on by script. Fire this event to remove/close the drawer, when drawer-cart is enabled.
 
