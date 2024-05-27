@@ -28,7 +28,7 @@ const globalComponents = useHydrate(globals)
 const pageComponents = useHydrate(components)
 
 function runExternalModules() {
-  useALaCart()
+  useALaCart({ useBarbaNavigation: true })
 }
 
 barba.init({

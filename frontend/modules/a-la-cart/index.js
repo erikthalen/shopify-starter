@@ -10,7 +10,14 @@ function defaultParser(form) {
   }
 }
 
-function setUrlParam(key, value) {
+function setUrlParam(key, value, useBarbaNavigation) {
+  if(useBarbaNavigation) {
+    // can't be used together with barba
+    // barba.history.add(url.href, 'popstate', 'replace')
+    // barba.history.remove()
+    return
+  }
+
   const url = new URL(window.location.href)
 
   if (value === null) {
@@ -20,12 +27,13 @@ function setUrlParam(key, value) {
   }
   window.history.replaceState({}, null, url)
 
-  // // barba
-  // barba.history.add(url.href, 'popstate', 'replace')
-  // barba.history.remove()
 }
 
-function redirect(to) {
+function redirect(to, useBarbaNavigation) {
+  if(useBarbaNavigation) {
+    return
+  }
+
   window.location.replace(to)
 }
 
@@ -160,14 +168,15 @@ async function fetchAndOpenDrawerCart(cartSectionSelector, drawerContainer) {
   listenAndUpdateRecursive(cartSectionSelector, cart.querySelector('form'))
 }
 
-function closeDrawer(cartSectionSelector, drawerContainer) {
+function closeDrawer(cartSectionSelector, drawerContainer, useBarbaNavigation) {
   drawerContainer.querySelector(cartSectionSelector)?.remove()
-  setUrlParam('cart', null)
+  setUrlParam('cart', null, useBarbaNavigation)
 }
 
 let teardownController = null
 
 export default async ({
+  useBarbaNavigation = false,
   cartSectionSelector = '.main-cart',
   productFormSelector = '.shopify-product-form',
   productFormParser, // https://shopify.dev/docs/api/ajax/reference/cart
@@ -179,12 +188,12 @@ export default async ({
   teardownController = new AbortController()
 
   if (drawerContainer) {
-    closeDrawer(cartSectionSelector, drawerContainer)
+    closeDrawer(cartSectionSelector, drawerContainer, useBarbaNavigation)
 
     const url = new URL(window.location)
 
     if (url.pathname === '/cart') {
-      redirect('/?cart')
+      redirect('/?cart', useBarbaNavigation)
     }
 
     if (url.searchParams.has('cart')) {
@@ -200,7 +209,7 @@ export default async ({
         async e => {
           e.preventDefault()
           e.stopPropagation()
-          setUrlParam('cart', '')
+          setUrlParam('cart', '', useBarbaNavigation)
           await fetchAndOpenDrawerCart(cartSectionSelector, drawerContainer)
           window.dispatchEvent(new CustomEvent('a-la-cart.drawer-opened'))
         },
@@ -212,7 +221,7 @@ export default async ({
       'keydown',
       e => {
         if (e.key !== 'Escape') return
-        closeDrawer(cartSectionSelector, drawerContainer)
+        closeDrawer(cartSectionSelector, drawerContainer, useBarbaNavigation)
       },
       {
         signal: teardownController.signal,
@@ -239,7 +248,12 @@ export default async ({
 
     productForm.addEventListener(
       'change',
-      () => setUrlParam('variant', parse(productForm).items[0].id),
+      () =>
+        setUrlParam(
+          'variant',
+          parse(productForm).items[0].id,
+          useBarbaNavigation
+        ),
       { signal: teardownController.signal }
     )
 
@@ -258,7 +272,7 @@ export default async ({
    */
   window.addEventListener(
     'a-la-cart.close-drawer',
-    () => closeDrawer(cartSectionSelector, drawerContainer),
+    () => closeDrawer(cartSectionSelector, drawerContainer, useBarbaNavigation),
     {
       signal: teardownController.signal,
     }
