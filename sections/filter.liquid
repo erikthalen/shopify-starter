@@ -1,5 +1,26 @@
+{% comment %}
+  https://help.shopify.com/en/manual/online-store/search-and-discovery
+{% endcomment %}
+
 <form class="filters">
-  <div>Sort by: {{ collection.sort_by }}</div>
+  <label for="sort-by">Sort by:</label>
+
+  <select name="sort_by" id="sort-by">
+    {% assign values = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-ascending,created-descending'
+      | split: ','
+    %}
+
+    {% for value in values %}
+      <option
+        {% if collection.sort_by == value %}
+          selected
+        {% endif %}
+        value="{{ value }}"
+      >
+        {{ value }}
+      </option>
+    {% endfor %}
+  </select>
 
   {%- for filter in collection.filters -%}
     <p>{{ filter.label }}</p>
