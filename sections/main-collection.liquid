@@ -1,0 +1,11 @@
+<h1>{{ collection.title }}</h1>
+
+<ol>
+  {% paginate collection.products by 1000 %}
+    {% for product in collection.products %}
+      <li>
+        <a href="{{ product.url }}">{{ product.title }}</a>
+      </li>
+    {% endfor %}
+  {% endpaginate %}
+</ol>

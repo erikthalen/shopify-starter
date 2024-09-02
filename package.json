@@ -1,0 +1,27 @@
+{
+  "name": "sissel-edelbo",
+  "version": "0.0.0-beta",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm run vite:dev & pnpm run shopify:serve",
+    "deploy": "pnpm run vite:build && pnpm run shopify:deploy",
+    "vite:dev": "vite",
+    "vite:build": "vite build",
+    "shopify:serve": "shopify theme dev -e development",
+    "shopify:deploy": "shopify theme push -e production",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@virtualstate/navigation": "^1.0.1-alpha.202",
+    "eslint": "^8.56.0",
+    "tsconfig": "^7.0.0",
+    "vite": "^5.0.0",
+    "vite-plugin-page-reload": "^0.2.0",
+    "vite-plugin-shopify": "^3.0.0",
+    "vite-plugin-top-level-await": "^1.4.1"
+  },
+  "dependencies": {
+    "@barba/core": "^2.10.2"
+  }
+}

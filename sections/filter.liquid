@@ -1,0 +1,141 @@
+{% comment %}
+  https://help.shopify.com/en/manual/online-store/search-and-discovery
+{% endcomment %}
+
+<form class="filters">
+  <label for="sort-by">Sort by:</label>
+
+  <select name="sort_by" id="sort-by">
+    {% assign values = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-ascending,created-descending'
+      | split: ','
+    %}
+
+    {% for value in values %}
+      <option
+        {% if collection.sort_by == value %}
+          selected
+        {% endif %}
+        value="{{ value }}"
+      >
+        {{ value }}
+      </option>
+    {% endfor %}
+  </select>
+
+  {%- for filter in collection.filters -%}
+    <p>{{ filter.label }}</p>
+
+    {%- case filter.type -%}
+        {% comment %} BOOLEAN FILTER {% endcomment %}
+      {%- when 'boolean' -%}
+        <input
+          type="checkbox"
+          name="{{ filter.param_name }}"
+          value="{{ filter.true_value.value }}"
+          id="Filter-{{ filter.param_name }}"
+          {% if filter.true_value.active -%}
+            checked
+          {%- endif %}
+        >
+        {{- filter.true_value.label -}}
+        ({{ filter.true_value.count }})
+        <input
+          type="checkbox"
+          name="{{ filter.param_name }}"
+          value="{{ filter.false_value.value }}"
+          id="Filter-{{ filter.param_name }}"
+          {% if filter.false_value.active -%}
+            checked
+          {%- endif %}
+        >
+        {{- filter.false_value.label -}}
+        ({{ filter.false_value.count }})
+
+        {% comment %} LIST FILTER {% endcomment %}
+      {%- when 'list' -%}
+        {%- for filter_value in filter.values -%}
+          <label style="display: block">
+            <input
+              type="checkbox"
+              name="{{ filter_value.param_name }}"
+              value="{{ filter_value.value }}"
+              {% if filter_value.active -%}
+                checked
+              {%- endif %}
+            >
+
+            {% comment %}
+              To use color swatches:
+              Create a Metaobject with 3 fields:
+               1. "Label" - Single line text
+               2. "Color" - Color
+               3. "Image" - File (image)
+
+              Create a Metafield on Variants and add this Metaobject as field value.
+              Create a new Search & Discovery Filter and choose the Metafield as Source.
+              Change Display options of the filter to "Swatch color: Color" and "Swatch pattern: Image"
+            {% endcomment %}
+            {% if filter.presentation == 'swatch' %}
+              {% if filter_value.swatch.color != blank %}
+                <span
+                  style="background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;"
+                ></span>
+              {% elsif filter_value.swatch.image != blank %}
+                {{ filter_value.swatch.image | image_url: width: 30, height: 30 | image_tag }}
+              {% endif %}
+            {% endif %}
+
+            {{ filter_value.label }}
+            ({{ filter_value.count }})
+          </label>
+        {%- endfor -%}
+
+        {% comment %} PRICE FILTER {% endcomment %}
+      {%- when 'price_range' -%}
+        {% assign lowValue = filter.min_value.value
+          | money_without_currency
+          | replace: ',', ''
+          | replace: '.', ''
+          | times: 0.01
+          | round
+        %}
+        {% assign highValue = filter.max_value.value
+          | money_without_currency
+          | replace: ',', ''
+          | replace: '.', ''
+          | times: 0.01
+          | round
+        %}
+        {% assign maxValue = filter.range_max
+          | money_without_currency
+          | replace: ',', ''
+          | replace: '.', ''
+          | times: 0.01
+          | round
+        %}
+
+        <input
+          name="filter.v.price.gte"
+          type="range"
+          min="0"
+          value="{% if filter.min_value.value != blank %}{{ lowValue }}{% else %}0{% endif %}"
+          max="{{ maxValue }}"
+        >
+
+        <input
+          name="filter.v.price.lte"
+          type="range"
+          min="0"
+          value="{% if filter.max_value.value != blank %}{{ highValue }}{% else %}{{ maxValue }}{% endif %}"
+          max="{{ maxValue }}"
+        >
+
+        <span>{{ cart.currency.symbol }}</span>
+    {%- endcase -%}
+
+    <hr>
+  {%- endfor -%}
+
+  <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}">Clear all</a>
+  <button type="submit">Apply</button>
+</form>

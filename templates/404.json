@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "default": {
+      "type": "error",
+      "settings": {}
+    }
+  },
+  "order": ["default"]
+}

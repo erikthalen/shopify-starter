@@ -1,0 +1,42 @@
+<div class="test-section" data-ref="test-section" style="{% render 'color-scheme' %}">
+  <p>{{ section.settings.text }}</p>
+  <p class="primary">Primary text</p>
+  <p class="secondary">Secondary text</p>
+
+  {% render 'image', image: section.settings.image %}
+
+  <button data-ref-test-section="button">Click me!</button>
+</div>
+
+{% render '_preview-trigger' %}
+
+{% schema %}
+{
+  "name": "Test section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "This is a test section"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme_1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Test section"
+    }
+  ]
+}
+{% endschema %}

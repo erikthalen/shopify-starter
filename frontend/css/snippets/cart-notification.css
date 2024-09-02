@@ -1,0 +1,17 @@
+.cart-notification {
+  transition: opacity 300ms;
+
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  background: #eee;
+  padding: 20px;
+
+  font-size: 12px;
+  max-width: 400px;
+
+  &:not(.active) {
+    opacity: 0;
+    pointer-events: none;
+  }
+}

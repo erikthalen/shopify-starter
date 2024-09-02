@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="{{ shop.locale }}">
+  <head>
+    <title>
+      {{ page_title }}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if settings.favicon_dark != blank %}
+      <link
+        rel="icon"
+        media="(prefers-color-scheme: light)"
+        href="{{ settings.favicon_dark | image_url: width: 512, crop: false }}"
+      >
+    {% endif %}
+
+    {% if settings.favicon_light != blank %}
+      <link
+        rel="icon"
+        media="(prefers-color-scheme: dark)"
+        href="{{ settings.favicon_light | image_url: width: 512, crop: false }}"
+      >
+    {% endif %}
+
+    {% render 'meta-tags' %}
+
+    {%- liquid
+      render 'vite' with 'theme.css', preload_stylesheet: true
+      render 'vite' with 'theme.ts'
+    -%}
+
+    {{ content_for_header }}
+  </head>
+
+  <body data-barba="wrapper">
+    {% render 'cart-notification' %}
+    {% section 'site-header' %}
+
+    <div
+      data-ref="cart-container"
+      style="position: fixed; top: 0; right: 0; background: white; border: 1px solid; z-index: 10; overflow: auto; height: 100dvh; overscroll-behavior: contain;"
+    ></div>
+
+    <main data-barba="container" data-barba-namespace="main" role="main">
+      {{ content_for_layout }}
+    </main>
+  </body>
+</html>

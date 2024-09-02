@@ -1,0 +1,32 @@
+{% if section.settings.amount != 0 %}
+  <div style="padding-bottom: {{ section.settings.amount }}px"></div>
+{% endif %}
+
+{% if request.visual_preview_mode %}
+  {% comment %} show a little arrow in the preview popup {% endcomment %}
+  <h1 style="text-align: center; opacity: 0.4; font-size: 5vw; margin: 0.15;">↕</h1>
+  {% render '_preview-trigger' %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Space",
+  "settings": [
+    {
+      "type": "range",
+      "id": "amount",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Amount",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Space"
+    }
+  ]
+}
+{% endschema %}

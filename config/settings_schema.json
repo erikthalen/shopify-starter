@@ -1,0 +1,80 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Shopify starter",
+    "theme_version": "1.0.0",
+    "theme_author": "Spring/Summer",
+    "theme_documentation_url": "https://github.com/SPRNGSMMR",
+    "theme_support_url": "https://springsummer.dk/"
+  },
+  {
+    "name": "Browser",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon_light",
+        "label": "Favicon - Light",
+        "info": "Will be used on browsers with dark theme"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon_dark",
+        "label": "Favicon - Dark",
+        "info": "Will be used on browsers with light theme"
+      },
+      {
+        "type": "color",
+        "id": "theme_color",
+        "label": "Theme color",
+        "default": "#ffffff",
+        "info": "Defines the color of the browser ui, typically on mobile browsers"
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "color",
+            "id": "text",
+            "label": "Text",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "primary",
+            "label": "Primary",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "secondary",
+            "label": "Secondary"
+          }
+        ],
+        "role": {
+          "background": "background",
+          "text": "text",
+          "primary_button": "primary",
+          "on_primary_button": "primary",
+          "primary_button_border": "primary",
+          "secondary_button": "secondary",
+          "on_secondary_button": "secondary",
+          "secondary_button_border": "secondary",
+          "icons": "primary",
+          "links": "primary"
+        }
+      }
+    ]
+  }
+]

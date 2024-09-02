@@ -1,0 +1,8 @@
+{
+  "sections": {
+    "default": {
+      "type": "space"
+    }
+  },
+  "order": ["default"]
+}

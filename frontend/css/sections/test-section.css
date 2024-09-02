@@ -1,0 +1,16 @@
+.test-section {
+  display: grid;
+  gap: 10px;
+  font-size: 2vw;
+
+  background-color: var(--scheme-background, #fff);
+  color: var(--scheme-text, #111);
+
+  .primary {
+    color: var(--scheme-primary);
+  }
+
+  .secondary {
+    color: var(--scheme-secondary);
+  }
+}

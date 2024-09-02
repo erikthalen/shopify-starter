@@ -1,0 +1,5 @@
+#cart {
+  &.loading {
+    opacity: 0.3;
+  }
+}

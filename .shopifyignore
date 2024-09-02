@@ -1,0 +1,8 @@
+frontend/
+modules/
+package.json
+pnpm-lock.yaml
+.pnpm-debug.log
+vite.config.ts
+jsconfig.json
+tsconfig.json

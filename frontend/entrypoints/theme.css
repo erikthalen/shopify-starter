@@ -1,0 +1,22 @@
+@import '../css/main';
+
+* {
+  box-sizing: border-box;
+}
+
+:where(img) {
+  object-fit: cover;
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+:where(svg) {
+  height: 100%;
+  width: 100%;
+}
+
+/* make it so sections in preview popup in cms don't overflow */
+shopify-visual-preview-section-list {
+  padding: 0 !important;
+}

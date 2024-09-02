@@ -1,0 +1,36 @@
+{%- comment -%}
+  Used to output a color scheme as inline css variables
+  Loops through all/any colors defined in the current scheme of a section
+
+  usage:
+
+  <div style="{% render 'color-scheme' %}">
+    ...
+  </div>
+
+  Defaults to finding a scheme under the key "section.settings.color_scheme"
+  overwrite this with "color_scheme":
+  
+  <div style="{% render 'color-scheme', color_scheme: block.settings.my_scheme %}"></div>
+
+{%- endcomment -%}
+
+{%- assign scheme = section.settings.color_scheme -%}
+
+{%- if color_scheme != blank -%}
+  {%- assign scheme = color_scheme -%}
+{%- endif -%}
+
+{%- assign colors = scheme.settings | remove_first: '{' | remove_last: '}' | split: ', ' -%}
+
+{%- for color in colors -%}
+  {%- assign key_value = color | split: '=>' -%}
+
+  {%- comment -%} When a color isn't set, it's outputted as "rgba(0,0,0,0)" {%- endcomment -%}
+  {%- if key_value[1] != '"rgba(0,0,0,0)"' -%}
+    {%- assign color_name = key_value[0] | remove: '"' | handleize -%}
+    {%- assign color_value = key_value[1] | remove: '"' -%}
+
+    --scheme-{{ color_name }}:{{ color_value }};
+  {%- endif -%}
+{%- endfor -%}

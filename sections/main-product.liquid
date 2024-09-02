@@ -1,0 +1,45 @@
+<h1>{{ product.title }}</h1>
+
+<p>{{ product.description }}</p>
+
+{% render 'image', image: product.featured_image %}
+
+{%- form 'product', product, novalidate: 'novalidate' -%}
+  <select name="id">
+    {% for variant in product.variants %}
+      <option
+        {% if variant.id == product.selected_or_first_available_variant.id %}
+          selected
+        {% endif %}
+        value="{{ variant.id }}"
+      >
+        {{ variant.title }} - {{ variant.id }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <input type="number" value="1" name="quantity">
+
+  <button
+    type="submit"
+    name="add"
+    {% if product.selected_or_first_available_variant.available == false %}
+      disabled
+    {% endif %}
+  >
+    Buy
+  </button>
+{%- endform -%}
+
+<ul>
+  {% for variant in product.variants %}
+    <li>
+      {{ variant.title }} - {{ variant.price | money_with_currency }}
+      {% render 'image', image: variant.featured_image %}
+    </li>
+  {% endfor %}
+</ul>
+
+<script>
+  console.log({{ product | json }})
+</script>

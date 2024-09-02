@@ -1,0 +1,18 @@
+.site-header {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+
+  nav {
+    display: flex;
+    gap: 20px;
+  }
+
+  form {
+    margin-left: auto;
+  }
+}
