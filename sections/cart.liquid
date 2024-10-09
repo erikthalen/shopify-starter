@@ -1,0 +1,109 @@
+<div data-ref="main-cart">
+  <h1>Cart</h1>
+
+  <form action="{{ routes.cart_url }}" method="post" id="cart">
+    {%- if cart == empty -%}
+      Your cart is empty
+    {% else %}
+      {%- for item in cart.items -%}
+        <div style="display: grid;">
+          {% if item.image %}
+            {% render 'image', image: item.image %}
+          {%- endif -%}
+
+          <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
+
+          {%- if item.original_price != item.final_price -%}
+            {{ item.original_price | money -}}
+            <br>
+            {{ item.final_price | money }}
+          {%- else -%}
+            {{ item.original_price | money }}
+          {%- endif -%}
+
+          <dl>
+            {%- if item.product.has_only_default_variant == false -%}
+              {%- for option in item.options_with_values -%}
+                <dt>{{ option.name }}:</dt>
+                <dd>{{ option.value }}</dd>
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- for property in item.properties -%}
+              {%- assign property_first_char = property.first | slice: 0 -%}
+              {%- if property.last != blank and property_first_char != '_' -%}
+                <dt>{{ property.first }}:</dt>
+                <dd>
+                  {%- if property.last contains '/uploads/' -%}
+                    <a href="{{ property.last }}" class="link" target="_blank">
+                      {{ property.last | split: '/' | last }}
+                    </a>
+                  {%- else -%}
+                    {{ property.last }}
+                  {%- endif -%}
+                </dd>
+              {%- endif -%}
+            {%- endfor -%}
+          </dl>
+
+          {{ item.selling_plan_allocation.selling_plan.name }}
+
+          {%- for discount in item.line_level_discount_allocations -%}
+            {{ discount.discount_application.title }}
+          {%- endfor -%}
+
+          {%- if item.original_line_price != item.final_line_price -%}
+            {{ item.original_line_price | money }}
+            {{ item.final_line_price | money }}
+          {%- else -%}
+            {{ item.original_line_price | money }}
+          {%- endif -%}
+
+          {%- if item.variant.available and item.unit_price_measurement -%}
+            {{ item.unit_price | money }}
+
+            {%- if item.unit_price_measurement.reference_value != 1 -%}
+              {{- item.unit_price_measurement.reference_value -}}
+            {%- endif -%}
+
+            {{ item.unit_price_measurement.reference_unit }}
+          {%- endif -%}
+
+          <a href="{{ item.url_to_remove }}">Remove</a>
+
+          <input
+            type="number"
+            name="updates[]"
+            value="{{ item.quantity }}"
+            id="{{ item.variant.id }}"
+            data-cart-quantity="{{ cart | item_count_for_variant: item.variant.id }}"
+            min="0"
+          >
+        </div>
+        <hr>
+      {%- endfor -%}
+    {%- endif -%}
+  </form>
+
+  <p>Total:</p>
+  {{ cart.total_price | money_with_currency }}
+
+  <button
+    type="submit"
+    name="checkout"
+    {% if cart == empty %}
+      disabled
+    {% endif %}
+    form="cart"
+  >
+    Checkout
+  </button>
+</div>
+
+{% schema %}
+{
+  "name": "Main cart",
+  "class": "main-cart",
+  "settings": []
+}
+{% endschema %}

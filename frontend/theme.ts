@@ -1,5 +1,4 @@
 import 'vite/modulepreload-polyfill'
-import '@virtualstate/navigation/polyfill'
 import barba from '@barba/core'
 import {
   useHydrate,
@@ -7,11 +6,12 @@ import {
   useTransition,
   createDevGrid,
   createBarbaScrollPersist,
-  pageTransition,
+  dolphin,
 } from '~/framework'
 import * as pageTransitions from '~/transitions'
 import { globals, components } from '~/components'
-import useALaCart from '~/modules/a-la-cart'
+
+dolphin()
 
 // visit ?grid to show visual grid
 createDevGrid({
@@ -27,28 +27,15 @@ let refs = useRefs({ asArray: true })
 const globalComponents = useHydrate(globals)
 const pageComponents = useHydrate(components)
 
-function runExternalModules(container = document.body) {
-  useALaCart({
-    root: container,
-    useBarbaNavigation: true,
-    drawerContainer: refs.cartContainer[0],
-    // drawerContainer: '[data-cart-drawer-content]',
-    cartSectionSelector: 'main',
-  })
-}
-
-// used for removing all "old" event listeners after page shift
-// note: this is maybe only necessary when listening on window-events?
-//       browsers seems to be smart enough to removeEventListeners automatically
-//       when an element is removed from the dom(?)
 let abortController = null
+
 const refreshAbortController = () => {
   abortController?.abort()
   abortController = new AbortController()
 }
 
 barba.init({
-  debug: location.origin.includes('127.0.0.1'),
+  // debug: location.origin.includes('127.0.0.1'),
   prevent: () => (window as any).Shopify.designMode,
   prefetchIgnore: '/cart',
   cacheIgnore: '/cart',
@@ -57,21 +44,16 @@ barba.init({
     global: {
       once() {
         refreshAbortController()
-        pageTransitions.pageLoad()
         globalComponents.hydrate(refs)
         pageComponents.hydrate(refs, { signal: abortController.signal })
-        runExternalModules(document.body)
       },
       before() {
-        window.dispatchEvent(new CustomEvent('window.navigation'))
-      },
-      leave() {
         refreshAbortController()
+        window.dispatchEvent(new CustomEvent('window.navigation'))
       },
       enter({ current, next }) {
         refs = useRefs({ exclude: current.container, asArray: true })
-        pageComponents.hydrate(refs)
-        runExternalModules(next.container)
+        pageComponents.hydrate(refs, { signal: abortController.signal })
 
         // if there for some reason are <script>'s that need to run in the new <main>
         next.container.querySelectorAll('script').forEach(script => {

@@ -5,7 +5,7 @@ export default {
     return new Promise((resolve) => {
       current.container.style.transition = `all ${duration}ms`
       current.container.style.opacity = 0
-      current.container.style.translate = '100px 0'
+      current.container.style.translate = '0 20px'
       
       setTimeout(resolve, duration)
     })
@@ -14,7 +14,7 @@ export default {
   async enter({ next }) {
     return new Promise((resolve) => {
       next.container.style.opacity = 0
-      next.container.style.translate = '-100px 0'
+      next.container.style.translate = '0 -20px'
       
       setTimeout(() => {
         next.container.style.transition = `all ${duration}ms`
@@ -22,7 +22,7 @@ export default {
         next.container.style.translate = '0 0'
 
         setTimeout(resolve, duration)
-      }, 50)
+      }, 100)
     })
   },
 }

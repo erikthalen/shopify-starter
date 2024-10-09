@@ -1,3 +1,5 @@
+import '@virtualstate/navigation/polyfill'
+
 /**
  * @function createDevGrid
  * @description Appends some fixed divs to the `<body>`, which are styled to look like a grid.
@@ -34,9 +36,9 @@ export const createDevGrid = ({
     userSelect: 'none',
   })
 
-  for (let i = 0; i < parseInt(cols); i++) {
+  for (let i = 0; i < parseInt(cols.toString()); i++) {
     const column = document.createElement('div')
-    column.textContent = i + 1
+    column.textContent = (i + 1).toString()
 
     Object.assign(column.style, {
       color: `hsla(${color} / 0.4)`,
@@ -45,7 +47,7 @@ export const createDevGrid = ({
       justifyContent: 'center',
       width: '100%',
       background: `hsla(${color} / 0.05)`,
-      borderInline: `1px solid hsla(${color} / 0.4)`,
+      borderInline: `0.5px solid hsla(${color} / 0.4)`,
     })
 
     container.append(column)
@@ -58,18 +60,25 @@ export const createDevGrid = ({
  * @function
  * @description An attempt to make the content not jump around on the screen while a page navigation is running
  */
-export const createBarbaScrollPersist = () => {
+export const createBarbaScrollPersist = ({ top = '0px' } = {}) => {
   /**
    * polyfill: @virtualstate/navigation
    */
-  if (!window.navigation) return
 
-  window.navigation.addEventListener('navigate', e => {
+  if (!(window as any).navigation) return
+  ;(window as any).navigation.addEventListener('navigate', e => {
     const scrollY = window.scrollY
+
     const { pathname } = new URL(e.destination.url)
 
     // bail if the new page is the old page (page load or changing query params)
-    if (window.location.pathname === pathname) return
+    // EXCEPT for when the window.navigationRefresh is set to true..
+    if (
+      !(window as any).navigationRefresh &&
+      window.location.pathname === pathname
+    ) {
+      return
+    }
 
     const container = document.querySelector('main')
 
@@ -78,6 +87,19 @@ export const createBarbaScrollPersist = () => {
     container.style.position = 'fixed'
     container.style.width = '100vw'
     container.style.left = '0'
-    container.style.top = -scrollY + 'px'
+    container.style.top = `calc(-${scrollY}px + ${top})`
+
+    // reset
+    ;(window as any).navigationRefresh = false
   })
 }
+
+export const dolphin = () =>
+  console.log(
+    `%c         ,
+       __)\\___
+   _.-'      .\`-.
+ .'/~~\`\`\`"~z/~'"\` 
+ ^^`,
+    'color: dodgerblue; font-family: "Menlo"'
+  )

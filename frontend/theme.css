@@ -1,0 +1,62 @@
+@import 'css/test-section';
+@import 'css/site-header';
+
+/* make it so sections in preview popup in cms don't overflow */
+shopify-visual-preview-section-list {
+  padding: 0 !important;
+}
+
+@font-face {
+  font-family: 'Martian';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Martian'),
+    url('fonts/MartianMono-Regular.ttf') format('truetype');
+}
+
+:root {
+  font-family: 'Martian', monospace;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+
+  color: #213547;
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  box-sizing: border-box;
+  font: inherit;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+main {
+  padding: 100px 20px 200px;
+}
+
+.shopify-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+:where(img),
+:where(svg) {
+  object-fit: cover;
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}

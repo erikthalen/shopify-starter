@@ -2,6 +2,7 @@
   position: fixed;
   width: 100%;
   z-index: 10;
+  left: 0;
 
   display: flex;
   gap: 20px;

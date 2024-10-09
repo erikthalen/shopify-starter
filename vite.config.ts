@@ -13,6 +13,7 @@ export default defineConfig({
     topLevelAwait(),
     shopify({
       snippetFile: 'vite.liquid',
+      entrypointsDir: 'frontend/'
     }),
     pageReload('/tmp/theme.update', {
       delay: 5000

@@ -1,7 +1,7 @@
 {
   "sections": {
     "default": {
-      "type": "space"
+      "type": "welcome"
     }
   },
   "order": ["default"]

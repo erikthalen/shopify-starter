@@ -1,10 +1,13 @@
 <h1>{{ collection.title }}</h1>
 
-<ol>
-  {% paginate collection.products by 1000 %}
+<ol style="padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+  {% paginate collection.products by 32 %}
     {% for product in collection.products %}
       <li>
-        <a href="{{ product.url }}">{{ product.title }}</a>
+        <a href="{{ product.url }}">
+          {% render 'image', image: product.featured_image, size: '50,10' %}
+          {{ product.title }}
+        </a>
       </li>
     {% endfor %}
   {% endpaginate %}

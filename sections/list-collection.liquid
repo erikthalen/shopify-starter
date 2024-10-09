@@ -1,10 +1,13 @@
 <h1>All collections</h1>
 
-<ol>
+<ol style="padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
   {% paginate collections by 1000 %}
     {% for collection in collections %}
       <li>
-        <a href="{{ collection.url }}">{{ collection.title }}</a>
+        <a href="{{ collection.url }}">
+          {% render 'image', image: collection.featured_image, size: '20,10' %}
+          {{ collection.title }}
+        </a>
       </li>
     {% endfor %}
   {% endpaginate %}

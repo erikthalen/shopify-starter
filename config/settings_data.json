@@ -5,8 +5,8 @@
         "settings": {
           "background": "#FFFFFF",
           "text": "#121212",
-          "primary": "",
-          "secondary": ""
+          "primary": "#ff3b3b",
+          "secondary": "#3b84ff"
         }
       }
     }

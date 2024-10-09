@@ -1,23 +1,14 @@
 {
-  "include": [
-    "."
-  ],
-  "exclude": [
-    "dist",
-    "build",
-    "node_modules"
-  ],
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
-    "lib": ["esnext", "dom"],
+    "lib": ["esnext", "dom", "dom.iterable"],
     "module": "es2022",
     "target": "es2022",
-    "moduleResolution":"node",
+    "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["frontend/*"],
-      "~/*": ["frontend/*"],
-      "@@/*": ["resources/js/*"],
-      "@modules/*": ["frontend/modules/*"]
+      "~/*": ["frontend/*"]
     },
     "types": ["vite/client"]
   }

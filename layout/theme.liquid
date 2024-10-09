@@ -33,13 +33,7 @@
   </head>
 
   <body data-barba="wrapper">
-    {% render 'cart-notification' %}
     {% section 'site-header' %}
-
-    <div
-      data-ref="cart-container"
-      style="position: fixed; top: 0; right: 0; background: white; border: 1px solid; z-index: 10; overflow: auto; height: 100dvh; overscroll-behavior: contain;"
-    ></div>
 
     <main data-barba="container" data-barba-namespace="main" role="main">
       {{ content_for_layout }}

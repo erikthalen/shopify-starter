@@ -1,108 +1,170 @@
-import { useRefs, useHydrate } from './../framework'
-import useALaCart from '~/modules/a-la-cart'
-import { components } from '~/components'
+import { useHydrate, useRefs } from '~/framework'
+import { Component } from '~/framework/types'
+import { components } from '.'
 
-async function fetchCartAmount() {
-  try {
-    const res = await fetch('/cart.js')
-    const json = await res.json()
-    if (json?.item_count !== undefined) return json.item_count
+const CART_SELECTOR = '.main-cart'
 
-    throw 'did not receive amount from shopify :('
-  } catch (error) {
-    window.location.reload()
-    return ''
+function isLoading(initiator, isLoading) {
+  if (isLoading) {
+    console.log(`%cStarted loading ${initiator}`, 'color: dodgerblue')
+  } else {
+    console.log(`%cFinished loading ${initiator}`, 'color: dodgerblue')
   }
 }
 
-// update text label indicating current amount in cart
-export const cartItemCount = ref => {
-  if (!ref.cartItemCount) return
+/**
+ * calls the passed function if not called again within [delay] ms.
+ * an abortcontroller is passed to the callback, good for aborting a fetch if a new fetch is called
+ */
+export function debounce(
+  callback: (arg: any, obj: { signal: AbortSignal }) => any,
+  delay: number
+): (arg: any) => Promise<any | Error> {
+  let abortController = null
 
-  // use markup like:
-  // <span data-ref="cart-item-count">{{ cart.item_count }}</span>
+  return arg =>
+    new Promise((resolve, reject) => {
+      abortController?.abort('debounced')
+      abortController = new AbortController()
 
-  async function updateAmount(e) {
-    const amountFromEvent = e.detail?.items?.reduce(
-      (acc, cur) => (acc += cur.quantity),
-      0
+      const handleAbort = () => {
+        clearTimeout(timeout)
+        reject('debounced')
+      }
+
+      let timeout = setTimeout(async () => {
+        try {
+          abortController.signal?.removeEventListener('abort', handleAbort)
+          resolve(await callback(arg, { signal: abortController.signal }))
+        } catch (error) {
+          handleAbort()
+        }
+      }, delay)
+
+      abortController.signal?.addEventListener('abort', handleAbort)
+    })
+}
+
+function replaceCartMarkup(
+  newCart: HTMLElement,
+  selector: string
+): HTMLElement {
+  const oldCarts = document.querySelectorAll(selector)
+
+  oldCarts.forEach(oldCart => {
+    oldCart.after(newCart.cloneNode(true))
+    oldCart.remove()
+  })
+
+  return newCart
+}
+
+async function fetchCartMarkup({
+  cache = true,
+  signal = null,
+}: {
+  cache?: boolean
+  signal?: AbortSignal | null
+}): Promise<HTMLElement> {
+  const parser = new DOMParser()
+  const res = await fetch('/cart' + cache ? '?cache=false' : '', { signal })
+  const text = await res.text()
+  const doc = parser.parseFromString(text, 'text/html')
+  const cart = doc.querySelector(CART_SELECTOR)
+  return cart as HTMLElement
+}
+
+const debouncedUpdateCart: (arg: any) => Promise<HTMLElement> = debounce(
+  async (body, { signal }) => {
+    isLoading('cart-update', true)
+
+    await fetch('/cart/update.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+
+    const newCart = await fetchCartMarkup({ signal })
+
+    isLoading('cart-update', false)
+
+    return newCart
+  },
+  200
+)
+
+async function updateCart(element: HTMLElement): Promise<HTMLElement> {
+  const target =
+    element.tagName !== 'FORM' ? element.querySelector('form') : element
+
+  const abortController = new AbortController()
+
+  return new Promise(resolve => {
+    async function handleRemoveItem(url) {
+      isLoading('cart-will-update', true)
+      await fetch(url) // call shopify with remove-request
+      const newCart = await fetchCartMarkup({ cache: false })
+      isLoading('cart-will-update', false)
+      abortController.abort()
+      resolve(replaceCartMarkup(newCart, CART_SELECTOR))
+    }
+
+    async function handleUpdateCart(input) {
+      try {
+        // both update cart and get new cart markup back
+        const newCart = await debouncedUpdateCart({
+          updates: { [input.id]: parseInt(input.value) },
+        })
+
+        abortController.abort()
+        resolve(replaceCartMarkup(newCart, CART_SELECTOR))
+      } catch (error) {
+        isLoading('cart-will-update', false)
+      }
+    }
+
+    target?.addEventListener(
+      'change',
+      async e => {
+        const input = e.target as HTMLInputElement
+        if (input.name !== 'updates[]') return
+        e.preventDefault()
+        e.stopPropagation()
+        handleUpdateCart(input)
+      },
+      { signal: abortController.signal }
     )
-    const amount = amountFromEvent || (await fetchCartAmount())
 
-    ref.cartItemCount.forEach(el => (el.textContent = amount))
-  }
+    const links = target ? [...target.querySelectorAll('a')] : []
+    const removeLinks = links.filter(link => link.href.includes('cart/change'))
 
-  window.addEventListener('a-la-cart.product-added', updateAmount)
-  window.addEventListener('a-la-cart.cart-updated', updateAmount)
+    // any/all remove buttons
+    removeLinks.forEach(link => {
+      link.addEventListener(
+        'click',
+        async e => {
+          e.preventDefault()
+          e.stopPropagation()
+          handleRemoveItem(link.href)
+        },
+        { signal: abortController.signal }
+      )
+    })
+  })
 }
 
-// handle cart opening/closing
-export default ref => {
-  if (!ref.cartContainer) return
+export const cart: Component = ref => {
+  if (!ref.mainCart) return
 
-  const [cartContainer] = ref.cartContainer
-
-  function hydrateCart() {
-    try {
-      const refs = useRefs({ root: cartContainer, asArray: true })
-
-      useALaCart({
-        useBarbaNavigation: true,
-        drawerContainer: cartContainer, // '[data-cart-drawer-content]',
-        cartSectionSelector: 'main',
-      })
-
-      useHydrate(components).hydrate(refs)
-
-      // refs.closeButton[0]?.addEventListener('click', () => {
-      //   const cartContent = document.querySelector(
-      //     '[data-shopify-content]'
-      //   ) as HTMLElement
-      //   cartContent.style.opacity = '0'
-
-      //   setTimeout(() => {
-      //     window.dispatchEvent(new CustomEvent('a-la-cart.close-drawer'))
-      //   }, 150)
-      // })
-    } catch (error) {
-      console.log('could not open cart')
-      window.location.reload()
-    }
+  async function updateRecursive(form) {
+    const newForm = await updateCart(form)
+    window.dispatchEvent(new CustomEvent('ss-event.cart.updated'))
+    updateRecursive(newForm)
   }
 
-  window.addEventListener('click', (e) => {
-    if(!cartContainer.contains(e.target)) {
-      window.dispatchEvent(new CustomEvent('a-la-cart.close-drawer'))
-    }
-  })
-
-  window.addEventListener('a-la-cart.drawer-opened', hydrateCart)
-  window.addEventListener('a-la-cart.cart-updated', hydrateCart)
-
-  window.addEventListener('a-la-cart.product-added', () => {
-    window.dispatchEvent(new CustomEvent('a-la-cart.open-drawer'))
-  })
-
-  function setLoadingState(e) {
-    const isLoading = e.detail
-    const form = cartContainer.querySelector('form')
-    form.style.opacity = isLoading ? '0.5' : null
-  }
-
-  window.addEventListener('a-la-cart.is-updating', setLoadingState)
-
-  // close on backdrop click
-  // cartContainer.addEventListener('click', e => {
-  //   if (e.target.closest('[data-cart-drawer-content]')) return
-
-  //   const drawer = cartContainer.querySelector('[data-shopify-content]')
-  //   console.log(cartContainer)
-
-  //   drawer.style.transition = 'opacity 150ms'
-  //   drawer.style.opacity = '0'
-
-  //   setTimeout(() => {
-  //     window.dispatchEvent(new CustomEvent('a-la-cart.close-drawer'))
-  //   }, 150)
-  // })
+  ref.mainCart.map(element => updateRecursive(element))
 }
+
+window.addEventListener('ss-event.cart.updated', () => {
+  useHydrate(components).hydrate(useRefs())
+})

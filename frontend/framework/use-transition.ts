@@ -1,3 +1,5 @@
+import { ITransitionPage, HooksTransitionMap,HookMethods } from '@barba/core/dist/src/defs'
+
 function createResolver() {
   let resolver = null
   const promise = new Promise(resolve => (resolver = resolve))
@@ -36,15 +38,25 @@ export const pageTransition = {
  * @param {object} options.global - A set of any Barba hooks
  * @param {object} options.barbaOptions - Any overwriting Barba options
  */
-export default ({ page, global }) => {
-  const _runCurrentHook = async (hook, data) => {
+export default ({
+  page,
+  global,
+}: {
+  page: {
+    [key: string]: HooksTransitionMap
+  }
+  global: HooksTransitionMap
+}): ITransitionPage[] => {
+  const runCurrentHook = async (hook, data) => {
     const currentHooks = page[currentTransition]
 
     // no transition set, or the name doesn't exist
     if (!currentTransition || !currentHooks) {
+      if (window.innerWidth < 800) return
+
       const [defaultTransition] = Object.keys(page)
 
-      // run nothing if the default transition has current hook registered
+      // run nothing if the default transition doesn't have current hook registered
       if (!page[defaultTransition][hook]) {
         return Promise.resolve()
       }
@@ -62,7 +74,7 @@ export default ({ page, global }) => {
     return currentHooks[hook](data)
   }
 
-  const _runGlobalHook = (hook, data) => {
+  const callGlobalHook = (hook, data) => {
     if (typeof global[hook] !== 'function') return
 
     return global[hook](data)
@@ -95,29 +107,26 @@ export default ({ page, global }) => {
 
   return [
     {
-      sync: true,
+      sync: false,
       name: 'main',
       ...ALL_BARBA_HOOKS.reduce((acc, hook) => {
         return {
           ...acc,
           async [hook](data) {
-            _runGlobalHook(hook, data)
-            await _runCurrentHook(hook, data)
+            callGlobalHook(hook, data)
+            await runCurrentHook(hook, data)
           },
         }
       }, {}),
-      async once(data) {
-        _runGlobalHook('once', data)
-      },
-      async leave(data) {
-        _runGlobalHook('leave', data)
-        await _runCurrentHook('leave', data)
-      },
+      // async leave(data) {
+      //   callGlobalHook('leave', data)
+      //   await runCurrentHook('leave', data)
+      // },
       async enter(data) {
         maybeScrollBackToTop(data.trigger)
 
-        _runGlobalHook('enter', data)
-        await _runCurrentHook('enter', data)
+        callGlobalHook('enter', data)
+        await runCurrentHook('enter', data)
 
         // cleanup
         setTransition(null)
@@ -128,11 +137,6 @@ export default ({ page, global }) => {
   ]
 }
 
-/**
- * @function
- * @description Run this anytime you want to set a specific transition to run on the next page shift
- * @param {string} name - The key of a set of hooks to run next page shift
- */
-export const setTransition = name => {
+export const setTransition = (name: string) => {
   currentTransition = name
 }

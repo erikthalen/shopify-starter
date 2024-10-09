@@ -15,7 +15,7 @@
       <h2>Pair it with</h2>
     {% endif %}
 
-    <ul>
+    <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr)">
       {%- for product in recommendations.products -%}
         <li>
           <a href="{{ product.url }}">

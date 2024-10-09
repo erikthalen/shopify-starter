@@ -1,7 +1,7 @@
 {
   "sections": {
     "default": {
-      "type": "main-collection",
+      "type": "search",
       "settings": {}
     }
   },

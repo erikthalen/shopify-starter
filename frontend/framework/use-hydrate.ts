@@ -1,3 +1,5 @@
+import { Component } from './types'
+
 /**
  * @function useHydrate
  * @description Used to initialize components, for when the window doesn't reload fully.
@@ -5,7 +7,7 @@
  * @returns {useHydrate~hydrate} - the returned function
  * @returns {useHydrate~dehydrate} - the returned function again
  */
-export default components => {
+export default (components: Component | Component[]) => {
   let teardownFunctions = null
 
   return {
@@ -19,11 +21,11 @@ export default components => {
       this.dehydrate()
 
       setTimeout(() => {
-        teardownFunctions = components
+        const componentsArray = [].concat(components)
+
+        teardownFunctions = componentsArray
           .map(component => {
-            if (typeof component !== 'function') {
-              return
-            }
+            if (typeof component !== 'function') return
 
             return [].concat(component(...args))
           })
@@ -31,7 +33,7 @@ export default components => {
           .filter(Boolean)
       })
 
-      return this
+      return args.length > 1 ? [args] : args[0]
     },
 
     /**
@@ -39,12 +41,20 @@ export default components => {
      * @description Runs any/all the returned functions returned from the `hydrate`
      */
     dehydrate() {
-      teardownFunctions?.map(teardown => {
-        Promise.resolve(teardown).then(value => {
-          if (typeof value === 'function') {
-            value()
-          }
-        })
+      teardownFunctions?.map(async teardown => {
+        const value = await Promise.resolve(teardown)
+
+        if (Array.isArray(value)) {
+          value.forEach(v => {
+            if (typeof v === 'function') {
+              v()
+            }
+          })
+        }
+
+        if (typeof value === 'function') {
+          value()
+        }
       })
       teardownFunctions = null
     },

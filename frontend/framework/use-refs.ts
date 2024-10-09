@@ -11,10 +11,16 @@
  */
 export default ({
   root = document.body,
-  namespaced,
-  watch,
-  asArray,
-  exclude,
+  namespaced = false,
+  watch = false,
+  asArray = true,
+  exclude = null,
+}: {
+  root?: HTMLElement
+  namespaced?: boolean
+  watch?: boolean
+  asArray?: boolean
+  exclude?: HTMLElement | null
 } = {}) => {
   if (!(root instanceof HTMLElement)) {
     console.warn('{ root } has to be an element')
@@ -38,17 +44,35 @@ function _refs(root, exclude = null, asArray = false, namespaced = false) {
 
   const refs = new Map()
 
+  /**
+   * loop over all element with [data-ref]
+   */
   elements.forEach(element => {
+    /**
+     * discard if element is part of an excluded dom branch
+     */
     if (exclude && (exclude === element || exclude.contains(element))) return
 
-    const dataset =
-      'ref' + (namespaced ? capitalize(camelCase(root.dataset.ref)) : '')
-    const keys = (camelCase(element.dataset[dataset]) || 'item').split(' ')
+    const namespace = namespaced ? capitalize(camelCase(root.dataset.ref)) : ''
 
-    keys.forEach(key => {
+    /**
+     * extract the value of the [data-ref] attribute, default to "item"
+     */
+    const keys = camelCase(element.dataset['ref' + namespace]) || 'item'
+
+    /**
+     * split on space, allowing for multiple ref values (saves element under multiple keys)
+     */
+    keys.split(' ').forEach(key => {
       if (refs.has(key)) {
+        /**
+         * push element to existing array of elements with same [data-ref]
+         */
         refs.set(key, [refs.get(key), element].flat())
       } else {
+        /**
+         * create new key with this element as value
+         */
         refs.set(key, asArray ? [element] : element)
       }
     })

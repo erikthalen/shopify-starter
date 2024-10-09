@@ -8,29 +8,18 @@
   "placeholder" - one of shopify's placeholder_svg_tags's images
 {% endcomment %}
 
-{% if request.visual_preview_mode %}
-  {% if placeholder != blank %}
-    {% assign placeholder_image = placeholder %}
-  {% else %}
-    {% assign placeholder_image = 'hero-apparel-1' %}
-  {% endif %}
-
-  <img class="image" src="{{ 'placeholder.png' | asset_img_url }}" width="1000" height="1000">
-  {% comment %} <div class="image">
-    {{ placeholder_image | placeholder_svg_tag: 'placeholder-svg' }}
-  </div> {% endcomment %}
+{% if image == blank %}
+  {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
 {% elsif image != blank %}
-  {% assign url = image | image_url %}
+  {% assign sizes = '100,100' | split: ',' %}
 
-  {% if img_size != blank %}
-    {% assign sizes = img_size | split: ',' %}
-  {% else %}
-    {% assign sizes = '100,100' | split: ',' %}
+  {% if size != blank %}
+    {% assign sizes = size | split: ',' %}
   {% endif %}
 
+  {% assign url = image | image_url %}
   {% assign image_name = url | split: '/' | last | split: '?' | first %}
   {% assign focal_point = images[image_name].presentation.focal_point %}
-  {% assign placeholder_url = image | image_url: width: 2, format: 'webp' %}
 
   <img
     srcset="
@@ -51,7 +40,7 @@
     loading="{% if loading != blank %}{{ loading }}{% else %}lazy{% endif %}"
     width="{{ image.width }}"
     height="{{ image.height }}"
-    class="image{% if url contains '.png' %} png{% endif %} {{ class }}"
-    style="object-position: {{ focal_point }}; background-image: url({{ placeholder_url }})"
+    class="{{ class }}"
+    style="object-position: {{ focal_point }}"
   >
 {% endif %}

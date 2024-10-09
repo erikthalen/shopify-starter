@@ -1,18 +1,18 @@
 {% paginate search.results by 1000 %}
   <p>Search terms: {{ search.terms }}</p>
   <p>Results: {{ search.results_count }}</p>
-  <p>Filters:</p>
+  {% comment %} <p>Filters:</p>
   <ol>
     {% for filter in search.filters %}
       {% comment %} https://shopify.dev/docs/api/liquid/objects/filter {% endcomment %}
       <li>{{ filter.label }}</li>
     {% endfor %}
-  </ol>
-  <p>Sort by: {{ search.sort_by }}</p>
+  </ol> {% endcomment %}
+  {% comment %} <p>Sort by: {{ search.sort_by }}</p>
   <p>Default sort by: {{ search.default_sort_by }}</p>
 
   <p>Product count: {{ search.products_count }}</p>
-  <p>All product count: {{ search.all_products_count }}</p>
+  <p>All product count: {{ search.all_products_count }}</p> {% endcomment %}
 
   <select name="sort_by">
     {%- for option in search.sort_options -%}
@@ -35,12 +35,15 @@
     <h2>Search isn't performed</h2>
   {% endif %}
 
-  <ol>
+  <ol style="padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
     {%- for item in search.results -%}
       <li>
         {%- case item.object_type -%}
           {%- when 'product' -%}
-            <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
+            <a href="{{ item.url }}">
+              {% render 'image', image: item.featured_image %}
+              {{ item.title | truncate: 50 | escape }}
+            </a>
           {%- when 'article' -%}
             <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
           {%- when 'page' -%}
