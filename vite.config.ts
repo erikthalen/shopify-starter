@@ -19,6 +19,7 @@ export default defineConfig({
       delay: 5000
     })
   ],
+  assetsInclude: '**/*.md',
   build: {
     sourcemap: true,
   }
