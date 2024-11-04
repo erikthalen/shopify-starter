@@ -1,5 +1,9 @@
-name: Theme deploy
-on: [push]
+name: Build and deploy theme to Shopify
+
+on:
+  push:
+    branches: [main]
+
 jobs:
   deploy:
     name: Deploy

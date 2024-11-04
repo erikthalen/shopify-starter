@@ -5,11 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm run vite:dev & pnpm run shopify:serve",
-    "deploy": "pnpm run vite:build && pnpm run shopify:deploy",
     "vite:dev": "vite",
     "vite:build": "vite build",
     "shopify:serve": "shopify theme dev -e development",
-    "shopify:deploy": "shopify theme push -e production",
     "lint": "npx eslint"
   },
   "devDependencies": {
