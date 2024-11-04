@@ -6,6 +6,10 @@
       {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
     </title>
 
+    {% render 'meta-tags' %}
+
+    {{ content_for_header }}
+
     {% if settings.favicon_dark != blank %}
       <link
         rel="icon"
@@ -22,14 +26,10 @@
       >
     {% endif %}
 
-    {% render 'meta-tags' %}
-
     {%- liquid
       render 'vite' with 'theme.css', preload_stylesheet: true
       render 'vite' with 'theme.ts'
     -%}
-
-    {{ content_for_header }}
   </head>
 
   <body data-barba="wrapper">

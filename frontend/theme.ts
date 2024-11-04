@@ -13,7 +13,9 @@ import { globals, components } from '~/components'
 
 declare global {
   interface Window {
-    Shopify: unknown
+    Shopify: {
+      designMode: unknown
+    }
     forceNavigationRefresh: boolean
     navigation: unknown
   }
