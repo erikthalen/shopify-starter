@@ -13,7 +13,7 @@ export const globals: Component[] = [
 export const components: Component[] = [
   cart,
   productForm,
-  ref => {
+  () => {
     console.log('%cComponent 1 hydrated', 'color: green')
     return () => console.log('%cComponent 1 de-hydrated', 'color: green')
   },

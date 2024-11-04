@@ -86,7 +86,10 @@ function _watched(root, onChange, ...args) {
 
   const observer = new MutationObserver(() => {
     ref.current = _refs(root, ...args)
-    typeof onChange === 'function' && onChange(ref.current)
+
+    if (typeof onChange === 'function') {
+      onChange(ref.current)
+    }
   })
 
   observer.observe(root, { childList: true, subtree: true })

@@ -11,6 +11,14 @@ import {
 import * as pageTransitions from '~/transitions'
 import { globals, components } from '~/components'
 
+declare global {
+  interface Window {
+    Shopify: unknown
+    forceNavigationRefresh: boolean
+    navigation: unknown
+  }
+}
+
 dolphin()
 
 // visit ?grid to show visual grid
@@ -36,7 +44,7 @@ const refreshAbortController = () => {
 
 barba.init({
   // debug: location.origin.includes('127.0.0.1'),
-  prevent: () => (window as any).Shopify.designMode,
+  prevent: () => window.Shopify.designMode,
   prefetchIgnore: '/cart',
   cacheIgnore: '/cart',
   transitions: useTransition({

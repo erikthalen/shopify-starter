@@ -65,16 +65,16 @@ export const createBarbaScrollPersist = ({ top = '0px' } = {}) => {
    * polyfill: @virtualstate/navigation
    */
 
-  if (!(window as any).navigation) return
-  ;(window as any).navigation.addEventListener('navigate', e => {
+  if (!window.navigation) return
+  window.navigation.addEventListener('navigate', e => {
     const scrollY = window.scrollY
 
     const { pathname } = new URL(e.destination.url)
 
     // bail if the new page is the old page (page load or changing query params)
-    // EXCEPT for when the window.navigationRefresh is set to true..
+    // EXCEPT for when the window.forceNavigationRefresh is set to true..
     if (
-      !(window as any).navigationRefresh &&
+      !window.forceNavigationRefresh &&
       window.location.pathname === pathname
     ) {
       return
@@ -90,7 +90,7 @@ export const createBarbaScrollPersist = ({ top = '0px' } = {}) => {
     container.style.top = `calc(-${scrollY}px + ${top})`
 
     // reset
-    ;(window as any).navigationRefresh = false
+    window.forceNavigationRefresh = false
   })
 }
 

@@ -17,9 +17,10 @@ function isLoading(initiator, isLoading) {
  * an abortcontroller is passed to the callback, good for aborting a fetch if a new fetch is called
  */
 export function debounce(
-  callback: (arg: any, obj: { signal: AbortSignal }) => any,
+  callback: (arg: unknown, obj: { signal: AbortSignal }) => unknown,
   delay: number
-): (arg: any) => Promise<any | Error> {
+  // eslint-disable-next-line
+): (arg: unknown) => Promise<any | Error> {
   let abortController = null
 
   return arg =>
@@ -32,11 +33,12 @@ export function debounce(
         reject('debounced')
       }
 
-      let timeout = setTimeout(async () => {
+      const timeout = setTimeout(async () => {
         try {
           abortController.signal?.removeEventListener('abort', handleAbort)
           resolve(await callback(arg, { signal: abortController.signal }))
         } catch (error) {
+          console.log(error)
           handleAbort()
         }
       }, delay)
@@ -74,7 +76,7 @@ async function fetchCartMarkup({
   return cart as HTMLElement
 }
 
-const debouncedUpdateCart: (arg: any) => Promise<HTMLElement> = debounce(
+const debouncedUpdateCart: (arg: unknown) => Promise<HTMLElement> = debounce(
   async (body, { signal }) => {
     isLoading('cart-update', true)
 
@@ -119,6 +121,7 @@ async function updateCart(element: HTMLElement): Promise<HTMLElement> {
         abortController.abort()
         resolve(replaceCartMarkup(newCart, CART_SELECTOR))
       } catch (error) {
+        console.log(error)
         isLoading('cart-will-update', false)
       }
     }

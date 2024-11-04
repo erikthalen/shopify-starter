@@ -1,4 +1,4 @@
-import { ITransitionPage, HooksTransitionMap,HookMethods } from '@barba/core/dist/src/defs'
+import { ITransitionPage, HooksTransitionMap } from '@barba/core/dist/src/defs'
 
 function createResolver() {
   let resolver = null
