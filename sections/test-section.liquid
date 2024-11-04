@@ -1,10 +1,17 @@
-<div class="test-section" data-ref="test-section" style="{% render 'color-scheme' %}">
+<div class="test-section" style="{% render 'color-scheme' %}">
   <p>{{ section.settings.text }}</p>
 
   <div class="primary">Primary color</div>
   <div class="secondary">Secondary color</div>
 
-  {% render 'image', image: section.settings.image %}
+  {% render 'image',
+    loading: 'eager',
+    image: section.settings.image,
+    image_mobile: section.settings.image_mobile,
+    aspect_ratio: '1/1',
+    aspect_ratio_mobile: '16/9',
+    sizes: '100vw, 50vw'
+  %}
 </div>
 
 {% render '_preview-trigger' %}
@@ -30,6 +37,11 @@
       "type": "image_picker",
       "id": "image",
       "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image - mobile"
     }
   ],
   "presets": [

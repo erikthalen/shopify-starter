@@ -1,46 +1,103 @@
 {% comment %}
+  props:
+
+  image:               the shopify image object,
+  image_mobile:        optionally another image for mobile
+  aspect_ratio:        css string defining aspect ratio
+  aspect_ratio_mobile: css string defining aspect ratio on small screens
+  sizes:               value for the sizes attribute, defaults to '100vw, 100vw'
+  loading:             sets loading attribute, defaults to "lazy"
+
   example usage:
 
-  {% render 'image', image: product.featured_image, size: '100,50' %}
+  {% render 'image', image: product.featured_image %}
 
-  "preload" - Change [loading] to eager
-  "size" - what transformation/size of image to fetch. good for performance, to not load a to big image
-  "placeholder" - one of shopify's placeholder_svg_tags's images
+  another example usage:
+
+  {% render 'image',
+    loading: 'eager',
+    image: section.settings.image,
+    image_mobile: section.settings.image_mobile,
+    aspect_ratio: '1/1',
+    aspect_ratio_mobile: '3/4',
+    sizes: '100vw, 50vw'
+  %}
 {% endcomment %}
+
+{% assign image_url_desktop = image | image_url %}
+{% assign image_name_desktop = image_url_desktop | split: '/' | last | split: '?' | first %}
+{% assign focal_point_desktop = images[image_name_desktop].presentation.focal_point %}
+
+{% assign focal_point_mobile = focal_point_desktop %}
+
+{% if image_mobile != blank %}
+  {% assign image_url_mobile = image_mobile | image_url %}
+  {% assign image_name_mobile = image_url_mobile | split: '/' | last | split: '?' | first %}
+  {% assign focal_point_mobile = images[image_name_mobile].presentation.focal_point %}
+{% endif %}
 
 {% if image == blank %}
   {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
-{% elsif image != blank %}
-  {% assign sizes = '100,100' | split: ',' %}
+{% else %}
+  <picture>
+    {% if image_mobile != blank %}
+      <source
+        srcset="
+          {%- if image_mobile.width >= 10 -%}{{ image_mobile | image_url: width: 10, format: 'webp' }} 10w,{%- endif -%}
+          {%- if image_mobile.width >= 50 -%}{{ image_mobile | image_url: width: 50, format: 'webp' }} 50w,{%- endif -%}
+          {%- if image_mobile.width >= 165 -%}{{ image_mobile | image_url: width: 165, format: 'webp' }} 165w,{%- endif -%}
+          {%- if image_mobile.width >= 360 -%}{{ image_mobile | image_url: width: 360, format: 'webp' }} 360w,{%- endif -%}
+          {%- if image_mobile.width >= 535 -%}{{ image_mobile | image_url: width: 535, format: 'webp' }} 535w,{%- endif -%}
+          {%- if image_mobile.width >= 750 -%}{{ image_mobile | image_url: width: 750, format: 'webp' }} 750w,{%- endif -%}
+          {%- if image_mobile.width >= 1070 -%}{{ image_mobile | image_url: width: 1070, format: 'webp' }} 1070w,{%- endif -%}
+          {%- if image_mobile.width >= 1500 -%}{{ image_mobile | image_url: width: 1500, format: 'webp' }} 1500w,{%- endif -%}
+          {%- if image_mobile.width >= 2200 -%}{{ image_mobile | image_url: width: 2200, format: 'webp' }} 2200w,{%- endif -%}
+          {%- if image_mobile.width >= 2800 -%}{{ image_mobile | image_url: width: 2800, format: 'webp' }} 2800w,{%- endif -%}
+          {%- if image_mobile.width >= 4500 -%}{{ image_mobile | image_url: width: 4500, format: 'webp' }} 4500w,{%- endif -%}
+          {{ url }}
+        "
+        sizes="(max-width: 750px) {{ sizes | default: '100vw, 100vw' }}"
+        width="{{ image_mobile.width }}"
+        height="{{ image_mobile.height }}"
+        media="(max-width: 750px)"
+      >
+    {% endif %}
 
-  {% if size != blank %}
-    {% assign sizes = size | split: ',' %}
-  {% endif %}
+    <source
+      srcset="
+        {%- if image.width >= 10 -%}{{ image | image_url: width: 10, format: 'webp' }} 10w,{%- endif -%}
+        {%- if image.width >= 50 -%}{{ image | image_url: width: 50, format: 'webp' }} 50w,{%- endif -%}
+        {%- if image.width >= 165 -%}{{ image | image_url: width: 165, format: 'webp' }} 165w,{%- endif -%}
+        {%- if image.width >= 360 -%}{{ image | image_url: width: 360, format: 'webp' }} 360w,{%- endif -%}
+        {%- if image.width >= 535 -%}{{ image | image_url: width: 535, format: 'webp' }} 535w,{%- endif -%}
+        {%- if image.width >= 750 -%}{{ image | image_url: width: 750, format: 'webp' }} 750w,{%- endif -%}
+        {%- if image.width >= 1070 -%}{{ image | image_url: width: 1070, format: 'webp' }} 1070w,{%- endif -%}
+        {%- if image.width >= 1500 -%}{{ image | image_url: width: 1500, format: 'webp' }} 1500w,{%- endif -%}
+        {%- if image.width >= 2200 -%}{{ image | image_url: width: 2200, format: 'webp' }} 2200w,{%- endif -%}
+        {%- if image.width >= 2800 -%}{{ image | image_url: width: 2800, format: 'webp' }} 2800w,{%- endif -%}
+        {%- if image.width >= 4500 -%}{{ image | image_url: width: 4500, format: 'webp' }} 4500w,{%- endif -%}
+        {{ url }}
+      "
+      sizes="(max-width: 750px) {{ sizes | default: '100vw, 100vw' }}"
+      width="{{ image.width }}"
+      height="{{ image.height }}"
 
-  {% assign url = image | image_url %}
-  {% assign image_name = url | split: '/' | last | split: '?' | first %}
-  {% assign focal_point = images[image_name].presentation.focal_point %}
+      {% if image_mobile != blank %}
+        media="(min-width: 750px)"
+      {% endif %}
+    >
 
-  <img
-    srcset="
-      {%- if image.width >= 165 -%}{{ image | image_url: width: 165, format: 'webp' }} 165w,{%- endif -%}
-      {%- if image.width >= 360 -%}{{ image | image_url: width: 360, format: 'webp' }} 360w,{%- endif -%}
-      {%- if image.width >= 535 -%}{{ image | image_url: width: 535, format: 'webp' }} 535w,{%- endif -%}
-      {%- if image.width >= 750 -%}{{ image | image_url: width: 750, format: 'webp' }} 750w,{%- endif -%}
-      {%- if image.width >= 1070 -%}{{ image | image_url: width: 1070, format: 'webp' }} 1070w,{%- endif -%}
-      {%- if image.width >= 1500 -%}{{ image | image_url: width: 1500, format: 'webp' }} 1500w,{%- endif -%}
-      {%- if image.width >= 2200 -%}{{ image | image_url: width: 2200, format: 'webp' }} 2200w,{%- endif -%}
-      {%- if image.width >= 2800 -%}{{ image | image_url: width: 2800, format: 'webp' }} 2800w,{%- endif -%}
-      {%- if image.width >= 4500 -%}{{ image | image_url: width: 4500, format: 'webp' }} 4500w,{%- endif -%}
-      {{ url }}
-    "
-    src="{{ image | image_url: width: 1500, format: 'webp' }}"
-    sizes="(max-width: 900px) {{ sizes[0] }}vw, {{ sizes[1] }}vw"
-    alt="{{ image.alt | escape }}"
-    loading="{% if loading != blank %}{{ loading }}{% else %}lazy{% endif %}"
-    width="{{ image.width }}"
-    height="{{ image.height }}"
-    class="{{ class }}"
-    style="object-position: {{ focal_point }}"
-  >
+    <img
+      src="{{ image | image_url: width: 1500, format: 'webp' }}"
+      alt="{{ image.alt }}"
+      width="{{ image.width }}"
+      height="{{ image.height }}"
+      loading="{{ loading | default: 'lazy' }}"
+      style="
+        --focal-point-mobile: {{ focal_point_mobile }}; --focal-point-desktop: {{ focal_point_desktop }};
+        {%- if aspect_ratio_mobile != blank %} --aspect-ratio-mobile: {{ aspect_ratio_mobile }};{%- endif -%}
+        {%- if aspect_ratio != blank %} --aspect-ratio-desktop: {{ aspect_ratio }};{%- endif -%}
+      "
+    >
+  </picture>
 {% endif %}

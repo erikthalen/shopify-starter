@@ -1,10 +1,22 @@
 [environments.development]
 store = "ss-dev-1"
 theme = "129419968596"
-ignore = ["templates/*", "config/settings_data.json", "locales/*"]
+ignore = [
+  "templates/*.json",
+  "templates/**/*.json",
+  "sections/*.json",
+  "config/settings_data.json",
+  "locales/*",
+]
 
 [environments.production]
 store = "ss-dev-1"
 theme = "129419968596"
-ignore = ["templates/*", "config/settings_data.json", "locales/*"]
+ignore = [
+  "templates/*.json",
+  "templates/**/*.json",
+  "sections/*.json",
+  "config/settings_data.json",
+  "locales/*",
+]
 allow-live = true
