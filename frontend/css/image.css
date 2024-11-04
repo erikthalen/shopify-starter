@@ -1,0 +1,9 @@
+img {
+  aspect-ratio: var(--aspect-ratio-mobile);
+  object-position: var(--focal-point-mobile, 50% 50%);
+  
+  @media (min-width: 751px) {
+    aspect-ratio: var(--aspect-ratio-desktop);
+    object-position: var(--focal-point-desktop, 50% 50%);
+  }
+}
