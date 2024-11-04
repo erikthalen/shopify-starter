@@ -22,5 +22,6 @@ export default defineConfig({
   assetsInclude: '**/*.md',
   build: {
     sourcemap: true,
+    manifest: "manifest.json",
   }
 })
