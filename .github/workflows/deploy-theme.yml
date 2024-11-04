@@ -13,16 +13,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: true
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1
           bundler: 'latest'
       - name: Install Shopify CLI
-        run: npm install -g @shopify/cli
+        run: pnpm install -g @shopify/cli
       - name: Install project dependencies
-        run: npm install
+        run: pnpm install
       - name: Build
-        run: npm run vite:build
+        run: pnpm run vite:build
       - name: Deploy
         env:
           # Store URL, like your-store.myshopify.com
