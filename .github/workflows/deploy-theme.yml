@@ -9,24 +9,27 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
+      # Setup
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - uses: pnpm/action-setup@v4
-        with:
-          run_install: true
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1
           bundler: 'latest'
+        
       - name: Install Shopify CLI
         run: pnpm install -g @shopify/cli
+        
       - name: Install project dependencies
         run: pnpm install
-      - name: Build
+        
+      - name: Build source directory
         run: pnpm run vite:build
-      - name: Deploy
+        
+      - name: Deploy Production theme
         env:
           # Store URL, like your-store.myshopify.com
           SHOPIFY_FLAG_STORE: '${{ secrets.SHOPIFY_STORE }}'
@@ -34,3 +37,10 @@ jobs:
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
           SHOPIFY_CLI_TTY: 0
         run: shopify theme push -e production
+        
+      - name: Deploy Development theme
+        env:
+          SHOPIFY_FLAG_STORE: '${{ secrets.SHOPIFY_STORE }}'
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+          SHOPIFY_CLI_TTY: 0
+        run: shopify theme push -e development
