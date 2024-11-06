@@ -1,28 +1,20 @@
-const duration = 400
+const options = {
+  duration: 400,
+  easing: 'ease',
+  fill: 'forwards',
+}
 
 export default {
   async leave({ current }) {
-    return new Promise((resolve) => {
-      current.container.style.transition = `all ${duration}ms`
-      current.container.style.opacity = 0
-      current.container.style.translate = '0 20px'
-      
-      setTimeout(resolve, duration)
-    })
-  },
-  
-  async enter({ next }) {
-    return new Promise((resolve) => {
-      next.container.style.opacity = 0
-      next.container.style.translate = '0 -20px'
-      
-      setTimeout(() => {
-        next.container.style.transition = `all ${duration}ms`
-        next.container.style.opacity = 1
-        next.container.style.translate = '0 0'
+    const from = { opacity: 0, translate: '0 20px' }
 
-        setTimeout(resolve, duration)
-      }, 100)
-    })
+    return current.container.animate(from, options).finished
+  },
+
+  async enter({ next }) {
+    const from = { opacity: 0, translate: '0 -20px' }
+    const to = { opacity: 1, translate: '0 0' }
+
+    return next.container.animate([from, to], options).finished
   },
 }
