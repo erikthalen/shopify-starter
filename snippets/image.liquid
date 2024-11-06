@@ -1,45 +1,48 @@
 {% comment %}
   props:
 
-  image:               the shopify image object,
-  image_mobile:        optionally another image for mobile
-  aspect_ratio:        css string defining aspect ratio
-  aspect_ratio_mobile: css string defining aspect ratio on small screens
-  sizes:               value for the sizes attribute, defaults to '100vw, 100vw'
-  loading:             sets loading attribute, defaults to "lazy"
+  image:           the shopify image object,
+  image_mobile:    optionally another image for mobile
+  sizes:           value for the sizes attribute, defaults to '100vw, 100vw'
+  loading:         sets loading attribute, defaults to "lazy"
+  aspect_ratio:    css string defining aspect ratio
+  aspect_ratio_sm: css string defining aspect ratio on small screens (overwrites aspect_ratio)
+  aspect_ratio_md: css string defining aspect ratio on large screens (overwrites aspect_ratio)
+  style:           any inline style to apply to the <img>
 
-  example usage:
+  example usages:
 
   {% render 'image', image: product.featured_image %}
 
-  another example usage:
+  {% render 'image',
+    image: section.settings.image,
+    sizes: '100vw, 50vw',
+    aspect_ratio: '1/1',
+    style: 'opacity: 0.3'
+  %}
 
   {% render 'image',
-    loading: 'eager',
     image: section.settings.image,
     image_mobile: section.settings.image_mobile,
-    aspect_ratio: '1/1',
-    aspect_ratio_mobile: '3/4',
-    sizes: '100vw, 50vw'
+    aspect_ratio_sm: '3/4'
+    aspect_ratio_md: '16/9'
   %}
 {% endcomment %}
 
 {% assign image_url_desktop = image | image_url %}
 {% assign image_name_desktop = image_url_desktop | split: '/' | last | split: '?' | first %}
-{% assign focal_point_desktop = images[image_name_desktop].presentation.focal_point %}
-
-{% assign focal_point_mobile = focal_point_desktop %}
+{% assign fpd = images[image_name_desktop].presentation.focal_point %}
 
 {% if image_mobile != blank %}
   {% assign image_url_mobile = image_mobile | image_url %}
   {% assign image_name_mobile = image_url_mobile | split: '/' | last | split: '?' | first %}
-  {% assign focal_point_mobile = images[image_name_mobile].presentation.focal_point %}
+  {% assign fpm = images[image_name_mobile].presentation.focal_point %}
 {% endif %}
 
 {% if image == blank %}
   {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
 {% else %}
-  <picture>
+  <picture class="image">
     {% if image_mobile != blank %}
       <source
         srcset="
@@ -93,11 +96,11 @@
       width="{{ image.width }}"
       height="{{ image.height }}"
       loading="{{ loading | default: 'lazy' }}"
-      style="
-        --focal-point-mobile: {{ focal_point_mobile }}; --focal-point-desktop: {{ focal_point_desktop }};
-        {%- if aspect_ratio_mobile != blank %} --aspect-ratio-mobile: {{ aspect_ratio_mobile }};{%- endif -%}
-        {%- if aspect_ratio != blank %} --aspect-ratio-desktop: {{ aspect_ratio }};{%- endif -%}
-      "
+      style="--focal: {{ fpm | default: fpd }}; --md-focal: {{ fpd }};
+        {%- if aspect_ratio != blank or aspect_ratio_sm != blank or aspect_ratio_md != blank -%}
+          --sm-aspect: {{ aspect_ratio_sm | default: aspect_ratio }}; --md-aspect: {{ aspect_ratio_md | default: aspect_ratio }};
+        {%- endif -%}
+        {{ style }}"
     >
   </picture>
 {% endif %}
