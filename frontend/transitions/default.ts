@@ -6,9 +6,9 @@ const options = {
 
 export default {
   async leave({ current }) {
-    const from = { opacity: 0, translate: '0 20px' }
+    const to = { opacity: 0, translate: '0 20px' }
 
-    return current.container.animate(from, options).finished
+    return current.container.animate(to, options).finished
   },
 
   async enter({ next }) {
