@@ -60,7 +60,7 @@ export const createDevGrid = ({
  * @function
  * @description An attempt to make the content not jump around on the screen while a page navigation is running
  */
-export const createBarbaScrollPersist = ({ top = '0px' } = {}) => {
+export const fixatePageOnNavigation = ({ top = '0px' } = {}) => {
   /**
    * polyfill: @virtualstate/navigation
    */

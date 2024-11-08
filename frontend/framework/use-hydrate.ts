@@ -3,9 +3,6 @@ import { Component } from './types'
 /**
  * @function useHydrate
  * @description Used to initialize components, for when the window doesn't reload fully.
- * @param {function[]} - Array of function run loop through
- * @returns {useHydrate~hydrate} - the returned function
- * @returns {useHydrate~dehydrate} - the returned function again
  */
 export default (components: Component | Component[]) => {
   let teardownFunctions = null
@@ -14,16 +11,13 @@ export default (components: Component | Component[]) => {
     /**
      * @memberof useHydrate
      * @description Runs all the passed functions. Any arguments passed will be passed on to the components
-     * @param {*} ...args - n arguments that should be passed to the components
      */
     hydrate(...args) {
-      // teardown any previously hydrated components
       this.dehydrate()
 
       setTimeout(() => {
-        const componentsArray = [].concat(components)
-
-        teardownFunctions = componentsArray
+        teardownFunctions = []
+          .concat(components)
           .map(component => {
             if (typeof component !== 'function') return
 
@@ -56,6 +50,7 @@ export default (components: Component | Component[]) => {
           value()
         }
       })
+
       teardownFunctions = null
     },
   }

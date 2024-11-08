@@ -5,7 +5,7 @@ import {
   useRefs,
   useTransition,
   createDevGrid,
-  createBarbaScrollPersist,
+  fixatePageOnNavigation,
   dolphin,
 } from '~/framework'
 import * as pageTransitions from '~/transitions'
@@ -17,7 +17,7 @@ declare global {
       designMode: unknown
     }
     forceNavigationRefresh: boolean
-    navigation: unknown
+    navigation: any
   }
 }
 
@@ -30,8 +30,8 @@ createDevGrid({
   gap: 'var(--grid-gap, 16px)',
 })
 
-// persist scroll position across navigation
-createBarbaScrollPersist()
+// place the old page "where it was" on navigation/scroll
+fixatePageOnNavigation()
 
 let refs = useRefs({ asArray: true })
 const globalComponents = useHydrate(globals)

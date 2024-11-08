@@ -5,4 +5,4 @@ export {
   setTransition,
   pageTransition,
 } from './use-transition.js'
-export { createDevGrid, createBarbaScrollPersist, dolphin } from './utils.js'
+export { createDevGrid, fixatePageOnNavigation, dolphin } from './utils.js'

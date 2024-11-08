@@ -99,6 +99,6 @@ If no transition is set before a page shift happens, the first one in { page } w
 
 Append `?grid` to the url to see a grid.
 
-### `createBarbaScrollPersist`
+### `fixatePageOnNavigation`
 
 Makes so that the native browser scroll persisting be used

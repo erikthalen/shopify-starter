@@ -105,23 +105,21 @@ export default ({
     'after',
   ]
 
+  const hooks = ALL_BARBA_HOOKS.reduce((acc, hook) => {
+    return {
+      ...acc,
+      async [hook](data) {
+        callGlobalHook(hook, data)
+        await runCurrentHook(hook, data)
+      },
+    }
+  }, {})
+
   return [
     {
       sync: false,
       name: 'main',
-      ...ALL_BARBA_HOOKS.reduce((acc, hook) => {
-        return {
-          ...acc,
-          async [hook](data) {
-            callGlobalHook(hook, data)
-            await runCurrentHook(hook, data)
-          },
-        }
-      }, {}),
-      // async leave(data) {
-      //   callGlobalHook('leave', data)
-      //   await runCurrentHook('leave', data)
-      // },
+      ...hooks,
       async enter(data) {
         maybeScrollBackToTop(data.trigger)
 
