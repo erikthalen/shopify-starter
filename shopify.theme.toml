@@ -1,6 +1,6 @@
 [environments.development]
-store = "ss-dev-1"
-theme = "129419968596"
+store = "your-store"
+theme = "123456789012"
 ignore = [
   "templates/*.json",
   "templates/**/*.json",
@@ -10,8 +10,8 @@ ignore = [
 ]
 
 [environments.production]
-store = "ss-dev-1"
-theme = "129419968596"
+store = "your-store"
+theme = "987654321098"
 ignore = [
   "templates/*.json",
   "templates/**/*.json",
