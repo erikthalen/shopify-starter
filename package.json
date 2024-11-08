@@ -7,7 +7,7 @@
     "dev": "pnpm run vite:dev & pnpm run shopify:serve",
     "vite:dev": "vite",
     "vite:build": "vite build",
-    "shopify:serve": "shopify theme dev -e development",
+    "shopify:serve": "shopify theme dev -e development --open",
     "lint": "npx eslint"
   },
   "devDependencies": {

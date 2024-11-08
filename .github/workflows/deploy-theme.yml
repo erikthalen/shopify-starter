@@ -9,13 +9,19 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      # Setup
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - uses: pnpm/action-setup@v4
-      - uses: ruby/setup-ruby@v1
+
+      - name: Install PNPM
+        uses: pnpm/action-setup@v4
+      
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1
           bundler: 'latest'
