@@ -4,14 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm run vite:dev & pnpm run shopify:serve",
+    "dev": "pnpm run vite:dev & pnpm run shopify:dev",
     "vite:dev": "vite",
     "vite:build": "vite build",
-    "shopify:serve": "shopify theme dev -e development --open",
-    "lint": "npx eslint",
+    "shopify:dev": "shopify theme dev -e development --open",
     "docs:dev": "pnpm vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "lint": "npx eslint"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",

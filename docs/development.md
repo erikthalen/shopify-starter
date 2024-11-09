@@ -4,13 +4,13 @@ Based on the `vite-shopify-example` from [shopify-vite](https://github.com/barre
 
 ### Install packages
 
-```bash
+```sh
 pnpm install
 ```
 
 ### Run dev server
 
-```bash
+```sh
 pnpm run dev
 ```
 

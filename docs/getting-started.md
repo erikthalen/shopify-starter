@@ -1,8 +1,10 @@
 # Getting started
 
+This demonstrates how to start developing a new theme.
+
 ### Prerequisite
 
-Before starting, you need a Shopify store and Shopify CLI
+Before starting, you need a Shopify store and [Shopify CLI](https://shopify.dev/docs/api/shopify-cli)
 
 ### Initialize theme
 
@@ -12,7 +14,7 @@ In your terminal run:
 shopify theme init my-new-theme --clone-url https://github.com/erikthalen/shopify-starter
 ```
 
-This will download the repo info a folder named `my-new-theme` inside the current directory.
+This will download the repo into a folder named `my-new-theme` inside the current directory.
 
 ### Create new themes in your store
 
