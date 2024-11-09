@@ -4,53 +4,102 @@ The theme's using [Barba.js](https://barba.js.org/) to navigate.
 
 In order to keep the components on the site hydrated, there's a few framework-functions to handle this.
 
+Each component should be a function following the type of Component. Each function has access to 2 arguments. The first is the result of `useRefs()`, and the other is an object containing an AbortSignal that is used to remove event listeners.
+
+## Examples
+
+### Standard
+
+```liquid
+<button data-ref='my-button'>My button</button>
+```
+
 ```ts
+// /frontend/components/my-component.ts
 import { Component } from '~/types'
 
-// ref is an object containing every dom element with a [data-ref]-attr (converted to camelCase)
-// second argument is optional
-// if the component returns Function of Function[], those are called on page shift
 const component: Component = (ref, { signal = null } = {}) => {
   // if nothing to hydrate
-  if (!ref.myRef) return
+  if (!ref.myButton) return
 
   const doSomething = e => console.log(e.target, 'was clicked')
 
-  // every value on ref is HTMLElement[]
-  return ref.myRef.map(element => {
-    // signal is aborted on page shift
-    element.addEventListener('click', doSomething, { signal })
-
-    // optional
-    return () => {
-      console.log("that's it for this instance")
-    }
+  ref.myButton.map(button => {
+    button.addEventListener('click', doSomething, { signal })
   })
-
-  // optional
-  return () => {
-    console.log("that's it for the component")
-  }
 }
 
-// export something to index.ts
+export default component
+```
+
+### Cleanup
+
+If the component returns a function, or an array of functions, this will be called on page shift. Good when the component need to do something after it's unmounted.
+
+```ts
+// /frontend/components/my-component.ts
+import { Component } from '~/types'
+
+const component: Component = ref => {
+  if (!ref.myElement) return
+
+  const doSomething = () => console.log(e.target, 'was clicked')
+
+  return ref.myElement.map(element => {
+    const interval = setInterval(doSomething, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  })
+}
+
 export default component
 ```
 
 ```ts
-// a component can be as small as:
+// /frontend/components/my-component.ts
+import { Component } from '~/types'
+
+const component: Component = ref => {
+  if (!ref.myElement) return
+
+  const doSomething = () => console.log(e.target, 'was clicked')
+
+  const interval = setInterval(doSomething, 1000)
+
+  return () => clearInterval(interval)
+}
+
+export default component
+```
+
+### Flexibility
+
+A component can be as small as:
+
+```ts
 const smallComponent: Component = ref => {
   if (!ref.myElement) return
 
   console.log(ref.myElement)
 }
+```
 
-// or even:
+or even:
+
+```ts
 const smallerComponent: Component = ref => console.log(ref)
+```
 
-// or why not:
+or why not:
+
+```ts
 const smComp: Component = () => console.log('hllo wrld!')
+```
 
-// even:
+even:
+
+```ts
 const c: Component = console.log
 ```

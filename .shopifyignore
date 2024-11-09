@@ -1,5 +1,6 @@
 frontend/
 modules/
+docs/
 package.json
 pnpm-lock.yaml
 .pnpm-debug.log

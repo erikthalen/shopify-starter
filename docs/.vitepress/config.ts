@@ -2,12 +2,13 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   lang: 'en-US',
+  cleanUrls: true,
   base: '/shopify-starter/',
   title: 'Shopify starter',
   description: '',
-  head: [['link', { rel: 'icon', href: '/logo.png' }]],
+  head: [['link', { rel: 'icon', href: 'logo.png' }]],
   themeConfig: {
-    logo: '/logo.png',
+    logo: 'logo.png',
     search: {
       provider: 'local',
     },
@@ -34,6 +35,23 @@ export default defineConfig({
           {
             text: 'Component',
             link: '/component',
+          },
+        ],
+      },
+      {
+        text: 'Liquid',
+        items: [
+          {
+            text: '_shopify-preview.liquid',
+            link: '/shopify-preview',
+          },
+          {
+            text: 'color-scheme.liquid',
+            link: '/color-scheme',
+          },
+          {
+            text: 'image.liquid',
+            link: '/image',
           },
         ],
       },

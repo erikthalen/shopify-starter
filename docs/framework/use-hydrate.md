@@ -28,16 +28,23 @@ const hydrator = useHydrate(component)
 hydrator.hydrate()
 ```
 
-Create a useHydrate instance by running the `useHydrate(components: Function[])` with an array of functions (components). This returns two methods:
+Create a useHydrate instance by running the `useHydrate(components: Function | Function[])` with function or an array of functions (components). This returns two methods:
 
-`hydrate`: Runs all the passed functions. Any arguments passed will be passed on to the components  
-`dehydrate`: Runs any/all the returned functions returned from the `hydrate`
+### `hydrate`
+
+Runs all the passed functions. Any arguments passed will be passed on to the components  
+
+### `dehydrate`
+
+Runs any/all the returned functions returned from the `hydrate`
+
+## Example
 
 ```js
 const component = arg => console.log('component: ', arg)
 
 // on page load
-const hydration = useHydrate([component]).hydrate('first') // 'component: "first"'
+const hydration = useHydrate(component).hydrate('first') // 'component: "first"'
 
 // on navigation
 hydration.dehydrate()

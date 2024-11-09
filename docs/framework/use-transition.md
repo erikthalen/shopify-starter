@@ -30,11 +30,17 @@ barba.init({
     },
   }),
 })
+```
 
-// somewhere in your app, when you want some other than default-transition to run
-// preferably triggered by an click event of a link
-setTransition('myOtherTransition') // -> logs 'leaving' and 'entering' next time a navigation happens
+### Runtime usage
+
+Somewhere in your app, when you want some other than default-transition to run. Preferably triggered by an click event of a link
+
+```ts
+button.addEventListener('click', () => {
+  // logs 'leaving' and 'entering' next time a navigation happens
+  setTransition('myOtherTransition')
+})
 ```
 
 If no transition is set before a page shift happens, the first one in `{ page }` will be used. So any "default" page transition must be put as the first key in the object, when running `useTransition`.
-
