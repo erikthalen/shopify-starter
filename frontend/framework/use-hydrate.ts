@@ -1,11 +1,11 @@
-import { Component } from './types'
+import { CleanupFunction, Component } from './types'
 
 /**
  * @function useHydrate
  * @description Used to initialize components, for when the window doesn't reload fully.
  */
 export default (components: Component | Component[]) => {
-  let teardownFunctions = null
+  let teardownFunctions: CleanupFunction[] | null = null
 
   return {
     /**
@@ -18,10 +18,10 @@ export default (components: Component | Component[]) => {
       setTimeout(() => {
         teardownFunctions = []
           .concat(components)
-          .map(component => {
+          .map((component: Component) => {
             if (typeof component !== 'function') return
 
-            return [].concat(component(...args))
+            return [].concat(component.apply(null, args))
           })
           .flat(10)
           .filter(Boolean)

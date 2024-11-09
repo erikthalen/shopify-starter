@@ -1,4 +1,9 @@
-import { ITransitionPage, HooksTransitionMap } from '@barba/core/dist/src/defs'
+import {
+  ITransitionPage,
+  HooksTransitionMap,
+  HooksTransition,
+  Trigger,
+} from '@barba/core/dist/src/defs'
 
 function createResolver() {
   let resolver = null
@@ -13,7 +18,7 @@ const { promise, resolver } = createResolver()
  * @private
  * The key of the set of hooks that will run on next page shift
  */
-let currentTransition = null
+let currentTransition: string | null = null
 
 export const pageTransition = {
   finished: promise,
@@ -42,24 +47,20 @@ export default ({
   page,
   global,
 }: {
-  page: {
-    [key: string]: HooksTransitionMap
-  }
+  page: Record<string, HooksTransitionMap>
   global: HooksTransitionMap
 }): ITransitionPage[] => {
-  const runCurrentHook = async (hook, data) => {
+  const runCurrentHook = async (hook: HooksTransition, data: unknown) => {
+    if (window.innerWidth < 800) return
+
     const currentHooks = page[currentTransition]
 
     // no transition set, or the name doesn't exist
     if (!currentTransition || !currentHooks) {
-      if (window.innerWidth < 800) return
-
       const [defaultTransition] = Object.keys(page)
 
       // run nothing if the default transition doesn't have current hook registered
-      if (!page[defaultTransition][hook]) {
-        return Promise.resolve()
-      }
+      if (!page[defaultTransition][hook]) Promise.resolve()
 
       // run defaultTransition's hook
       return page[defaultTransition][hook](data)
@@ -74,24 +75,23 @@ export default ({
     return currentHooks[hook](data)
   }
 
-  const callGlobalHook = (hook, data) => {
+  const callGlobalHook = (hook: HooksTransition, data: unknown) => {
     if (typeof global[hook] !== 'function') return
 
     return global[hook](data)
   }
 
   // bug: chrome doesn't scroll to top if new page is prefetched and cached.
-  function maybeScrollBackToTop(trigger) {
+  function maybeScrollBackToTop(trigger: Trigger) {
     if (
-      typeof trigger !== 'string' &&
-      trigger !== 'back' &&
-      trigger !== 'forward'
+      typeof trigger !== 'string' ||
+      (trigger !== 'back' && trigger !== 'forward')
     ) {
       window.scrollTo(0, 0)
     }
   }
 
-  const ALL_BARBA_HOOKS = [
+  const ALL_BARBA_HOOKS: HooksTransition[] = [
     'beforeOnce',
     'once',
     'afterOnce',

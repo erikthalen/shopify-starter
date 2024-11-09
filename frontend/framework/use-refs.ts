@@ -40,9 +40,9 @@ function _refs(root, exclude = null, asArray = false, namespaced = false) {
   const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
 
   const attribute = namespaced ? `data-ref-${root.dataset.ref}` : 'data-ref'
-  const elements = root.querySelectorAll(`[${attribute}]`)
+  const elements: HTMLElement[] = root.querySelectorAll(`[${attribute}]`)
 
-  const refs = new Map()
+  const refs: Map<string, HTMLElement | HTMLElement[]> = new Map()
 
   /**
    * loop over all element with [data-ref]
@@ -53,12 +53,12 @@ function _refs(root, exclude = null, asArray = false, namespaced = false) {
      */
     if (exclude && (exclude === element || exclude.contains(element))) return
 
-    const namespace = namespaced ? capitalize(camelCase(root.dataset.ref)) : ''
+    const namespace: string = namespaced ? capitalize(camelCase(root.dataset.ref)) : ''
 
     /**
      * extract the value of the [data-ref] attribute, default to "item"
      */
-    const keys = camelCase(element.dataset['ref' + namespace]) || 'item'
+    const keys: string = camelCase(element.dataset['ref' + namespace]) || 'item'
 
     /**
      * split on space, allowing for multiple ref values (saves element under multiple keys)
