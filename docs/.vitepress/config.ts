@@ -5,9 +5,9 @@ export default defineConfig({
   base: '/shopify-starter/',
   title: 'Shopify starter',
   description: '',
-  head: [['link', { rel: 'icon', href: '/.vitepress/theme/logo.png' }]],
+  head: [['link', { rel: 'icon', href: '/logo.png' }]],
   themeConfig: {
-    logo: '/.vitepress/theme/logo.png',
+    logo: '/logo.png',
     search: {
       provider: 'local',
     },

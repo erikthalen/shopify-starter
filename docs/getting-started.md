@@ -44,6 +44,7 @@ shopify theme list
 Copy and paste the ID's to its corresponding environment:
 
 ```yaml [./shopify.theme.toml]
+# ./shopify.theme.toml // [!code focus]
 [environments.development]
 store = "your-store" // [!code focus]
 theme = "123456789012" // [!code focus]
