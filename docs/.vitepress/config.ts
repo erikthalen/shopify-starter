@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   lang: 'en-US',
+  base: '/shopify-starter/',
   title: 'Shopify starter',
   description: '',
   head: [['link', { rel: 'icon', href: '/.vitepress/theme/logo.png' }]],
