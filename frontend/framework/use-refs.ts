@@ -1,3 +1,11 @@
+type RefTypes = {
+  root?: HTMLElement
+  namespaced?: boolean
+  watch?: boolean
+  asArray?: boolean
+  exclude?: HTMLElement | null
+}
+
 /**
  * @function useRefs
  * @description Collect all dom elements with the attribute [data-ref]
@@ -15,13 +23,7 @@ export default ({
   watch = false,
   asArray = true,
   exclude = null,
-}: {
-  root?: HTMLElement
-  namespaced?: boolean
-  watch?: boolean
-  asArray?: boolean
-  exclude?: HTMLElement | null
-} = {}) => {
+}: RefTypes = {}) => {
   if (!(root instanceof HTMLElement)) {
     console.warn('{ root } has to be an element')
     return
@@ -31,18 +33,20 @@ export default ({
     root,
     ...(watch
       ? _watched(root, watch, exclude, asArray, namespaced)
-      : _refs(root, exclude, asArray, namespaced)),
+      : _refs({ root, exclude, asArray, namespaced })),
   }
 }
 
-function _refs(root, exclude = null, asArray = false, namespaced = false) {
+function _refs({ root, exclude, asArray, namespaced }: RefTypes) {
   const camelCase = s => (s ? s.replace(/-./g, x => x[1].toUpperCase()) : '')
   const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
 
   const attribute = namespaced ? `data-ref-${root.dataset.ref}` : 'data-ref'
-  const elements: HTMLElement[] = root.querySelectorAll(`[${attribute}]`)
+  const elements: NodeListOf<HTMLElement> = root.querySelectorAll(
+    `[${attribute}]`
+  )
 
-  const refs: Map<string, HTMLElement | HTMLElement[]> = new Map()
+  const refs = new Map<string, HTMLElement | HTMLElement[]>()
 
   /**
    * loop over all element with [data-ref]
@@ -53,7 +57,9 @@ function _refs(root, exclude = null, asArray = false, namespaced = false) {
      */
     if (exclude && (exclude === element || exclude.contains(element))) return
 
-    const namespace: string = namespaced ? capitalize(camelCase(root.dataset.ref)) : ''
+    const namespace: string = namespaced
+      ? capitalize(camelCase(root.dataset.ref))
+      : ''
 
     /**
      * extract the value of the [data-ref] attribute, default to "item"
@@ -82,10 +88,10 @@ function _refs(root, exclude = null, asArray = false, namespaced = false) {
 }
 
 function _watched(root, onChange, ...args) {
-  const ref = { current: _refs(root, ...args) }
+  const ref = { current: _refs({ root, ...args }) }
 
   const observer = new MutationObserver(() => {
-    ref.current = _refs(root, ...args)
+    ref.current = _refs({ root, ...args })
 
     if (typeof onChange === 'function') {
       onChange(ref.current)
