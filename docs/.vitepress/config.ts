@@ -33,8 +33,16 @@ export default defineConfig({
         text: 'Guide',
         items: [
           {
+            text: 'Flexibility',
+            link: '/flexibility',
+          },
+          {
             text: 'Component',
             link: '/component',
+          },
+          {
+            text: 'Locales',
+            link: '/locales',
           },
         ],
       },
@@ -56,7 +64,7 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Framework',
+        text: 'API',
         items: [
           {
             text: 'useRefs',

@@ -1,4 +1,4 @@
-import { CleanupFunction, Component } from './types'
+import { CleanupFunction, Component } from '../types'
 
 /**
  * @function useHydrate

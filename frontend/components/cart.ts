@@ -1,5 +1,5 @@
 import { useHydrate, useRefs } from '~/framework'
-import { Component } from '~/framework/types'
+import { Component } from '~/types'
 import { components } from '.'
 
 const CART_SELECTOR = '.main-cart'

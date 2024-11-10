@@ -1,6 +1,11 @@
 # useTransition
 
-Used to trigger and run specific transitions not tied to specific routes (as is Barba default behavior). Should be passed to a Barba instance like:
+Used as a transition router, to control which transition to run next.
+
+> [!TIP]
+> If you choose to handle navigation with something other than barba.js, this function can be omitted and removed. As it's built to extend the barba-api.
+
+Trigger and run specific transitions not tied to specific routes (as is Barba default behavior). Should be passed to a Barba instance like:
 
 ```ts
 barba.init({
@@ -37,7 +42,7 @@ barba.init({
 Somewhere in your app, when you want some other than default-transition to run. Preferably triggered by an click event of a link
 
 ```ts
-button.addEventListener('click', () => {
+myLink.addEventListener('click', () => {
   // logs 'leaving' and 'entering' next time a navigation happens
   setTransition('myOtherTransition')
 })

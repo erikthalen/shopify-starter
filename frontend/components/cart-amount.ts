@@ -1,4 +1,4 @@
-import { Component } from "~/framework/types"
+import { Component } from "~/types"
 
 async function fetchCartAmount() {
   try {

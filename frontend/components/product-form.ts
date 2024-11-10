@@ -1,5 +1,5 @@
 import barba from '@barba/core'
-import { Component } from '~/framework/types'
+import { Component } from '~/types'
 
 function isLoading(initiator, isLoading) {
   if (isLoading) {
