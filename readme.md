@@ -2,6 +2,12 @@
 
 [Documentation](https://erikthalen.github.io/shopify-starter/)
 
+The whole documentation is included in the repo when starting your own project, and can be seen by running:
+
+```sh
+pnpm run docs:dev
+```
+
 ## Theme settings
 
 The theme is setup with a dark and a light favicon, and a browser color theme. This is edited in theme settings.
