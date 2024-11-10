@@ -1,4 +1,4 @@
-import { Component } from '~/framework/types'
+import { Component } from '~/types'
 import { cart } from './cart'
 import { cartAmount } from './cart-amount'
 import { productForm } from './product-form'

@@ -11,16 +11,6 @@ import {
 import * as pageTransitions from '~/transitions'
 import { globals, components } from '~/components'
 
-declare global {
-  interface Window {
-    Shopify: {
-      designMode: unknown
-    }
-    forceNavigationRefresh: boolean
-    navigation: any
-  }
-}
-
 dolphin()
 
 // visit ?grid to show visual grid
@@ -33,7 +23,7 @@ createDevGrid({
 // place the old page "where it was" on navigation/scroll
 fixatePageOnNavigation()
 
-let refs = useRefs({ asArray: true })
+let refs = useRefs()
 const globalComponents = useHydrate(globals)
 const pageComponents = useHydrate(components)
 
@@ -42,10 +32,11 @@ let abortController = null
 const refreshAbortController = () => {
   abortController?.abort()
   abortController = new AbortController()
+  return abortController.signal
 }
 
 barba.init({
-  // debug: location.origin.includes('127.0.0.1'),
+  debug: location.origin.includes('127.0.0.1'),
   prevent: () => window.Shopify.designMode,
   prefetchIgnore: '/cart',
   cacheIgnore: '/cart',
@@ -53,25 +44,15 @@ barba.init({
     page: pageTransitions,
     global: {
       once() {
-        refreshAbortController()
         globalComponents.hydrate(refs)
-        pageComponents.hydrate(refs, { signal: abortController.signal })
+        pageComponents.hydrate(refs, { signal: refreshAbortController() })
       },
       before() {
-        refreshAbortController()
         window.dispatchEvent(new CustomEvent('window.navigation'))
       },
-      enter({ current, next }) {
-        refs = useRefs({ exclude: current.container, asArray: true })
-        pageComponents.hydrate(refs, { signal: abortController.signal })
-
-        // if there for some reason are <script>'s that need to run in the new <main>
-        next.container.querySelectorAll('script').forEach(script => {
-          const tag = document.createElement('script')
-          tag.innerHTML = script.innerHTML
-          script.after(tag)
-          script.remove()
-        })
+      enter({ current }) {
+        refs = useRefs({ exclude: current.container })
+        pageComponents.hydrate(refs, { signal: refreshAbortController() })
       },
     },
   }),

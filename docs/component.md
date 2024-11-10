@@ -1,14 +1,20 @@
 # Components
 
-The theme's using [Barba.js](https://barba.js.org/) to navigate.
+The theme's built like a SPA, in that the page doesn't fully reload on page shifts.
 
 In order to keep the components on the site hydrated, there's a few framework-functions to handle this.
 
-Each component should be a function following the type of Component. Each function has access to 2 arguments. The first is the result of `useRefs()`, and the other is an object containing an AbortSignal that is used to remove event listeners.
+Each component your make should be a function following the type of `Component`: 
+
+<<< @/../frontend/types.ts {5-11}
+
+Each function has access to 2 arguments. The first is the result of `useRefs()`, and the other is an object containing an `AbortSignal` that is used to remove event listeners.
 
 ## Examples
 
 ### Standard
+
+This is how a typical component could look like:
 
 ```liquid
 <button data-ref='my-button'>My button</button>
@@ -36,7 +42,7 @@ export default component
 
 If the component returns a function, or an array of functions, this will be called on page shift. Good when the component need to do something after it's unmounted.
 
-```ts
+```ts {9-15}
 // /frontend/components/my-component.ts
 import { Component } from '~/types'
 
@@ -57,7 +63,7 @@ const component: Component = ref => {
 export default component
 ```
 
-```ts
+```ts {11}
 // /frontend/components/my-component.ts
 import { Component } from '~/types'
 
