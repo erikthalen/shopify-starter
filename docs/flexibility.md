@@ -14,11 +14,12 @@ It's up to you to decide how to work with styling in your project.
 
 If you're installing [Tailwind](https://tailwindcss.com/docs/installation/using-postcss), the css file would look like this:
 
-```css
-/* frontend/theme.css */
+::: code-group
+```css [frontend/theme.css]
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 ```
+:::
 
 and the `frontend/css/` folder can be removed.
