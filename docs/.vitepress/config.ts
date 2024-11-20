@@ -44,6 +44,10 @@ export default defineConfig({
             text: 'Locales',
             link: '/locales',
           },
+          {
+            text: 'Theme settings',
+            link: '/theme-settings',
+          },
         ],
       },
       {
