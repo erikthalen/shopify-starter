@@ -3,6 +3,7 @@ name: Build and deploy theme to Shopify
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
