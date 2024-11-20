@@ -30,6 +30,10 @@ export default defineConfig({
         link: '/deployment',
       },
       {
+        text: 'Documentation',
+        link: '/documentation',
+      },
+      {
         text: 'Guide',
         items: [
           {
