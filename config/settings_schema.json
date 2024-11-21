@@ -76,5 +76,20 @@
         }
       }
     ]
+  },
+  {
+    "name": "Custom <head>",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Code to render in the top of the <head> tag. Like tracking and GDPR."
+      },
+      {
+        "type": "liquid",
+        "id": "head_tags",
+        "label": "<head>",
+        "info": "</head>"
+      }
+    ]
   }
 ]

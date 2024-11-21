@@ -15,3 +15,7 @@ A color string defining the color of the browser UI, mainly on mobile browsers.
 Depending on the projects need for colors, you should define and name the amount of colors in the settings_schema.json, under "Colors".
 
 The theme's predefined to handle text-, background-, primary- and secondary colors. But add/remove as needed.
+
+## Custom `<head>`
+
+Used for adding tracking and GDPR code. Renders in the top of the `<head>`

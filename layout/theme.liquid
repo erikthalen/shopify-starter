@@ -6,6 +6,8 @@
       {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
     </title>
 
+    {{ settings.head_tags }}
+
     {% render 'meta-tags' %}
 
     {{ content_for_header }}
