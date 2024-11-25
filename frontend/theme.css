@@ -13,15 +13,13 @@ shopify-visual-preview-section-list {
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: local('Martian'),
+  src:
+    local('Martian'),
     url('fonts/MartianMono-Regular.ttf') format('truetype');
 }
 
 :root {
   font-family: 'Martian', monospace;
-  font-size: 16px;
-  line-height: 1.6;
-  font-weight: 400;
 
   color: #213547;
   background-color: #ffffff;
@@ -31,6 +29,21 @@ shopify-visual-preview-section-list {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  /* apply zooming of everything on screens > 1440px */
+  --zoom-amount: 0.4;
+  --zoomed-rem: max(
+    16px,
+    calc(16px + 16 * var(--zoom-amount) * (100vw - 1440px) / 1440)
+  );
+
+  font-size: var(--zoomed-rem);
+  line-height: 1.6;
+  font-weight: 400;
 }
 
 * {
@@ -61,4 +74,11 @@ main {
   height: auto;
   max-width: 100%;
   vertical-align: middle;
+}
+
+@media (prefers-reduced-motion) {
+  * {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
 }
