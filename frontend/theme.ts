@@ -1,39 +1,41 @@
 import 'vite/modulepreload-polyfill'
+
 import barba from '@barba/core'
-import {
-  useHydrate,
-  useRefs,
-  useTransition,
-  createDevGrid,
-  fixatePageOnNavigation,
-  dolphin,
-} from '~/framework'
-import * as pageTransitions from '~/transitions'
-import { globals, components } from '~/components'
+import Alpine from 'alpinejs'
+import morph from '@alpinejs/morph'
 
-dolphin()
+import useTransition from '~/utils/use-transition'
+import { fixatePageOnNavigation, dolphin } from '~/utils/utils'
 
-// visit ?grid to show visual grid
-createDevGrid({
-  cols: 12,
-  bleed: 'var(--grid-bleed, 32px)',
-  gap: 'var(--grid-gap, 16px)',
-})
+import './components/loading'
+import productForm from './components/product-form'
+import cartAmount from './components/cart-amount'
+import cart from './components/cart'
+import filter from './components/filter'
+import plp from './components/plp'
+import cartNotification from './components/cart-notification'
 
-// place the old page "where it was" on navigation/scroll
-fixatePageOnNavigation()
-
-let refs = useRefs()
-const globalComponents = useHydrate(globals)
-const pageComponents = useHydrate(components)
-
-let abortController = null
-
-const refreshAbortController = () => {
-  abortController?.abort()
-  abortController = new AbortController()
-  return abortController.signal
+declare global {
+  interface Window {
+    Shopify: {
+      designMode: unknown
+    }
+    forceNavigationRefresh: boolean
+    navigation: unknown
+  }
 }
+
+Alpine.plugin(morph)
+
+Alpine.store('cartAmount', cartAmount)
+
+Alpine.data('cart', cart)
+Alpine.data('cartNotification', cartNotification)
+Alpine.data('filter', filter)
+Alpine.data('plp', plp)
+Alpine.data('productForm', productForm)
+
+Alpine.start()
 
 barba.init({
   debug: location.origin.includes('127.0.0.1'),
@@ -41,19 +43,41 @@ barba.init({
   prefetchIgnore: '/cart',
   cacheIgnore: '/cart',
   transitions: useTransition({
-    page: pageTransitions,
-    global: {
-      once() {
-        globalComponents.hydrate(refs)
-        pageComponents.hydrate(refs, { signal: refreshAbortController() })
+    page: {
+      default: {
+        async leave({ current }) {
+          const options = {
+            duration: 400,
+            easing: 'ease',
+            fill: 'forwards',
+          }
+          const to = { opacity: 0, translate: '0 20px' }
+
+          return current.container.animate(to, options).finished
+        },
+
+        async enter({ next }) {
+          const options = {
+            duration: 400,
+            easing: 'ease',
+            fill: 'forwards',
+          }
+          const from = { opacity: 0, translate: '0 -20px' }
+          const to = { opacity: 1, translate: '0 0' }
+
+          return next.container.animate([from, to], options).finished
+        },
       },
+    },
+    global: {
       before() {
         window.dispatchEvent(new CustomEvent('window.navigation'))
-      },
-      enter({ current }) {
-        refs = useRefs({ exclude: current.container })
-        pageComponents.hydrate(refs, { signal: refreshAbortController() })
       },
     },
   }),
 })
+
+// place the old page "where it was" on navigation/scroll
+fixatePageOnNavigation()
+
+dolphin()

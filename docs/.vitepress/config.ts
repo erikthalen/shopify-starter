@@ -37,12 +37,12 @@ export default defineConfig({
         text: 'Guide',
         items: [
           {
-            text: 'Flexibility',
-            link: '/flexibility',
+            text: 'What\'s included?',
+            link: '/whats-included',
           },
           {
-            text: 'Component',
-            link: '/component',
+            text: 'Components',
+            link: '/components',
           },
           {
             text: 'Locales',
@@ -74,14 +74,6 @@ export default defineConfig({
       {
         text: 'API',
         items: [
-          {
-            text: 'useRefs',
-            link: '/framework/use-refs',
-          },
-          {
-            text: 'useHydrate',
-            link: '/framework/use-hydrate',
-          },
           {
             text: 'useTransition',
             link: '/framework/use-transition',

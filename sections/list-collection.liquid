@@ -1,14 +1,16 @@
-<h1>All collections</h1>
+<section class="px-4 my-20">
+  <h1 class="text-3xl mb-4">All collections</h1>
 
-<ol style="padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-  {% paginate collections by 1000 %}
-    {% for collection in collections %}
-      <li>
-        <a href="{{ collection.url }}">
-          {% render 'image', image: collection.featured_image, size: '20,10' %}
-          {{ collection.title }}
-        </a>
-      </li>
-    {% endfor %}
-  {% endpaginate %}
-</ol>
+  <ol style="padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+    {% paginate collections by 1000 %}
+      {% for collection in collections %}
+        <li>
+          <a href="{{ collection.url }}">
+            {% render 'image', image: collection.featured_image, size: '20,10' %}
+            {{ collection.title }}
+          </a>
+        </li>
+      {% endfor %}
+    {% endpaginate %}
+  </ol>
+</section>

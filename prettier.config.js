@@ -8,7 +8,7 @@ const config = {
   semi: false,
   singleQuote: true,
   arrowParens: 'avoid',
-  plugins: ['@shopify/prettier-plugin-liquid'],
+  plugins: ['@shopify/prettier-plugin-liquid', 'prettier-plugin-tailwindcss'],
 }
 
 export default config

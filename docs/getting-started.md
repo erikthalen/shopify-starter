@@ -18,7 +18,9 @@ shopify theme init my-new-theme --clone-url https://github.com/erikthalen/shopif
 
 This will download the repo into a folder named `my-new-theme` inside the current directory.
 
-### Create new themes in your store
+### Create 2 new themes in your store
+
+One will be used for development, and one for production.
 
 ::: code-group
 ```sh [terminal]
@@ -29,15 +31,7 @@ shopify theme push -u -s your-store.myshopify.com
 
 Enter a suiting name for the theme, when prompted.
 
-The repo needs 2 themes to work. One that will be used as production, and one that is used while developing.
-
-Repeat the same command:
-
-::: code-group
-```sh [terminal]
-shopify theme push -u -s your-store.myshopify.com
-```
-:::
+Repeat the same command.
 
 Name this theme the same, suffixed with `/develop` or similar.
 

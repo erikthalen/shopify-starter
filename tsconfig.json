@@ -5,11 +5,12 @@
     "lib": ["esnext", "dom", "dom.iterable"],
     "module": "es2022",
     "target": "es2022",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "baseUrl": ".",
     "paths": {
       "~/*": ["frontend/*"]
     },
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "allowSyntheticDefaultImports": true
   }
 }

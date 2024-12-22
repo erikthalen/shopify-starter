@@ -34,11 +34,13 @@
     -%}
   </head>
 
-  <body data-barba="wrapper">
+  <body data-barba="wrapper" @loading="(e) => console.log(e)">
     {% section 'site-header' %}
 
     <main data-barba="container" data-barba-namespace="main" role="main">
       {{ content_for_layout }}
+
+      {% section 'site-footer' %}
     </main>
   </body>
 </html>

@@ -2,28 +2,34 @@
   https://help.shopify.com/en/manual/online-store/search-and-discovery
 {% endcomment %}
 
-<form class="filters">
-  <label for="sort-by">Sort by:</label>
-
-  <select name="sort_by" id="sort-by">
-    {% assign values = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-ascending,created-descending'
-      | split: ','
-    %}
-
-    {% for value in values %}
-      <option
-        {% if collection.sort_by == value %}
-          selected
-        {% endif %}
-        value="{{ value }}"
-      >
-        {{ value }}
-      </option>
-    {% endfor %}
-  </select>
+{% comment %} <form x-data="filter" @change.prevent="handleFilterChange" class="px-4 pt-20 grid gap-4"> {% endcomment %}
+<form x-data="filter" @change="handleFilterChange" class="px-4 pt-20 grid gap-4">
+  <div>
+    <label for="sort-by">Sort by:</label>
+    
+    <select name="sort_by" id="sort-by" class="border py-1 rounded">
+      {% assign values = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-ascending,created-descending'
+        | split: ','
+      %}
+      
+      {% for value in values %}
+        <option
+          {% if collection.sort_by == value %}
+            selected
+          {% endif %}
+          value="{{ value }}"
+        >
+          {{ value }}
+        </option>
+      {% endfor %}
+    </select>
+</div>
 
   {%- for filter in collection.filters -%}
-    <p>{{ filter.label }}</p>
+    <div class="bg-gray-100 p-2 rounded-md">
+
+    
+    <p class="font-bold">{{ filter.label }}</p>
 
     {%- case filter.type -%}
         {% comment %} BOOLEAN FILTER {% endcomment %}
@@ -92,50 +98,61 @@
 
         {% comment %} PRICE FILTER {% endcomment %}
       {%- when 'price_range' -%}
-        {% assign lowValue = filter.min_value.value
+        {% assign low_value = filter.min_value.value
           | money_without_currency
           | replace: ',', ''
           | replace: '.', ''
-          | times: 0.01
           | round
         %}
-        {% assign highValue = filter.max_value.value
+        {% assign high_value = filter.max_value.value
           | money_without_currency
           | replace: ',', ''
           | replace: '.', ''
-          | times: 0.01
           | round
         %}
-        {% assign maxValue = filter.range_max
+        {% assign max_value = filter.range_max
           | money_without_currency
           | replace: ',', ''
           | replace: '.', ''
-          | times: 0.01
           | round
         %}
 
-        <input
-          name="filter.v.price.gte"
-          type="range"
-          min="0"
-          value="{% if filter.min_value.value != blank %}{{ lowValue }}{% else %}0{% endif %}"
-          max="{{ maxValue }}"
-        >
+        <label x-data="{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }">
+          <p>
+            From: 
+            <span x-text="value">{% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %}</span> {{ cart.currency.symbol }}
+          </p>
+          
+          <input
+            name="filter.v.price.gte"
+            type="range"
+            min="0"
+            @change="value = $el.value"
+            x-model="value"
+            max="{{ max_value }}"
+          >
+        </label>
 
-        <input
-          name="filter.v.price.lte"
-          type="range"
-          min="0"
-          value="{% if filter.max_value.value != blank %}{{ highValue }}{% else %}{{ maxValue }}{% endif %}"
-          max="{{ maxValue }}"
-        >
-
-        <span>{{ cart.currency.symbol }}</span>
+        <label x-data="{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }">
+          <p>
+            To: 
+            <span x-text="value">{% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %}</span> {{ cart.currency.symbol }}
+          </p>
+          <input
+            name="filter.v.price.lte"
+            type="range"
+            min="0"
+            x-model="value"
+            max="{{ max_value }}"
+          >
+        </label>
     {%- endcase -%}
 
-    <hr>
+  </div>
   {%- endfor -%}
 
-  <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}">Clear all</a>
-  <button type="submit">Apply</button>
+  <div>
+    <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="inline-block bg-blue-400 text-white py-1 px-2 rounded">Clear all</a>
+    {% comment %} <button type="submit" class="bg-blue-400 text-white py-1 px-2 leading-normal rounded">Apply</button> {% endcomment %}
+  </div>
 </form>

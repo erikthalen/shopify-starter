@@ -1,4 +1,4 @@
-import {
+import type {
   ITransitionPage,
   HooksTransitionMap,
   HooksTransition,
@@ -60,7 +60,7 @@ export default ({
       const [defaultTransition] = Object.keys(page)
 
       // run nothing if the default transition doesn't have current hook registered
-      if (!page[defaultTransition][hook]) Promise.resolve()
+      if (!page[defaultTransition][hook]) return Promise.resolve()
 
       // run defaultTransition's hook
       return page[defaultTransition][hook](data)
@@ -117,7 +117,7 @@ export default ({
 
   return [
     {
-      sync: false,
+      sync: true,
       name: 'main',
       ...hooks,
       async enter(data) {

@@ -5,8 +5,9 @@
 {% if request.visual_preview_mode %}
   {% comment %} show a little arrow in the preview popup {% endcomment %}
   <h1 style="text-align: center; opacity: 0.4; font-size: 5vw; margin: 0.15;">↕</h1>
-  {% render '_shopify-preview' %}
 {% endif %}
+
+{% render '_shopify-preview' %}
 
 {% schema %}
 {

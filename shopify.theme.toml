@@ -1,6 +1,6 @@
 [environments.development]
-store = "your-store"
-theme = "123456789012"
+store = "wi0e05-g1"
+theme = "175728787793"
 ignore = [
   "templates/*.json",
   "templates/**/*.json",
@@ -10,8 +10,8 @@ ignore = [
 ]
 
 [environments.production]
-store = "your-store"
-theme = "987654321098"
+store = "wi0e05-g1"
+theme = "175728787793"
 ignore = [
   "templates/*.json",
   "templates/**/*.json",

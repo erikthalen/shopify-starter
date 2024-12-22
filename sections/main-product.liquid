@@ -1,70 +1,94 @@
-<h1>{{ product.title }}</h1>
+<section class="px-4 my-20">
+  <h1 class="text-3xl mb-4">{{ product.title }}</h1>
 
-<p>{{ product.description }}</p>
+  <div class="mb-4">{{ product.description }}</div>
 
-{% render 'image', image: product.featured_image %}
+  {% render 'image', image: product.featured_image %}
 
-{%- form 'product', product, novalidate: 'novalidate', data-ref: 'product-form', data-pdp: 'true' -%}
-  {% comment %} <script data-product>{{ product | json }}</script> {% endcomment %}
+  <form
+    class="inline-grid gap-4 justify-items-start bg-gray-100 py-4 px-10 rounded-lg my-10"
+    x-data="productForm({{ product.selected_or_first_available_variant.available }})"
+    @change="handleChange"
+    @submit.prevent="handleSubmit"
+    method="post"
+    action="/cart/add"
+    accept-charset="UTF-8"
+    enctype="multipart/form-data"
+    novalidate="novalidate"
+  >
+    <input type="hidden" name="form_type" value="product">
+    <input type="hidden" name="utf8" value="✓">
+    <input type="hidden" name="product-id" value="{{ product.id }}">
 
-  {% if product.variants.size == 1 %}
-    <input type="hidden" value="{{ product.selected_or_first_available_variant.id }}" name="id">
-  {% else %}
-    {% comment %} reference of what type of option we're on {% endcomment %}
-    {% assign options_index = 0 %}
+    <input type="hidden" value="1" name="quantity">
 
-    {% comment %} loop through all options {% endcomment %}
-    {% for option in product.options %}
-      <div>
-        {% comment %} keep reference of what we've printed {% endcomment %}
-        {% assign printed_options = '' %}
-        {% assign option_name = option %}
+    {% if product.variants.size == 1 %}
+      <input type="hidden" value="{{ product.selected_or_first_available_variant.id }}" name="id">
+    {% else %}
+      {% for option in product.options %}
+        
+          {% assign values = '' %}
+          {% assign checked_value = '' %}
 
-        <p>{{ option_name }}</p>
-
-        <div>
-          {% comment %} loop through all the variants {% endcomment %}
+          {% assign option_index = forloop.index0 %}
+          
           {% for variant in product.variants %}
-            {% assign printed_options_array = printed_options | split: ';;;' %}
-            {% assign option_value = variant.options[options_index] %}
-
-            {% comment %} print the option, if it's not yet printed {% endcomment %}
-            {% unless printed_options_array contains option_value %}
-              <label>
-                {{ option_value }}
-
-                <input
-                  type="radio"
-                  {% if variant.id == product.selected_or_first_available_variant.id %}
-                    checked
-                  {% endif %}
-                  value="{{ option_value }}"
-                  name="{{ option_name }}"
-                >
-              </label>
+            {% assign values_array = values | split: ';;;' %}
+            {% assign value = variant.options[option_index] %}
+            
+            {% unless values_array contains value %}
+              {% assign values = values | append: variant.options[option_index] | append: ';;;' %}
             {% endunless %}
 
-            {% assign printed_options = printed_options | append: variant.options[options_index] | append: ';;;' %}
+            {% if variant.id == product.selected_or_first_available_variant.id %}
+              {% assign checked_value = value %}
+            {% endif %}
           {% endfor %}
+
+        <div class="grid gap-1">
+          <p class="font-bold underline">{{ option }}</p>
+
+          <div class="grid">
+            {% assign values_array = values | split: ';;;' %}
+
+            {% for value in values_array %}
+              <label>
+                {{ value }}
+                
+                <input
+                  type="radio"
+                  {% if value == checked_value %}
+                    checked
+                  {% endif %}
+                  value="{{ value | escape }}"
+                  name="{{ option }}"
+                >
+              </label>
+            {% endfor %}
+          </div>
         </div>
-        {% assign options_index = options_index | plus: 1 %}
-      </div>
-    {% endfor %}
-  {% endif %}
-
-  <input type="hidden" value="1" name="quantity">
-
-  <button
-    type="submit"
-    name="add"
-    {% if product.selected_or_first_available_variant.available == false %}
-      disabled
+      {% endfor %}
     {% endif %}
-  >
-    Buy
-  </button>
-{%- endform -%}
+
+    {% comment %} <p class="font-bold text-xl" x-text="currentVariant.price">{{ product.selected_or_first_available_variant.price | money }}</p> {% endcomment %}
+    <p class="font-bold text-xl">{{ product.selected_or_first_available_variant.price | money }}</p>
+
+    <button
+      x-ref="submitButton"
+      class="bg-blue-400 text-white py-1 px-2 rounded disabled:bg-gray-400"
+      type="submit"
+      name="add"
+      :disabled="!currentVariant.available"
+    >
+      Buy
+    </button>
+  </form>
+</section>
 
 <script>
   console.log({{ product | json }})
+</script>
+
+<script type="application/ld+json">
+  {{ product | structured_data }}
 </script>

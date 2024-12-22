@@ -1,0 +1,5 @@
+<span
+  x-data
+  x-init="$store.cartAmount.setAmount({{ cart.item_count }})"
+  x-text="$store.cartAmount.amount"
+>{{ cart.item_count }}</span>

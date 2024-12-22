@@ -1,14 +1,43 @@
-<h1>{{ collection.title }}</h1>
-
-<ol style="padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-  {% paginate collection.products by 32 %}
-    {% for product in collection.products %}
-      <li>
-        <a href="{{ product.url }}">
-          {% render 'image', image: product.featured_image, size: '50,10' %}
-          {{ product.title }}
-        </a>
-      </li>
-    {% endfor %}
-  {% endpaginate %}
-</ol>
+<section class="px-4 my-20" x-data="plp" @filter-update.window="handleFilterUpdate">
+  <h1 class="text-3xl mb-4">{{ collection.title }}</h1>
+  
+  <ol style="padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+    {% paginate collection.products by 32 %}
+      {% if collection.products.size == 0 %}
+        <p class="text-8xl col-span-4">No results 😔</p>
+      {% else %}
+      {% for product in collection.products %}
+        <li class="bg-gray-100 p-4 rounded-lg" style="view-transition-name: item-{{ product.id }}">
+          <a href="{{ product.url }}">
+            {% render 'image', image: product.featured_image, size: '50,10' %}
+            {{ product.title }} – {{ product.price | money }}
+          </a>
+          <form
+            class=""
+            x-data="productForm({{ product.selected_or_first_available_variant.available }}, 'default')"
+            @change="handleChange"
+            @submit.prevent="handleSubmit"
+            method="post"
+            action="/cart/add"
+            accept-charset="UTF-8"
+            enctype="multipart/form-data"
+            novalidate="novalidate"
+          >
+            <input type="hidden" value="1" name="quantity">
+            <input type="hidden" value="{{ product.selected_or_first_available_variant.id }}" name="id">
+            <button
+              x-ref="submitButton"
+              class="bg-blue-400 text-white py-1 px-2 rounded disabled:bg-gray-400"
+              type="submit"
+              name="add"
+              :disabled="!currentVariant.available"
+            >
+              Buy
+            </button>
+          </form>
+        </li>
+      {% endfor %}
+    {% endif %}
+    {% endpaginate %}
+  </ol>
+</section>
