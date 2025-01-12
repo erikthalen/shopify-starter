@@ -1,67 +1,66 @@
-<section class="px-4 my-20">
-  <h1 class="text-3xl mb-4">{{ product.title }}</h1>
+<section class='my-20 px-4'>
+  <h1 class='mb-4 text-3xl'>{{ product.title }}</h1>
 
-  <div class="mb-4">{{ product.description }}</div>
+  <div class='mb-4'>{{ product.description }}</div>
 
   {% render 'image', image: product.featured_image %}
 
   <form
-    class="inline-grid gap-4 justify-items-start bg-gray-100 py-4 px-10 rounded-lg my-10"
-    x-data="productForm({{ product.selected_or_first_available_variant.available }})"
-    @change="handleChange"
-    @submit.prevent="handleSubmit"
-    method="post"
-    action="/cart/add"
-    accept-charset="UTF-8"
-    enctype="multipart/form-data"
-    novalidate="novalidate"
+    class='my-10 inline-grid justify-items-start gap-4 rounded-lg bg-gray-100 px-10 py-4'
+    x-data='productForm({{ product.selected_or_first_available_variant.available }})'
+    @change='handleChange'
+    @submit.prevent='handleSubmit'
+    method='post'
+    action='/cart/add'
+    accept-charset='UTF-8'
+    enctype='multipart/form-data'
+    novalidate='novalidate'
   >
-    <input type="hidden" name="form_type" value="product">
-    <input type="hidden" name="utf8" value="✓">
-    <input type="hidden" name="product-id" value="{{ product.id }}">
+    <input type='hidden' name='form_type' value='product'>
+    <input type='hidden' name='utf8' value='✓'>
+    <input type='hidden' name='product-id' value='{{ product.id }}'>
 
-    <input type="hidden" value="1" name="quantity">
+    <input type='hidden' value='1' name='quantity'>
 
     {% if product.variants.size == 1 %}
-      <input type="hidden" value="{{ product.selected_or_first_available_variant.id }}" name="id">
+      <input type='hidden' value='{{ product.selected_or_first_available_variant.id }}' name='id'>
     {% else %}
       {% for option in product.options %}
-        
-          {% assign values = '' %}
-          {% assign checked_value = '' %}
+        {% assign values = '' %}
+        {% assign checked_value = '' %}
 
-          {% assign option_index = forloop.index0 %}
-          
-          {% for variant in product.variants %}
-            {% assign values_array = values | split: ';;;' %}
-            {% assign value = variant.options[option_index] %}
-            
-            {% unless values_array contains value %}
-              {% assign values = values | append: variant.options[option_index] | append: ';;;' %}
-            {% endunless %}
+        {% assign option_index = forloop.index0 %}
 
-            {% if variant.id == product.selected_or_first_available_variant.id %}
-              {% assign checked_value = value %}
-            {% endif %}
-          {% endfor %}
+        {% for variant in product.variants %}
+          {% assign values_array = values | split: ';;;' %}
+          {% assign value = variant.options[option_index] %}
 
-        <div class="grid gap-1">
-          <p class="font-bold underline">{{ option }}</p>
+          {% unless values_array contains value %}
+            {% assign values = values | append: variant.options[option_index] | append: ';;;' %}
+          {% endunless %}
 
-          <div class="grid">
+          {% if variant.id == product.selected_or_first_available_variant.id %}
+            {% assign checked_value = value %}
+          {% endif %}
+        {% endfor %}
+
+        <div class='grid gap-1'>
+          <p class='font-bold underline'>{{ option }}</p>
+
+          <div class='grid'>
             {% assign values_array = values | split: ';;;' %}
 
             {% for value in values_array %}
               <label>
                 {{ value }}
-                
+
                 <input
-                  type="radio"
+                  type='radio'
                   {% if value == checked_value %}
                     checked
                   {% endif %}
-                  value="{{ value | escape }}"
-                  name="{{ option }}"
+                  value='{{ value | escape }}'
+                  name='{{ option }}'
                 >
               </label>
             {% endfor %}
@@ -71,14 +70,13 @@
     {% endif %}
 
     {% comment %} <p class="font-bold text-xl" x-text="currentVariant.price">{{ product.selected_or_first_available_variant.price | money }}</p> {% endcomment %}
-    <p class="font-bold text-xl">{{ product.selected_or_first_available_variant.price | money }}</p>
+    <p class='text-xl font-bold'>{{ product.selected_or_first_available_variant.price | money }}</p>
 
     <button
-      x-ref="submitButton"
-      class="bg-blue-400 text-white py-1 px-2 rounded disabled:bg-gray-400"
-      type="submit"
-      name="add"
-      :disabled="!currentVariant.available"
+      class='rounded bg-blue-400 px-2 py-1 text-white disabled:bg-gray-400'
+      type='submit'
+      name='add'
+      :disabled='!currentVariant.available'
     >
       Buy
     </button>
@@ -89,6 +87,6 @@
   console.log({{ product | json }})
 </script>
 
-<script type="application/ld+json">
+<script type='application/ld+json'>
   {{ product | structured_data }}
 </script>

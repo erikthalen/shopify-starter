@@ -14,6 +14,7 @@ import cart from './components/cart'
 import filter from './components/filter'
 import plp from './components/plp'
 import cartNotification from './components/cart-notification'
+import productRecommendations from './components/product-recommendations'
 
 declare global {
   interface Window {
@@ -34,6 +35,7 @@ Alpine.data('cartNotification', cartNotification)
 Alpine.data('filter', filter)
 Alpine.data('plp', plp)
 Alpine.data('productForm', productForm)
+Alpine.data('productRecommendations', productRecommendations)
 
 Alpine.start()
 

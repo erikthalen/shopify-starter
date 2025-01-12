@@ -1,4 +1,4 @@
-import { AlpineComponent } from 'alpinejs'
+import type { AlpineComponent } from 'alpinejs'
 
 type CartNotificationComponent = () => {
   show: () => void

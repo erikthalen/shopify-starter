@@ -1,12 +1,12 @@
-<section class="px-4 my-20">
-  <h1 class="text-3xl mb-4">All collections</h1>
+<section class='my-20 px-4'>
+  <h1 class='mb-4 text-3xl'>All collections</h1>
 
-  <ol style="padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+  <ol class="grid grid-cols-4 gap-4">
     {% paginate collections by 1000 %}
       {% for collection in collections %}
         <li>
-          <a href="{{ collection.url }}">
-            {% render 'image', image: collection.featured_image, size: '20,10' %}
+          <a href='{{ collection.url }}'>
+            {% render 'image', image: collection.featured_image, sizes: '100vw, 20vw' %}
             {{ collection.title }}
           </a>
         </li>

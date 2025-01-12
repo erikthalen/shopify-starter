@@ -1,6 +1,6 @@
 [environments.development]
-store = "wi0e05-g1"
-theme = "175728787793"
+store = "ss-dev-1"
+theme = "129419968596"
 ignore = [
   "templates/*.json",
   "templates/**/*.json",

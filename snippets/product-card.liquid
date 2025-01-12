@@ -1,0 +1,30 @@
+<div>
+  <a class='grid' href='{{ product.url }}'>
+    {% render 'image', image: product.featured_image, sizes: '50vw, 20vw' %}
+    {{ product.title }} – {{ product.price | money }}
+  </a>
+  
+  {% comment %} quick buy {% endcomment %}
+  <form
+    class=''
+    x-data="productForm({{ product.selected_or_first_available_variant.available }}, 'default')"
+    @change='handleChange'
+    @submit.prevent='handleSubmit'
+    method='post'
+    action='/cart/add'
+    accept-charset='UTF-8'
+    enctype='multipart/form-data'
+    novalidate='novalidate'
+  >
+    <input type='hidden' value='1' name='quantity'>
+    <input type='hidden' value='{{ product.selected_or_first_available_variant.id }}' name='id'>
+    <button
+      class='cursor-pointer rounded bg-blue-400 px-2 py-1 text-white disabled:bg-gray-400'
+      type='submit'
+      name='add'
+      :disabled='!currentVariant.available'
+    >
+      Buy
+    </button>
+  </form>
+</div>

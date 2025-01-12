@@ -3,156 +3,163 @@
 {% endcomment %}
 
 {% comment %} <form x-data="filter" @change.prevent="handleFilterChange" class="px-4 pt-20 grid gap-4"> {% endcomment %}
-<form x-data="filter" @change="handleFilterChange" class="px-4 pt-20 grid gap-4">
+<form x-data='filter' @change='handleFilterChange' class='grid gap-4 px-4 pt-20'>
   <div>
-    <label for="sort-by">Sort by:</label>
-    
-    <select name="sort_by" id="sort-by" class="border py-1 rounded">
+    <label for='sort-by'>Sort by:</label>
+
+    <select name='sort_by' id='sort-by' class='rounded border py-1'>
       {% assign values = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-ascending,created-descending'
         | split: ','
       %}
-      
+
       {% for value in values %}
         <option
           {% if collection.sort_by == value %}
             selected
           {% endif %}
-          value="{{ value }}"
+          value='{{ value }}'
         >
           {{ value }}
         </option>
       {% endfor %}
     </select>
-</div>
+  </div>
 
   {%- for filter in collection.filters -%}
-    <div class="bg-gray-100 p-2 rounded-md">
+    <div class='rounded-md bg-gray-100 p-2'>
+      <p class='font-bold'>{{ filter.label }}</p>
 
-    
-    <p class="font-bold">{{ filter.label }}</p>
+      {%- case filter.type -%}
+          {% comment %} BOOLEAN FILTER {% endcomment %}
+        {%- when 'boolean' -%}
+          <input
+            type='checkbox'
+            name='{{ filter.param_name }}'
+            value='{{ filter.true_value.value }}'
+            id='Filter-{{ filter.param_name }}'
+            {% if filter.true_value.active -%}
+              checked
+            {%- endif %}
+          >
+          {{- filter.true_value.label -}}
+          ({{ filter.true_value.count }})
+          <input
+            type='checkbox'
+            name='{{ filter.param_name }}'
+            value='{{ filter.false_value.value }}'
+            id='Filter-{{ filter.param_name }}'
+            {% if filter.false_value.active -%}
+              checked
+            {%- endif %}
+          >
+          {{- filter.false_value.label -}}
+          ({{ filter.false_value.count }})
 
-    {%- case filter.type -%}
-        {% comment %} BOOLEAN FILTER {% endcomment %}
-      {%- when 'boolean' -%}
-        <input
-          type="checkbox"
-          name="{{ filter.param_name }}"
-          value="{{ filter.true_value.value }}"
-          id="Filter-{{ filter.param_name }}"
-          {% if filter.true_value.active -%}
-            checked
-          {%- endif %}
-        >
-        {{- filter.true_value.label -}}
-        ({{ filter.true_value.count }})
-        <input
-          type="checkbox"
-          name="{{ filter.param_name }}"
-          value="{{ filter.false_value.value }}"
-          id="Filter-{{ filter.param_name }}"
-          {% if filter.false_value.active -%}
-            checked
-          {%- endif %}
-        >
-        {{- filter.false_value.label -}}
-        ({{ filter.false_value.count }})
+          {% comment %} LIST FILTER {% endcomment %}
+        {%- when 'list' -%}
+          {%- for filter_value in filter.values -%}
+            <label style='display: block'>
+              <input
+                type='checkbox'
+                name='{{ filter_value.param_name }}'
+                value='{{ filter_value.value }}'
+                {% if filter_value.active -%}
+                  checked
+                {%- endif %}
+              >
 
-        {% comment %} LIST FILTER {% endcomment %}
-      {%- when 'list' -%}
-        {%- for filter_value in filter.values -%}
-          <label style="display: block">
-            <input
-              type="checkbox"
-              name="{{ filter_value.param_name }}"
-              value="{{ filter_value.value }}"
-              {% if filter_value.active -%}
-                checked
-              {%- endif %}
-            >
+              {% comment %}
+                To use color swatches:
+                Create a Metaobject with 3 fields:
+                 1. "Label" - Single line text
+                 2. "Color" - Color
+                 3. "Image" - File (image)
 
-            {% comment %}
-              To use color swatches:
-              Create a Metaobject with 3 fields:
-               1. "Label" - Single line text
-               2. "Color" - Color
-               3. "Image" - File (image)
-
-              Create a Metafield on Variants and add this Metaobject as field value.
-              Create a new Search & Discovery Filter and choose the Metafield as Source.
-              Change Display options of the filter to "Swatch color: Color" and "Swatch pattern: Image"
-            {% endcomment %}
-            {% if filter.presentation == 'swatch' %}
-              {% if filter_value.swatch.color != blank %}
-                <span
-                  style="background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;"
-                ></span>
-              {% elsif filter_value.swatch.image != blank %}
-                {{ filter_value.swatch.image | image_url: width: 30, height: 30 | image_tag }}
+                Create a Metafield on Variants and add this Metaobject as field value.
+                Create a new Search & Discovery Filter and choose the Metafield as Source.
+                Change Display options of the filter to "Swatch color: Color" and "Swatch pattern: Image"
+              {% endcomment %}
+              {% if filter.presentation == 'swatch' %}
+                {% if filter_value.swatch.color != blank %}
+                  <span
+                    style='background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;'
+                  ></span>
+                {% elsif filter_value.swatch.image != blank %}
+                  {{ filter_value.swatch.image | image_url: width: 30, height: 30 | image_tag }}
+                {% endif %}
               {% endif %}
-            {% endif %}
 
-            {{ filter_value.label }}
-            ({{ filter_value.count }})
+              {{ filter_value.label }}
+              ({{ filter_value.count }})
+            </label>
+          {%- endfor -%}
+
+          {% comment %} PRICE FILTER {% endcomment %}
+        {%- when 'price_range' -%}
+          {% assign low_value = filter.min_value.value
+            | money_without_currency
+            | replace: ',', ''
+            | replace: '.', ''
+            | round
+          %}
+          {% assign high_value = filter.max_value.value
+            | money_without_currency
+            | replace: ',', ''
+            | replace: '.', ''
+            | round
+          %}
+          {% assign max_value = filter.range_max
+            | money_without_currency
+            | replace: ',', ''
+            | replace: '.', ''
+            | round
+          %}
+
+          <label x-data='{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }'>
+            <p>
+              From:
+              <span x-text='value'>
+                {%- if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif -%}
+              </span>
+              {{ cart.currency.symbol }}
+            </p>
+
+            <input
+              name='filter.v.price.gte'
+              type='range'
+              min='0'
+              @change='value = $el.value'
+              x-model='value'
+              max='{{ max_value }}'
+            >
           </label>
-        {%- endfor -%}
 
-        {% comment %} PRICE FILTER {% endcomment %}
-      {%- when 'price_range' -%}
-        {% assign low_value = filter.min_value.value
-          | money_without_currency
-          | replace: ',', ''
-          | replace: '.', ''
-          | round
-        %}
-        {% assign high_value = filter.max_value.value
-          | money_without_currency
-          | replace: ',', ''
-          | replace: '.', ''
-          | round
-        %}
-        {% assign max_value = filter.range_max
-          | money_without_currency
-          | replace: ',', ''
-          | replace: '.', ''
-          | round
-        %}
-
-        <label x-data="{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }">
-          <p>
-            From: 
-            <span x-text="value">{% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %}</span> {{ cart.currency.symbol }}
-          </p>
-          
-          <input
-            name="filter.v.price.gte"
-            type="range"
-            min="0"
-            @change="value = $el.value"
-            x-model="value"
-            max="{{ max_value }}"
-          >
-        </label>
-
-        <label x-data="{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }">
-          <p>
-            To: 
-            <span x-text="value">{% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %}</span> {{ cart.currency.symbol }}
-          </p>
-          <input
-            name="filter.v.price.lte"
-            type="range"
-            min="0"
-            x-model="value"
-            max="{{ max_value }}"
-          >
-        </label>
-    {%- endcase -%}
-
-  </div>
+          <label x-data='{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }'>
+            <p>
+              To:
+              <span x-text='value'>
+                {%- if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif -%}
+              </span>
+              {{ cart.currency.symbol }}
+            </p>
+            <input
+              name='filter.v.price.lte'
+              type='range'
+              min='0'
+              x-model='value'
+              max='{{ max_value }}'
+            >
+          </label>
+      {%- endcase -%}
+    </div>
   {%- endfor -%}
 
   <div>
-    <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="inline-block bg-blue-400 text-white py-1 px-2 rounded">Clear all</a>
+    <a
+      href='{{ collection.url }}?sort_by={{ collection.sort_by }}'
+      class='inline-block rounded bg-blue-400 px-2 py-1 text-white'
+      >Clear all</a
+    >
     {% comment %} <button type="submit" class="bg-blue-400 text-white py-1 px-2 leading-normal rounded">Apply</button> {% endcomment %}
   </div>
 </form>

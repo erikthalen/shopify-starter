@@ -7,50 +7,29 @@
         seems like the way shopify wants it. a little like a search.
 {% endcomment %}
 
-<div class="product-recommendations">
-  {%- if recommendations.performed? and recommendations.products_count > 0 -%}
-    {% if recommendations.intent == 'related' %}
-      <h2>You may also like</h2>
-    {% elsif recommendations.intent == 'complementary' %}
-      <h2>Pair it with</h2>
-    {% endif %}
+<div
+  x-data='
+    productRecommendations({
+      url: "{{ routes.product_recommendations_url }}",
+      sectionId: "{{ section.id }}",
+      productId: "{{ product.id }}",
+      limit: {{ section.settings.limit | default: 4 }},
+      intent: "{{ section.settings.intent | default: 'related' }}"
+    })
+  '
+  class='px-4'
+>
+  <h2 class="text-2xl mb-4" x-show="result">You may also like</h2>
 
-    <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr)">
-      {%- for product in recommendations.products -%}
-        <li>
-          <a href="{{ product.url }}">
-            <img
-              class="product__img"
-              src="{{ product.featured_image | image_url: width: 100 }}"
-              alt="{{ product.featured_image.alt }}"
-              width="100"
-              height="100"
-            >
-
-            <p>{{ product.title }} - {{ product.price | money }}</p>
-          </a>
-        </li>
-      {%- endfor -%}
-    </ul>
-  {%- endif -%}
+  <div x-html='result'></div>
 </div>
 
-<output id="product-recommendations-output"></output>
-
-<script>
-  async function inject(type) {
-    try {
-      const url = `{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4&intent=${type}`;
-      const res = await fetch(url);
-      const text = await res.text();
-  
-      const output = document.getElementById('product-recommendations-output');
-      output.insertAdjacentHTML('beforeend', text);
-    } catch(error) {
-      console.log('cound not load recommendations')
-    }
-  }
-
-  inject('related');
-  inject('complementary');
-</script>
+{%- if recommendations.performed? and recommendations.products_count > 0 -%}
+  <ul class="grid grid-cols-4 gap-4">
+    {%- for product in recommendations.products -%}
+      <li>
+        {% render 'product-card', product: product %}
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
