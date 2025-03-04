@@ -1,11 +1,5 @@
-import type { AlpineComponent } from 'alpinejs'
+import { defineComponent } from '~/utils/define'
 
-type CartNotificationComponent = () => {
-  show: () => void
-}
-
-const cartNotification: AlpineComponent<CartNotificationComponent> = () => ({
+export default defineComponent(() => ({
   show() {},
-})
-
-export default cartNotification
+}))

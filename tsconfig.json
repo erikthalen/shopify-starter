@@ -2,6 +2,7 @@
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
+    "strict": true,
     "lib": ["esnext", "dom", "dom.iterable"],
     "module": "es2022",
     "target": "es2022",
@@ -11,6 +12,7 @@
       "~/*": ["frontend/*"]
     },
     "types": ["vite/client"],
+    "noImplicitThis": true,
     "allowSyntheticDefaultImports": true
   }
 }

@@ -13,7 +13,7 @@ Used to render images.
   image: section.settings.image,
   sizes: '100vw, 50vw',
   aspect_ratio: '1/1',
-  style: 'opacity: 0.3'
+  class: 'opacity-30'
 %}
 ```
 
@@ -77,9 +77,16 @@ CSS string defining aspect ratio on small screens (overwrites aspect_ratio)
 
 CSS string defining aspect ratio on large screens (overwrites aspect_ratio)
 
+#### class
+
+- **Type:** `String`
+- **Default:** `null`
+
+Any classes to apply to the "picture"
+
 #### style
 
 - **Type:** `String`
 - **Default:** `null`
 
-Any inline style to apply to the <img>
+Any inline style to apply to the "picture"

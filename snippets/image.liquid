@@ -92,7 +92,10 @@
 {%- if image == blank -%}
   {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
 {%- else -%}
-  <picture class="image">
+  <picture
+    {% if class != blank %}class="{{ class }}" {% endif %}
+    {% if style != blank %}style="{{ style }}" {% endif %}
+  >
     {%- if image_mobile != blank -%}
       <source
         srcset="

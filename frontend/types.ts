@@ -22,7 +22,7 @@ export type Product = {
   variants: Variant[]
   images: string[]
   featured_image: string
-  options: string[]
+  options: { name: string; position: number; values: string[] }[]
   media: Media[]
   requires_selling_plan: boolean
   selling_plan_groups: string[]

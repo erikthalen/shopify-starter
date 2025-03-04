@@ -1,13 +1,10 @@
-import Alpine, { type AlpineComponent } from 'alpinejs'
+import Alpine from 'alpinejs'
 import { setIsLoading } from './loading'
 import debounce from '~/utils/debounce'
+import { defineComponent } from '~/utils/define'
 
-type CartComponent = () => {
-  handleQuantityChange: (e: Event) => void
-}
-
-const updateCart = debounce<HTMLElement>(
-  async (el: HTMLInputElement, { signal }): Promise<HTMLElement> => {
+const updateCart = debounce<HTMLInputElement, HTMLElement | undefined>(
+  async (el: HTMLInputElement, { signal }) => {
     const { id, value } = el
 
     setIsLoading(true)
@@ -39,7 +36,7 @@ const updateCart = debounce<HTMLElement>(
 
       setIsLoading(false)
 
-      return newCartSectionMarkup
+      return newCartSectionMarkup as HTMLElement
     } catch (error) {
       console.log(error)
       setIsLoading(false)
@@ -47,8 +44,8 @@ const updateCart = debounce<HTMLElement>(
   }
 )
 
-const cart: AlpineComponent<CartComponent> = () => ({
-  async handleQuantityChange(e) {
+export default defineComponent(() => ({
+  async handleQuantityChange(e: Event) {
     const el = e.target as HTMLInputElement
 
     try {
@@ -58,7 +55,7 @@ const cart: AlpineComponent<CartComponent> = () => ({
       if (!newCartMarkup) return
 
       document.startViewTransition(() => {
-        Alpine.morph(this.$root, newCartMarkup)
+        Alpine.morph(this.$root, newCartMarkup, {})
       })
 
       /**
@@ -67,8 +64,11 @@ const cart: AlpineComponent<CartComponent> = () => ({
        */
       const newInputs = [...newCartMarkup.querySelectorAll('input')]
       const inputs = this.$root.querySelectorAll('input')
-      inputs.forEach(input => {
+      inputs.forEach((input: HTMLInputElement) => {
         const target = newInputs.find(i => i.id === input.id)
+
+        if (!target) return
+
         input.value = target.value
       })
     } catch (error) {
@@ -76,18 +76,26 @@ const cart: AlpineComponent<CartComponent> = () => ({
     }
   },
 
-  async handleRemove(e) {
+  async handleRemove(e: PointerEvent) {
+    const target = e.target as HTMLAnchorElement
+
+    if (!target || target.tagName !== 'A') {
+      console.log('The remove-button has to be an <a href="url/to/remove">')
+      return
+    }
+
     setIsLoading(true)
 
     try {
-      const res = await fetch(e.target.href)
+      const res = await fetch(target.href)
       const text = await res.text()
       const parser = new DOMParser()
       const markup = parser.parseFromString(text, 'text/html')
       const element = markup.querySelector('[x-data="cart"]')
 
       document.startViewTransition(() => {
-        Alpine.morph(this.$root, element)
+        if (!element) return
+        Alpine.morph(this.$root, element, {})
       })
 
       const res2 = await fetch('/cart.json')
@@ -100,6 +108,4 @@ const cart: AlpineComponent<CartComponent> = () => ({
 
     setIsLoading(false)
   },
-})
-
-export default cart
+}))

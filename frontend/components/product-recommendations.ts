@@ -1,4 +1,4 @@
-import type { AlpineComponent } from 'alpinejs'
+import { defineComponent } from '~/utils/define'
 
 type Props = {
   url: string
@@ -8,41 +8,45 @@ type Props = {
   intent: 'related' | 'complementary'
 }
 
-type ProductRecommendationsComponent = (Props) => {
+type ProductRecommendationsComponent = {
   url: string
+  sectionId: string
+  productId: string
+  limit: number
+  intent: string
+
   result: string
-  init: () => void
 }
 
-const productRecommendations: AlpineComponent<
-  ProductRecommendationsComponent
-> = ({ url, sectionId, productId, limit, intent }) => ({
-  url,
-  sectionId,
-  productId,
-  limit,
-  intent,
+export default defineComponent<ProductRecommendationsComponent>(
+  ({ url, sectionId, productId, limit, intent }: Props) => ({
+    url,
+    sectionId,
+    productId,
+    limit,
+    intent,
 
-  result: '',
+    result: '',
 
-  async init() {
-    try {
-      const url = new URL(this.url, window.location.origin)
-      url.searchParams.set('section_id', this.sectionId)
-      url.searchParams.set('product_id', this.productId)
-      url.searchParams.set('limit', this.limit)
-      url.searchParams.set('intent', this.intent)
+    async init() {
+      try {
+        const url = new URL(this.url, window.location.origin)
+        url.searchParams.set('section_id', this.sectionId)
+        url.searchParams.set('product_id', this.productId)
+        url.searchParams.set('limit', this.limit.toString())
+        url.searchParams.set('intent', this.intent)
 
-      const res = await fetch(url)
-      const text = await res.text()
-      const parser = new DOMParser()
-      const markup = parser.parseFromString(text, 'text/html')
-      
-      this.result = markup.querySelector('ul').outerHTML
-    } catch (error) {
-      console.log('cound not load recommendations', error)
-    }
-  },
-})
+        const res = await fetch(url)
+        const text = await res.text()
+        const parser = new DOMParser()
+        const markup = parser.parseFromString(text, 'text/html')
 
-export default productRecommendations
+        if (!markup) return
+
+        this.result = markup.querySelector('ul')?.outerHTML || ''
+      } catch (error) {
+        console.log('cound not load recommendations', error)
+      }
+    },
+  })
+)

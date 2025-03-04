@@ -36,7 +36,7 @@ import {
   watchEffect
 } from "./chunk-LPBJEE5X.js";
 
-// node_modules/.pnpm/vitepress@1.5.0_@algolia+client-search@5.13.0_@types+node@22.10.2_lightningcss@1.28.2_postcss_dejseovrxrsiwqtvwhgthdn36e/node_modules/vitepress/lib/vue-demi.mjs
+// node_modules/.pnpm/vitepress@1.5.0_@algolia+client-search@5.13.0_@types+node@22.10.2_lightningcss@1.29.1_postcss_i2i24kcouhmp7lgumt7v35xx5y/node_modules/vitepress/lib/vue-demi.mjs
 var isVue2 = false;
 var isVue3 = true;
 function set(target, key, val) {
@@ -9329,4 +9329,4 @@ vitepress/lib/vue-demi.mjs:
    * @license MIT
    *)
 */
-//# sourceMappingURL=chunk-YSJATURM.js.map
+//# sourceMappingURL=chunk-6UUMRHDV.js.map

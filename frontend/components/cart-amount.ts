@@ -1,16 +1,9 @@
-import type { AlpineComponent } from 'alpinejs'
+import { defineStore } from '~/utils/define'
 
-type CartAmountComponent = {
-  amount: number | null
-  setAmount: (amount: number) => void
-}
+export default defineStore({
+  amount: null as number | null,
 
-const cartAmount: AlpineComponent<CartAmountComponent> = {
-  amount: null,
-
-  setAmount(amount) {
+  setAmount(amount: number) {
     this.amount = amount
   },
-}
-
-export default cartAmount
+})

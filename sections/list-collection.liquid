@@ -6,7 +6,7 @@
       {% for collection in collections %}
         <li>
           <a href='{{ collection.url }}'>
-            {% render 'image', image: collection.featured_image, sizes: '100vw, 20vw' %}
+            {% render 'image', image: collection.featured_image, sizes: '100vw, 20vw', aspect_ratio: '1/1' %}
             {{ collection.title }}
           </a>
         </li>

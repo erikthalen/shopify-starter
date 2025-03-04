@@ -11,9 +11,6 @@ importers:
       '@alpinejs/morph':
         specifier: ^3.14.7
         version: 3.14.7
-      '@barba/core':
-        specifier: ^2.10.3
-        version: 2.10.3
       alpinejs:
         specifier: ^3.14.7
         version: 3.14.7
@@ -21,9 +18,9 @@ importers:
         specifier: 4.0.0
         version: 4.0.0
     devDependencies:
-      '@eslint/js':
-        specifier: ^9.14.0
-        version: 9.14.0
+      '@barba/core':
+        specifier: ^2.10.3
+        version: 2.10.3
       '@shopify/prettier-plugin-liquid':
         specifier: ^1.5.2
         version: 1.5.2(prettier@3.3.3)
@@ -33,6 +30,9 @@ importers:
       '@types/alpinejs':
         specifier: ^3.13.11
         version: 3.13.11
+      '@types/alpinejs__morph':
+        specifier: ^3.13.4
+        version: 3.13.4
       '@virtualstate/navigation':
         specifier: ^1.0.1-alpha.202
         version: 1.0.1-alpha.206
@@ -48,9 +48,6 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.9
         version: 0.6.9(@shopify/prettier-plugin-liquid@1.5.2(prettier@3.3.3))(prettier@3.3.3)
-      tsconfig:
-        specifier: ^7.0.0
-        version: 7.0.0
       typescript-eslint:
         specifier: ^8.12.2
         version: 8.13.0(eslint@9.14.0(jiti@2.4.2))(typescript@5.6.3)
@@ -844,6 +841,9 @@ packages:
   '@types/alpinejs@3.13.11':
     resolution: {integrity: sha512-3KhGkDixCPiLdL3Z/ok1GxHwLxEWqQOKJccgaQL01wc0EVM2tCTaqlC3NIedmxAXkVzt/V6VTM8qPgnOHKJ1MA==}
 
+  '@types/alpinejs__morph@3.13.4':
+    resolution: {integrity: sha512-7A7YfX1EjWSPgOK677AFTW0iJNxYh+uaF952nwGiPxspej2Ch9lPAdctj7BDtyvZYM7GDtmx7DRqH6xTjtIe3A==}
+
   '@types/archiver@5.3.2':
     resolution: {integrity: sha512-IctHreBuWE5dvBDz/0WeKtyVKVRs4h75IblxOACL92wU66v+HGAfEYAOyXkOFphvRJMhuXdI9huDXpX0FC6lCw==}
 
@@ -879,12 +879,6 @@ packages:
 
   '@types/readdir-glob@1.1.5':
     resolution: {integrity: sha512-raiuEPUYqXu+nvtY2Pe8s8FEmZ3x5yAH4VkLdihcPdalvsHltomrRC9BzuStrJ9yk06470hS0Crw0f1pXqD+Hg==}
-
-  '@types/strip-bom@3.0.0':
-    resolution: {integrity: sha512-xevGOReSYGM7g/kUBZzPqCrR/KYAo+F0yiPc85WFTJa0MSLtyFTVTU6cJu/aV4mid7IffDIWqo69THF2o4JiEQ==}
-
-  '@types/strip-json-comments@0.0.30':
-    resolution: {integrity: sha512-7NQmHra/JILCd1QqpSzl8+mJRc8ZHz3uDm8YV1Ks9IhK0epEiTw8aIErbvH9PI+6XbqhyIQy3462nEsn7UVzjQ==}
 
   '@types/tinycolor2@1.4.6':
     resolution: {integrity: sha512-iEN8J0BoMnsWBqjVbWH/c0G0Hh7O21lpR2/+PrvAVgWdzL7eexIFm4JN/Wn10PTcmNdtS6U67r499mlWMXOxNw==}
@@ -2598,10 +2592,6 @@ packages:
     resolution: {integrity: sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==}
     engines: {node: '>=12'}
 
-  strip-bom@3.0.0:
-    resolution: {integrity: sha512-vavAMRXOgBVNF6nyEEmL3DBK19iRpDcoIwW+swQ+CbGiu7lju6t+JklA1MHweoWtadgt4ISVUsXLyDq34ddcwA==}
-    engines: {node: '>=4'}
-
   strip-final-newline@3.0.0:
     resolution: {integrity: sha512-dOESqjYr96iWYylGObzd39EuNTa5VJxyvVAEm5Jnh7KGo75V43Hk1odPQkNDyXNmUR6k+gEiDVXnjB8HJ3crXw==}
     engines: {node: '>=12'}
@@ -2693,9 +2683,6 @@ packages:
 
   ts-error@1.0.6:
     resolution: {integrity: sha512-tLJxacIQUM82IR7JO1UUkKlYuUTmoY9HBJAmNWFzheSlDS5SPMcNIepejHJa4BpPQLAcbRhRf3GDJzyj6rbKvA==}
-
-  tsconfig@7.0.0:
-    resolution: {integrity: sha512-vZXmzPrL+EmC4T/4rVlT2jNVMWCi/O4DIiSj3UHg1OE5kCKbk4mfrXc6dZksLgRM/TZlKnousKH9bbTazUWRRw==}
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
@@ -3728,6 +3715,10 @@ snapshots:
 
   '@types/alpinejs@3.13.11': {}
 
+  '@types/alpinejs__morph@3.13.4':
+    dependencies:
+      '@types/alpinejs': 3.13.11
+
   '@types/archiver@5.3.2':
     dependencies:
       '@types/readdir-glob': 1.1.5
@@ -3766,10 +3757,6 @@ snapshots:
   '@types/readdir-glob@1.1.5':
     dependencies:
       '@types/node': 22.10.2
-
-  '@types/strip-bom@3.0.0': {}
-
-  '@types/strip-json-comments@0.0.30': {}
 
   '@types/tinycolor2@1.4.6': {}
 
@@ -5525,8 +5512,6 @@ snapshots:
     dependencies:
       ansi-regex: 6.1.0
 
-  strip-bom@3.0.0: {}
-
   strip-final-newline@3.0.0: {}
 
   strip-json-comments@2.0.1: {}
@@ -5609,13 +5594,6 @@ snapshots:
       typescript: 5.6.3
 
   ts-error@1.0.6: {}
-
-  tsconfig@7.0.0:
-    dependencies:
-      '@types/strip-bom': 3.0.0
-      '@types/strip-json-comments': 0.0.30
-      strip-bom: 3.0.0
-      strip-json-comments: 2.0.1
 
   tslib@2.8.1: {}
 

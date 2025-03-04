@@ -1,16 +1,12 @@
-import { AlpineComponent } from 'alpinejs'
 import barba from '@barba/core'
 import { setIsLoading } from './loading'
+import { defineComponent } from '~/utils/define'
 
-type FilterComponent = () => {
-  handleFilterChange: (e: Event) => void
-}
-
-const filter: AlpineComponent<FilterComponent> = () => ({
+export default defineComponent(() => ({
   async handleFilterChange() {
     setIsLoading(true)
 
-    const formData = new FormData(this.$root)
+    const formData = new FormData(this.$root as HTMLFormElement)
 
     const url = new URL(window.location.pathname, window.location.origin)
 
@@ -29,10 +25,10 @@ const filter: AlpineComponent<FilterComponent> = () => ({
     const res = await fetch(searchUrl)
     const text = await res.text()
 
-    this.$root.dispatchEvent(new CustomEvent('filter-update', { detail: text, bubbles: true }))
+    this.$root.dispatchEvent(
+      new CustomEvent('filter-update', { detail: text, bubbles: true })
+    )
 
     setIsLoading(false)
   },
-})
-
-export default filter
+}))

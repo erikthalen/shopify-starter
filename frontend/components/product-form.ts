@@ -1,7 +1,8 @@
-import Alpine, { type AlpineComponent } from 'alpinejs'
+import Alpine from 'alpinejs'
 import barba from '@barba/core'
 import { Product, Variant } from '~/types'
 import { setIsLoading } from './loading'
+import { defineComponent } from '~/utils/define'
 
 type AddToCartData = {
   items: {
@@ -10,24 +11,11 @@ type AddToCartData = {
   }[]
 }
 
-type ProductFormComponent = (
-  initialVariantAvailable: boolean,
-  parser?: 'default'
-) => {
+export default defineComponent<{
   productData: Product | null
   currentVariant: Variant | { available: boolean }
-
-  parser: (form: HTMLFormElement, productData: Product) => AddToCartData
-
-  init: () => Promise<void>
-  handleChange: (e: Event) => void
-  handleSubmit: (e: Event) => void
-}
-
-const productForm: AlpineComponent<ProductFormComponent> = (
-  initialVariantAvailable,
-  parser
-) => ({
+  parser: (form: HTMLFormElement, productData: Product) => AddToCartData | null
+}>((initialVariantAvailable: boolean, parser: 'default') => ({
   productData: null,
   currentVariant: { available: initialVariantAvailable },
 
@@ -48,28 +36,34 @@ const productForm: AlpineComponent<ProductFormComponent> = (
     }
   },
 
-  handleChange(e) {
+  handleChange(e: Event) {
     const form = (e.target as HTMLElement).closest('form')
-    const id = this.parser(form, this.productData).items[0].id
+
+    if (!form || !this.productData) return
+
+    const id = this.parser(form, this.productData)?.items[0].id
     const url = new URL(window.location.href)
 
-    if (id === null) {
+    if (!id || id === null) {
       url.searchParams.delete('variant')
     } else {
-      url.searchParams.set('variant', id)
+      url.searchParams.set('variant', id.toString())
     }
 
     barba.history.add(url.href, 'popstate', 'replace')
 
-    if (this.productData && id) {
+    if (id) {
       this.currentVariant = this.productData.variants.find(
         variant => variant.id === parseInt(id.toString())
-      )
+      ) || { available: false }
     }
   },
 
-  async handleSubmit(e) {
+  async handleSubmit(e: SubmitEvent) {
     const form = (e.target as HTMLElement).closest('form')
+
+    if (!form || !this.productData) return
+
     const data = this.parser(form, this.productData)
 
     setIsLoading(true)
@@ -91,9 +85,9 @@ const productForm: AlpineComponent<ProductFormComponent> = (
 
     setIsLoading(false)
   },
-})
+}))
 
-function pdpParser(form, productData) {
+function pdpParser(form: HTMLFormElement, productData: Product) {
   const formData = new FormData(form)
   const formValues = Object.fromEntries(formData.entries())
 
@@ -106,23 +100,21 @@ function pdpParser(form, productData) {
       })
     })?.id
 
-  const quantity = parseInt(formData.get('quantity').toString() || '1')
+  const quantity = parseInt(formData.get('quantity')?.toString() || '1')
+
+  if (!variant) return null
 
   return {
-    items: [{ id: variant, quantity }],
+    items: [{ id: parseInt(variant.toString()), quantity }],
   }
 }
 
-function defaultParser(form) {
+function defaultParser(form: HTMLFormElement) {
   const formData = new FormData(form)
   const [id] = formData.getAll('id')
   const quantity = parseInt(formData.getAll('quantity').toString() || '1')
 
-  console.log(id, quantity)
-
   return {
-    items: [{ id, quantity }],
+    items: [{ id: parseInt(id.toString()), quantity }],
   }
 }
-
-export default productForm

@@ -1,14 +1,12 @@
-import Alpine, { AlpineComponent } from 'alpinejs'
+import { defineComponent } from '~/utils/define'
 
-type PLPComponent = () => {
-  handleFilterUpdate: (e: CustomEvent) => void
-}
-
-const plp: AlpineComponent<PLPComponent> = () => ({
-  handleFilterUpdate(e) {
+export default defineComponent(() => ({
+  handleFilterUpdate(e: CustomEvent<string>) {
     const parser = new DOMParser()
     const markup = parser.parseFromString(e.detail, 'text/html')
     const newPLP = markup.querySelector('[x-data="plp"]')
+
+    if (!newPLP) return
 
     document.startViewTransition(() => {
       this.$root.after(newPLP)
@@ -16,6 +14,4 @@ const plp: AlpineComponent<PLPComponent> = () => ({
       // Alpine.morph(this.$root, newPLP)
     })
   },
-})
-
-export default plp
+}))

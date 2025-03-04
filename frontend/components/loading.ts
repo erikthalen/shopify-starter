@@ -9,6 +9,6 @@ document.head.appendChild(style)
 /**
  * listen for loading events
  */
-export function setIsLoading(isLoading) {
+export function setIsLoading(isLoading: boolean) {
   document.body.classList.toggle('is-loading', isLoading)
 }

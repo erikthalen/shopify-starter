@@ -39,6 +39,11 @@ Alpine.data('productRecommendations', productRecommendations)
 
 Alpine.start()
 
+type BarbaPayload = {
+  current: { container: HTMLElement }
+  next: { container: HTMLElement }
+}
+
 barba.init({
   debug: location.origin.includes('127.0.0.1'),
   prevent: () => window.Shopify.designMode,
@@ -47,22 +52,22 @@ barba.init({
   transitions: useTransition({
     page: {
       default: {
-        async leave({ current }) {
+        async leave({ current }: BarbaPayload) {
           const options = {
             duration: 400,
             easing: 'ease',
-            fill: 'forwards',
+            fill: 'forwards' as FillMode,
           }
           const to = { opacity: 0, translate: '0 20px' }
 
           return current.container.animate(to, options).finished
         },
 
-        async enter({ next }) {
+        async enter({ next }: BarbaPayload) {
           const options = {
             duration: 400,
             easing: 'ease',
-            fill: 'forwards',
+            fill: 'forwards' as FillMode,
           }
           const from = { opacity: 0, translate: '0 -20px' }
           const to = { opacity: 1, translate: '0 0' }
