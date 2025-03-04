@@ -3,10 +3,14 @@ import type {
   HooksTransitionMap,
   HooksTransition,
   Trigger,
+  ITransitionData,
 } from '@barba/core/dist/src/defs'
 
-function createResolver() {
-  let resolver = null
+function createResolver(): {
+  promise: Promise<unknown>
+  resolver: (value: unknown) => void
+} {
+  let resolver: ((value: unknown) => void) | null = () => {}
   const promise = new Promise(resolve => (resolver = resolve))
 
   return { promise, resolver }
@@ -25,7 +29,7 @@ export const pageTransition = {
   resolver: resolver,
   done() {
     if (typeof this.resolver === 'function') {
-      this.resolver()
+      this.resolver(null)
     }
 
     const { promise, resolver } = createResolver()
@@ -53,10 +57,12 @@ export default ({
   const runCurrentHook = async (hook: HooksTransition, data: unknown) => {
     if (window.innerWidth < 800) return
 
+    if (!currentTransition) return
+
     const currentHooks = page[currentTransition]
 
     // no transition set, or the name doesn't exist
-    if (!currentTransition || !currentHooks) {
+    if (!currentHooks) {
       const [defaultTransition] = Object.keys(page)
 
       // run nothing if the default transition doesn't have current hook registered
@@ -108,7 +114,7 @@ export default ({
   const hooks = ALL_BARBA_HOOKS.reduce((acc, hook) => {
     return {
       ...acc,
-      async [hook](data) {
+      async [hook](data: ITransitionData) {
         callGlobalHook(hook, data)
         await runCurrentHook(hook, data)
       },
@@ -135,6 +141,6 @@ export default ({
   ]
 }
 
-export const setTransition = (name: string) => {
+export const setTransition = (name: string | null) => {
   currentTransition = name
 }

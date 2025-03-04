@@ -19,10 +19,9 @@ import productRecommendations from './components/product-recommendations'
 declare global {
   interface Window {
     Shopify: {
-      designMode: unknown
+      designMode: boolean
     }
     forceNavigationRefresh: boolean
-    navigation: unknown
   }
 }
 

@@ -30,16 +30,3 @@ html {
     calc(16px + 16 * var(--zoom-amount) * (100vw - 1440px) / 1440)
   );
 }
-
-.image {
-  img {
-    /* object-fit: cover; */
-    /* aspect-ratio: var(--sm-aspect, var(--aspect), auto); */
-    object-position: var(--focal, 50% 50%);
-
-    @media (min-width: 751px) {
-      /* aspect-ratio: var(--md-aspect, var(--aspect), auto); */
-      object-position: var(--md-focal, var(--focal, 50% 50%));
-    }
-  }
-}

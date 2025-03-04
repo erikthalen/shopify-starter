@@ -12,7 +12,6 @@
       "~/*": ["frontend/*"]
     },
     "types": ["vite/client"],
-    "noImplicitThis": true,
     "allowSyntheticDefaultImports": true
   }
 }
