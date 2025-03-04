@@ -96,6 +96,14 @@ Create two repository secrets:
 | `SHOPIFY_STORE` | Store URL, like your-store.myshopify.com |
 | `SHOPIFY_CLI_THEME_TOKEN` | Password generated from Theme Access app |
 
+### Manual deployment
+
+The repo also supports manual deployments from the CLI by running:
+
+```sh
+pnpm run deploy
+```
+
 ## Theme settings
 
 There's a few Shopify Theme Settings included as schema fields. Feel free to remove the fields from `config/settings_schema.json`, if they aren't relevant to your project.

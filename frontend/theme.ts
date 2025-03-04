@@ -1,6 +1,7 @@
 import 'vite/modulepreload-polyfill'
 
 import barba from '@barba/core'
+import type { ITransitionData } from '@barba/core/dist/src/defs'
 import Alpine from 'alpinejs'
 import morph from '@alpinejs/morph'
 
@@ -38,11 +39,6 @@ Alpine.data('productRecommendations', productRecommendations)
 
 Alpine.start()
 
-type BarbaPayload = {
-  current: { container: HTMLElement }
-  next: { container: HTMLElement }
-}
-
 barba.init({
   debug: location.origin.includes('127.0.0.1'),
   prevent: () => window.Shopify.designMode,
@@ -51,7 +47,7 @@ barba.init({
   transitions: useTransition({
     page: {
       default: {
-        async leave({ current }: BarbaPayload) {
+        async leave({ current }: ITransitionData) {
           const options = {
             duration: 400,
             easing: 'ease',
@@ -62,7 +58,7 @@ barba.init({
           return current.container.animate(to, options).finished
         },
 
-        async enter({ next }: BarbaPayload) {
+        async enter({ next }: ITransitionData) {
           const options = {
             duration: 400,
             easing: 'ease',

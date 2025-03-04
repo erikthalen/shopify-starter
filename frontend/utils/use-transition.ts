@@ -54,25 +54,17 @@ export default ({
   page: Record<string, HooksTransitionMap>
   global: HooksTransitionMap
 }): ITransitionPage[] => {
-  const runCurrentHook = async (hook: HooksTransition, data: unknown) => {
+  const runCurrentHook = async (
+    hook: HooksTransition,
+    data: ITransitionData
+  ) => {
     if (window.innerWidth < 800) return
 
-    if (!currentTransition) return
+    const currentHooks = currentTransition
+      ? page[currentTransition]
+      : Object.values(page)[0]
 
-    const currentHooks = page[currentTransition]
-
-    // no transition set, or the name doesn't exist
-    if (!currentHooks) {
-      const [defaultTransition] = Object.keys(page)
-
-      // run nothing if the default transition doesn't have current hook registered
-      if (!page[defaultTransition][hook]) return Promise.resolve()
-
-      // run defaultTransition's hook
-      return page[defaultTransition][hook](data)
-    }
-
-    // a currentTransition doesn't have currentHook registered
+    // the currentTransition doesn't have currentHook registered
     if (typeof currentHooks[hook] !== 'function') {
       return Promise.resolve()
     }
@@ -81,7 +73,7 @@ export default ({
     return currentHooks[hook](data)
   }
 
-  const callGlobalHook = (hook: HooksTransition, data: unknown) => {
+  const callGlobalHook = (hook: HooksTransition, data: ITransitionData) => {
     if (typeof global[hook] !== 'function') return
 
     return global[hook](data)

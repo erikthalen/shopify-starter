@@ -1,6 +1,6 @@
 // https://app.quicktype.io/
 
-export type Product = {
+export type ProductData = {
   id: number
   title: string
   handle: string
@@ -19,7 +19,7 @@ export type Product = {
   compare_at_price_min: number
   compare_at_price_max: number
   compare_at_price_varies: boolean
-  variants: Variant[]
+  variants: VariantData[]
   images: string[]
   featured_image: string
   options: { name: string; position: number; values: string[] }[]
@@ -48,7 +48,7 @@ export type PreviewImage = {
   src: string
 }
 
-export type Variant = {
+export type VariantData = {
   id: number
   title: string
   option1: string

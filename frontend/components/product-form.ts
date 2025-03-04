@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs'
 import barba from '@barba/core'
-import { Product, Variant } from '~/types'
+import { ProductData, VariantData } from '~/types'
 import { setIsLoading } from './loading'
 import { defineComponent } from '~/utils/define'
 
@@ -11,10 +11,15 @@ type AddToCartData = {
   }[]
 }
 
+type ProductFormParser = (
+  form: HTMLFormElement,
+  productData: ProductData
+) => AddToCartData | null
+
 export default defineComponent<{
-  productData: Product | null
-  currentVariant: Variant | { available: boolean }
-  parser: (form: HTMLFormElement, productData: Product) => AddToCartData | null
+  productData: ProductData | null
+  currentVariant: VariantData | { available: boolean }
+  parser: ProductFormParser
 }>((initialVariantAvailable: boolean, parser: 'default') => ({
   productData: null,
   currentVariant: { available: initialVariantAvailable },
@@ -22,14 +27,10 @@ export default defineComponent<{
   parser: parser === 'default' ? defaultParser : pdpParser,
 
   async init() {
-    const getData = async () => {
-      const res = await fetch(window.location.pathname + '.js')
-      this.productData = await res.json()
-    }
-
     if (parser !== 'default') {
       try {
-        getData()
+        const res = await fetch(window.location.pathname + '.js')
+        this.productData = await res.json()
       } catch (error) {
         console.log(error)
       }
@@ -53,9 +54,11 @@ export default defineComponent<{
     barba.history.add(url.href, 'popstate', 'replace')
 
     if (id) {
-      this.currentVariant = this.productData.variants.find(
-        variant => variant.id === parseInt(id.toString())
-      ) || { available: false }
+      const newVariant = this.productData.variants.find(
+        variant => variant.id === id
+      )
+
+      this.currentVariant = newVariant || { available: false }
     }
   },
 
@@ -87,7 +90,7 @@ export default defineComponent<{
   },
 }))
 
-function pdpParser(form: HTMLFormElement, productData: Product) {
+function pdpParser(form: HTMLFormElement, productData: ProductData) {
   const formData = new FormData(form)
   const formValues = Object.fromEntries(formData.entries())
 

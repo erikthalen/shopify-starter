@@ -4,7 +4,7 @@ import debounce from '~/utils/debounce'
 import { defineComponent } from '~/utils/define'
 
 const updateCart = debounce<HTMLInputElement, HTMLElement | undefined>(
-  async (el: HTMLInputElement, { signal }) => {
+  async (el, { signal }) => {
     const { id, value } = el
 
     setIsLoading(true)
