@@ -8,12 +8,12 @@
     loading: 'eager',
     image: section.settings.image,
     image_mobile: section.settings.image_mobile,
-    sizes: '100vw, 50vw',
-    aspect_ratio: '16/9',
+    sizes: '100vw, 100vw',
+    aspect_ratio: '1/1',
     aspect_ratio_md: '1/1',
   %}
   
-  {% render 'image', image: section.settings.image, aspect_ratio: '4/1' %}
+  {% render 'image', image: section.settings.image, aspect_ratio: '1/1' %}
 </div>
 
 {% render '_shopify-preview' %}
