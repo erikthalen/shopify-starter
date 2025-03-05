@@ -24,8 +24,8 @@
       },
       {
         "type": "color",
-        "id": "theme_color",
-        "label": "Theme color",
+        "id": "browser_theme_color",
+        "label": "Browser theme color",
         "default": "#ffffff",
         "info": "Defines the color of the browser ui, typically on mobile browsers"
       }
@@ -86,7 +86,7 @@
       },
       {
         "type": "liquid",
-        "id": "head_tags",
+        "id": "custom_head",
         "label": "<head>",
         "info": "</head>"
       }
