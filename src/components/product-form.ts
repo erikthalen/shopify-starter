@@ -1,7 +1,7 @@
 import Alpine from 'alpinejs'
 import barba from '@barba/core'
 import { ProductData, VariantData } from '~/types'
-import { setIsLoading } from './loading'
+import { setIsLoading } from './is-loading'
 import { defineComponent } from '~/utils/define'
 
 type AddToCartData = {
@@ -20,14 +20,14 @@ export default defineComponent<{
   productData: ProductData | null
   currentVariant: VariantData | { available: boolean }
   parser: ProductFormParser
-}>((initialVariantAvailable: boolean, parser: 'default') => ({
+}>((initialVariantAvailable: boolean, parserType: 'default') => ({
   productData: null,
   currentVariant: { available: initialVariantAvailable },
 
-  parser: parser === 'default' ? defaultParser : pdpParser,
+  parser: parserType === 'default' ? defaultParser : pdpParser,
 
   async init() {
-    if (parser !== 'default') {
+    if (parserType !== 'default') {
       try {
         const res = await fetch(window.location.pathname + '.js')
         this.productData = await res.json()

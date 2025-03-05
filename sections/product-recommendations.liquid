@@ -24,6 +24,7 @@
   <div x-html='result'></div>
 </div>
 
+{% comment %} Will render when this section is fetched by Alpine {% endcomment %}
 {%- if recommendations.performed? and recommendations.products_count > 0 -%}
   <ul class="grid grid-cols-4 gap-4">
     {%- for product in recommendations.products -%}

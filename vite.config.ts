@@ -14,7 +14,8 @@ export default defineConfig({
     topLevelAwait(),
     shopify({
       snippetFile: 'vite.liquid',
-      entrypointsDir: 'frontend/',
+      entrypointsDir: 'src',
+      sourceCodeDir: 'src'
     }),
     pageReload('/tmp/theme.update'),
     tailwindcss(),

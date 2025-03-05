@@ -1,5 +1,5 @@
 import Alpine from 'alpinejs'
-import { setIsLoading } from './loading'
+import { setIsLoading } from './is-loading'
 import debounce from '~/utils/debounce'
 import { defineComponent } from '~/utils/define'
 

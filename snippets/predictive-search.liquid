@@ -1,0 +1,22 @@
+<section x-data="predictiveSearch" class="relative" @window-navigation.window="handleNavigation">
+  <form
+    @input="handleFormInput"
+    @submit.prevent="handleFormSubmit"
+    action="{{ routes.search_url }}"
+  >
+    <input
+      class="border-gray-400 bg-white border py-1 px-2 rounded"
+      type="text"
+      placeholder="Search"
+      name="q"
+      x-model="q"
+    >
+    <input type="hidden" name="type" value="product,page">
+    <input type="hidden" name="options[unavailable_products]" value="hide">
+    <input type="hidden" name="options[prefix]" value="last">
+    <button class="bg-blue-400 text-white py-1 px-2 rounded cursor-pointer" type="submit">Search</button>
+  </form>
+
+  {% comment %} results {% endcomment %}
+  <output x-show="results" x-html="results" class="bg-white absolute w-full max-h-200 overflow-auto p-4"> </output>
+</section>

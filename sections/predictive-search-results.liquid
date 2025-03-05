@@ -1,0 +1,20 @@
+{%- if predictive_search.performed -%}
+  {%- if predictive_search.resources.products.size > 0 -%}
+    <ul class="grid gap-4">
+      {%- for product in predictive_search.resources.products -%}
+        <li>
+          {% render 'product-card', product: product %}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {% else %}
+    <h1>No results</h1>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Predictive search results",
+  "class": "predictive-search-results"
+}
+{% endschema %}

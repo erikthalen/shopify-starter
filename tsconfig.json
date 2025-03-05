@@ -9,7 +9,7 @@
     "moduleResolution": "bundler",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["frontend/*"]
+      "~/*": ["src/*"]
     },
     "types": ["vite/client"],
     "allowSyntheticDefaultImports": true

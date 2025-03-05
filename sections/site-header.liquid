@@ -1,23 +1,9 @@
-<header class="fixed z-10 top-0 px-4 h-16 flex items-center justify-between gap-x-4 w-full">
+<header class="fixed z-10 top-0 px-4 h-16 bg-white flex items-center justify-between gap-x-4 w-full">
   <nav class="flex items-center gap-x-4 text-blue-500">
     <a href="/">Home</a>
     <a href="/collections">Collections</a>
     <a href="/cart">Cart ({% render 'cart-amount' %})</a>
   </nav>
 
-  {% comment %} search input {% endcomment %}
-  <form action="{{ routes.search_url }}">
-    <input
-      class="border-gray-400 bg-white border py-1 px-2 rounded"
-      type="text"
-      placeholder="Search"
-      name="q"
-      value="{{ search.terms | escape }}"
-    >
-    <input type="hidden" name="type" value="product,page">
-    <input type="hidden" name="options[unavailable_products]" value="hide">
-    <input type="hidden" name="options[prefix]" value="last">
-    <button class="bg-blue-400 text-white py-1 px-2 rounded" type="submit">Search</button>
-    
-  </form>
+  {% render 'predictive-search' %}
 </header>

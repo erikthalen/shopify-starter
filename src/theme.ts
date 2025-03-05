@@ -8,13 +8,14 @@ import morph from '@alpinejs/morph'
 import useTransition from '~/utils/use-transition'
 import { fixatePageOnNavigation, dolphin } from '~/utils/utils'
 
-import './components/loading'
-import productForm from './components/product-form'
 import cartAmount from './components/cart-amount'
+import cartNotification from './components/cart-notification'
 import cart from './components/cart'
 import filter from './components/filter'
-import plp from './components/plp'
-import cartNotification from './components/cart-notification'
+import './components/is-loading'
+import mainCollection from './components/main-collection'
+import predictiveSearch from './components/predictive-search'
+import productForm from './components/product-form'
 import productRecommendations from './components/product-recommendations'
 
 declare global {
@@ -30,10 +31,11 @@ Alpine.plugin(morph)
 
 Alpine.store('cartAmount', cartAmount)
 
-Alpine.data('cart', cart)
 Alpine.data('cartNotification', cartNotification)
+Alpine.data('cart', cart)
 Alpine.data('filter', filter)
-Alpine.data('plp', plp)
+Alpine.data('mainCollection', mainCollection)
+Alpine.data('predictiveSearch', predictiveSearch)
 Alpine.data('productForm', productForm)
 Alpine.data('productRecommendations', productRecommendations)
 
@@ -73,7 +75,7 @@ barba.init({
     },
     global: {
       before() {
-        window.dispatchEvent(new CustomEvent('window.navigation'))
+        window.dispatchEvent(new CustomEvent('window-navigation'))
       },
     },
   }),

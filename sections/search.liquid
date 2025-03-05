@@ -1,58 +1,64 @@
-{% paginate search.results by 1000 %}
-  <p>Search terms: {{ search.terms }}</p>
-  <p>Results: {{ search.results_count }}</p>
-  {% comment %} <p>Filters:</p>
-  <ol>
-    {% for filter in search.filters %}
-      {% comment %} https://shopify.dev/docs/api/liquid/objects/filter {% endcomment %}
-      <li>{{ filter.label }}</li>
-    {% endfor %}
-  </ol> {% endcomment %}
-  {% comment %} <p>Sort by: {{ search.sort_by }}</p>
-  <p>Default sort by: {{ search.default_sort_by }}</p>
+<section class="p-4 py-20">
+  {% paginate search.results by 24 %}
+    <p>Search terms: {{ search.terms }}</p>
+    <p>Results: {{ search.results_count }}</p>
+    {% comment %}
+      <p>Filters:</p>
+      <ol>
+        {% for filter in search.filters %}
+          {% comment %} https://shopify.dev/docs/api/liquid/objects/filter {% endcomment %}
+          <li>{{ filter.label }}</li>
+        {% endfor %}
+      </ol>
+    {% endcomment %}
+    {% comment %}
+      <p>Sort by: {{ search.sort_by }}</p>
+      <p>Default sort by: {{ search.default_sort_by }}</p>
 
-  <p>Product count: {{ search.products_count }}</p>
-  <p>All product count: {{ search.all_products_count }}</p> {% endcomment %}
+      <p>Product count: {{ search.products_count }}</p>
+      <p>All product count: {{ search.all_products_count }}</p>
+    {% endcomment %}
 
-  <select name="sort_by">
-    {%- for option in search.sort_options -%}
-      <option
-        value="{{ option.value | escape }}"
-        {% if option.value == sort_by %}
-          selected="selected"
-        {% endif %}
-      >
-        {{ option.name | escape }}
-      </option>
-    {%- endfor -%}
-  </select>
+    <select name="sort_by">
+      {%- for option in search.sort_options -%}
+        <option
+          value="{{ option.value | escape }}"
+          {% if option.value == sort_by %}
+            selected="selected"
+          {% endif %}
+        >
+          {{ option.name | escape }}
+        </option>
+      {%- endfor -%}
+    </select>
 
-  {% if search.results_count == 0 %}
-    <h1>No results</h1>
-  {% endif %}
+    {% if search.results_count == 0 %}
+      <h1>No results</h1>
+    {% endif %}
 
-  {% if search.performed == false %}
-    <h2>Search isn't performed</h2>
-  {% endif %}
+    {% if search.performed == false %}
+      <h2>Search isn't performed</h2>
+    {% endif %}
 
-  <ol style="padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-    {%- for item in search.results -%}
-      <li>
-        {%- case item.object_type -%}
-          {%- when 'product' -%}
-            <a href="{{ item.url }}">
-              {% render 'image', image: item.featured_image %}
-              {{ item.title | truncate: 50 | escape }}
-            </a>
-          {%- when 'article' -%}
-            <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
-          {%- when 'page' -%}
-            <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
-        {%- endcase -%}
-      </li>
-    {%- endfor -%}
-  </ol>
-{% endpaginate %}
+    <ol class="grid md:grid-cols-4 gap-4">
+      {%- for item in search.results -%}
+        <li>
+          {%- case item.object_type -%}
+            {%- when 'product' -%}
+              <a href="{{ item.url }}">
+                {% render 'image', image: item.featured_image, sizes: '100vw, 25vw' %}
+                {{ item.title | truncate: 50 | escape }}
+              </a>
+            {%- when 'article' -%}
+              <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
+            {%- when 'page' -%}
+              <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
+          {%- endcase -%}
+        </li>
+      {%- endfor -%}
+    </ol>
+  {% endpaginate %}
+</section>
 
 {% schema %}
 {
