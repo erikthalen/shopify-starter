@@ -57,6 +57,54 @@
         </li>
       {%- endfor -%}
     </ol>
+
+    {%- if paginate.pages > 1 -%}
+      <nav role="navigation" class="flex justify-center mt-20" x-data>
+        <ol class="flex gap-4">
+          {%- if paginate.previous -%}
+            <li>
+              <a @mousedown="window.forceNavigationRefresh = true" href="{{ paginate.previous.url }}">
+                <span aria-hidden="true">&laquo;</span>
+                Previous <span class="sr-only">page</span>
+              </a>
+            </li>
+          {%- else -%}
+            <li class="disabled">
+              <span aria-hidden="true">&laquo;</span>
+              Previous <span class="sr-only">page</span>
+            </li>
+          {%- endif -%}
+
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <li>
+                <a @mousedown="window.forceNavigationRefresh = true" href="{{ part.url }}"> <span class="sr-only">page</span> {{ part.title }} </a>
+              </li>
+            {%- else -%}
+              {%- if part.title == paginate.current_page -%}
+                <li class="underline" aria-current="page"><span class="sr-only">page</span> {{ part.title }}</li>
+              {%- else -%}
+                <li><span class="sr-only">page</span> {{ part.title }}</li>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if paginate.next -%}
+            <li>
+              <a @mousedown="window.forceNavigationRefresh = true" href="{{ paginate.next.url }}">
+                Next <span class="sr-only">page</span>
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          {%- else -%}
+            <li class="disabled">
+              Next <span class="sr-only">page</span>
+              <span aria-hidden="true">&raquo;</span>
+            </li>
+          {%- endif -%}
+        </ol>
+      </nav>
+    {%- endif -%}
   {% endpaginate %}
 </section>
 

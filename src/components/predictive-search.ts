@@ -25,12 +25,8 @@ export default defineComponent(() => ({
       url.searchParams.set('q', this.q)
       url.searchParams.set('section_id', 'predictive-search-results')
 
-      const res = await debounceFetch(url.toString())
+      const res = await debouncedFetch(url.toString())
       const text = await res.text()
-
-      // const searchUrl = new URL('/search', window.location.origin)
-      // searchUrl.searchParams.set('q', this.q)
-      // barba.prefetch(searchUrl.toString())
 
       const parser = new DOMParser()
       const doc = parser.parseFromString(text, 'text/html')
@@ -54,6 +50,6 @@ export default defineComponent(() => ({
   },
 }))
 
-const debounceFetch = debounce<string, Response>(async (url, { signal }) => {
-  return await fetch(url, { signal })
+const debouncedFetch = debounce<string, Response>(async (url, { signal }) => {
+  return fetch(url, { signal })
 })

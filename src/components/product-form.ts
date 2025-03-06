@@ -13,21 +13,21 @@ type AddToCartData = {
 
 type ProductFormParser = (
   form: HTMLFormElement,
-  productData: ProductData
+  productData: ProductData | null
 ) => AddToCartData | null
 
 export default defineComponent<{
   productData: ProductData | null
   currentVariant: VariantData | { available: boolean }
   parser: ProductFormParser
-}>((initialVariantAvailable: boolean, parserType: 'default') => ({
+}>((initialVariantAvailable: boolean, parserType: 'simple') => ({
   productData: null,
   currentVariant: { available: initialVariantAvailable },
 
-  parser: parserType === 'default' ? defaultParser : pdpParser,
+  parser: parserType === 'simple' ? defaultParser : pdpParser,
 
   async init() {
-    if (parserType !== 'default') {
+    if (parserType !== 'simple') {
       try {
         const res = await fetch(window.location.pathname + '.js')
         this.productData = await res.json()
@@ -65,7 +65,7 @@ export default defineComponent<{
   async handleSubmit(e: SubmitEvent) {
     const form = (e.target as HTMLElement).closest('form')
 
-    if (!form || !this.productData) return
+    if (!form) return
 
     const data = this.parser(form, this.productData)
 
@@ -90,7 +90,9 @@ export default defineComponent<{
   },
 }))
 
-function pdpParser(form: HTMLFormElement, productData: ProductData) {
+function pdpParser(form: HTMLFormElement, productData: ProductData | null) {
+  if (!productData) return null
+
   const formData = new FormData(form)
   const formValues = Object.fromEntries(formData.entries())
 

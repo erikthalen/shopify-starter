@@ -2,41 +2,60 @@
   https://help.shopify.com/en/manual/online-store/search-and-discovery
 {% endcomment %}
 
-{% comment %} <form x-data="filter" @change.prevent="handleFilterChange" class="px-4 pt-20 grid gap-4"> {% endcomment %}
-<form x-data='filter' @change='handleFilterChange' class='grid gap-4 px-4 pt-20'>
+<form x-data="filter" @change="handleFilterChange" class="grid gap-4 px-4 pt-20">
   <div>
-    <label for='sort-by'>Sort by:</label>
+    <label for="sort-by">Sort by:</label>
 
-    <select name='sort_by' id='sort-by' class='rounded border py-1'>
-      {% assign values = 'manual,best-selling,title-ascending,title-descending,price-ascending,price-descending,created-ascending,created-descending'
-        | split: ','
-      %}
+    {% assign sorting_values = "[
+      {
+        title: 'Manual',
+        value: 'manual'
+      },
+      {
+        title: 'Best selling',
+        value: 'best-selling',
+      },
+      {
+        title: 'Title ascending',
+        value: 'title-ascending'
+      },
+      {
+        title: 'Title descending',
+        value: 'title-descending'
+      },
+      {
+        title: 'Price ascending',
+        value: 'price-ascending'
+      },
+      {
+        title: 'Price descending',
+        value: 'price-descending'
+      },
+      {
+        title: 'Created ascending',
+        value: 'created-ascending'
+      },
+      {
+        title: 'Created descending',
+        value: 'created-descending'
+      },
+    ]" %}
 
-      {% for value in values %}
-        <option
-          {% if collection.sort_by == value %}
-            selected
-          {% endif %}
-          value='{{ value }}'
-        >
-          {{ value }}
-        </option>
-      {% endfor %}
-    </select>
+    {% render 'select', name: 'sort_by', values: sorting_values %}
   </div>
 
   {%- for filter in collection.filters -%}
-    <div class='rounded-md bg-gray-100 p-2'>
-      <p class='font-bold'>{{ filter.label }}</p>
+    <div class="rounded-md bg-gray-100 p-2">
+      <p class="font-bold">{{ filter.label }}</p>
 
       {%- case filter.type -%}
           {% comment %} BOOLEAN FILTER {% endcomment %}
         {%- when 'boolean' -%}
           <input
-            type='checkbox'
-            name='{{ filter.param_name }}'
-            value='{{ filter.true_value.value }}'
-            id='Filter-{{ filter.param_name }}'
+            type="checkbox"
+            name="{{ filter.param_name }}"
+            value="{{ filter.true_value.value }}"
+            id="Filter-{{ filter.param_name }}"
             {% if filter.true_value.active -%}
               checked
             {%- endif %}
@@ -44,10 +63,10 @@
           {{- filter.true_value.label -}}
           ({{ filter.true_value.count }})
           <input
-            type='checkbox'
-            name='{{ filter.param_name }}'
-            value='{{ filter.false_value.value }}'
-            id='Filter-{{ filter.param_name }}'
+            type="checkbox"
+            name="{{ filter.param_name }}"
+            value="{{ filter.false_value.value }}"
+            id="Filter-{{ filter.param_name }}"
             {% if filter.false_value.active -%}
               checked
             {%- endif %}
@@ -58,11 +77,11 @@
           {% comment %} LIST FILTER {% endcomment %}
         {%- when 'list' -%}
           {%- for filter_value in filter.values -%}
-            <label style='display: block'>
+            <label style="display: block">
               <input
-                type='checkbox'
-                name='{{ filter_value.param_name }}'
-                value='{{ filter_value.value }}'
+                type="checkbox"
+                name="{{ filter_value.param_name }}"
+                value="{{ filter_value.value }}"
                 {% if filter_value.active -%}
                   checked
                 {%- endif %}
@@ -82,7 +101,7 @@
               {% if filter.presentation == 'swatch' %}
                 {% if filter_value.swatch.color != blank %}
                   <span
-                    style='background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;'
+                    style="background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;"
                   ></span>
                 {% elsif filter_value.swatch.image != blank %}
                   {{ filter_value.swatch.image | image_url: width: 30, height: 30 | image_tag }}
@@ -115,39 +134,39 @@
             | round
           %}
 
-          <label x-data='{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }'>
+          <label x-data="{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }">
             <p>
               From:
-              <span x-text='value'>
+              <span x-text="value">
                 {%- if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif -%}
               </span>
               {{ cart.currency.symbol }}
             </p>
 
             <input
-              name='filter.v.price.gte'
-              type='range'
-              min='0'
-              @change='value = $el.value'
-              x-model='value'
-              max='{{ max_value }}'
+              name="filter.v.price.gte"
+              type="range"
+              min="0"
+              @change="value = $el.value"
+              x-model="value"
+              max="{{ max_value }}"
             >
           </label>
 
-          <label x-data='{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }'>
+          <label x-data="{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }">
             <p>
               To:
-              <span x-text='value'>
+              <span x-text="value">
                 {%- if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif -%}
               </span>
               {{ cart.currency.symbol }}
             </p>
             <input
-              name='filter.v.price.lte'
-              type='range'
-              min='0'
-              x-model='value'
-              max='{{ max_value }}'
+              name="filter.v.price.lte"
+              type="range"
+              min="0"
+              x-model="value"
+              max="{{ max_value }}"
             >
           </label>
       {%- endcase -%}
@@ -156,8 +175,8 @@
 
   <div>
     <a
-      href='{{ collection.url }}?sort_by={{ collection.sort_by }}'
-      class='inline-block rounded bg-blue-400 px-2 py-1 text-white'
+      href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
+      class="inline-block rounded bg-blue-400 px-2 py-1 text-white"
       >Clear all</a
     >
     {% comment %} <button type="submit" class="bg-blue-400 text-white py-1 px-2 leading-normal rounded">Apply</button> {% endcomment %}

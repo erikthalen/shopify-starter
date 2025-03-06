@@ -23,7 +23,6 @@ export const fixatePageOnNavigation = ({ top = '0px' } = {}) => {
       return
     }
 
-    // reset
     window.forceNavigationRefresh = false
 
     const container = document.querySelector('main')

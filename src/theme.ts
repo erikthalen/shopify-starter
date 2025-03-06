@@ -51,7 +51,7 @@ barba.init({
       default: {
         async leave({ current }: ITransitionData) {
           const options = {
-            duration: 400,
+            duration: 600,
             easing: 'ease',
             fill: 'forwards' as FillMode,
           }
@@ -62,7 +62,7 @@ barba.init({
 
         async enter({ next }: ITransitionData) {
           const options = {
-            duration: 400,
+            duration: 600,
             easing: 'ease',
             fill: 'forwards' as FillMode,
           }
