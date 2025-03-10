@@ -5,8 +5,7 @@ import type { ITransitionData } from '@barba/core/dist/src/defs'
 import Alpine from 'alpinejs'
 import morph from '@alpinejs/morph'
 
-import useTransition from '~/utils/use-transition'
-import { fixatePageOnNavigation, dolphin } from '~/utils/utils'
+import { fixatePageOnNavigation } from '~/utils/utils'
 
 import './components/loading'
 import productForm from './components/product-form'
@@ -44,42 +43,70 @@ barba.init({
   prevent: () => window.Shopify.designMode,
   prefetchIgnore: '/cart',
   cacheIgnore: '/cart',
-  transitions: useTransition({
-    page: {
-      default: {
-        async leave({ current }: ITransitionData) {
-          const options = {
-            duration: 400,
-            easing: 'ease',
-            fill: 'forwards' as FillMode,
-          }
-          const to = { opacity: 0, translate: '0 20px' }
+  transitions: [
+    {
+      name: 'slide-right',
+      sync: true,
+      from: {
+        custom: ({ trigger }) =>
+          (trigger as HTMLElement).dataset.transition === 'slide-right',
+      },
+      async leave({ current }) {
+        return current.container.animate(
+          { opacity: 0, translate: '-20px 0' },
+          { duration: 400, easing: 'ease', fill: 'forwards' }
+        ).finished
+      },
+      async enter({ next }) {
+        await next.container.animate(
+          [
+            { opacity: 0, translate: '20px 0' },
+            { opacity: 1, translate: '0 0' },
+          ],
+          { duration: 400, easing: 'ease', fill: 'forwards' }
+        ).finished
 
-          return current.container.animate(to, options).finished
-        },
-
-        async enter({ next }: ITransitionData) {
-          const options = {
-            duration: 400,
-            easing: 'ease',
-            fill: 'forwards' as FillMode,
-          }
-          const from = { opacity: 0, translate: '0 -20px' }
-          const to = { opacity: 1, translate: '0 0' }
-
-          return next.container.animate([from, to], options).finished
-        },
+        return
       },
     },
-    global: {
-      before() {
-        window.dispatchEvent(new CustomEvent('window.navigation'))
+    {
+      name: 'default',
+      sync: true,
+      from: {
+        custom: ({ trigger }) => !(trigger as HTMLElement)?.dataset?.transition,
+      },
+      async leave({ current }) {
+        return current.container.animate(
+          { opacity: 0, translate: '0 20px' },
+          { duration: 400, easing: 'ease', fill: 'forwards' }
+        ).finished
+      },
+      async enter({ next }) {
+        await next.container.animate(
+          [
+            { opacity: 0, translate: '0 -20px' },
+            { opacity: 1, translate: '0 0' },
+          ],
+          { duration: 400, easing: 'ease', fill: 'forwards' }
+        ).finished
+
+        return
       },
     },
-  }),
+  ],
+})
+
+// bug: chrome doesn't scroll to top if new page is prefetched and cached.
+barba.hooks.beforeEnter(data => {
+  const { trigger } = data as ITransitionData
+  if (trigger !== 'back' && trigger !== 'forward') {
+    window.scrollTo(0, 0)
+  }
+})
+
+barba.hooks.before(() => {
+  window.dispatchEvent(new CustomEvent('window.navigation'))
 })
 
 // place the old page "where it was" on navigation/scroll
 fixatePageOnNavigation()
-
-dolphin()

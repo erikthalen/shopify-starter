@@ -39,12 +39,11 @@ export const fixatePageOnNavigation = ({ top = '0px' } = {}) => {
   })
 }
 
-export const dolphin = () =>
-  console.log(
-    `%c         ,
+console.log(
+  `%c         ,
        __)\\___
    _.-'      .\`-.
  .'/~~\`\`\`"~z/~'"\` 
  ^^`,
-    'color: dodgerblue; font-family: "Menlo"'
-  )
+  'color: dodgerblue; font-family: "Menlo"'
+)

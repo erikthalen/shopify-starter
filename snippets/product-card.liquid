@@ -1,5 +1,5 @@
 <div>
-  <a class='grid' href='{{ product.url }}'>
+  <a class='grid' href='{{ product.url }}' data-transition="slide-right">
     {% render 'image', image: product.featured_image, sizes: '50vw, 20vw' %}
     {{ product.title }} – {{ product.price | money }}
   </a>
