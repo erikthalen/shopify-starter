@@ -5,6 +5,7 @@ import { defineComponent } from '~/utils/define'
 export default defineComponent(() => ({
   results: '',
   q: '',
+  hasFocus: false,
 
   resetSearch() {
     this.results = ''

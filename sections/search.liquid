@@ -1,7 +1,7 @@
 <section class="p-4 py-20">
   {% paginate search.results by 24 %}
-    <p>Search terms: {{ search.terms }}</p>
-    <p>Results: {{ search.results_count }}</p>
+    <p class="mb-2">Search terms: "{{ search.terms }}"</p>
+    <p class="mb-2">Results: {{ search.results_count }}</p>
     {% comment %}
       <p>Filters:</p>
       <ol>
@@ -19,18 +19,23 @@
       <p>All product count: {{ search.all_products_count }}</p>
     {% endcomment %}
 
-    <select name="sort_by">
-      {%- for option in search.sort_options -%}
-        <option
-          value="{{ option.value | escape }}"
-          {% if option.value == sort_by %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ option.name | escape }}
-        </option>
-      {%- endfor -%}
-    </select>
+    {% assign sorting_values = '[' %}
+
+    {%- for option in search.sort_options -%}
+      {% assign sorting_values = sorting_values
+        | append: '{ title: "'
+        | append: option.name
+        | escape
+        | append: '", value: "'
+        | append: option.value
+        | escape
+        | append: '" },'
+      %}
+    {%- endfor -%}
+
+    {% assign sorting_values = sorting_values | append: ']' %}
+
+    {% render 'select', name: 'sort_by', values: sorting_values %}
 
     {% if search.results_count == 0 %}
       <h1>No results</h1>
@@ -78,7 +83,9 @@
           {%- for part in paginate.parts -%}
             {%- if part.is_link -%}
               <li>
-                <a @mousedown="window.forceNavigationRefresh = true" href="{{ part.url }}"> <span class="sr-only">page</span> {{ part.title }} </a>
+                <a @mousedown="window.forceNavigationRefresh = true" href="{{ part.url }}">
+                  <span class="sr-only">page</span> {{ part.title }}
+                </a>
               </li>
             {%- else -%}
               {%- if part.title == paginate.current_page -%}

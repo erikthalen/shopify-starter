@@ -1,6 +1,8 @@
 <section x-data="predictiveSearch" class="relative" @window-navigation.window="resetSearch">
   <form
     @input="handleFormInput"
+    @focusout="hasFocus = false"
+    @focusin="hasFocus = true"
     @submit.prevent="handleFormSubmit"
     action="{{ routes.search_url }}"
   >
@@ -18,5 +20,5 @@
   </form>
 
   {% comment %} results {% endcomment %}
-  <output x-show="results" x-html="results" class="bg-white absolute w-full max-h-200 overflow-auto p-4"> </output>
+  <output x-show="results && hasFocus" x-html="results" class="bg-white absolute w-full max-h-200 overflow-auto p-4"> </output>
 </section>
