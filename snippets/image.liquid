@@ -222,6 +222,11 @@
     >
 
     <img
+      x-data="{ show: false }"
+      x-init="if($el.complete) show = true"
+      @load="show = true"
+      :class="show ? 'opacity-100' : ''"
+      class="transition-opacity duration-300 opacity-0"
       src="{{ image | image_url: width: 2000, format: 'webp' }}"
       alt="{{ image.alt }}"
       width="{{ image.width }}"
