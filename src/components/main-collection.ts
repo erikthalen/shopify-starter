@@ -8,8 +8,7 @@ export default defineComponent(() => ({
     const res = await fetch(window.location.href)
     const text = await res.text()
 
-    const parser = new DOMParser()
-    const markup = parser.parseFromString(text, 'text/html')
+    const markup = new DOMParser().parseFromString(text, 'text/html')
     const newPLP = markup.querySelector('[x-data="mainCollection"]')
 
     setIsLoading(false)

@@ -6,7 +6,7 @@ export default defineComponent(() => ({
   results: '',
   q: '',
 
-  handleNavigation() {
+  resetSearch() {
     this.results = ''
     this.q = ''
   },
@@ -28,8 +28,7 @@ export default defineComponent(() => ({
       const res = await debouncedFetch(url.toString())
       const text = await res.text()
 
-      const parser = new DOMParser()
-      const doc = parser.parseFromString(text, 'text/html')
+      const doc = new DOMParser().parseFromString(text, 'text/html')
       const results = doc.querySelector<HTMLElement>(
         '.predictive-search-results'
       )

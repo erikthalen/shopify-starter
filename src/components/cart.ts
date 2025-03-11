@@ -3,16 +3,13 @@ import { setIsLoading } from './is-loading'
 import debounce from '~/utils/debounce'
 import { defineComponent } from '~/utils/define'
 
-const updateCart = debounce<HTMLInputElement, HTMLElement | undefined>(
+const updateCart = debounce<HTMLInputElement, Element | null | undefined>(
   async (el, { signal }) => {
     const { id, value } = el
 
     setIsLoading(true)
 
     try {
-      /**
-       * update cart
-       */
       const res = await fetch('/cart/update.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -25,20 +22,16 @@ const updateCart = debounce<HTMLInputElement, HTMLElement | undefined>(
 
       Alpine.store('cartAmount', { amount: json.item_count })
 
-      /**
-       * get new cart markup
-       */
+      // get new cart markup
       const res2 = await fetch('/cart', { signal })
       const cartMarkup = await res2.text()
-      const parser = new DOMParser()
-      const markup = parser.parseFromString(cartMarkup, 'text/html')
+      const markup = new DOMParser().parseFromString(cartMarkup, 'text/html')
       const newCartSectionMarkup = markup.querySelector('[x-data="cart"]')
 
       setIsLoading(false)
 
-      return newCartSectionMarkup as HTMLElement
+      return newCartSectionMarkup
     } catch (error) {
-      console.log(error)
       setIsLoading(false)
     }
   }
@@ -58,10 +51,8 @@ export default defineComponent(() => ({
         Alpine.morph(this.$root, newCartMarkup, {})
       })
 
-      /**
-       * adjust input values
-       * (bug in Alpine.morph?)
-       */
+      // adjust input values
+      // (bug in Alpine.morph?)
       const newInputs = [...newCartMarkup.querySelectorAll('input')]
       const inputs = this.$root.querySelectorAll('input')
       inputs.forEach((input: HTMLInputElement) => {
@@ -89,8 +80,7 @@ export default defineComponent(() => ({
     try {
       const res = await fetch(target.href)
       const text = await res.text()
-      const parser = new DOMParser()
-      const markup = parser.parseFromString(text, 'text/html')
+      const markup = new DOMParser().parseFromString(text, 'text/html')
       const element = markup.querySelector('[x-data="cart"]')
 
       document.startViewTransition(() => {

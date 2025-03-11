@@ -1,6 +1,6 @@
 {%- comment -%}
   Image snippet that supports aspect-ratios, using the Shopify "crop: 'ratio'" attribute.
-  The snippet respects FocalPoint set in Shopify image editor. 
+  The snippet respects FocalPoint set in Shopify image editor.
 
   props:
 
@@ -53,7 +53,7 @@
 
 {%- if aspect_ratio != blank -%}
   {%- assign aspect_ratio_ints = aspect_ratio | split: '/' -%}
-  {%- assign aspect_ratio_int = aspect_ratio_ints[0] | times: 1.0 | divided_by: aspect_ratio_ints[1]  -%}
+  {%- assign aspect_ratio_int = aspect_ratio_ints[0] | times: 1.0 | divided_by: aspect_ratio_ints[1] -%}
 {%- endif -%}
 
 {%- comment -%} ASPECT RATIO SM {%- endcomment -%}
@@ -61,7 +61,7 @@
 
 {%- if aspect_ratio_sm != blank -%}
   {%- assign aspect_ratio_sm_ints = aspect_ratio_sm | split: '/' -%}
-  {%- assign aspect_ratio_sm_int = aspect_ratio_sm_ints[0] | times: 1.0 | divided_by: aspect_ratio_sm_ints[1]  -%}
+  {%- assign aspect_ratio_sm_int = aspect_ratio_sm_ints[0] | times: 1.0 | divided_by: aspect_ratio_sm_ints[1] -%}
 {%- endif -%}
 
 {%- comment -%} ASPECT RATIO MD {%- endcomment -%}
@@ -69,7 +69,7 @@
 
 {%- if aspect_ratio_md != blank -%}
   {%- assign aspect_ratio_md_ints = aspect_ratio_md | split: '/' -%}
-  {%- assign aspect_ratio_md_int = aspect_ratio_md_ints[0] | times: 1.0 | divided_by: aspect_ratio_md_ints[1]  -%}
+  {%- assign aspect_ratio_md_int = aspect_ratio_md_ints[0] | times: 1.0 | divided_by: aspect_ratio_md_ints[1] -%}
 {%- endif -%}
 
 {%- assign active_aspect_radio_sm = aspect_ratio_sm_int | default: aspect_ratio_int -%}
@@ -88,26 +88,31 @@
   {%- assign height_attribute_md = image.width | divided_by: active_aspect_radio_md -%}
 {%- endif -%}
 
-
 {%- if image == blank -%}
-  {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+  <div style="aspect-ratio: {{ aspect_ratio }}">
+    {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg size-full' }}
+  </div>
 {%- else -%}
   <picture
-    {% if class != blank %}class="{{ class }}" {% endif %}
-    {% if style != blank %}style="{{ style }}" {% endif %}
+    {% if class != blank %}
+      class="{{ class }}"
+    {% endif %}
+    {% if style != blank %}
+      style="{{ style }}"
+    {% endif %}
   >
     {%- if image_mobile != blank -%}
       <source
         srcset="
           {%- for width in widths -%}
             {%- assign width_int = width | times: 1 -%}
-            
+
             {%- if image_mobile.width >= width_int -%}
               {%- if active_aspect_radio_sm == blank -%}
                 {{ image_mobile | image_url: width: width_int, format: 'webp' }} {{ width_int }}w,
               {%- else -%}
                 {%- assign original_image_ratio = image.width | times: 1.0 | divided_by: image.height -%}
-                
+
                 {%- if original_image_ratio > active_aspect_radio_md -%}
                   {%- assign crop_width = image.height | times: active_aspect_radio_md -%}
                   {%- assign crop_height = image.height -%}
@@ -127,7 +132,7 @@
                 {%- assign crop_left_max = image_mobile.width | minus: crop_width -%}
                 {%- assign crop_left = crop_left | at_most: crop_left_max -%}
                 {%- assign crop_left = crop_left | at_least: 0 -%}
-                
+
                 {%- assign crop_top_max = image_mobile.height | minus: crop_height -%}
                 {%- assign crop_top = crop_top | at_most: crop_top_max -%}
                 {%- assign crop_top = crop_top | at_least: 0 -%}
@@ -142,7 +147,7 @@
                   crop_left: crop_left,
                   crop_top: crop_top,
                   crop_width: crop_width,
-                  crop_height: crop_height 
+                  crop_height: crop_height
                 }} {{ width_int }}w,
               {%- endif -%}
             {%- endif -%}
@@ -160,7 +165,7 @@
       srcset="
         {%- for width in widths -%}
           {%- assign width_int = width | times: 1 -%}
-          
+
           {%- if image.width >= width_int -%}
             {%- if active_aspect_radio_md == blank -%}
               {{ image | image_url: width: width_int, format: 'webp' }} {{ width_int }}w,
@@ -185,7 +190,7 @@
               {%- assign crop_left_max = image.width | minus: crop_width -%}
               {%- assign crop_left = crop_left | at_most: crop_left_max -%}
               {%- assign crop_left = crop_left | at_least: 0 -%}
-              
+
               {%- assign crop_top_max = image.height | minus: crop_height -%}
               {%- assign crop_top = crop_top | at_most: crop_top_max -%}
               {%- assign crop_top = crop_top | at_least: 0 -%}
@@ -200,7 +205,7 @@
                 crop_left: crop_left,
                 crop_top: crop_top,
                 crop_width: crop_width,
-                crop_height: crop_height 
+                crop_height: crop_height
               }} {{ width_int }}w,
             {%- endif -%}
           {%- endif -%}

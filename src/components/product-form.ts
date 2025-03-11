@@ -16,79 +16,81 @@ type ProductFormParser = (
   productData: ProductData | null
 ) => AddToCartData | null
 
-export default defineComponent<{
-  productData: ProductData | null
-  currentVariant: VariantData | { available: boolean }
-  parser: ProductFormParser
-}>((initialVariantAvailable: boolean, parserType: 'simple') => ({
-  productData: null,
-  currentVariant: { available: initialVariantAvailable },
+export default defineComponent(
+  (initialVariantAvailable: boolean, parserType: 'simple') => ({
+    productData: null as ProductData | null,
+    currentVariant: { available: initialVariantAvailable } as
+      | VariantData
+      | { available: boolean },
 
-  parser: parserType === 'simple' ? defaultParser : pdpParser,
+    parser: (parserType === 'simple'
+      ? defaultParser
+      : pdpParser) as ProductFormParser,
 
-  async init() {
-    if (parserType !== 'simple') {
-      try {
-        const res = await fetch(window.location.pathname + '.js')
-        this.productData = await res.json()
-      } catch (error) {
-        console.log(error)
+    async init() {
+      if (parserType !== 'simple') {
+        try {
+          const res = await fetch(window.location.pathname + '.js')
+          this.productData = await res.json()
+        } catch (error) {
+          console.log(error)
+        }
       }
-    }
-  },
+    },
 
-  handleChange(e: Event) {
-    const form = (e.target as HTMLElement).closest('form')
+    handleChange(e: Event) {
+      const form = (e.target as HTMLElement).closest('form')
 
-    if (!form || !this.productData) return
+      if (!form || !this.productData) return
 
-    const id = this.parser(form, this.productData)?.items[0].id
-    const url = new URL(window.location.href)
+      const id = this.parser(form, this.productData)?.items[0].id
+      const url = new URL(window.location.href)
 
-    if (!id || id === null) {
-      url.searchParams.delete('variant')
-    } else {
-      url.searchParams.set('variant', id.toString())
-    }
+      if (!id || id === null) {
+        url.searchParams.delete('variant')
+      } else {
+        url.searchParams.set('variant', id.toString())
+      }
 
-    barba.history.add(url.href, 'popstate', 'replace')
+      barba.history.add(url.href, 'popstate', 'replace')
 
-    if (id) {
-      const newVariant = this.productData.variants.find(
-        variant => variant.id === id
-      )
+      if (id) {
+        const newVariant = this.productData.variants.find(
+          variant => variant.id === id
+        )
 
-      this.currentVariant = newVariant || { available: false }
-    }
-  },
+        this.currentVariant = newVariant || { available: false }
+      }
+    },
 
-  async handleSubmit(e: SubmitEvent) {
-    const form = (e.target as HTMLElement).closest('form')
+    async handleSubmit(e: SubmitEvent) {
+      const form = (e.target as HTMLElement).closest('form')
 
-    if (!form) return
+      if (!form) return
 
-    const data = this.parser(form, this.productData)
+      const data = this.parser(form, this.productData)
 
-    setIsLoading(true)
+      setIsLoading(true)
 
-    try {
-      await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      })
+      try {
+        await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        })
 
-      const res = await fetch('/cart.json')
-      const json = await res.json()
+        const res = await fetch('/cart.json')
+        const json = await res.json()
 
-      Alpine.store('cartAmount', { amount: json.item_count })
-    } catch (error) {
-      console.log(`Couldn't add to card: `, error)
-    }
+        Alpine.store('cartAmount', { amount: json.item_count })
+      } catch (error) {
+        console.log(`Couldn't add to card: `, error)
+      }
 
-    setIsLoading(false)
-  },
-}))
+      setIsLoading(false)
+    },
+  })
+)
 
 function pdpParser(form: HTMLFormElement, productData: ProductData | null) {
   if (!productData) return null

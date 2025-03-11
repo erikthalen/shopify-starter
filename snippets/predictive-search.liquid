@@ -1,4 +1,4 @@
-<section x-data="predictiveSearch" class="relative" @window-navigation.window="handleNavigation">
+<section x-data="predictiveSearch" class="relative" @window-navigation.window="resetSearch">
   <form
     @input="handleFormInput"
     @submit.prevent="handleFormSubmit"
