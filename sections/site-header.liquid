@@ -1,9 +1,36 @@
 <header class="fixed z-10 top-0 px-4 h-16 bg-white flex items-center justify-between gap-x-4 w-full">
   <nav class="flex items-center gap-x-4 text-blue-500">
-    <a href="/">Home</a>
-    <a href="/collections">Collections</a>
-    <a href="/cart">Cart ({% render 'cart-amount' %})</a>
+    <a
+      href="/"
+      x-data="{ active: {% if request.path == '/' %}true{% else %}false{% endif %} }"
+      @window-navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
+      :class="active ? 'underline' : ''"
+    >
+      Home
+    </a>
+    <a
+      href="/collections"
+      x-data="{ active: {% if request.path contains '/collections' %}true{% else %}false{% endif %} }"
+      @window-navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
+      :class="active ? 'underline' : ''"
+    >
+      Collections
+    </a>
+    <a
+      href="/cart"
+      x-data="{ active: {% if request.path == '/cart' %}true{% else %}false{% endif %} }"
+      @window-navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
+      :class="active ? 'underline' : ''"
+    >
+      Cart ({% render 'cart-amount' %})
+    </a>
   </nav>
 
   {% render 'predictive-search' %}
 </header>
+
+{% schema %}
+{
+  "name": "Site Header"
+}
+{% endschema %}

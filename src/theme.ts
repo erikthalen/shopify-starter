@@ -47,8 +47,20 @@ barba.init({
   cacheIgnore: '/cart',
   transitions: [
     {
+      name: 'self',
+      beforeLeave() {
+        document.documentElement.style.scrollBehavior = 'smooth'
+      },
+      enter() {
+        return new Promise(resolve => setTimeout(resolve, 1000))
+      },
+      after() {
+        document.documentElement.style.removeProperty('scroll-behavior')
+      },
+    },
+    {
       name: 'slide-right',
-      sync: true,
+      // sync: true,
       from: {
         custom: ({ trigger }) =>
           (trigger as HTMLElement).dataset.transition === 'slide-right',
@@ -73,7 +85,7 @@ barba.init({
     },
     {
       name: 'default',
-      sync: true,
+      // sync: true,
       from: {
         custom: ({ trigger }) => !(trigger as HTMLElement)?.dataset?.transition,
       },
@@ -102,12 +114,12 @@ barba.init({
 barba.hooks.beforeEnter(data => {
   const { trigger } = data as ITransitionData
   if (trigger !== 'back' && trigger !== 'forward') {
-    window.scrollTo(0, 0)
+    setTimeout(() => window.scrollTo(0, 0))
   }
 })
 
 barba.hooks.before(() => {
-  window.dispatchEvent(new CustomEvent('window.navigation'))
+  window.dispatchEvent(new CustomEvent('window-navigation'))
 })
 
 // place the old page "where it was" on navigation/scroll
