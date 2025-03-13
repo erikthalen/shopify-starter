@@ -1,3 +1,12 @@
+declare global {
+  interface Window {
+    Shopify: {
+      designMode: boolean
+    }
+    forceNavigationRefresh: boolean
+  }
+}
+
 // https://app.quicktype.io/
 
 export type ProductData = {

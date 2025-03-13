@@ -17,15 +17,6 @@ import predictiveSearch from './components/predictive-search'
 import productForm from './components/product-form'
 import productRecommendations from './components/product-recommendations'
 
-declare global {
-  interface Window {
-    Shopify: {
-      designMode: boolean
-    }
-    forceNavigationRefresh: boolean
-  }
-}
-
 Alpine.plugin(morph)
 
 Alpine.store('cartAmount', cartAmount)
@@ -88,6 +79,17 @@ barba.init({
       // sync: true,
       from: {
         custom: ({ trigger }) => !(trigger as HTMLElement)?.dataset?.transition,
+      },
+      once({ next }) {
+        document.body.removeAttribute('x-cloak')
+
+        next.container.animate(
+          [
+            { opacity: 0, translate: '0 20px' },
+            { opacity: 1, translate: '0 0' },
+          ],
+          { duration: 800, easing: 'ease', fill: 'forwards' }
+        ).finished
       },
       async leave({ current }) {
         return current.container.animate(

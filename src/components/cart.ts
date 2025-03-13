@@ -11,10 +11,12 @@ const updateCart = debounce<HTMLInputElement, Element | null | undefined>(
 
     try {
       const res = await fetch('/cart/update.js', {
+        signal,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           updates: { [id]: parseInt(value) },
+          sections: ['cart'],
         }),
       })
 
@@ -22,15 +24,13 @@ const updateCart = debounce<HTMLInputElement, Element | null | undefined>(
 
       Alpine.store('cartAmount', { amount: json.item_count })
 
-      // get new cart markup
-      const res2 = await fetch('/cart', { signal })
-      const cartMarkup = await res2.text()
-      const markup = new DOMParser().parseFromString(cartMarkup, 'text/html')
-      const newCartSectionMarkup = markup.querySelector('[x-data="cart"]')
+      const newCart = new DOMParser()
+        .parseFromString(json.sections['cart'], 'text/html')
+        .querySelector('[x-data="cart"]')
 
       setIsLoading(false)
 
-      return newCartSectionMarkup
+      return newCart
     } catch (error) {
       setIsLoading(false)
     }
@@ -42,18 +42,16 @@ export default defineComponent(() => ({
     const el = e.target as HTMLInputElement
 
     try {
-      const newCartMarkup = await updateCart(el)
+      const newCart = await updateCart(el)
 
       // update was debounced
-      if (!newCartMarkup) return
+      if (!newCart) return
 
-      document.startViewTransition(() => {
-        Alpine.morph(this.$root, newCartMarkup, {})
-      })
+      this.renderCart(newCart)
 
       // adjust input values
       // (bug in Alpine.morph?)
-      const newInputs = [...newCartMarkup.querySelectorAll('input')]
+      const newInputs = [...newCart.querySelectorAll('input')]
       const inputs = this.$root.querySelectorAll('input')
       inputs.forEach((input: HTMLInputElement) => {
         const target = newInputs.find(i => i.id === input.id)
@@ -81,12 +79,9 @@ export default defineComponent(() => ({
       const res = await fetch(target.href)
       const text = await res.text()
       const markup = new DOMParser().parseFromString(text, 'text/html')
-      const element = markup.querySelector('[x-data="cart"]')
+      const newCart = markup.querySelector('[x-data="cart"]')
 
-      document.startViewTransition(() => {
-        if (!element) return
-        Alpine.morph(this.$root, element, {})
-      })
+      this.renderCart(newCart)
 
       const res2 = await fetch('/cart.json')
       const json = await res2.json()
@@ -97,5 +92,13 @@ export default defineComponent(() => ({
     }
 
     setIsLoading(false)
+  },
+
+  renderCart(cart: Element | null) {
+    if (!cart) return
+
+    // document.startViewTransition(() => {
+    Alpine.morph(this.$root, cart, {})
+    // })
   },
 }))

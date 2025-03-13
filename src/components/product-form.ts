@@ -73,16 +73,25 @@ export default defineComponent(
       setIsLoading(true)
 
       try {
-        await fetch('/cart/add.js', {
+        const res = await fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            ...data,
+            sections: ['api-cart-amount'],
+          }),
         })
 
-        const res = await fetch('/cart.json')
         const json = await res.json()
 
-        Alpine.store('cartAmount', { amount: json.item_count })
+        if (!json.sections) throw json.message
+
+        const itemCount = new DOMParser()
+          .parseFromString(json.sections['api-cart-amount'], 'text/html')
+          .querySelector('.shopify-section')
+          ?.textContent?.trim()
+
+        Alpine.store('cartAmount', { amount: itemCount })
       } catch (error) {
         console.log(`Couldn't add to card: `, error)
       }

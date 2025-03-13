@@ -22,6 +22,10 @@ shopify-visual-preview-section-list {
   padding: 0 !important;
 }
 
+[x-cloak] {
+  display: none !important;
+}
+
 html {
   /* apply zooming of everything on screens > 1440px */
   --zoom-amount: 0.4;

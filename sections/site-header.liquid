@@ -8,6 +8,7 @@
     >
       Home
     </a>
+
     <a
       href="/collections"
       x-data="{ active: {% if request.path contains '/collections' %}true{% else %}false{% endif %} }"
@@ -16,6 +17,7 @@
     >
       Collections
     </a>
+    
     <a
       href="/cart"
       x-data="{ active: {% if request.path == '/cart' %}true{% else %}false{% endif %} }"
