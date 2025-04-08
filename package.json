@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm run vite:dev & pnpm run shopify:dev",
-    "deploy": "pnpm run vite:build & pnpm run shopify:prod",
+    "deploy": "pnpm run vite:build && pnpm run shopify:prod",
     "vite:dev": "vite",
     "vite:build": "vite build",
     "shopify:dev": "shopify theme dev -e development --open",
@@ -33,6 +33,17 @@
     "@barba/core": "^2.10.3",
     "alpinejs": "^3.14.7",
     "tailwindcss": "4.0.0"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "plugins": [
+      "@shopify/prettier-plugin-liquid",
+      "prettier-plugin-tailwindcss"
+    ]
   },
   "packageManager": "pnpm@9.12.2"
 }

@@ -51,7 +51,7 @@ barba.init({
     },
     {
       name: 'slide-right',
-      // sync: true,
+      sync: true, // make browser keep history scroll position
       from: {
         custom: ({ trigger }) =>
           (trigger as HTMLElement).dataset.transition === 'slide-right',
@@ -76,7 +76,7 @@ barba.init({
     },
     {
       name: 'default',
-      // sync: true,
+      sync: true, // make browser keep history scroll position
       from: {
         custom: ({ trigger }) => !(trigger as HTMLElement)?.dataset?.transition,
       },
@@ -91,20 +91,33 @@ barba.init({
           { duration: 800, easing: 'ease', fill: 'forwards' }
         ).finished
       },
-      async leave({ current }) {
-        return current.container.animate(
+      async leave(data) {
+        const animation = data.current.container.animate(
           { opacity: 0, translate: '0 20px' },
           { duration: 400, easing: 'ease', fill: 'forwards' }
-        ).finished
+        )
+
+        // @ts-expect-error: Property 'leaveAnimation' does not exist on type 'ITransitionData'.
+        data.leaveAnimation = animation as Animation
+
+        return animation.finished
       },
-      async enter({ next }) {
-        await next.container.animate(
+      async enter(data) {
+        data.next.container.style.opacity = '0'
+
+        // fake the { sync: false } option
+        // @ts-expect-error: Property 'leaveAnimation' does not exist on type 'ITransitionData'.
+        await data.leaveAnimation.finished
+
+        await data.next.container.animate(
           [
             { opacity: 0, translate: '0 -20px' },
             { opacity: 1, translate: '0 0' },
           ],
           { duration: 400, easing: 'ease', fill: 'forwards' }
         ).finished
+
+        data.next.container.style.removeProperty('opacity')
 
         return
       },
