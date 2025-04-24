@@ -1,34 +1,36 @@
-<header class="fixed z-10 top-0 px-4 h-16 bg-white flex items-center justify-between gap-x-4 w-full">
-  <nav class="flex items-center gap-x-4 text-blue-500">
+<header class='fixed top-0 z-10 flex h-10 w-full items-center gap-x-4 border-b border-gray-400 bg-white px-4 text-sm'>
+  <nav class='flex items-center gap-x-4'>
     <a
-      href="/"
-      x-data="{ active: {% if request.path == '/' %}true{% else %}false{% endif %} }"
+      href='/'
+      x-data='{ active: {% if request.path == '/' %}true{% else %}false{% endif %} }'
       @window-navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
       :class="active ? 'underline' : ''"
     >
-      Home
+      HOME
     </a>
 
     <a
-      href="/collections"
-      x-data="{ active: {% if request.path contains '/collections' %}true{% else %}false{% endif %} }"
+      href='/collections'
+      x-data='{ active: {% if request.path contains '/collections' %}true{% else %}false{% endif %} }'
       @window-navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
       :class="active ? 'underline' : ''"
     >
-      Collections
-    </a>
-    
-    <a
-      href="/cart"
-      x-data="{ active: {% if request.path == '/cart' %}true{% else %}false{% endif %} }"
-      @window-navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
-      :class="active ? 'underline' : ''"
-    >
-      Cart ({% render 'cart-amount' %})
+      COLLECTIONS
     </a>
   </nav>
 
-  {% render 'predictive-search' %}
+  <nav class="flex gap-4 items-center ml-auto">
+    {% render 'predictive-search' %}
+
+    <a
+      href='/cart'
+      x-data='{ active: {% if request.path == '/cart' %}true{% else %}false{% endif %} }'
+      @window-navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
+      :class="active ? 'underline' : ''"
+    >
+      CART ({% render 'cart-amount' %})
+    </a>
+  </nav>
 </header>
 
 {% schema %}

@@ -13,8 +13,21 @@
   font-display: block;
 }
 
+@font-face {
+  font-family: 'DMMono';
+  src: local('DMMono'), url('fonts/DMMono-Light.ttf');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'DMMono';
+  src: local('DMMono'), url('fonts/DMMono-Regular.ttf');
+  font-weight: 700;
+  font-display: block;
+}
+
 @theme {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'DMMono', sans-serif;
 }
 
 /* make it so sections in preview popup in cms don't overflow */
