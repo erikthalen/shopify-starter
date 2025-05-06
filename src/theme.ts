@@ -3,12 +3,10 @@ import 'vite/modulepreload-polyfill'
 import barba from '@barba/core'
 import type { ITransitionData } from '@barba/core/dist/src/defs'
 import Alpine from 'alpinejs'
-import morph from '@alpinejs/morph'
 
 import { fixatePageOnNavigation } from '~/utils/utils'
 
-import cartAmount from './components/cart-amount'
-import cartNotification from './components/cart-notification'
+import cartStore from './components/cart-store'
 import cart from './components/cart'
 import filter from './components/filter'
 import './components/is-loading'
@@ -16,13 +14,12 @@ import mainCollection from './components/main-collection'
 import predictiveSearch from './components/predictive-search'
 import productForm from './components/product-form'
 import productRecommendations from './components/product-recommendations'
+import cartDrawer from './components/cart-drawer'
 
-Alpine.plugin(morph)
+Alpine.store('cartStore', cartStore)
 
-Alpine.store('cartAmount', cartAmount)
-
-Alpine.data('cartNotification', cartNotification)
 Alpine.data('cart', cart)
+Alpine.data('cartDrawer', cartDrawer)
 Alpine.data('filter', filter)
 Alpine.data('mainCollection', mainCollection)
 Alpine.data('predictiveSearch', predictiveSearch)
@@ -59,7 +56,7 @@ barba.init({
       async leave({ current }) {
         return current.container.animate(
           { opacity: 0, translate: '-20px 0' },
-          { duration: 400, easing: 'ease', fill: 'forwards' }
+          { duration: 100, easing: 'ease-in', fill: 'forwards' }
         ).finished
       },
       async enter({ next }) {
@@ -68,7 +65,7 @@ barba.init({
             { opacity: 0, translate: '20px 0' },
             { opacity: 1, translate: '0 0' },
           ],
-          { duration: 400, easing: 'ease', fill: 'forwards' }
+          { duration: 100, easing: 'ease-out', fill: 'forwards' }
         ).finished
 
         return
@@ -94,7 +91,7 @@ barba.init({
       async leave(data) {
         const animation = data.current.container.animate(
           { opacity: 0, translate: '0 20px' },
-          { duration: 400, easing: 'ease', fill: 'forwards' }
+          { duration: 100, easing: 'ease-in', fill: 'forwards' }
         )
 
         // @ts-expect-error: Property 'leaveAnimation' does not exist on type 'ITransitionData'.
@@ -114,7 +111,7 @@ barba.init({
             { opacity: 0, translate: '0 -20px' },
             { opacity: 1, translate: '0 0' },
           ],
-          { duration: 400, easing: 'ease', fill: 'forwards' }
+          { duration: 100, easing: 'ease-out', fill: 'forwards' }
         ).finished
 
         data.next.container.style.removeProperty('opacity')
@@ -138,4 +135,4 @@ barba.hooks.before(() => {
 })
 
 // place the old page "where it was" on navigation/scroll
-fixatePageOnNavigation()
+fixatePageOnNavigation({ top: '2.5rem' })

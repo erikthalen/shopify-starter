@@ -4,7 +4,7 @@
  */
 
 export default function debounce<A = unknown, R = void>(
-  callback: (arg: A, obj: { signal: AbortSignal }) => Promise<R>,
+  fn: (arg: A, obj: { signal: AbortSignal }) => Promise<R>,
   delay: number = 200
 ): (arg: A) => Promise<R> {
   let abortController: AbortController | null = null
@@ -24,7 +24,7 @@ export default function debounce<A = unknown, R = void>(
           if (!abortController) return
 
           abortController.signal?.removeEventListener('abort', handleAbort)
-          resolve(await callback(arg, { signal: abortController.signal }))
+          resolve(await fn(arg, { signal: abortController.signal }))
         } catch (error) {
           console.log(error)
           handleAbort()

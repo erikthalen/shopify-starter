@@ -1,86 +1,76 @@
-<section class='my-20 px-4'>
-  <h1 class='mb-4 text-3xl'>{{ product.title }}</h1>
+<section class='grid gap-4 md:grid-cols-2'>
+  <div class='col-span-2 grid place-items-center gap-4 md:grid-cols-2'>
+    {% render 'image', image: product.featured_image, sizes: '100vw, 50vw' %}
 
-  <div class='mb-4'>{{ product.description }}</div>
+    <div class='w-full max-md:px-4 md:w-sm'>
+      <h1 class='mb-1'>{{ product.title }}</h1>
+      <p class='mb-2'>{{ product.selected_or_first_available_variant.price | money }}</p>
+      <div class='mb-4'>{{ product.description }}</div>
 
-  {% render 'image', image: product.featured_image %}
+      <form
+        class='inline-grid w-full justify-items-start gap-4'
+        x-data='productForm({{ product.selected_or_first_available_variant.available }})'
+        @change='handleChange'
+        @submit.prevent='handleSubmit'
+        method='post'
+        action='/cart/add'
+        accept-charset='UTF-8'
+        enctype='multipart/form-data'
+        novalidate='novalidate'
+      >
+        <input type='hidden' name='form_type' value='product'>
+        <input type='hidden' name='utf8' value='✓'>
+        <input type='hidden' name='product-id' value='{{ product.id }}'>
 
-  <form
-    class='my-10 inline-grid justify-items-start gap-4 rounded-lg bg-gray-100 px-10 py-4'
-    x-data='productForm({{ product.selected_or_first_available_variant.available }})'
-    @change='handleChange'
-    @submit.prevent='handleSubmit'
-    method='post'
-    action='/cart/add'
-    accept-charset='UTF-8'
-    enctype='multipart/form-data'
-    novalidate='novalidate'
-  >
-    <input type='hidden' name='form_type' value='product'>
-    <input type='hidden' name='utf8' value='✓'>
-    <input type='hidden' name='product-id' value='{{ product.id }}'>
+        <input type='hidden' value='1' name='quantity'>
 
-    <input type='hidden' value='1' name='quantity'>
+        {% if product.variants.size == 1 %}
+          <input type='hidden' value='{{ product.selected_or_first_available_variant.id }}' name='id'>
+        {% else %}
+          {% for option in product.options_with_values %}
+            <div class='grid w-full gap-1'>
+              <p class='mb-2 text-xs uppercase'>{{ option.name }}</p>
 
-    {% if product.variants.size == 1 %}
-      <input type='hidden' value='{{ product.selected_or_first_available_variant.id }}' name='id'>
-    {% else %}
-      {% for option in product.options %}
-        {% assign values = '' %}
-        {% assign checked_value = '' %}
+              <div class='flex gap-4'>
+                {% for value in option.values %}
+                  <label class='w-full rounded-md border border-gray-300 px-5 py-2 text-center text-sm tracking-wider uppercase hover:bg-gray-50 has-checked:border-gray-600'>
+                    <input
+                      type='radio'
+                      {% if value == option.selected_value %}
+                        checked
+                      {% endif %}
+                      value='{{ value | escape }}'
+                      name='{{ option.name }}'
+                      class='hidden'
+                    >
 
-        {% assign option_index = forloop.index0 %}
+                    {{ value }}
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
 
-        {% for variant in product.variants %}
-          {% assign values_array = values | split: ';;;' %}
-          {% assign value = variant.options[option_index] %}
-
-          {% unless values_array contains value %}
-            {% assign values = values | append: variant.options[option_index] | append: ';;;' %}
-          {% endunless %}
-
-          {% if variant.id == product.selected_or_first_available_variant.id %}
-            {% assign checked_value = value %}
-          {% endif %}
-        {% endfor %}
-
-        <div class='grid gap-1'>
-          <p class='font-bold underline'>{{ option }}</p>
-
-          <div class='grid'>
-            {% assign values_array = values | split: ';;;' %}
-
-            {% for value in values_array %}
-              <label>
-                {{ value }}
-
-                <input
-                  type='radio'
-                  {% if value == checked_value %}
-                    checked
-                  {% endif %}
-                  value='{{ value | escape }}'
-                  name='{{ option }}'
-                >
-              </label>
-            {% endfor %}
-          </div>
-        </div>
-      {% endfor %}
-    {% endif %}
-
-    {% comment %} <p class="font-bold text-xl" x-text="currentVariant.price">{{ product.selected_or_first_available_variant.price | money }}</p> {% endcomment %}
-    <p class='text-xl font-bold'>{{ product.selected_or_first_available_variant.price | money }}</p>
-
-    <button
-      class='rounded bg-blue-400 px-2 py-1 text-white disabled:bg-gray-400'
-      type='submit'
-      name='add'
-      :disabled='!currentVariant.available'
-    >
-      Buy
-    </button>
-  </form>
+        <button
+          class='my-4 w-full cursor-pointer rounded border border-gray-300 bg-gray-100 p-2 tracking-wider uppercase disabled:bg-gray-400'
+          type='submit'
+          name='add'
+          :disabled='!currentVariant?.available'
+        >
+          Buy
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  <div class='flex gap-4'>
+    {% for variant in product.variants %}
+      {% if variant.featured_image != blank %}
+        {% render 'image', image: variant.featured_image, sizes: '33vw, 16vw', aspect_ratio: '1/1', class: 'shink-0' %}
+      {% endif %}
+    {% endfor %}
+  </div>
 </section>
 
 <script>

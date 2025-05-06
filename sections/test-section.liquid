@@ -1,16 +1,16 @@
-<div class="mt-10 px-4" style="{% render 'color-scheme' %}">
+<div class='mt-4 px-4' style='{% render 'color-scheme' %}'>
   <p>{{ section.settings.text }}</p>
 
-  <div class="text-(--scheme-primary)">Primary color</div>
-  <div class="text-(--scheme-secondary)">Secondary color</div>
+  <div class='text-(--scheme-primary)'>Primary color</div>
+  <div class='text-(--scheme-secondary)'>Secondary color</div>
 
   {% render 'image',
     loading: 'eager',
     image: section.settings.image,
     image_mobile: section.settings.image_mobile,
-    sizes: '100vw, 100vw',
-    aspect_ratio: '3/4',
-    aspect_ratio_md: '16/9'
+    aspect_ratio_sm: '1/1',
+    aspect_ratio: '10/2',
+    sizes: '100vw, 100vw'
   %}
 </div>
 

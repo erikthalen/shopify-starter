@@ -1,104 +1,81 @@
 import Alpine from 'alpinejs'
 import { setIsLoading } from './is-loading'
-import debounce from '~/utils/debounce'
 import { defineComponent } from '~/utils/define'
 
-const updateCart = debounce<HTMLInputElement, Element | null | undefined>(
-  async (el, { signal }) => {
-    const { id, value } = el
+export default defineComponent((sectionName: string) => ({
+  abortController: new AbortController(),
 
-    setIsLoading(true)
-
-    try {
-      const res = await fetch('/cart/update.js', {
-        signal,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          updates: { [id]: parseInt(value) },
-          sections: ['cart'],
-        }),
-      })
-
-      const json = await res.json()
-
-      Alpine.store('cartAmount', { amount: json.item_count })
-
-      const newCart = new DOMParser()
-        .parseFromString(json.sections['cart'], 'text/html')
-        .querySelector('[x-data="cart"]')
-
-      setIsLoading(false)
-
-      return newCart
-    } catch (error) {
-      setIsLoading(false)
-    }
-  }
-)
-
-export default defineComponent(() => ({
   async handleQuantityChange(e: Event) {
     const el = e.target as HTMLInputElement
 
-    try {
-      const newCart = await updateCart(el)
+    setIsLoading(true)
 
-      // update was debounced
-      if (!newCart) return
-
-      this.renderCart(newCart)
-
-      // adjust input values
-      // (bug in Alpine.morph?)
-      const newInputs = [...newCart.querySelectorAll('input')]
-      const inputs = this.$root.querySelectorAll('input')
-      inputs.forEach((input: HTMLInputElement) => {
-        const target = newInputs.find(i => i.id === input.id)
-
-        if (!target) return
-
-        input.value = target.value
+    await Alpine.store('cartStore')
+      .updateLines({
+        updates: { [el.id]: parseInt(el.value) },
       })
-    } catch (error) {
-      console.log(error)
-    }
+      .catch(() => {})
+
+    setIsLoading(false)
   },
 
   async handleRemove(e: PointerEvent) {
     const target = e.target as HTMLAnchorElement
 
     if (!target || target.tagName !== 'A') {
-      console.log('The remove-button has to be an <a href="url/to/remove">')
+      console.log(
+        'The element has to be an <a href="{{ item.url_to_remove }}">'
+      )
       return
     }
 
     setIsLoading(true)
 
-    try {
-      const res = await fetch(target.href)
-      const text = await res.text()
-      const markup = new DOMParser().parseFromString(text, 'text/html')
-      const newCart = markup.querySelector('[x-data="cart"]')
+    const url = new URL(target.href)
+    const param = url.searchParams.get('id')
+    const id = param?.split(':')[0]
 
-      this.renderCart(newCart)
+    if (!id) return
 
-      const res2 = await fetch('/cart.json')
-      const json = await res2.json()
-
-      Alpine.store('cartAmount', { amount: json.item_count })
-    } catch (error) {
-      console.log(error)
-    }
+    await Alpine.store('cartStore')
+      .updateLines({
+        updates: { [id]: 0 },
+      })
+      .catch(() => {})
 
     setIsLoading(false)
   },
 
-  renderCart(cart: Element | null) {
+  async render() {
+    const response = await fetch(`?section_id=${sectionName}`)
+    const text = await response.text()
+
+    const cart = new DOMParser()
+      .parseFromString(text, 'text/html')
+      .querySelector(`[x-data='cart("${sectionName}")']`)
+
     if (!cart) return
 
-    // document.startViewTransition(() => {
-    Alpine.morph(this.$root, cart, {})
-    // })
+    if (typeof document.startViewTransition === 'function') {
+      document.startViewTransition(() => {
+        if (cart?.innerHTML) {
+          this.$root.innerHTML = cart?.innerHTML
+        }
+      })
+    } else {
+      if (cart?.innerHTML) {
+        this.$root.innerHTML = cart?.innerHTML
+      }
+    }
+  },
+
+  init() {
+    window.addEventListener('cart:updated', () => this.render(), {
+      signal: this.abortController.signal,
+    })
+  },
+
+  destroy() {
+    this.abortController.abort()
   },
 }))

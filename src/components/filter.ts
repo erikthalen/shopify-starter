@@ -14,7 +14,7 @@ export default defineComponent(() => ({
     barba.history.add(url.href, 'popstate', 'replace')
 
     this.$root.dispatchEvent(
-      new CustomEvent('filter-update', { detail: url, bubbles: true })
+      new CustomEvent('filter:update', { detail: url, bubbles: true })
     )
   },
 }))

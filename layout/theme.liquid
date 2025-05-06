@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ shop.locale }}">
+<html lang='{{ shop.locale }}'>
   <head>
     <title>
       {{ page_title }}
@@ -14,17 +14,29 @@
 
     {% if settings.favicon_dark != blank %}
       <link
-        rel="icon"
-        media="(prefers-color-scheme: light)"
-        href="{{ settings.favicon_dark | image_url: width: 512, crop: false }}"
+        rel='icon'
+        media='(prefers-color-scheme: light)'
+        href='{{ settings.favicon_dark | image_url: width: 512, crop: false }}'
+      >
+    {% else %}
+      <link
+        rel='icon'
+        media='(prefers-color-scheme: light)'
+        href='/favicon.png'
       >
     {% endif %}
 
     {% if settings.favicon_light != blank %}
       <link
-        rel="icon"
-        media="(prefers-color-scheme: dark)"
-        href="{{ settings.favicon_light | image_url: width: 512, crop: false }}"
+        rel='icon'
+        media='(prefers-color-scheme: dark)'
+        href='{{ settings.favicon_light | image_url: width: 512, crop: false }}'
+      >
+    {% else %}
+      <link
+        rel='icon'
+        media='(prefers-color-scheme: dark)'
+        href='/favicon.png'
       >
     {% endif %}
 
@@ -34,11 +46,17 @@
     -%}
   </head>
 
-  <body data-barba="wrapper" x-cloak>
-    {% section 'site-header' %}
+  <body data-barba='wrapper' x-cloak class='grid min-h-screen grid-rows-[auto_1fr]'>
+    <section class='sticky top-0 z-10 overflow-x-clip'>
+      {% section 'site-header' %}
+      {% section 'cart-drawer' %}
+      {% section 'predictive-search' %}
+    </section>
 
-    <main data-barba="container" role="main" class="bg-white">
-      {{ content_for_layout }}
+    <main data-barba='container' role='main' class='grid min-h-[calc(100vh-2.5rem)] grid-rows-[1fr_auto] bg-white'>
+      <div>
+        {{ content_for_layout }}
+      </div>
 
       {% section 'site-footer' %}
     </main>

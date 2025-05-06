@@ -3,11 +3,24 @@ import debounce from '~/utils/debounce'
 import { defineComponent } from '~/utils/define'
 
 export default defineComponent(() => ({
+  abortController: new AbortController(),
+
+  isOpen: false,
+
   results: '',
   q: '',
-  hasFocus: false,
 
-  resetSearch() {
+  open() {
+    setTimeout(() => {
+      this.isOpen = true
+      this.$refs.input.focus({
+        preventScroll: true,
+      })
+    })
+  },
+
+  close() {
+    this.isOpen = false
     this.results = ''
     this.q = ''
   },
@@ -47,6 +60,24 @@ export default defineComponent(() => ({
     url.searchParams.set('q', this.q)
 
     barba.go(url.toString())
+  },
+
+  toggle() {
+    if (this.isOpen) {
+      this.close()
+    } else {
+      this.open()
+    }
+  },
+
+  init() {
+    window.addEventListener('predictive-search:toggle', () => this.toggle(), {
+      signal: this.abortController.signal,
+    })
+  },
+
+  destroy() {
+    this.abortController.abort()
   },
 }))
 

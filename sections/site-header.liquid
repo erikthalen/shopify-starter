@@ -1,35 +1,40 @@
-<header class='fixed top-0 z-10 flex h-10 w-full items-center gap-x-4 border-b border-gray-400 bg-white px-4 text-sm'>
+<header class='relative z-10 flex h-10 w-full items-center gap-x-4 border-b border-gray-400 bg-white px-4 text-sm'>
   <nav class='flex items-center gap-x-4'>
     <a
       href='/'
       x-data='{ active: {% if request.path == '/' %}true{% else %}false{% endif %} }'
-      @window-navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
+      @window:navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
       :class="active ? 'underline' : ''"
+      class='button'
     >
-      HOME
+      Home
     </a>
 
     <a
       href='/collections'
       x-data='{ active: {% if request.path contains '/collections' %}true{% else %}false{% endif %} }'
-      @window-navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
+      @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
       :class="active ? 'underline' : ''"
+      class='button'
     >
-      COLLECTIONS
+      Shop
     </a>
   </nav>
 
-  <nav class="flex gap-4 items-center ml-auto">
-    {% render 'predictive-search' %}
+  <nav class='ml-auto flex items-center gap-4'>
+    <button x-data class='button' @click="$dispatch('predictive-search:toggle')">Search</button>
 
-    <a
-      href='/cart'
+    {% comment %} Cart drawer {% endcomment %}
+    <button
       x-data='{ active: {% if request.path == '/cart' %}true{% else %}false{% endif %} }'
-      @window-navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
+      data-href='/cart'
+      @window:navigation.window="active = $el.dataset.href.replace(location.origin, '') === location.pathname"
+      @click="$dispatch('cart-drawer:open')"
       :class="active ? 'underline' : ''"
+      class='button'
     >
-      CART ({% render 'cart-amount' %})
-    </a>
+      Cart ({% render 'cart-amount' %})
+    </button>
   </nav>
 </header>
 

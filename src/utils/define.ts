@@ -13,4 +13,4 @@ export const defineComponent = <T>(
   fn: (...args: any[]) => AlpineComponent<T>
 ) => fn
 
-export const defineStore = (arg: Stores) => arg
+export const defineStore = <T>(arg: Stores) => arg as T

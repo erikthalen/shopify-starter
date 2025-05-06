@@ -1,29 +1,38 @@
 <div>
-  <a class='grid' href='{{ product.url }}' data-transition="slide-right">
-    {% render 'image', image: product.featured_image, sizes: '50vw, 20vw' %}
-    {{ product.title }} – {{ product.price | money }}
+  <a class='grid gap-3' href='{{ product.url }}' data-transition='slide-right'>
+    {% if product.selected_or_first_available_variant.featured_image != blank %}
+      {% render 'image', image: product.selected_or_first_available_variant.featured_image, sizes: '50vw, 20vw' %}
+    {% else %}
+      {% render 'image', image: product.featured_image, sizes: '50vw, 20vw' %}
+    {% endif %}
+
+    <span class='text-sm'>{{ product.title }}</span>
   </a>
 
-  {% comment %} quick buy {% endcomment %}
-  <form
-    x-data="productForm({{ product.selected_or_first_available_variant.available }}, 'simple')"
-    @change="handleChange"
-    @submit.prevent="handleSubmit"
-    method="post"
-    action="/cart/add"
-    accept-charset="UTF-8"
-    enctype="multipart/form-data"
-    novalidate="novalidate"
-  >
-    <input type="hidden" value="1" name="quantity">
-    <input type="hidden" value="{{ product.selected_or_first_available_variant.id }}" name="id">
-    <button
-      class="cursor-pointer rounded bg-blue-400 px-2 py-1 text-white disabled:bg-gray-400"
-      type="submit"
-      name="add"
-      :disabled="!currentVariant.available"
+  <div class='mt-2 flex flex-col justify-between gap-1'>
+    <span class='text-sm'>{{ product.price | money }}</span>
+
+    {% comment %} quick buy {% endcomment %}
+    <form
+      x-data="productForm({{ product.selected_or_first_available_variant.available }}, 'simple')"
+      @change='handleChange'
+      @submit.prevent='handleSubmit'
+      method='post'
+      action='/cart/add'
+      accept-charset='UTF-8'
+      enctype='multipart/form-data'
+      novalidate='novalidate'
     >
-      Buy
-    </button>
-  </form>
+      <input type='hidden' value='1' name='quantity'>
+      <input type='hidden' value='{{ product.selected_or_first_available_variant.id }}' name='id'>
+      <button
+        class='button disabled:bg-gray-400'
+        type='submit'
+        name='add'
+        :disabled='!currentVariant.available'
+      >
+        Add to cart
+      </button>
+    </form>
+  </div>
 </div>

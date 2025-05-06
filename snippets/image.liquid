@@ -113,12 +113,12 @@
               {%- else -%}
                 {%- assign original_image_ratio = image.width | times: 1.0 | divided_by: image.height -%}
 
-                {%- if original_image_ratio > active_aspect_radio_md -%}
-                  {%- assign crop_width = image.height | times: active_aspect_radio_md -%}
+                {%- if original_image_ratio > active_aspect_radio_sm -%}
+                  {%- assign crop_width = image.height | times: active_aspect_radio_sm -%}
                   {%- assign crop_height = image.height -%}
                 {%- else -%}
                   {%- assign crop_width = image.width -%}
-                  {%- assign crop_height = crop_width | divided_by: active_aspect_radio_md -%}
+                  {%- assign crop_height = crop_width | divided_by: active_aspect_radio_sm -%}
                 {%- endif -%}
 
                 {%- assign focal_left = focal_point_sm_x | times: image_mobile.width -%}

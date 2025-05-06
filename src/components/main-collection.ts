@@ -8,8 +8,9 @@ export default defineComponent(() => ({
     const res = await fetch(window.location.href)
     const text = await res.text()
 
-    const markup = new DOMParser().parseFromString(text, 'text/html')
-    const newPLP = markup.querySelector('[x-data="mainCollection"]')
+    const newPLP = new DOMParser()
+      .parseFromString(text, 'text/html')
+      .querySelector('[x-data="mainCollection"]')
 
     setIsLoading(false)
 
@@ -18,7 +19,6 @@ export default defineComponent(() => ({
     document.startViewTransition(() => {
       this.$root.after(newPLP)
       this.$root.remove()
-      // Alpine.morph(this.$root, newPLP)
     })
   },
 }))
