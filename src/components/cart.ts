@@ -3,17 +3,15 @@ import { setIsLoading } from './is-loading'
 import { defineComponent } from '~/utils/define'
 
 export default defineComponent((sectionName: string) => ({
-  abortController: new AbortController(),
-
   async handleQuantityChange(e: Event) {
     const el = e.target as HTMLInputElement
 
     setIsLoading(true)
 
+    const { id, value } = el
+
     await Alpine.store('cartStore')
-      .updateLines({
-        updates: { [el.id]: parseInt(el.value) },
-      })
+      .updateLines({ updates: { [id]: parseInt(value) } })
       .catch(() => {})
 
     setIsLoading(false)
@@ -38,9 +36,7 @@ export default defineComponent((sectionName: string) => ({
     if (!id) return
 
     await Alpine.store('cartStore')
-      .updateLines({
-        updates: { [id]: 0 },
-      })
+      .updateLines({ updates: { [id]: 0 } })
       .catch(() => {})
 
     setIsLoading(false)
@@ -67,15 +63,5 @@ export default defineComponent((sectionName: string) => ({
         this.$root.innerHTML = cart?.innerHTML
       }
     }
-  },
-
-  init() {
-    window.addEventListener('cart:updated', () => this.render(), {
-      signal: this.abortController.signal,
-    })
-  },
-
-  destroy() {
-    this.abortController.abort()
   },
 }))

@@ -28,13 +28,22 @@ shopify-visual-preview-section-list {
 
 html {
   /* apply zooming of everything on screens > 1440px */
-  --zoom-amount: 0.4;
-  --zoomed-rem: max(
+  --zoom-amount: 0.2;
+  font-size: max(
     16px,
     calc(16px + 16 * var(--zoom-amount) * (100vw - 1440px) / 1440)
   );
 }
 
 .button {
-  @apply relative cursor-pointer text-sm tracking-wider uppercase after:absolute after:-inset-x-2 after:-inset-y-1 after:-z-1 after:rounded after:bg-gray-100 after:opacity-0 after:transition-opacity hover:after:opacity-100;
+  @apply relative cursor-pointer text-xs tracking-wider uppercase after:absolute after:-inset-x-2 after:-inset-y-1 after:-z-1 after:rounded after:bg-gray-100 after:opacity-0 after:transition-opacity hover:after:opacity-100;
+}
+
+details > summary {
+  list-style: none;
+}
+
+details > summary::marker, /* Latest Chrome, Edge, Firefox */ 
+details > summary::-webkit-details-marker /* Safari */ {
+  display: none;
 }

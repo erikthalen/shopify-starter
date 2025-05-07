@@ -1,0 +1,46 @@
+{% comment %}
+  Can be used to check if all Shopify settings are filled out.
+{% endcomment %}
+
+<section class="p-4">
+  <h1 class="mb-4 text-xs tracking-wider uppercase">Cheat sheet</h1>
+
+  <div class="mb-2">
+    <a class="text-sm underline" href="https://admin.shopify.com/store/{{ shop.name }}/settings/general/branding">
+      Brand assets settings
+    </a>
+  </div>
+
+  <pre>
+{
+  "theme": {
+    "name": "{{ theme.name }}"
+  },
+  "shop": {
+    "brand: {
+      "colors": {
+        "primary_backgound": "{{ shop.brand.colors.primary[0].background | default: 'null' }}"
+        "primary_foreground": "{{ shop.brand.colors.primary[0].foreground | default: 'null' }}"
+      }
+      "cover_image": "{{ shop.brand.cover_image | default: 'null' }}"
+      "favicon_url": "{{ shop.brand.favicon_url | default: 'null' }}"
+      "logo": "{{ shop.brand.logo | default: 'null' }}"
+      "metafields": "{{ shop.brand.metafields | default: 'null' }}"
+      "short_description": "{{ shop.brand.short_description | default: 'null' }}"
+      "slogan": "{{ shop.brand.slogan | default: 'null' }}"
+      "square_logo": "{{ shop.brand.square_logo | default: 'null' }}"
+    },
+    
+}
+  </pre>
+</section>
+{% schema %}
+{
+  "name": "Cheat sheet",
+  "presets": [
+    {
+      "name": "Cheat sheet"
+    }
+  ]
+}
+{% endschema %}

@@ -1,37 +1,55 @@
-<header class='relative z-10 flex h-10 w-full items-center gap-x-4 border-b border-gray-400 bg-white px-4 text-sm'>
-  <nav class='flex items-center gap-x-4'>
+<header class="relative z-10 flex grid h-10 w-full grid-cols-[1fr_auto_1fr] items-center gap-x-4 border-b border-gray-400 bg-white px-4 text-sm">
+  <nav class="flex items-center gap-x-4">
     <a
-      href='/'
-      x-data='{ active: {% if request.path == '/' %}true{% else %}false{% endif %} }'
+      href="/"
+      x-data="{ active: {% if request.path == '/' %}true{% else %}false{% endif %} }"
       @window:navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
       :class="active ? 'underline' : ''"
-      class='button'
+      class="button"
     >
       Home
     </a>
 
     <a
-      href='/collections'
-      x-data='{ active: {% if request.path contains '/collections' %}true{% else %}false{% endif %} }'
+      href="/collections"
+      x-data="{ active: {% if request.path contains '/collections' %}true{% else %}false{% endif %} }"
       @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
       :class="active ? 'underline' : ''"
-      class='button'
+      class="button"
     >
       Shop
     </a>
   </nav>
 
-  <nav class='ml-auto flex items-center gap-4'>
-    <button x-data class='button' @click="$dispatch('predictive-search:toggle')">Search</button>
+  <a href="/" class="flex" aria-label="Go to homepage">
+    {% if shop.brand.logo != blank %}
+      {% render 'image', image: shop.brand.logo, class: 'size-6' %}
+    {% else %}
+      <span class="text-xs tracking-wider uppercase">{{ shop.name }}</span>
+    {% endif %}
+  </a>
+
+  <nav class="ml-auto flex items-center gap-4">
+    <button x-data class="button" @click="$dispatch('predictive-search:toggle')">Search</button>
+
+    <a
+      href="/account"
+      x-data="{ active: {% if request.path contains '/account' %}true{% else %}false{% endif %} }"
+      @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
+      :class="active ? 'underline' : ''"
+      class="button"
+    >
+      Account
+    </a>
 
     {% comment %} Cart drawer {% endcomment %}
     <button
-      x-data='{ active: {% if request.path == '/cart' %}true{% else %}false{% endif %} }'
-      data-href='/cart'
+      x-data="{ active: {% if request.path == '/cart' %}true{% else %}false{% endif %} }"
+      data-href="/cart"
       @window:navigation.window="active = $el.dataset.href.replace(location.origin, '') === location.pathname"
       @click="$dispatch('cart-drawer:open')"
       :class="active ? 'underline' : ''"
-      class='button'
+      class="button"
     >
       Cart ({% render 'cart-amount' %})
     </button>

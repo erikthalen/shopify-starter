@@ -76,7 +76,7 @@
 {%- assign active_aspect_radio_md = aspect_ratio_md_int | default: aspect_ratio_int -%}
 
 {%- comment -%} Widths to generate <srcset> for {%- endcomment -%}
-{%- assign widths = '10,50,165,360,535,750,1070,1500,2200,2800,4500,6000' | split: ',' -%}
+{%- assign widths = '10,50,100,150,165,256,360,535,750,1070,1500,2200,2800,4500,6000' | split: ',' -%}
 
 {%- assign height_attribute_sm = image_mobile.height -%}
 {%- if active_aspect_radio_sm != blank -%}

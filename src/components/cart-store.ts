@@ -25,18 +25,19 @@ type LinesUpdateResponse = Cart & {
   sections: Record<string, string>
 }
 
-const updateLinesDebounced = debounce<CartUpdateInput, LinesUpdateResponse>(
-  async (body, { signal }) => {
-    const response = await fetch('/cart/update.js', {
-      signal,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
+const updateLinesDebounced = debounce<
+  CartUpdateInput,
+  LinesUpdateResponse | Error
+>(async (body, { signal }) => {
+  const response = await fetch('/cart/update.js', {
+    signal,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
 
-    return await response.json()
-  }
-)
+  return await response.json()
+})
 
 const cartStore = {
   itemCount: undefined as number | undefined,
@@ -51,7 +52,7 @@ const cartStore = {
     this.itemCount = json.item_count
   },
 
-  async addLines(body: CartAddInput) {
+  async addLines(body: CartAddInput): Promise<LinesAddResponse | Error> {
     const response = await fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -60,20 +61,6 @@ const cartStore = {
 
     const json: LinesAddResponse = await response.json()
 
-    // if (!json.sections['api-cart-amount']) {
-    //   console.warn(
-    //     `Create a section named "api-cart-amount.liquid" with the content of {{ cart.item_count }}`
-    //   )
-    // } else {
-    //   const itemCount = new DOMParser()
-    //     .parseFromString(json.sections['api-cart-amount'], 'text/html')
-    //     .querySelector('.shopify-section')?.textContent
-
-    //   if (typeof itemCount === 'string') {
-    //     this.itemCount = parseInt(itemCount)
-    //   }
-    // }
-
     this.updateItemCount()
 
     window.dispatchEvent(new CustomEvent('cart:updated'))
@@ -81,10 +68,14 @@ const cartStore = {
     return json
   },
 
-  async updateLines(body: CartUpdateInput) {
+  async updateLines(
+    body: CartUpdateInput
+  ): Promise<LinesUpdateResponse | Error> {
     const response = await updateLinesDebounced(body)
 
-    this.itemCount = response.item_count
+    if (!(response instanceof Error)) {
+      this.itemCount = response.item_count
+    }
 
     window.dispatchEvent(new CustomEvent('cart:updated'))
 
@@ -92,7 +83,9 @@ const cartStore = {
   },
 }
 
-// Declare uiStore as an Alpine store module
+/**
+ * Make the store typesafe
+ */
 declare module 'alpinejs' {
   interface Stores {
     cartStore: typeof cartStore

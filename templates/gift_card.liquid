@@ -1,1 +1,12 @@
-gift card
+<h1 class="p-4">Gift card</h1>
+
+<div class="p-4">
+  <p>{{ gift_card.customer.name }}</p>
+  <p>{{ gift_card.customer.email }}</p>
+  <p>{{ gift_card.balance | money }}</p>
+  <p>{{ gift_card.code }}</p>
+  <p>{{ gift_card.currency }}</p>
+  <p>{{ gift_card.message }}</p>
+  <p>{{ gift_card.product.title }}</p>
+  <a href="{{ gift_card.url }}">{{ gift_card.url }}</a>
+</div>
