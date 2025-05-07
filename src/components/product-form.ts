@@ -3,6 +3,7 @@ import { ProductData, VariantData } from '~/types'
 import { setIsLoading } from './is-loading'
 import { defineComponent } from '~/utils/define'
 import Alpine from 'alpinejs'
+import { allAvailableInOption } from '~/utils/all-available-in-option'
 
 const pdpParser = (form: HTMLFormElement, productData?: ProductData) => {
   if (!productData) return
@@ -10,12 +11,15 @@ const pdpParser = (form: HTMLFormElement, productData?: ProductData) => {
   const formData = new FormData(form)
   const formValues = Object.fromEntries(formData.entries())
 
-  console.log(formValues, productData.variants.find(variant => {
-    return variant.options.every((value, idx) => {
-      const { name } = productData.options[idx]
-      return formValues[name] === value
+  console.log(
+    formValues,
+    productData.variants.find(variant => {
+      return variant.options.every((value, idx) => {
+        const { name } = productData.options[idx]
+        return formValues[name] === value
+      })
     })
-  }))
+  )
 
   const id =
     formValues.id ||
@@ -77,7 +81,42 @@ export default defineComponent(
         variant => variant.id === data?.id
       )
 
+      this.disableNonAvailableOptions(form)
+
       this.updateURL()
+    },
+
+    disableNonAvailableOptions(form: HTMLFormElement) {
+      const formData = new FormData(form)
+      const formValues = Object.fromEntries(formData.entries())
+
+      if (!this.productData) return
+
+      const availableOptions = allAvailableInOption(
+        this.productData,
+        'Color',
+        formValues['Color'].toString()
+      )
+
+      this.$root.querySelectorAll(`input[type="radio"]`).forEach(input => {
+        if (input.getAttribute('name') === 'Color') return
+
+        input.setAttribute('disabled', 'disabled')
+      })
+
+      for (let option in availableOptions) {
+        const inputs = this.$root.querySelectorAll(`input[name="${option}"]`)
+
+        inputs.forEach(input => {
+          const element = input as HTMLInputElement
+
+          if (!!availableOptions[option].includes(element.value)) {
+            element.removeAttribute('disabled')
+          } else {
+            element.setAttribute('disabled', 'disabled')
+          }
+        })
+      }
     },
 
     async handleSubmit(e: SubmitEvent) {

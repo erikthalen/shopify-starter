@@ -33,7 +33,7 @@
 
               <div class='flex gap-4'>
                 {% for value in option.values %}
-                  <label class='w-full rounded-md border border-gray-300 px-5 py-2 text-center text-sm tracking-wider uppercase hover:bg-gray-50 has-checked:border-gray-600'>
+                  <label class='w-full rounded-md border border-gray-300 px-5 py-2 text-center text-sm tracking-wider uppercase hover:bg-gray-50 has-checked:not-disabled:border-gray-600 has-disabled:bg-amber-600'>
                     <input
                       type='radio'
                       {% if value == option.selected_value %}
@@ -63,7 +63,7 @@
       </form>
     </div>
   </div>
-  
+
   <div class='flex gap-4'>
     {% for variant in product.variants %}
       {% if variant.featured_image != blank %}
