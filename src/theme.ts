@@ -131,7 +131,7 @@ barba.hooks.beforeEnter(data => {
 })
 
 barba.hooks.before(() => {
-  window.dispatchEvent(new CustomEvent('window-navigation'))
+  window.dispatchEvent(new CustomEvent('window:navigation'))
 })
 
 // place the old page "where it was" on navigation/scroll

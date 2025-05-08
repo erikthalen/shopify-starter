@@ -1,8 +1,8 @@
-<div class='mt-4 px-4' style='{% render 'color-scheme' %}'>
+<div class="mt-4 px-4" style="{% render 'color-scheme' %}">
   <p>{{ section.settings.text }}</p>
 
-  <div class='text-(--scheme-primary)'>Primary color</div>
-  <div class='text-(--scheme-secondary)'>Secondary color</div>
+  <div class="text-(--scheme-primary)">Primary color</div>
+  <div class="text-(--scheme-secondary)">Secondary color</div>
 
   {% render 'image',
     loading: 'eager',
@@ -12,6 +12,8 @@
     aspect_ratio: '10/2',
     sizes: '100vw, 100vw'
   %}
+
+  {% content_for 'blocks' %}
 </div>
 
 {% render '_shopify-preview' %}
@@ -42,6 +44,11 @@
       "type": "image_picker",
       "id": "image_mobile",
       "label": "Image - mobile"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@theme"
     }
   ],
   "presets": [

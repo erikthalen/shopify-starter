@@ -17,11 +17,11 @@
       intent: "{{ section.settings.intent | default: 'related' }}"
     })
   '
-  class='px-4'
+  class="p-4"
 >
   <h2 class="mb-4" x-show="result">You may also like</h2>
 
-  <div x-html='result'></div>
+  <div x-html="result"></div>
 </div>
 
 {% comment %} Will render when this section is fetched by Alpine {% endcomment %}

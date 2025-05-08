@@ -1,7 +1,27 @@
-<section class="p-4 py-20">
+<section class="p-4">
   {% paginate search.results by 24 %}
-    <p class="mb-2">Search terms: "{{ search.terms }}"</p>
-    <p class="mb-2">Results: {{ search.results_count }}</p>
+    <div class="mb-2 flex justify-between">
+      <h1 class="">Results for: "{{ search.terms }}" ({{ search.results_count }})</h1>
+
+      {% assign sorting_values = '[' %}
+
+      {%- for option in search.sort_options -%}
+        {% assign sorting_values = sorting_values
+          | append: '{ title: "'
+          | append: option.name
+          | escape
+          | append: '", value: "'
+          | append: option.value
+          | escape
+          | append: '" },'
+        %}
+      {%- endfor -%}
+
+      {% assign sorting_values = sorting_values | append: ']' %}
+
+      {% render 'select', name: 'sort_by', values: sorting_values %}
+    </div>
+
     {% comment %}
       <p>Filters:</p>
       <ol>
@@ -19,24 +39,6 @@
       <p>All product count: {{ search.all_products_count }}</p>
     {% endcomment %}
 
-    {% assign sorting_values = '[' %}
-
-    {%- for option in search.sort_options -%}
-      {% assign sorting_values = sorting_values
-        | append: '{ title: "'
-        | append: option.name
-        | escape
-        | append: '", value: "'
-        | append: option.value
-        | escape
-        | append: '" },'
-      %}
-    {%- endfor -%}
-
-    {% assign sorting_values = sorting_values | append: ']' %}
-
-    {% render 'select', name: 'sort_by', values: sorting_values %}
-
     {% if search.results_count == 0 %}
       <h1>No results</h1>
     {% endif %}
@@ -45,15 +47,12 @@
       <h2>Search isn't performed</h2>
     {% endif %}
 
-    <ol class="grid md:grid-cols-4 gap-4">
+    <ol class="grid gap-4 md:grid-cols-4">
       {%- for item in search.results -%}
         <li>
           {%- case item.object_type -%}
             {%- when 'product' -%}
-              <a href="{{ item.url }}">
-                {% render 'image', image: item.featured_image, sizes: '100vw, 25vw' %}
-                {{ item.title | truncate: 50 | escape }}
-              </a>
+              {%- render 'product-card', product: item -%}
             {%- when 'article' -%}
               <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
             {%- when 'page' -%}
@@ -64,7 +63,7 @@
     </ol>
 
     {%- if paginate.pages > 1 -%}
-      <nav role="navigation" class="flex justify-center mt-20" x-data>
+      <nav role="navigation" class="mt-20 flex justify-center" x-data>
         <ol class="flex gap-4">
           {%- if paginate.previous -%}
             <li>

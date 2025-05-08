@@ -2,9 +2,141 @@
   https://help.shopify.com/en/manual/online-store/search-and-discovery
 {% endcomment %}
 
-<form x-data='filter' @change='handleFilterChange' class='grid gap-4 p-4'>
+<form x-data="filter" @change="handleFilterChange" class="mx-4 grid gap-4 border-b border-gray-300 py-4 md:grid-cols-4">
+  {%- for filter in collection.filters -%}
+    <div>
+      <p class="mb-2 text-xs tracking-wider uppercase">{{ filter.label }}</p>
+
+      {%- case filter.type -%}
+          {% comment %} BOOLEAN FILTER {% endcomment %}
+        {%- when 'boolean' -%}
+          <input
+            type="checkbox"
+            name="{{ filter.param_name }}"
+            value="{{ filter.true_value.value }}"
+            id="Filter-{{ filter.param_name }}"
+            {% if filter.true_value.active -%}
+              checked
+            {%- endif %}
+          >
+          {{- filter.true_value.label -}}
+          ({{ filter.true_value.count }})
+          <input
+            type="checkbox"
+            name="{{ filter.param_name }}"
+            value="{{ filter.false_value.value }}"
+            id="Filter-{{ filter.param_name }}"
+            {% if filter.false_value.active -%}
+              checked
+            {%- endif %}
+          >
+          {{- filter.false_value.label -}}
+          ({{ filter.false_value.count }})
+
+          {% comment %} LIST FILTER {% endcomment %}
+        {%- when 'list' -%}
+          {%- for filter_value in filter.values -%}
+            <div class="mb-1 flex items-center">
+              <input
+                id="{{ filter_value.value }}"
+                type="checkbox"
+                class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-neutral-900 focus:ring-neutral-900"
+                name="{{ filter_value.param_name }}"
+                value="{{ filter_value.value }}"
+                {% if filter_value.active -%}
+                  checked
+                {%- endif %}
+              >
+              <label for="{{ filter_value.value }}" class="ml-2 text-sm text-gray-900">
+                {% comment %}
+                  To use color swatches:
+                  Create a Metaobject with 3 fields:
+                   1. "Label" - Single line text
+                   2. "Color" - Color
+                   3. "Image" - File (image)
+
+                  Create a Metafield on Variants and add this Metaobject as field value.
+                  Create a new Search & Discovery Filter and choose the Metafield as Source.
+                  Change Display options of the filter to "Swatch color: Color" and "Swatch pattern: Image"
+                {% endcomment %}
+                {% if filter.presentation == 'swatch' %}
+                  {% if filter_value.swatch.color != blank %}
+                    <span
+                      style="background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;"
+                    ></span>
+                  {% elsif filter_value.swatch.image != blank %}
+                    {{ filter_value.swatch.image | image_url: width: 30, height: 30 | image_tag }}
+                  {% endif %}
+                {% else %}
+                  {{ filter_value.label }}
+                  <span class="text-gray-400">({{ filter_value.count }})</span>
+                {% endif %}
+              </label>
+            </div>
+          {%- endfor -%}
+
+          {% comment %} PRICE FILTER {% endcomment %}
+        {%- when 'price_range' -%}
+          {% assign low_value = filter.min_value.value
+            | money_without_currency
+            | replace: ',', ''
+            | replace: '.', ''
+            | round
+          %}
+          {% assign high_value = filter.max_value.value
+            | money_without_currency
+            | replace: ',', ''
+            | replace: '.', ''
+            | round
+          %}
+          {% assign max_value = filter.range_max
+            | money_without_currency
+            | replace: ',', ''
+            | replace: '.', ''
+            | round
+          %}
+
+          <label x-data="{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }">
+            <p>
+              From:
+              <span x-text="value">
+                {%- if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif -%}
+              </span>
+              {{ cart.currency.symbol }}
+            </p>
+
+            <input
+              name="filter.v.price.gte"
+              type="range"
+              min="0"
+              @change="value = $el.value"
+              x-model="value"
+              max="{{ max_value }}"
+            >
+          </label>
+
+          <label x-data="{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }">
+            <p>
+              To:
+              <span x-text="value">
+                {%- if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif -%}
+              </span>
+              {{ cart.currency.symbol }}
+            </p>
+            <input
+              name="filter.v.price.lte"
+              type="range"
+              min="0"
+              x-model="value"
+              max="{{ max_value }}"
+            >
+          </label>
+      {%- endcase -%}
+    </div>
+  {%- endfor -%}
+
   <div>
-    <label for='sort-by'>Sort by:</label>
+    <label for="sort-by" class="mb-2 inline-block text-xs tracking-wider uppercase">Sort by:</label>
 
     {% assign sorting_values = "[
       {
@@ -44,157 +176,13 @@
     {% render 'select', name: 'sort_by', values: sorting_values %}
   </div>
 
-  {%- for filter in collection.filters -%}
-    <div class='rounded-md bg-gray-100 p-2'>
-      <p class='font-bold'>{{ filter.label }}</p>
-
-      {%- case filter.type -%}
-          {% comment %} BOOLEAN FILTER {% endcomment %}
-        {%- when 'boolean' -%}
-          <input
-            type='checkbox'
-            name='{{ filter.param_name }}'
-            value='{{ filter.true_value.value }}'
-            id='Filter-{{ filter.param_name }}'
-            {% if filter.true_value.active -%}
-              checked
-            {%- endif %}
-          >
-          {{- filter.true_value.label -}}
-          ({{ filter.true_value.count }})
-          <input
-            type='checkbox'
-            name='{{ filter.param_name }}'
-            value='{{ filter.false_value.value }}'
-            id='Filter-{{ filter.param_name }}'
-            {% if filter.false_value.active -%}
-              checked
-            {%- endif %}
-          >
-          {{- filter.false_value.label -}}
-          ({{ filter.false_value.count }})
-
-          {% comment %} LIST FILTER {% endcomment %}
-        {%- when 'list' -%}
-          {%- for filter_value in filter.values -%}
-            <div class='mb-1 flex items-center'>
-              <input
-                id='{{ filter_value.value }}'
-                type='checkbox'
-                class='h-4 w-4 rounded border-gray-300 bg-gray-100 text-neutral-900 focus:ring-neutral-900'
-                name='{{ filter_value.param_name }}'
-                value='{{ filter_value.value }}'
-                {% if filter_value.active -%}
-                  checked
-                {%- endif %}
-              >
-              <label for='{{ filter_value.value }}' class='ml-2 text-sm text-gray-900'>
-                {% comment %}
-                  To use color swatches:
-                  Create a Metaobject with 3 fields:
-                   1. "Label" - Single line text
-                   2. "Color" - Color
-                   3. "Image" - File (image)
-
-                  Create a Metafield on Variants and add this Metaobject as field value.
-                  Create a new Search & Discovery Filter and choose the Metafield as Source.
-                  Change Display options of the filter to "Swatch color: Color" and "Swatch pattern: Image"
-                {% endcomment %}
-                {% if filter.presentation == 'swatch' %}
-                  {% if filter_value.swatch.color != blank %}
-                    <span
-                      style='background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;'
-                    ></span>
-                  {% elsif filter_value.swatch.image != blank %}
-                    {{ filter_value.swatch.image | image_url: width: 30, height: 30 | image_tag }}
-                  {% endif %}
-                {% else %}
-                  {{ filter_value.label }}
-                  ({{ filter_value.count }})
-                {% endif %}
-              </label>
-            </div>
-
-            {% comment %} <label style='display: block'>
-              <input
-                type='checkbox'
-                name='{{ filter_value.param_name }}'
-                value='{{ filter_value.value }}'
-                {% if filter_value.active -%}
-                  checked
-                {%- endif %}
-              >
-              {{ filter_value.label }}
-              ({{ filter_value.count }})
-            </label> {% endcomment %}
-          {%- endfor -%}
-
-          {% comment %} PRICE FILTER {% endcomment %}
-        {%- when 'price_range' -%}
-          {% assign low_value = filter.min_value.value
-            | money_without_currency
-            | replace: ',', ''
-            | replace: '.', ''
-            | round
-          %}
-          {% assign high_value = filter.max_value.value
-            | money_without_currency
-            | replace: ',', ''
-            | replace: '.', ''
-            | round
-          %}
-          {% assign max_value = filter.range_max
-            | money_without_currency
-            | replace: ',', ''
-            | replace: '.', ''
-            | round
-          %}
-
-          <label x-data='{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }'>
-            <p>
-              From:
-              <span x-text='value'>
-                {%- if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif -%}
-              </span>
-              {{ cart.currency.symbol }}
-            </p>
-
-            <input
-              name='filter.v.price.gte'
-              type='range'
-              min='0'
-              @change='value = $el.value'
-              x-model='value'
-              max='{{ max_value }}'
-            >
-          </label>
-
-          <label x-data='{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }'>
-            <p>
-              To:
-              <span x-text='value'>
-                {%- if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif -%}
-              </span>
-              {{ cart.currency.symbol }}
-            </p>
-            <input
-              name='filter.v.price.lte'
-              type='range'
-              min='0'
-              x-model='value'
-              max='{{ max_value }}'
-            >
-          </label>
-      {%- endcase -%}
-    </div>
-  {%- endfor -%}
-
   <div>
     <a
-      href='{{ collection.url }}?sort_by={{ collection.sort_by }}'
-      class='inline-block rounded bg-blue-400 px-2 py-1 text-white'
-      >Clear all</a
+      href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
+      class="inline-block border-b border-dotted text-xs text-gray-600 uppercase hover:text-black"
     >
+      Clear all
+    </a>
     {% comment %} <button type="submit" class="bg-blue-400 text-white py-1 px-2 leading-normal rounded">Apply</button> {% endcomment %}
   </div>
 </form>

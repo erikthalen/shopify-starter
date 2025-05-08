@@ -11,16 +11,6 @@ const pdpParser = (form: HTMLFormElement, productData?: ProductData) => {
   const formData = new FormData(form)
   const formValues = Object.fromEntries(formData.entries())
 
-  console.log(
-    formValues,
-    productData.variants.find(variant => {
-      return variant.options.every((value, idx) => {
-        const { name } = productData.options[idx]
-        return formValues[name] === value
-      })
-    })
-  )
-
   const id =
     formValues.id ||
     productData.variants.find(variant => {
@@ -64,6 +54,7 @@ export default defineComponent(
         try {
           const res = await fetch(window.location.pathname + '.js')
           this.productData = await res.json()
+          console.log(this.productData)
         } catch (error) {
           console.log(error)
         }
@@ -130,11 +121,9 @@ export default defineComponent(
 
       setIsLoading(true)
 
-      try {
-        await Alpine.store('cartStore').addLines({ items: [data] })
-      } catch (error) {
-        console.log(`Couldn't add to card: `, error)
-      }
+      await Alpine.store('cartStore')
+        .addLines({ items: [data] })
+        .catch(() => {})
 
       setIsLoading(false)
     },

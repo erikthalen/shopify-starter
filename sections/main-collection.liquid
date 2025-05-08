@@ -1,16 +1,16 @@
-<section class='my-4 px-4' x-data='mainCollection' @filter:update.window='handleFilterUpdate'>
-  <h1 class='mb-4'>
+<section class="my-4 px-4" x-data="mainCollection" @filter:update.window="handleFilterUpdate">
+  <h1 class="mb-4">
     {{ collection.title }}
-    <span class='text-neutral-400'>({{ collection.all_products_count }})</span>
+    <span class="text-neutral-400">({{ collection.all_products_count }})</span>
   </h1>
 
   {% paginate collection.products by 32 %}
-    <ol class='grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4'>
+    <ol class="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4">
       {% if collection.products.size == 0 %}
-        <p class='col-span-4 text-8xl'>No results 😔</p>
+        <p class="col-span-4 text-sm">No results 😔</p>
       {% else %}
         {% for product in collection.products %}
-          <li style='view-transition-name: main-collection-item-{{ product.id }}'>
+          <li style="view-transition-name: main-collection-item-{{ product.id }}">
             {% render 'product-card', product: product %}
           </li>
         {% endfor %}
@@ -18,49 +18,49 @@
     </ol>
 
     {%- if paginate.pages > 1 -%}
-      <nav role='navigation' class='mt-20 flex justify-center' x-data>
-        <ol class='flex gap-4'>
+      <nav role="navigation" class="mt-20 flex justify-center" x-data>
+        <ol class="flex gap-4">
           {%- if paginate.previous -%}
             <li>
-              <a @mousedown='window.forceNavigationRefresh = true' href='{{ paginate.previous.url }}'>
-                <span aria-hidden='true'>&laquo;</span>
-                Previous <span class='sr-only'>page</span>
+              <a @mousedown="window.forceNavigationRefresh = true" href="{{ paginate.previous.url }}">
+                <span aria-hidden="true">&laquo;</span>
+                Previous <span class="sr-only">page</span>
               </a>
             </li>
           {%- else -%}
-            <li class='disabled'>
-              <span aria-hidden='true'>&laquo;</span>
-              Previous <span class='sr-only'>page</span>
+            <li class="disabled">
+              <span aria-hidden="true">&laquo;</span>
+              Previous <span class="sr-only">page</span>
             </li>
           {%- endif -%}
 
           {%- for part in paginate.parts -%}
             {%- if part.is_link -%}
               <li>
-                <a @mousedown='window.forceNavigationRefresh = true' href='{{ part.url }}'>
-                  <span class='sr-only'>page</span> {{ part.title }}
+                <a @mousedown="window.forceNavigationRefresh = true" href="{{ part.url }}">
+                  <span class="sr-only">page</span> {{ part.title }}
                 </a>
               </li>
             {%- else -%}
               {%- if part.title == paginate.current_page -%}
-                <li class='underline' aria-current='page'><span class='sr-only'>page</span> {{ part.title }}</li>
+                <li class="underline" aria-current="page"><span class="sr-only">page</span> {{ part.title }}</li>
               {%- else -%}
-                <li><span class='sr-only'>page</span> {{ part.title }}</li>
+                <li><span class="sr-only">page</span> {{ part.title }}</li>
               {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
 
           {%- if paginate.next -%}
             <li>
-              <a @mousedown='window.forceNavigationRefresh = true' href='{{ paginate.next.url }}'>
-                Next <span class='sr-only'>page</span>
-                <span aria-hidden='true'>&raquo;</span>
+              <a @mousedown="window.forceNavigationRefresh = true" href="{{ paginate.next.url }}">
+                Next <span class="sr-only">page</span>
+                <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
           {%- else -%}
-            <li class='disabled'>
-              Next <span class='sr-only'>page</span>
-              <span aria-hidden='true'>&raquo;</span>
+            <li class="disabled">
+              Next <span class="sr-only">page</span>
+              <span aria-hidden="true">&raquo;</span>
             </li>
           {%- endif -%}
         </ol>

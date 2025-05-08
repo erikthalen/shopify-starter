@@ -1,49 +1,55 @@
-<section class='grid gap-4 md:grid-cols-2'>
-  <div class='col-span-2 grid place-items-center gap-4 md:grid-cols-2'>
+<section class="grid gap-4 md:grid-cols-2">
+  <div class="col-span-2 grid place-items-center gap-4 md:grid-cols-2">
     {% render 'image', image: product.featured_image, sizes: '100vw, 50vw' %}
 
-    <div class='w-full max-md:px-4 md:w-sm'>
-      <h1 class='mb-1'>{{ product.title }}</h1>
-      <p class='mb-2'>{{ product.selected_or_first_available_variant.price | money }}</p>
-      <div class='mb-4'>{{ product.description }}</div>
+    <div class="w-full max-md:px-4 md:w-sm">
+      {% for variant in product.variants %}
+        <div class="size-4" style="background-color: {{ variant.metafields.custom.swatch.value.color }};"></div>
+      {% endfor %}
+      <h1 class="mb-1">{{ product.title }}</h1>
+      <p class="mb-4">{{ product.selected_or_first_available_variant.price | money }}</p>
 
       <form
-        class='inline-grid w-full justify-items-start gap-4'
-        x-data='productForm({{ product.selected_or_first_available_variant.available }})'
-        @change='handleChange'
-        @submit.prevent='handleSubmit'
-        method='post'
-        action='/cart/add'
-        accept-charset='UTF-8'
-        enctype='multipart/form-data'
-        novalidate='novalidate'
+        class="inline-grid w-full justify-items-start gap-4"
+        x-data="productForm({{ product.selected_or_first_available_variant.available }})"
+        @change="handleChange"
+        @submit.prevent="handleSubmit"
+        method="post"
+        action="/cart/add"
+        accept-charset="UTF-8"
+        enctype="multipart/form-data"
+        novalidate="novalidate"
       >
-        <input type='hidden' name='form_type' value='product'>
-        <input type='hidden' name='utf8' value='✓'>
-        <input type='hidden' name='product-id' value='{{ product.id }}'>
+        <input type="hidden" name="form_type" value="product">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="product-id" value="{{ product.id }}">
 
-        <input type='hidden' value='1' name='quantity'>
+        <input type="hidden" value="1" name="quantity">
 
         {% if product.variants.size == 1 %}
-          <input type='hidden' value='{{ product.selected_or_first_available_variant.id }}' name='id'>
+          <input type="hidden" value="{{ product.selected_or_first_available_variant.id }}" name="id">
         {% else %}
           {% for option in product.options_with_values %}
-            <div class='grid w-full gap-1'>
-              <p class='mb-2 text-xs uppercase'>{{ option.name }}</p>
+            <div class="grid w-full gap-1">
+              <p class="mb-2 text-xs tracking-wider uppercase">{{ option.name }}</p>
 
-              <div class='flex gap-4'>
+              <div class="flex gap-4">
                 {% for value in option.values %}
-                  <label class='w-full rounded-md border border-gray-300 px-5 py-2 text-center text-sm tracking-wider uppercase hover:bg-gray-50 has-checked:not-disabled:border-gray-600 has-disabled:bg-amber-600'>
+                  <label
+                    style="background: {% if value.swatch.color != blank %}{{ value.swatch.color }}{% elsif value.swatch.image != blank %}url({{ value.swatch.image | image_url }});{% endif %}"
+                    class="w-full rounded-md border border-gray-300 px-5 py-2 text-center text-xs tracking-wider uppercase hover:bg-gray-50 has-checked:border-gray-600 has-disabled:bg-amber-600"
+                  >
                     <input
-                      type='radio'
+                      type="radio"
                       {% if value == option.selected_value %}
                         checked
                       {% endif %}
-                      value='{{ value | escape }}'
-                      name='{{ option.name }}'
-                      class='hidden'
+                      value="{{ value | escape }}"
+                      name="{{ option.name }}"
+                      class="hidden"
                     >
-
+                    {{ value.swatch.color }}
+                    {{ value.swatch.image }}
                     {{ value }}
                   </label>
                 {% endfor %}
@@ -53,18 +59,24 @@
         {% endif %}
 
         <button
-          class='my-4 w-full cursor-pointer rounded border border-gray-300 bg-gray-100 p-2 tracking-wider uppercase disabled:bg-gray-400'
-          type='submit'
-          name='add'
-          :disabled='!currentVariant?.available'
+          class="my-4 w-full cursor-pointer rounded border border-gray-300 bg-gray-100 p-2 tracking-wider uppercase disabled:bg-gray-400"
+          type="submit"
+          name="add"
+          :disabled="!currentVariant?.available"
         >
           Buy
         </button>
       </form>
+
+      <details class="mt-4 border-t border-gray-200">
+        <summary class="my-4 cursor-pointer text-xs tracking-wider uppercase">Description</summary>
+
+        <div class="mb-4 text-xs leading-normal">{{ product.description }}</div>
+      </details>
     </div>
   </div>
 
-  <div class='flex gap-4'>
+  <div class="flex gap-4">
     {% for variant in product.variants %}
       {% if variant.featured_image != blank %}
         {% render 'image', image: variant.featured_image, sizes: '33vw, 16vw', aspect_ratio: '1/1', class: 'shink-0' %}
@@ -77,6 +89,6 @@
   console.log({{ product | json }})
 </script>
 
-<script type='application/ld+json'>
+<script type="application/ld+json">
   {{ product | structured_data }}
 </script>
