@@ -1,6 +1,6 @@
-import Alpine from 'alpinejs'
-import { setIsLoading } from './is-loading'
-import { defineComponent } from '~/utils/define'
+import Alpine from "alpinejs"
+import { setIsLoading } from "./is-loading"
+import { defineComponent } from "~/utils/define"
 
 export default defineComponent((sectionName: string) => ({
   async handleQuantityChange(e: Event) {
@@ -10,7 +10,7 @@ export default defineComponent((sectionName: string) => ({
 
     const { id, value } = el
 
-    await Alpine.store('cartStore')
+    await Alpine.store("cartStore")
       .updateLines({ updates: { [id]: parseInt(value) } })
       .catch(() => {})
 
@@ -20,7 +20,7 @@ export default defineComponent((sectionName: string) => ({
   async handleRemove(e: PointerEvent) {
     const target = e.target as HTMLAnchorElement
 
-    if (!target || target.tagName !== 'A') {
+    if (!target || target.tagName !== "A") {
       console.log(
         'The element has to be an <a href="{{ item.url_to_remove }}">'
       )
@@ -30,12 +30,12 @@ export default defineComponent((sectionName: string) => ({
     setIsLoading(true)
 
     const url = new URL(target.href)
-    const param = url.searchParams.get('id')
-    const id = param?.split(':')[0]
+    const param = url.searchParams.get("id")
+    const id = param?.split(":")[0]
 
     if (!id) return
 
-    await Alpine.store('cartStore')
+    await Alpine.store("cartStore")
       .updateLines({ updates: { [id]: 0 } })
       .catch(() => {})
 
@@ -43,16 +43,18 @@ export default defineComponent((sectionName: string) => ({
   },
 
   async render() {
+    console.log('RENDER')
     const response = await fetch(`?section_id=${sectionName}`)
     const text = await response.text()
-
+    
     const cart = new DOMParser()
-      .parseFromString(text, 'text/html')
-      .querySelector(`[x-data='cart("${sectionName}")']`)
-
+    .parseFromString(text, "text/html")
+    .querySelector(`[x-data='cartForm("${sectionName}")']`)
+    
+    console.log('CART', cart)
     if (!cart) return
 
-    if (typeof document.startViewTransition === 'function') {
+    if (typeof document.startViewTransition === "function") {
       document.startViewTransition(() => {
         if (cart?.innerHTML) {
           this.$root.innerHTML = cart?.innerHTML

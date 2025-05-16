@@ -1,8 +1,8 @@
-<p>This is a local block!</p>
+<p style="{% render 'color-scheme' %}" class="bg-(--scheme-primary)">This is a local block!</p>
 
 {% schema %}
 {
-  "name": "Block name",
+  "name": "Test block",
   "settings": [
     {
       "type": "color_scheme",
@@ -12,7 +12,7 @@
   ],
   "presets": [
     {
-      "name": "Block test"
+      "name": "Test block"
     }
   ]
 }

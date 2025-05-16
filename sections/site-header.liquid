@@ -1,13 +1,17 @@
-<header class="relative z-10 flex grid h-10 w-full grid-cols-[1fr_auto_1fr] items-center gap-x-4 border-b border-gray-400 bg-white px-4 text-sm">
+<header class="relative z-10 flex h-10 w-full items-center justify-between gap-x-4 border-b border-gray-400 bg-white px-4 text-sm">
   <nav class="flex items-center gap-x-4">
     <a
       href="/"
       x-data="{ active: {% if request.path == '/' %}true{% else %}false{% endif %} }"
       @window:navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
       :class="active ? 'underline' : ''"
-      class="button"
+      class="button flex items-center"
     >
-      Home
+      {% if shop.brand.logo != blank %}
+        {% render 'image', image: shop.brand.logo, class: 'h-6' %}
+      {% else %}
+        Home
+      {% endif %}
     </a>
 
     <a
@@ -21,19 +25,11 @@
     </a>
   </nav>
 
-  <a href="/" class="flex" aria-label="Go to homepage">
-    {% if shop.brand.logo != blank %}
-      {% render 'image', image: shop.brand.logo, class: 'size-6' %}
-    {% else %}
-      <span class="text-xs tracking-wider uppercase">{{ shop.name }}</span>
-    {% endif %}
-  </a>
-
   <nav class="ml-auto flex items-center gap-4">
     <button x-data class="button" @click="$dispatch('predictive-search:toggle')">Search</button>
 
     <a
-      href="/account"
+      href="{{ routes.storefront_login_url }}"
       x-data="{ active: {% if request.path contains '/account' %}true{% else %}false{% endif %} }"
       @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
       :class="active ? 'underline' : ''"

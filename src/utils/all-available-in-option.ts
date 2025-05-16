@@ -8,8 +8,8 @@ type Option = {
 
 export function allAvailableInOption(
   productData: ProductData,
-  type: string,
-  choice: string
+  relativeTo: string,
+  currentChoice: string
 ) {
   const result: Record<string, any> = []
 
@@ -17,16 +17,16 @@ export function allAvailableInOption(
     productData.options.findIndex(o => o.name === option.name)
 
   const allOtherOptions = productData.options.filter(
-    option => option.name !== type
+    option => option.name !== relativeTo
   )
 
-  const targetIdx = getIndex({ name: type })
+  const targetIdx = getIndex({ name: relativeTo })
 
   allOtherOptions.forEach(option => {
     const idx = getIndex(option)
 
     const variantOfChoice = productData.variants.filter(
-      variant => variant.options[targetIdx] === choice
+      variant => variant.options[targetIdx] === currentChoice
     )
 
     variantOfChoice.forEach(variant => {

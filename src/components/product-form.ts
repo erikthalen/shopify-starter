@@ -1,15 +1,17 @@
-import barba from '@barba/core'
-import { ProductData, VariantData } from '~/types'
-import { setIsLoading } from './is-loading'
-import { defineComponent } from '~/utils/define'
-import Alpine from 'alpinejs'
-import { allAvailableInOption } from '~/utils/all-available-in-option'
+import barba from "@barba/core"
+import { ProductData, VariantData } from "~/types"
+import { setIsLoading } from "./is-loading"
+import { defineComponent } from "~/utils/define"
+import Alpine from "alpinejs"
+import { allAvailableInOption } from "~/utils/all-available-in-option"
 
 const pdpParser = (form: HTMLFormElement, productData?: ProductData) => {
   if (!productData) return
 
   const formData = new FormData(form)
   const formValues = Object.fromEntries(formData.entries())
+
+  console.log(formValues)
 
   const id =
     formValues.id ||
@@ -24,14 +26,14 @@ const pdpParser = (form: HTMLFormElement, productData?: ProductData) => {
 
   return {
     id: parseInt(id.toString()),
-    quantity: parseInt(formData.get('quantity')?.toString() || '1'),
+    quantity: parseInt(formData.get("quantity")?.toString() || "1"),
   }
 }
 
 const defaultParser = (form: HTMLFormElement) => {
   const formData = new FormData(form)
-  const [id] = formData.getAll('id')
-  const quantity = parseInt(formData.getAll('quantity').toString() || '1')
+  const [id] = formData.getAll("id")
+  const quantity = parseInt(formData.getAll("quantity").toString() || "1")
 
   return {
     id: parseInt(id.toString()),
@@ -40,20 +42,23 @@ const defaultParser = (form: HTMLFormElement) => {
 }
 
 export default defineComponent(
-  (initialVariantAvailable: boolean, parserType: 'simple') => ({
+  (initialVariantAvailable: boolean, parserType: "simple") => ({
     productData: undefined as ProductData | undefined,
 
     currentVariant: { available: initialVariantAvailable } as
       | VariantData
       | undefined,
 
-    parser: parserType === 'simple' ? defaultParser : pdpParser,
+    parser: parserType === "simple" ? defaultParser : pdpParser,
 
     async init() {
-      if (parserType !== 'simple') {
+      if (parserType !== "simple") {
         try {
-          const res = await fetch(window.location.pathname + '.js')
+          const res = await fetch(window.location.pathname + ".js")
           this.productData = await res.json()
+
+          this.disableNonAvailableOptions(this.$root as HTMLFormElement)
+
           console.log(this.productData)
         } catch (error) {
           console.log(error)
@@ -62,7 +67,7 @@ export default defineComponent(
     },
 
     handleChange(e: Event) {
-      const form = (e.target as HTMLElement).closest('form')
+      const form = (e.target as HTMLElement).closest("form")
 
       if (!form || !this.productData) return
 
@@ -85,14 +90,27 @@ export default defineComponent(
 
       const availableOptions = allAvailableInOption(
         this.productData,
-        'Color',
-        formValues['Color'].toString()
+        "Color",
+        formValues["Color"].toString()
       )
 
       this.$root.querySelectorAll(`input[type="radio"]`).forEach(input => {
-        if (input.getAttribute('name') === 'Color') return
+        if (input.getAttribute("name") === "Color") return
 
-        input.setAttribute('disabled', 'disabled')
+        if (input.parentElement) {
+          input.parentElement.classList.add(
+            "text-gray-400",
+            "after:h-px",
+            "after:w-[150%]",
+            "after:-rotate-[18deg]",
+            "after:absolute",
+            "after:top-1/2",
+            "after:left-1/2",
+            "after:-translate-x-1/2",
+            "after:-translate-y-1/2",
+            "after:bg-zinc-300"
+          )
+        }
       })
 
       for (let option in availableOptions) {
@@ -101,17 +119,41 @@ export default defineComponent(
         inputs.forEach(input => {
           const element = input as HTMLInputElement
 
-          if (!!availableOptions[option].includes(element.value)) {
-            element.removeAttribute('disabled')
+          if (!element.parentElement) return
+
+          if (!availableOptions[option].includes(element.value)) {
+            element.parentElement.classList.add(
+              "text-gray-400",
+              "after:h-px",
+              "after:w-[150%]",
+              "after:-rotate-[18deg]",
+              "after:absolute",
+              "after:top-1/2",
+              "after:left-1/2",
+              "after:-translate-x-1/2",
+              "after:-translate-y-1/2",
+              "after:bg-zinc-300"
+            )
           } else {
-            element.setAttribute('disabled', 'disabled')
+            element.parentElement.classList.remove(
+              "text-gray-400",
+              "after:h-px",
+              "after:w-[150%]",
+              "after:-rotate-[18deg]",
+              "after:absolute",
+              "after:top-1/2",
+              "after:left-1/2",
+              "after:-translate-x-1/2",
+              "after:-translate-y-1/2",
+              "after:bg-zinc-300"
+            )
           }
         })
       }
     },
 
     async handleSubmit(e: SubmitEvent) {
-      const form = (e.target as HTMLElement).closest('form')
+      const form = (e.target as HTMLElement).closest("form")
 
       if (!form) return
 
@@ -121,7 +163,7 @@ export default defineComponent(
 
       setIsLoading(true)
 
-      await Alpine.store('cartStore')
+      await Alpine.store("cartStore")
         .addLines({ items: [data] })
         .catch(() => {})
 
@@ -133,12 +175,12 @@ export default defineComponent(
       const url = new URL(window.location.href)
 
       if (!id) {
-        url.searchParams.delete('variant')
+        url.searchParams.delete("variant")
       } else {
-        url.searchParams.set('variant', id.toString())
+        url.searchParams.set("variant", id.toString())
       }
 
-      barba.history.add(url.href, 'popstate', 'replace')
+      barba.history.add(url.href, "popstate", "replace")
     },
   })
 )

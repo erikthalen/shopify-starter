@@ -35,6 +35,8 @@
 {%- assign image_name_desktop = image | image_url | split: '/' | last | split: '?' | first -%}
 {%- assign fpd = images[image_name_desktop].presentation.focal_point -%}
 
+{%- assign image_mobile = image_mobile | default: image -%}
+
 {%- if image_mobile != blank -%}
   {%- assign image_name_mobile = image_mobile | image_url | split: '/' | last | split: '?' | first -%}
   {%- assign fpm = images[image_name_mobile].presentation.focal_point -%}
@@ -226,7 +228,7 @@
       x-init="if($el.complete) show = true"
       @load="show = true"
       :class="show ? 'opacity-100' : ''"
-      class="transition-opacity duration-300 opacity-0"
+      class="h-full w-full opacity-0 transition-opacity duration-300"
       src="{{ image | image_url: width: 2000, format: 'webp' }}"
       alt="{{ image.alt }}"
       width="{{ image.width }}"

@@ -10,17 +10,11 @@
 
   Defaults to finding a scheme under the key "section.settings.color_scheme"
   overwrite this with "color_scheme":
-  
-  <div style="{% render 'color-scheme', color_scheme: block.settings.my_scheme %}"></div>
 
+  <div style="{% render 'color-scheme', color_scheme: block.settings.my_scheme %}"></div>
 {%- endcomment -%}
 
-{%- assign scheme = section.settings.color_scheme -%}
-
-{%- if color_scheme != blank -%}
-  {%- assign scheme = color_scheme -%}
-{%- endif -%}
-
+{%- assign scheme = color_scheme | default: section.settings.color_scheme | default: block.settings.color_scheme -%}
 {%- assign colors = scheme.settings | remove_first: '{' | remove_last: '}' | split: ', ' -%}
 
 {%- for color in colors -%}

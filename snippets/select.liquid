@@ -105,7 +105,7 @@
   @keydown.up='if(selectOpen){ selectableItemActivePrevious(); } else { selectOpen=true; } event.preventDefault();'
   @keydown.enter='selectedItem=selectableItemActive; selectOpen=false;'
   @keydown='selectKeydown($event);'
-  class='relative w-64'
+  class='relative w-64 z-100'
 >
   <input x-ref='inputField' name='{{ name }}' type='hidden' x-model='selectedItem.value'>
 
