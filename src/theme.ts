@@ -16,7 +16,16 @@ import productForm from "./components/product-form"
 import productRecommendations from "./components/product-recommendations"
 import cartDrawer from "./components/cart-drawer"
 
-Alpine.store("cartStore", cartStore)
+// makes alpine.d.ts create types of each store
+export const stores = {
+  cartStore,
+
+  /* ... add stores ... */
+}
+
+for (const [key, store] of Object.entries(stores)) {
+  Alpine.store(key, store)
+}
 
 Alpine.data("cartForm", cartForm)
 Alpine.data("cartDrawer", cartDrawer)

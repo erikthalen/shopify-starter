@@ -43,15 +43,13 @@ export default defineComponent((sectionName: string) => ({
   },
 
   async render() {
-    console.log('RENDER')
     const response = await fetch(`?section_id=${sectionName}`)
     const text = await response.text()
-    
+
     const cart = new DOMParser()
-    .parseFromString(text, "text/html")
-    .querySelector(`[x-data='cartForm("${sectionName}")']`)
-    
-    console.log('CART', cart)
+      .parseFromString(text, "text/html")
+      .querySelector(`[x-data='cartForm("${sectionName}")']`)
+
     if (!cart) return
 
     if (typeof document.startViewTransition === "function") {

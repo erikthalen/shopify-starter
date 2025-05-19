@@ -1,25 +1,24 @@
 <section class="p-4">
   {% paginate search.results by 24 %}
     <div class="mb-2 flex justify-between">
-      <h1 class="">Results for: "{{ search.terms }}" ({{ search.results_count }})</h1>
+      <h1 class="text-sm uppercase">
+        Results for: "{{ search.terms }}"
+        <span class="text-neutral-400">({{ search.results_count }})</span>
+      </h1>
 
-      {% assign sorting_values = '[' %}
-
-      {%- for option in search.sort_options -%}
-        {% assign sorting_values = sorting_values
-          | append: '{ title: "'
-          | append: option.name
-          | escape
-          | append: '", value: "'
-          | append: option.value
-          | escape
-          | append: '" },'
-        %}
-      {%- endfor -%}
-
-      {% assign sorting_values = sorting_values | append: ']' %}
-
-      {% render 'select', name: 'sort_by', values: sorting_values %}
+      <div class="grid justify-items-end text-xs uppercase">
+        <p class="mb-2 text-neutral-500">Sort by:</p>
+        {%- for option in search.sort_options -%}
+          <a
+            x-data
+            @click="window.forcePageRefresh = true"
+            class="mb-1 border-b border-dotted"
+            href="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
+          >
+            {{- option.name -}}
+          </a>
+        {%- endfor -%}
+      </div>
     </div>
 
     {% comment %}
@@ -63,26 +62,22 @@
     </ol>
 
     {%- if paginate.pages > 1 -%}
-      <nav role="navigation" class="mt-20 flex justify-center" x-data>
+      <nav role="navigation" class="mt-20 flex justify-center text-xs uppercase" x-data>
         <ol class="flex gap-4">
           {%- if paginate.previous -%}
             <li>
-              <a @mousedown="window.forceNavigationRefresh = true" href="{{ paginate.previous.url }}">
-                <span aria-hidden="true">&laquo;</span>
+              <a @mousedown="window.forcePageRefresh = true" href="{{ paginate.previous.url }}">
                 Previous <span class="sr-only">page</span>
               </a>
             </li>
           {%- else -%}
-            <li class="disabled">
-              <span aria-hidden="true">&laquo;</span>
-              Previous <span class="sr-only">page</span>
-            </li>
+            <li class="disabled">Previous <span class="sr-only">page</span></li>
           {%- endif -%}
 
           {%- for part in paginate.parts -%}
             {%- if part.is_link -%}
               <li>
-                <a @mousedown="window.forceNavigationRefresh = true" href="{{ part.url }}">
+                <a @mousedown="window.forcePageRefresh = true" href="{{ part.url }}">
                   <span class="sr-only">page</span> {{ part.title }}
                 </a>
               </li>
@@ -97,16 +92,12 @@
 
           {%- if paginate.next -%}
             <li>
-              <a @mousedown="window.forceNavigationRefresh = true" href="{{ paginate.next.url }}">
+              <a @mousedown="window.forcePageRefresh = true" href="{{ paginate.next.url }}">
                 Next <span class="sr-only">page</span>
-                <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
           {%- else -%}
-            <li class="disabled">
-              Next <span class="sr-only">page</span>
-              <span aria-hidden="true">&raquo;</span>
-            </li>
+            <li class="disabled">Next <span class="sr-only">page</span></li>
           {%- endif -%}
         </ol>
       </nav>

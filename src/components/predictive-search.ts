@@ -55,7 +55,7 @@ export default defineComponent(() => ({
     }
   },
 
-  async handleFormSubmit(e: SubmitEvent) {
+  async handleFormSubmit() {
     const url = new URL('/search', window.location.origin)
     url.searchParams.set('q', this.q)
 
@@ -70,15 +70,15 @@ export default defineComponent(() => ({
     }
   },
 
-  init() {
-    window.addEventListener('predictive-search:toggle', () => this.toggle(), {
-      signal: this.abortController.signal,
-    })
-  },
+  // init() {
+  //   window.addEventListener('predictive-search:toggle', () => this.toggle(), {
+  //     signal: this.abortController.signal,
+  //   })
+  // },
 
-  destroy() {
-    this.abortController.abort()
-  },
+  // destroy() {
+  //   this.abortController.abort()
+  // },
 }))
 
 const debouncedFetch = debounce<string, Response>(async (url, { signal }) => {

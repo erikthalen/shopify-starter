@@ -83,13 +83,4 @@ const cartStore = {
   },
 }
 
-/**
- * Make the store typesafe
- */
-declare module 'alpinejs' {
-  interface Stores {
-    cartStore: typeof cartStore
-  }
-}
-
 export default cartStore

@@ -11,8 +11,6 @@ const pdpParser = (form: HTMLFormElement, productData?: ProductData) => {
   const formData = new FormData(form)
   const formValues = Object.fromEntries(formData.entries())
 
-  console.log(formValues)
-
   const id =
     formValues.id ||
     productData.variants.find(variant => {
@@ -113,7 +111,7 @@ export default defineComponent(
         }
       })
 
-      for (let option in availableOptions) {
+      for (const option in availableOptions) {
         const inputs = this.$root.querySelectorAll(`input[name="${option}"]`)
 
         inputs.forEach(input => {

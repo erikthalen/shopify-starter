@@ -3,7 +3,7 @@ declare global {
     Shopify: {
       designMode: boolean
     }
-    forceNavigationRefresh: boolean
+    forcePageRefresh: boolean
   }
 }
 

@@ -1,12 +1,12 @@
 <section class="mx-auto my-4 max-w-xl px-4">
-  <h1 class="mb-4">{{ section.settings.title }}</h1>
+  <h1 class="mb-4 text-sm uppercase">{{ section.settings.title }}</h1>
 
   <form
     x-data='cartForm("cart")'
     class="grid text-sm"
     action="{{ routes.cart_url }}"
     method="post"
-    @cart:updated.window="render"
+    @cart:updated.window="render" 
   >
     {%- if cart == empty -%}
       Your cart is empty

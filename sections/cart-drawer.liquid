@@ -1,6 +1,6 @@
 <section
   x-data="cartDrawer"
-  class="absolute top-0 right-0 z-100 h-screen w-md max-w-screen bg-white text-sm transition-transform after:absolute after:top-0 after:right-full after:h-full after:w-screen after:bg-black/50 after:transition-opacity"
+  class="absolute top-0 z-3 right-0 h-screen w-md max-w-screen bg-white text-sm transition-transform after:absolute after:top-0 after:right-full after:h-full after:w-screen after:bg-black/50 after:transition-opacity"
   :class='[isOpen ? "translate-x-0 after:opacity-100" : "translate-x-full after:opacity-0 after:pointer-events-none"]'
   @window:navigation.window="close"
   @cart:updated.window="open"

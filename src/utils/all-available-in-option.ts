@@ -1,4 +1,4 @@
-import { ProductData } from '~/types'
+import { ProductData } from "~/types"
 
 type Option = {
   name: string
@@ -11,7 +11,7 @@ export function allAvailableInOption(
   relativeTo: string,
   currentChoice: string
 ) {
-  const result: Record<string, any> = []
+  const result: Record<string, string[]> = {}
 
   const getIndex = (option: Option) =>
     productData.options.findIndex(o => o.name === option.name)
