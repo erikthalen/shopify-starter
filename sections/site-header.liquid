@@ -8,7 +8,12 @@
       class="button flex items-center"
     >
       {% if shop.brand.logo != blank %}
-        {% render 'image', image: shop.brand.logo, class: 'h-6' %}
+        {% render 'image',
+          image: shop.brand.logo,
+          class: 'h-6 w-auto',
+          fill: 'h',
+          alt: 'The logo'
+        %}
       {% else %}
         Home
       {% endif %}

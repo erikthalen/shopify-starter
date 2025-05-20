@@ -3,9 +3,9 @@
     {% render 'image', image: product.featured_image, sizes: '100vw, 50vw', loading: 'eager' %}
 
     <div class="w-full max-md:px-4 md:w-sm">
-      {% for variant in product.variants %}
+      {% comment %} {% for variant in product.variants %}
         <div class="size-4" style="background-color: {{ variant.metafields.custom.swatch.value.color }};"></div>
-      {% endfor %}
+      {% endfor %} {% endcomment %}
       <h1 class="mb-1">{{ product.title }}</h1>
 
       {% render 'price', variant: product.selected_or_first_available_variant, class: 'mb-4' %}

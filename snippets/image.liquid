@@ -12,6 +12,7 @@
   aspect_ratio_sm: css string defining aspect ratio on small screens (overwrites aspect_ratio)
   aspect_ratio_md: css string defining aspect ratio on large screens (overwrites aspect_ratio)
   style:           any inline style to apply to the <img>
+  fill:            'h' | 'w' | 'both'. make <img> have same hight/width as its container
 
   example usages:
 
@@ -88,6 +89,16 @@
 {%- assign height_attribute_md = image.height -%}
 {%- if active_aspect_radio_md != blank -%}
   {%- assign height_attribute_md = image.width | divided_by: active_aspect_radio_md -%}
+{%- endif -%}
+
+{%- assign fill_class = '' -%}
+
+{%- if fill == 'h' -%}
+  {%- assign fill_class = 'h-full w-auto' -%}
+{%- elsif fill == 'w' -%}
+  {%- assign fill_class = 'h-auto w-full' -%}
+{%- elsif fill == 'both' -%}
+  {%- assign fill_class = 'h-full w-full' -%}
 {%- endif -%}
 
 {%- if image == blank -%}
@@ -228,9 +239,9 @@
       x-init="if($el.complete) show = true"
       @load="show = true"
       :class="show ? 'opacity-100' : ''"
-      class="h-full w-full opacity-0 transition-opacity duration-300"
+      class="object-cover opacity-0 transition-opacity duration-300 {{ fill_class }}"
       src="{{ image | image_url: width: 2000, format: 'webp' }}"
-      alt="{{ image.alt }}"
+      alt="{{ alt | default: image.alt }}"
       width="{{ image.width }}"
       height="{{ height_attribute_md }}"
       loading="{{ loading | default: 'lazy' }}"
