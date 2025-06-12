@@ -9,7 +9,7 @@
     "vite:dev": "vite",
     "vite:build": "vite build",
     "shopify:dev": "shopify theme dev -e development --open",
-    "shopify:prod": "shopify theme push -e production",
+    "shopify:prod": "shopify theme push -e development && shopify theme push -e production",
     "lint": "npx eslint"
   },
   "devDependencies": {
