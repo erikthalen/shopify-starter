@@ -1,7 +1,7 @@
 <section class="my-4 px-4">
   <h1 class="mb-4">
     All collections
-    <span class="text-neutral-400">({{ collections.size }})</span>
+    <span class="text-neutral-500">({{ collections.size }})</span>
   </h1>
 
   <ol class="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -12,7 +12,7 @@
             {% render 'image', image: collection.featured_image, sizes: '100vw, 20vw', aspect_ratio: '1/1' %}
             <div class="mt-2">
               {{ collection.title }}
-              <span class="text-neutral-400">({{ collection.all_products_count }})</span>
+              <span class="text-neutral-500">({{ collection.all_products_count }})</span>
             </div>
           </a>
         </li>

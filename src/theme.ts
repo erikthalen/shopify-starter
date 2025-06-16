@@ -8,33 +8,28 @@ import type { ITransitionData } from "@barba/core/dist/src/defs"
 
 import { fixatePageOnNavigation } from "~/utils/utils"
 
-import cartStore from "./components/cart-store"
-import cartForm from "./components/cart-form"
+import drawer from "./components/drawer"
 import filter from "./components/filter"
 import "./components/is-loading"
-import mainCollection from "./components/main-collection"
 import predictiveSearch from "./components/predictive-search"
 import productForm from "./components/product-form"
 import productRecommendations from "./components/product-recommendations"
-import cartDrawer from "./components/cart-drawer"
 
 Alpine.plugin(ajax)
 
-// makes alpine.d.ts create types of each store
+// makes alpine.d.ts able to create types of each store
 export const stores = {
   // cartStore,
 
-  /* ... add stores ... */
+  /* ... add your stores here ... */
 }
 
 for (const [key, store] of Object.entries(stores)) {
   Alpine.store(key, store)
 }
 
-Alpine.data("cartForm", cartForm)
-Alpine.data("cartDrawer", cartDrawer)
+Alpine.data("drawer", drawer)
 Alpine.data("filter", filter)
-Alpine.data("mainCollection", mainCollection)
 Alpine.data("predictiveSearch", predictiveSearch)
 Alpine.data("productForm", productForm)
 Alpine.data("productRecommendations", productRecommendations)
@@ -63,8 +58,10 @@ barba.init({
       name: "slide-right",
       sync: true, // make browser keep history scroll position
       from: {
-        custom: ({ trigger }) =>
-          (trigger as HTMLElement).dataset.transition === "slide-right",
+        custom: ({ trigger }) => {
+          // link looks like <a data-transition="slide-right"></a>
+          return (trigger as HTMLElement).dataset.transition === "slide-right"
+        },
       },
       async leave({ current }) {
         return current.container.animate(

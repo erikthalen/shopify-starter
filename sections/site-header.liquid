@@ -8,12 +8,7 @@
       class="button flex items-center"
     >
       {% if shop.brand.logo != blank %}
-        {% render 'image',
-          image: shop.brand.logo,
-          class: 'h-6 w-auto',
-          fill: 'h',
-          alt: 'The logo'
-        %}
+        {% render 'image', image: shop.brand.logo, class: 'h-6 w-auto', fill: 'h', alt: 'The logo' %}
       {% else %}
         Home
       {% endif %}
@@ -35,8 +30,9 @@
 
     <a
       href="{{ routes.storefront_login_url }}"
+      data-barba-prevent
       x-data="{ active: {% if request.path contains '/account' %}true{% else %}false{% endif %} }"
-      @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
+      @window:navigation.window="active = location.pathname.includes('/account')"
       :class="active ? 'underline' : ''"
       class="button"
     >
@@ -48,7 +44,7 @@
       x-data="{ active: {% if request.path == '/cart' %}true{% else %}false{% endif %} }"
       data-href="/cart"
       @window:navigation.window="active = $el.dataset.href.replace(location.origin, '') === location.pathname"
-      @click="$dispatch('cart-drawer:open')"
+      @click="$dispatch('drawer:cart:open')"
       :class="active ? 'underline' : ''"
       class="button"
     >

@@ -11,17 +11,17 @@ const pdpParser = (form: HTMLFormElement, productData?: ProductData) => {
   const formData = new FormData(form)
   const formValues = Object.fromEntries(formData.entries())
 
-  const id = productData.variants.find(variant => {
+  const variant = productData.variants.find(variant => {
     return variant.options.every((value, idx) => {
       const { name } = productData.options[idx]
       return formValues[name] === value
     })
-  })?.id
+  })
 
-  if (!id) return
+  if (!variant?.id) return
 
   return {
-    id: parseInt(id.toString()),
+    id: parseInt(variant.id.toString()),
     quantity: parseInt(formData.get("quantity")?.toString() || "1"),
   }
 }
@@ -143,24 +143,6 @@ export default defineComponent((parserType: "simple" | undefined) => ({
       })
     }
   },
-
-  // async handleSubmit(e: SubmitEvent) {
-  //   const form = (e.target as HTMLElement).closest("form")
-
-  //   if (!form) return
-
-  //   const data = this.parser(form, this.productData)
-
-  //   if (!data) return
-
-  //   setIsLoading(true)
-
-  //   await Alpine.store("cartStore")
-  //     .addLines({ items: [data] })
-  //     .catch(() => {})
-
-  //   setIsLoading(false)
-  // },
 
   updateURL() {
     const { id } = this.currentVariant || {}

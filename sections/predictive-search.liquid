@@ -8,7 +8,6 @@
   <div class="relative z-1 flex max-h-screen w-full justify-center bg-white px-4 pt-30 pb-40" @click.outside="close">
     <div class="w-full max-w-3xl">
       <form
-        @input="handleFormInput"
         @submit.prevent="handleFormSubmit"
         action="{{ routes.search_url }}"
         class="flex items-center gap-2 border-b border-gray-400"
@@ -24,6 +23,7 @@
           name="q"
           x-model="q"
           x-ref="input"
+          @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
         >
 
         <button type="button" aria-label="Close search" class="button w-4" @click="close">
@@ -33,12 +33,36 @@
         <input type="hidden" name="type" value="product,page">
         <input type="hidden" name="options[unavailable_products]" value="hide">
         <input type="hidden" name="options[prefix]" value="last">
-
-        {% comment %} <button class='button cursor-pointer' type='submit'>Search</button> {% endcomment %}
       </form>
 
-      {% comment %} results {% endcomment %}
-      <output x-html="results" class="w-full overflow-auto bg-white py-4"> </output>
+      <form
+        class="sr-only"
+        x-ref="predictiveSearchForm"
+        action="{{ routes.predictive_search_url }}"
+        x-target="predictive-search-results"
+        @ajax:before="
+          if(!q) {
+            $event.preventDefault()
+            $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
+          }
+        "
+        @ajax:after="
+          if(!q) {
+            $event.preventDefault()
+            $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
+          }
+        "
+      >
+        <input type="search" name="q" x-model="q">
+        <input type="hidden" name="section_id" value="predictive-search-results">
+        <input type="hidden" name="type" value="product,page">
+        <input type="hidden" name="options[unavailable_products]" value="hide">
+        <input type="hidden" name="options[prefix]" value="last">
+      </form>
+
+      <div x-show="q !== ''" x-ref="predictiveSearchResults">
+        <output id="predictive-search-results" class="w-full overflow-auto bg-white py-4"> </output>
+      </div>
     </div>
   </div>
 </section>

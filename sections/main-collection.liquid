@@ -1,17 +1,17 @@
-<section class="my-4 px-4" x-data="mainCollection" @filter:update.window="handleFilterUpdate">
+<section class="my-4 px-4" id="main_collection">
   <div class="mb-4 flex justify-between">
     <h1>
       {{ collection.title }}
-      <span class="text-neutral-400">({{ collection.all_products_count }})</span>
+      <span class="text-neutral-500">({{ collection.all_products_count }})</span>
     </h1>
 
-    <button class="button" @click="$dispatch('filter:open')">Filter</button>
+    <button x-data class="button" @click="$dispatch('drawer:filter:open')">Filter</button>
   </div>
 
   {% paginate collection.products by 24 %}
     <ol class="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4">
       {% if collection.products.size == 0 %}
-        <p class="col-span-4 text-sm">No results 😔</p>
+        <p class="col-span-4 text-sm">No results</p>
       {% else %}
         {% for product in collection.products %}
           <li style="view-transition-name: main-collection-item-{{ product.id }}">
@@ -31,7 +31,7 @@
               </a>
             </li>
           {%- else -%}
-            <li class="text-neutral-400">Previous <span class="sr-only">page</span></li>
+            <li class="text-neutral-500">Previous <span class="sr-only">page</span></li>
           {%- endif -%}
 
           {%- for part in paginate.parts -%}
@@ -57,7 +57,7 @@
               </a>
             </li>
           {%- else -%}
-            <li class="text-neutral-400">Next <span class="sr-only">page</span></li>
+            <li class="text-neutral-500">Next <span class="sr-only">page</span></li>
           {%- endif -%}
         </ol>
       </nav>

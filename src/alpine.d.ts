@@ -1,4 +1,3 @@
-import "alpinejs"
 import type { stores } from "./theme"
 
 type ThemeStores = typeof stores
