@@ -3,77 +3,16 @@
     {% render 'image', image: product.featured_image, sizes: '100vw, 50vw', loading: 'eager' %}
 
     <div class="w-full max-md:px-4 md:w-sm">
-      {% comment %} {% for variant in product.variants %}
-        <div class="size-4" style="background-color: {{ variant.metafields.custom.swatch.value.color }};"></div>
-      {% endfor %} {% endcomment %}
+      {% comment %}
+        {% for variant in product.variants %}
+          <div class="size-4" style="background-color: {{ variant.metafields.custom.swatch.value.color }};"></div>
+        {% endfor %}
+      {% endcomment %}
       <h1 class="mb-1">{{ product.title }}</h1>
 
       {% render 'price', variant: product.selected_or_first_available_variant, class: 'mb-4' %}
 
-      <form
-        class="inline-grid w-full justify-items-start gap-4"
-        x-data="productForm({{ product.selected_or_first_available_variant.available }})"
-        @change="handleChange"
-        @submit.prevent="handleSubmit"
-        method="post"
-        action="/cart/add"
-        accept-charset="UTF-8"
-        enctype="multipart/form-data"
-        novalidate="novalidate"
-      >
-        <input type="hidden" name="form_type" value="product">
-        <input type="hidden" name="utf8" value="✓">
-        <input type="hidden" name="product-id" value="{{ product.id }}">
-
-        <input type="hidden" value="1" name="quantity">
-
-        {% if product.variants.size == 1 %}
-          <input type="hidden" value="{{ product.selected_or_first_available_variant.id }}" name="id">
-        {% else %}
-          {% for option in product.options_with_values %}
-            <div class="grid w-full gap-1">
-              <p class="mb-2 text-xs tracking-wider uppercase">{{ option.name }}</p>
-
-              <div class="flex gap-4">
-                {% for value in option.values %}
-                  <label
-                    {% if value.swatch != blank %}
-                      style="
-                        --color: {{ value.swatch.color }};
-                        --image: url({{ value.swatch.image | image_url }});
-                        background-image: var(--image);
-                        background-color: var(--color);
-                      "
-                    {% endif %}
-                    class="relative w-full overflow-clip rounded-md border border-gray-300 bg-cover bg-center px-5 py-2 text-center text-xs tracking-wider uppercase hover:bg-gray-50 has-checked:border-gray-600"
-                  >
-                    <input
-                      type="radio"
-                      {% if value == option.selected_value %}
-                        checked
-                      {% endif %}
-                      value="{{ value | escape }}"
-                      name="{{ option.name }}"
-                      class="hidden"
-                    >
-                    {{ value }}
-                  </label>
-                {% endfor %}
-              </div>
-            </div>
-          {% endfor %}
-        {% endif %}
-
-        <button
-          class="my-4 w-full cursor-pointer rounded border border-gray-300 bg-gray-100 p-2 text-sm tracking-wider uppercase"
-          type="submit"
-          name="add"
-          x-text="currentVariant?.available ? 'Add to cart' : 'Notify me'"
-          :class="!currentVariant?.available ? 'text-gray-400' : 'text-black'"
-        >
-          Add to cart
-        </button>
-      </form>
+      {% content_for 'block', type: '_product-form', id: 'productForm' %}
 
       <details class="mt-4 border-t border-gray-200">
         <summary class="my-4 cursor-pointer text-xs tracking-wider uppercase">Description</summary>
@@ -99,3 +38,22 @@
 <script type="application/ld+json">
   {{ product | structured_data }}
 </script>
+
+{% schema %}
+{
+  "name": "Main product",
+  "blocks": [{ "type": "_product-form" }],
+  "presets": [
+    {
+      "name": "Product form",
+      "blocks": [
+        {
+          "type": "_product-form",
+          "static": true,
+          "id": "productForm"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

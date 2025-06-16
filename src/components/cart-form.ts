@@ -17,30 +17,30 @@ export default defineComponent((sectionName: string) => ({
     setIsLoading(false)
   },
 
-  async handleRemove(e: PointerEvent) {
-    const target = e.target as HTMLAnchorElement
+  // async handleRemove(e: PointerEvent) {
+  //   const target = e.target as HTMLAnchorElement
 
-    if (!target || target.tagName !== "A") {
-      console.log(
-        'The element has to be an <a href="{{ item.url_to_remove }}">'
-      )
-      return
-    }
+  //   if (!target || target.tagName !== "A") {
+  //     console.log(
+  //       'The element has to be an <a href="{{ item.url_to_remove }}">'
+  //     )
+  //     return
+  //   }
 
-    setIsLoading(true)
+  //   setIsLoading(true)
 
-    const url = new URL(target.href)
-    const param = url.searchParams.get("id")
-    const id = param?.split(":")[0]
+  //   const url = new URL(target.href)
+  //   const param = url.searchParams.get("id")
+  //   const id = param?.split(":")[0]
 
-    if (!id) return
+  //   if (!id) return
 
-    await Alpine.store("cartStore")
-      .updateLines({ updates: { [id]: 0 } })
-      .catch(() => {})
+  //   await Alpine.store("cartStore")
+  //     .updateLines({ updates: { [id]: 0 } })
+  //     .catch(() => {})
 
-    setIsLoading(false)
-  },
+  //   setIsLoading(false)
+  // },
 
   async render() {
     const response = await fetch(`?section_id=${sectionName}`)

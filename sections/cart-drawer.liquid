@@ -7,35 +7,43 @@
   @cart-drawer:open.window="open"
 >
   <div @click.outside="close" class="grid h-full grid-rows-[auto_1fr]">
-    <div
-      :class="loading ? 'opacity-100' : 'opacity-0 transition-opacity'"
-      class="pointer-events-none absolute inset-0 z-1 bg-white"
-    ></div>
-
     <div class="mx-4 flex h-10 items-center justify-between border-b border-gray-300">
-      <p class="text-sm uppercase">Your cart ({% render 'cart-amount' %})</p>
+      <p class="text-xs uppercase">Your cart ({% render 'cart-amount' %})</p>
 
       <button aria-label="Close cart drawer" @click="close" class="button size-5">
         {% render 'icon-cross' %}
       </button>
     </div>
 
-    <form
-      x-data='cartForm("cart-drawer")'
-      action="{{ routes.cart_url }}"
-      method="post"
-      class="flex flex-col overflow-auto px-4"
-      @cart:updated.window="render"
-    >
-      {%- if cart == empty -%}
+    {%- if cart == empty -%}
+      <div id="cart_form" class="flex flex-col items-start overflow-auto px-4">
         <p class="py-4">Your cart is empty</p>
         <a
           href="/collections"
-          class="my-2 mr-auto cursor-pointer rounded border border-gray-300 bg-gray-100 p-2 tracking-wider uppercase"
+          class="button my-2 border-b border-dotted"
         >
           Go to shop
         </a>
-      {% else %}
+      </div>
+    {% else %}
+      {% comment %} @cart:updated.window="render" {% endcomment %}
+      {% comment %} x-data='cartForm("cart-drawer")' {% endcomment %}
+      <form
+        id="cart_form"
+        x-target="_none"
+        @ajax:sent="console.log($event.detail)"
+
+        action="{{ routes.cart_url }}"
+        method="post"
+        class="flex flex-col overflow-auto px-4"
+
+        accept-charset="UTF-8"
+        enctype="multipart/form-data"
+      >
+        <input type="hidden" name="form_type" value="cart">
+        <input type="hidden" name="utf8" value="✓">
+        {% comment %} <input type="hidden" name="section_id" value="cart"> {% endcomment %}
+
         {%- for item in cart.items -%}
           <div
             style="view-transition-name: cart-drawer-item-{{ item.variant_id }}"
@@ -122,35 +130,27 @@
                   <div class="flex items-center gap-3" x-data="{ count: {{ item.quantity }} }">
                     <button
                       type="button"
-                      @click="
-                        (e) => {
-                          count--
-                          handleQuantityChange(e)
-                        }
-                      "
+                      @click="(e) => count--"
+                      @click.debounce.1000ms="$el.form.requestSubmit()"
                       class="inline-flex aspect-square w-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
-                      name="updates[]"
-                      :value="count - 1"
-                      id="{{ item.variant_id }}"
                       aria-label="Decrease quantity of {{ item.title }}"
                     >
                       -
                     </button>
 
+                    <input
+                      type="hidden"
+                      name="updates[]"
+                      :value="typeof count === 'number' ? count : {{ item.quantity }}"
+                    >
+
                     <span x-text="count">{{ item.quantity }}</span>
 
                     <button
                       type="button"
-                      @click="
-                        (e) => {
-                          count++
-                          handleQuantityChange(e)
-                        }
-                      "
+                      @click="(e) => count++"
+                      @click.debounce.1000ms="$el.form.requestSubmit()"
                       class="inline-flex aspect-square w-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
-                      name="updates[]"
-                      :value="count + 1"
-                      id="{{ item.variant_id }}"
                       aria-label="Increase quantity of {{ item.title }}"
                     >
                       +
@@ -158,7 +158,7 @@
                   </div>
 
                   <a
-                    @click.prevent="handleRemove"
+                    x-target="cart cart_form"
                     data-barba-prevent
                     class="inline-block border-b border-dotted text-xs text-gray-600 uppercase hover:text-black"
                     href="{{ item.url_to_remove }}"
@@ -172,24 +172,21 @@
         {%- endfor -%}
 
         <div class="sticky bottom-0 mt-auto grid w-full border-t border-gray-300 bg-white py-4">
-          <p class="text-right">Total: {{ cart.total_price | money_with_currency }}</p>
+          <p class="text-right uppercase">Total: {{ cart.total_price | money_with_currency }}</p>
 
           <button
-            class="my-4 w-full rounded border border-gray-300 bg-gray-100 p-2 tracking-wider uppercase"
+            class="my-4 w-full text-xs rounded border border-gray-300 bg-gray-100 p-2 tracking-wider uppercase"
             type="submit"
             name="checkout"
-            {% if cart == empty %}
-              disabled
-            {% endif %}
-            form="cart"
+            formnoajax
           >
             Checkout
           </button>
 
           <a href="/cart" class="button mb-2 inline-block justify-self-center text-center">Go to cart</a>
         </div>
-      {%- endif -%}
-    </form>
+      </form>
+    {%- endif -%}
   </div>
 </section>
 

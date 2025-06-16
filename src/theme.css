@@ -1,20 +1,20 @@
-@import 'tailwindcss' source('../');
+@import "tailwindcss" source("../");
 
 @font-face {
-  font-family: 'DMMono';
-  src: local('DMMono'), url('fonts/DMMono-Light.ttf');
+  font-family: "DMMono";
+  src: local("DMMono"), url("fonts/DMMono-Light.ttf");
   font-display: block;
 }
 
 @font-face {
-  font-family: 'DMMono';
-  src: local('DMMono'), url('fonts/DMMono-Regular.ttf');
+  font-family: "DMMono";
+  src: local("DMMono"), url("fonts/DMMono-Regular.ttf");
   font-weight: 700;
   font-display: block;
 }
 
 @theme {
-  --font-sans: 'DMMono', sans-serif;
+  --font-sans: "DMMono", sans-serif;
 }
 
 /* make it so sections in preview popup in cms don't overflow */
@@ -46,4 +46,8 @@ details > summary {
 details > summary::marker, /* Latest Chrome, Edge, Firefox */ 
 details > summary::-webkit-details-marker /* Safari */ {
   display: none;
+}
+
+[aria-busy="true"] {
+  opacity: 0.4;
 }

@@ -1,4 +1,4 @@
-<section class="mx-auto my-4 max-w-xl px-4">
+<section id="cart" class="mx-auto my-4 max-w-xl px-4">
   <h1 class="mb-4 text-sm uppercase">{{ section.settings.title }}</h1>
 
   <form
@@ -6,7 +6,7 @@
     class="grid text-sm"
     action="{{ routes.cart_url }}"
     method="post"
-    @cart:updated.window="render" 
+    @cart:updated.window="render"
   >
     {%- if cart == empty -%}
       Your cart is empty

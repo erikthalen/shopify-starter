@@ -1,8 +1,10 @@
 import "vite/modulepreload-polyfill"
 
 import barba from "@barba/core"
-import type { ITransitionData } from "@barba/core/dist/src/defs"
 import Alpine from "alpinejs"
+import ajax from "@imacrayon/alpine-ajax"
+
+import type { ITransitionData } from "@barba/core/dist/src/defs"
 
 import { fixatePageOnNavigation } from "~/utils/utils"
 
@@ -16,9 +18,11 @@ import productForm from "./components/product-form"
 import productRecommendations from "./components/product-recommendations"
 import cartDrawer from "./components/cart-drawer"
 
+Alpine.plugin(ajax)
+
 // makes alpine.d.ts create types of each store
 export const stores = {
-  cartStore,
+  // cartStore,
 
   /* ... add stores ... */
 }

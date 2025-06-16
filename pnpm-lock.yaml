@@ -11,6 +11,9 @@ importers:
       '@barba/core':
         specifier: ^2.10.3
         version: 2.10.3
+      '@imacrayon/alpine-ajax':
+        specifier: ^0.12.2
+        version: 0.12.2
       alpinejs:
         specifier: ^3.14.7
         version: 3.14.7
@@ -300,6 +303,9 @@ packages:
 
   '@iarna/toml@2.2.5':
     resolution: {integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==}
+
+  '@imacrayon/alpine-ajax@0.12.2':
+    resolution: {integrity: sha512-X9U4wOgHcokUqSzTfad7TW33f4Vw/+VPZFTFzHzb2gO+57smtD8SrkTtaYdyZeEWwY0dyP5ZLhYfeOr5c9uPSw==}
 
   '@jsdevtools/ono@7.1.3':
     resolution: {integrity: sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==}
@@ -2680,6 +2686,8 @@ snapshots:
   '@humanwhocodes/retry@0.4.1': {}
 
   '@iarna/toml@2.2.5': {}
+
+  '@imacrayon/alpine-ajax@0.12.2': {}
 
   '@jsdevtools/ono@7.1.3': {}
 

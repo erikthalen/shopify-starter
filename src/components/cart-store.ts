@@ -52,21 +52,21 @@ const cartStore = {
     this.itemCount = json.item_count
   },
 
-  async addLines(body: CartAddInput): Promise<LinesAddResponse | Error> {
-    const response = await fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
+  // async addLines(body: CartAddInput): Promise<LinesAddResponse | Error> {
+  //   const response = await fetch('/cart/add.js', {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify(body),
+  //   })
 
-    const json: LinesAddResponse = await response.json()
+  //   const json: LinesAddResponse = await response.json()
 
-    this.updateItemCount()
+  //   this.updateItemCount()
 
-    window.dispatchEvent(new CustomEvent('cart:updated'))
+  //   window.dispatchEvent(new CustomEvent('cart:updated'))
 
-    return json
-  },
+  //   return json
+  // },
 
   async updateLines(
     body: CartUpdateInput

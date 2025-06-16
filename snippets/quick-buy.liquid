@@ -1,0 +1,22 @@
+<form
+  x-target="cart_form"
+  @ajax:after="$dispatch('cart:updated')"
+
+  action="/cart/add"
+  method="post"
+  accept-charset="UTF-8"
+  enctype="multipart/form-data"
+  novalidate="novalidate"
+>
+  <input type="hidden" value="1" name="quantity">
+  <input type="hidden" value="{{ product.selected_or_first_available_variant.id }}" name="id">
+
+  <button
+    class="button disabled:text-gray-300"
+    type="submit"
+    name="add"
+    :disabled="!{{ product.selected_or_first_available_variant.available }}"
+  >
+    Add to cart
+  </button>
+</form>

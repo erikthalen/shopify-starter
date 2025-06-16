@@ -11,14 +11,12 @@ const pdpParser = (form: HTMLFormElement, productData?: ProductData) => {
   const formData = new FormData(form)
   const formValues = Object.fromEntries(formData.entries())
 
-  const id =
-    formValues.id ||
-    productData.variants.find(variant => {
-      return variant.options.every((value, idx) => {
-        const { name } = productData.options[idx]
-        return formValues[name] === value
-      })
-    })?.id
+  const id = productData.variants.find(variant => {
+    return variant.options.every((value, idx) => {
+      const { name } = productData.options[idx]
+      return formValues[name] === value
+    })
+  })?.id
 
   if (!id) return
 
@@ -39,64 +37,97 @@ const defaultParser = (form: HTMLFormElement) => {
   }
 }
 
-export default defineComponent(
-  (initialVariantAvailable: boolean, parserType: "simple") => ({
-    productData: undefined as ProductData | undefined,
+export default defineComponent((parserType: "simple" | undefined) => ({
+  productData: undefined as ProductData | undefined,
+  currentVariant: undefined as VariantData | undefined,
 
-    currentVariant: { available: initialVariantAvailable } as
-      | VariantData
-      | undefined,
+  parser: parserType === "simple" ? defaultParser : pdpParser,
 
-    parser: parserType === "simple" ? defaultParser : pdpParser,
+  async init() {
+    if (parserType !== "simple") {
+      try {
+        const res = await fetch(window.location.pathname + ".js")
+        this.productData = await res.json()
 
-    async init() {
-      if (parserType !== "simple") {
-        try {
-          const res = await fetch(window.location.pathname + ".js")
-          this.productData = await res.json()
+        this.disableNonAvailableOptions(this.$root as HTMLFormElement)
 
-          this.disableNonAvailableOptions(this.$root as HTMLFormElement)
-
-          console.log(this.productData)
-        } catch (error) {
-          console.log(error)
-        }
+        console.log(this.productData)
+      } catch (error) {
+        console.log(error)
       }
-    },
+    }
+  },
 
-    handleChange(e: Event) {
-      const form = (e.target as HTMLElement).closest("form")
+  handleChange(e: Event) {
+    const form = (e.target as HTMLElement).closest("form")
 
-      if (!form || !this.productData) return
+    if (!form || !this.productData) return
 
-      const data = this.parser(form, this.productData)
+    const data = this.parser(form, this.productData)
 
-      this.currentVariant = this.productData.variants.find(
-        variant => variant.id === data?.id
-      )
+    this.currentVariant = this.productData.variants.find(
+      variant => variant.id === data?.id
+    )
 
-      this.disableNonAvailableOptions(form)
+    this.disableNonAvailableOptions(form)
 
-      this.updateURL()
-    },
+    this.updateURL()
+  },
 
-    disableNonAvailableOptions(form: HTMLFormElement) {
-      const formData = new FormData(form)
-      const formValues = Object.fromEntries(formData.entries())
+  disableNonAvailableOptions(form: HTMLFormElement) {
+    const formData = new FormData(form)
+    const formValues = Object.fromEntries(formData.entries())
 
-      if (!this.productData) return
+    if (!this.productData) return
 
-      const availableOptions = allAvailableInOption(
-        this.productData,
-        "Color",
-        formValues["Color"].toString()
-      )
+    const availableOptions = allAvailableInOption(
+      this.productData,
+      "Color",
+      formValues["Color"].toString()
+    )
 
-      this.$root.querySelectorAll(`input[type="radio"]`).forEach(input => {
-        if (input.getAttribute("name") === "Color") return
+    this.$root.querySelectorAll(`input[type="radio"]`).forEach(input => {
+      if (input.getAttribute("name") === "Color") return
 
-        if (input.parentElement) {
-          input.parentElement.classList.add(
+      if (input.parentElement) {
+        input.parentElement.classList.add(
+          "text-gray-400",
+          "after:h-px",
+          "after:w-[150%]",
+          "after:-rotate-[18deg]",
+          "after:absolute",
+          "after:top-1/2",
+          "after:left-1/2",
+          "after:-translate-x-1/2",
+          "after:-translate-y-1/2",
+          "after:bg-zinc-300"
+        )
+      }
+    })
+
+    for (const option in availableOptions) {
+      const inputs = this.$root.querySelectorAll(`input[name="${option}"]`)
+
+      inputs.forEach(input => {
+        const element = input as HTMLInputElement
+
+        if (!element.parentElement) return
+
+        if (!availableOptions[option].includes(element.value)) {
+          element.parentElement.classList.add(
+            "text-gray-400",
+            "after:h-px",
+            "after:w-[150%]",
+            "after:-rotate-[18deg]",
+            "after:absolute",
+            "after:top-1/2",
+            "after:left-1/2",
+            "after:-translate-x-1/2",
+            "after:-translate-y-1/2",
+            "after:bg-zinc-300"
+          )
+        } else {
+          element.parentElement.classList.remove(
             "text-gray-400",
             "after:h-px",
             "after:w-[150%]",
@@ -110,75 +141,37 @@ export default defineComponent(
           )
         }
       })
+    }
+  },
 
-      for (const option in availableOptions) {
-        const inputs = this.$root.querySelectorAll(`input[name="${option}"]`)
+  // async handleSubmit(e: SubmitEvent) {
+  //   const form = (e.target as HTMLElement).closest("form")
 
-        inputs.forEach(input => {
-          const element = input as HTMLInputElement
+  //   if (!form) return
 
-          if (!element.parentElement) return
+  //   const data = this.parser(form, this.productData)
 
-          if (!availableOptions[option].includes(element.value)) {
-            element.parentElement.classList.add(
-              "text-gray-400",
-              "after:h-px",
-              "after:w-[150%]",
-              "after:-rotate-[18deg]",
-              "after:absolute",
-              "after:top-1/2",
-              "after:left-1/2",
-              "after:-translate-x-1/2",
-              "after:-translate-y-1/2",
-              "after:bg-zinc-300"
-            )
-          } else {
-            element.parentElement.classList.remove(
-              "text-gray-400",
-              "after:h-px",
-              "after:w-[150%]",
-              "after:-rotate-[18deg]",
-              "after:absolute",
-              "after:top-1/2",
-              "after:left-1/2",
-              "after:-translate-x-1/2",
-              "after:-translate-y-1/2",
-              "after:bg-zinc-300"
-            )
-          }
-        })
-      }
-    },
+  //   if (!data) return
 
-    async handleSubmit(e: SubmitEvent) {
-      const form = (e.target as HTMLElement).closest("form")
+  //   setIsLoading(true)
 
-      if (!form) return
+  //   await Alpine.store("cartStore")
+  //     .addLines({ items: [data] })
+  //     .catch(() => {})
 
-      const data = this.parser(form, this.productData)
+  //   setIsLoading(false)
+  // },
 
-      if (!data) return
+  updateURL() {
+    const { id } = this.currentVariant || {}
+    const url = new URL(window.location.href)
 
-      setIsLoading(true)
+    if (!id) {
+      url.searchParams.delete("variant")
+    } else {
+      url.searchParams.set("variant", id.toString())
+    }
 
-      await Alpine.store("cartStore")
-        .addLines({ items: [data] })
-        .catch(() => {})
-
-      setIsLoading(false)
-    },
-
-    updateURL() {
-      const { id } = this.currentVariant || {}
-      const url = new URL(window.location.href)
-
-      if (!id) {
-        url.searchParams.delete("variant")
-      } else {
-        url.searchParams.set("variant", id.toString())
-      }
-
-      barba.history.add(url.href, "popstate", "replace")
-    },
-  })
-)
+    barba.history.add(url.href, "popstate", "replace")
+  },
+}))
