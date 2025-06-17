@@ -30,3 +30,40 @@
     {%- endfor -%}
   </ul>
 {%- endunless -%}
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "Intent",
+      "options": [
+        { "label": "Related", "value": "related" },
+        { "label": "Complementary", "value": "complementary" },
+      ],
+      "default": "related",
+      "info": "What type of products"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Limit",
+      "default": 4,
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "info": "How many products"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product recommendations"
+    }
+  ]
+}
+{% endschema %}
