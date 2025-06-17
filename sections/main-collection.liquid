@@ -8,7 +8,7 @@
     <button x-data class="button" @click="$dispatch('drawer:filter:open')">Filter</button>
   </div>
 
-  {% paginate collection.products by 24 %}
+  {% paginate collection.products by 4 %}
     <ol class="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4">
       {% if collection.products.size == 0 %}
         <p class="col-span-4 text-sm">No results</p>
@@ -21,46 +21,6 @@
       {% endif %}
     </ol>
 
-    {%- if paginate.pages > 1 -%}
-      <nav role="navigation" class="mt-20 flex justify-center text-xs uppercase" x-data>
-        <ol class="flex gap-4">
-          {%- if paginate.previous -%}
-            <li>
-              <a @mousedown="window.forcePageRefresh = true" href="{{ paginate.previous.url }}">
-                Previous <span class="sr-only">page</span>
-              </a>
-            </li>
-          {%- else -%}
-            <li class="text-neutral-500">Previous <span class="sr-only">page</span></li>
-          {%- endif -%}
-
-          {%- for part in paginate.parts -%}
-            {%- if part.is_link -%}
-              <li>
-                <a @mousedown="window.forcePageRefresh = true" href="{{ part.url }}">
-                  <span class="sr-only">page</span> {{ part.title }}
-                </a>
-              </li>
-            {%- else -%}
-              {%- if part.title == paginate.current_page -%}
-                <li class="underline" aria-current="page"><span class="sr-only">page</span> {{ part.title }}</li>
-              {%- else -%}
-                <li><span class="sr-only">page</span> {{ part.title }}</li>
-              {%- endif -%}
-            {%- endif -%}
-          {%- endfor -%}
-
-          {%- if paginate.next -%}
-            <li>
-              <a @mousedown="window.forcePageRefresh = true" href="{{ paginate.next.url }}">
-                Next <span class="sr-only">page</span>
-              </a>
-            </li>
-          {%- else -%}
-            <li class="text-neutral-500">Next <span class="sr-only">page</span></li>
-          {%- endif -%}
-        </ol>
-      </nav>
-    {%- endif -%}
+    {% comment %} {% render 'pagination', paginate: paginate %} {% endcomment %}
   {% endpaginate %}
 </section>

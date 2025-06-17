@@ -2,17 +2,19 @@
   https://shopify.dev/docs/storefronts/themes/product-merchandising/recommendations/complementary-products
 {% endcomment %}
 
+{%- assign unique_id = 'product_recommendations-' | append: section.id | append: product.id -%}
+
 {%- unless recommendations.performed -%}
-  <div class="px-4 my-4">
+  <div class="my-4 px-4">
     <h2 class="mb-4">You may also like</h2>
 
-    <div id="product_recommendations-{{ section.id }}-{{ product.id }}">
+    <div id="{{ unique_id }}">
       {% comment %} results are appended here {% endcomment %}
     </div>
 
     <form
       x-init="setTimeout(() => $el.requestSubmit())"
-      x-target="product_recommendations-{{ section.id }}-{{ product.id }}"
+      x-target="{{ unique_id }}"
       action="{{ routes.product_recommendations_url }}"
     >
       <input type="hidden" name="section_id" value="{{ section.id }}">
@@ -22,7 +24,7 @@
     </form>
   </div>
 {%- else -%}
-  <ul id="product_recommendations-{{ section.id }}-{{ product.id }}" class="grid grid-cols-4 gap-4">
+  <ul id="{{ unique_id }}" class="grid grid-cols-4 gap-4">
     {%- for product in recommendations.products -%}
       <li>
         {% render 'product-card', product: product %}
@@ -44,7 +46,7 @@
       "label": "Intent",
       "options": [
         { "label": "Related", "value": "related" },
-        { "label": "Complementary", "value": "complementary" },
+        { "label": "Complementary", "value": "complementary" }
       ],
       "default": "related",
       "info": "What type of products"
