@@ -1,60 +1,44 @@
 import barba from "@barba/core"
 import { ProductData, VariantData } from "~/types"
-import { setIsLoading } from "./is-loading"
 import { defineComponent } from "~/utils/define"
-import Alpine from "alpinejs"
 import { allAvailableInOption } from "~/utils/all-available-in-option"
-
-const pdpParser = (form: HTMLFormElement, productData?: ProductData) => {
-  if (!productData) return
-
-  const formData = new FormData(form)
-  const formValues = Object.fromEntries(formData.entries())
-
-  const variant = productData.variants.find(variant => {
-    return variant.options.every((value, idx) => {
-      const { name } = productData.options[idx]
-      return formValues[name] === value
-    })
-  })
-
-  if (!variant?.id) return
-
-  return {
-    id: parseInt(variant.id.toString()),
-    quantity: parseInt(formData.get("quantity")?.toString() || "1"),
-  }
-}
-
-const defaultParser = (form: HTMLFormElement) => {
-  const formData = new FormData(form)
-  const [id] = formData.getAll("id")
-  const quantity = parseInt(formData.getAll("quantity").toString() || "1")
-
-  return {
-    id: parseInt(id.toString()),
-    quantity,
-  }
-}
 
 export default defineComponent((parserType: "simple" | undefined) => ({
   productData: undefined as ProductData | undefined,
   currentVariant: undefined as VariantData | undefined,
 
-  parser: parserType === "simple" ? defaultParser : pdpParser,
+  parser(form: HTMLFormElement) {
+    if (!this.productData) return
+
+    const formData = new FormData(form)
+    const formValues = Object.fromEntries(formData.entries())
+
+    const variant = this.productData.variants.find(variant => {
+      return variant.options.every((value, idx) => {
+        if (!this.productData) return
+        const { name } = this.productData.options[idx]
+        return formValues[name] === value
+      })
+    })
+
+    if (!variant?.id) return
+
+    return {
+      id: parseInt(variant.id.toString()),
+      quantity: parseInt(formData.get("quantity")?.toString() || "1"),
+    }
+  },
 
   async init() {
-    if (parserType !== "simple") {
-      try {
-        const res = await fetch(window.location.pathname + ".js")
-        this.productData = await res.json()
+    try {
+      const res = await fetch(window.location.pathname + ".js")
+      this.productData = await res.json()
 
-        this.disableNonAvailableOptions(this.$root as HTMLFormElement)
+      this.disableNonAvailableOptions(this.$root as HTMLFormElement)
 
-        console.log(this.productData)
-      } catch (error) {
-        console.log(error)
-      }
+      console.log(this.productData)
+    } catch (error) {
+      console.log(error)
     }
   },
 
@@ -63,7 +47,7 @@ export default defineComponent((parserType: "simple" | undefined) => ({
 
     if (!form || !this.productData) return
 
-    const data = this.parser(form, this.productData)
+    const data = this.parser(form)
 
     this.currentVariant = this.productData.variants.find(
       variant => variant.id === data?.id
