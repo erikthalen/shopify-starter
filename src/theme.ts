@@ -38,10 +38,8 @@ Alpine.start()
 document.body.removeAttribute("x-cloak")
 
 barba.init({
-  cacheFirstPage: true,
   debug: location.origin.includes("127.0.0.1"),
   prevent: () => window.Shopify.designMode,
-  prefetchIgnore: "/cart",
   cacheIgnore: "/cart",
   transitions: [
     {
@@ -72,13 +70,17 @@ barba.init({
         ).finished
       },
       async enter({ next }) {
-        await next.container.animate(
+        const animation = next.container.animate(
           [
             { opacity: 0, translate: "20px 0" },
             { opacity: 1, translate: "0 0" },
           ],
           { duration: 100, easing: "ease-out", fill: "forwards" }
-        ).finished
+        )
+
+        await animation.finished
+
+        animation.cancel()
 
         return
       },

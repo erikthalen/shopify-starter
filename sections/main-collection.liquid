@@ -1,4 +1,4 @@
-<section class="my-4 px-4" id="main_collection">
+<section class="my-4 px-4" id="main_collection" x-merge.transition>
   <div class="mb-4 flex justify-between">
     <h1>
       {{ collection.title }}
@@ -14,7 +14,7 @@
         <p class="col-span-4 text-sm">No results</p>
       {% else %}
         {% for product in collection.products %}
-          <li style="view-transition-name: main-collection-item-{{ product.id }}">
+          <li>
             {% content_for 'block', type: '_product-card', id: 'product_card', product: product %}
           </li>
         {% endfor %}
