@@ -2,7 +2,7 @@
   x-target="cart_form"
   @ajax:after="$dispatch('cart:updated')"
 
-  action="/cart/add"
+  action="{{ routes.cart_add_url }}"
   method="post"
   accept-charset="UTF-8"
   enctype="multipart/form-data"
@@ -22,3 +22,9 @@
     Add to cart
   </button>
 </form>
+
+{% schema %}
+{
+  "name": "Quick buy"
+}
+{% endschema %}

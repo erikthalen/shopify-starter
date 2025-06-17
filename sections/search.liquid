@@ -51,7 +51,7 @@
         <li>
           {%- case item.object_type -%}
             {%- when 'product' -%}
-              {%- render 'product-card', product: item -%}
+              {% content_for 'block', type: '_product-card', id: 'product_card', product: product %}
             {%- when 'article' -%}
               <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
             {%- when 'page' -%}

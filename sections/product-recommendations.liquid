@@ -27,7 +27,7 @@
   <ul id="{{ unique_id }}" class="grid grid-cols-4 gap-4">
     {%- for product in recommendations.products -%}
       <li>
-        {% render 'product-card', product: product %}
+        {% content_for 'block', type: '_product-card', id: 'product_card', product: product %}
       </li>
     {%- endfor -%}
   </ul>

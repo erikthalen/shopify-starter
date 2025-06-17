@@ -10,8 +10,16 @@
   </a>
 
   <div class="mt-2 flex flex-col justify-between gap-1">
-    {% render 'price', variant: product.selected_or_first_available_variant, class: 'text-sm' %}
+    <div class="text-sm">
+      {% content_for 'block', type: '_product-price', id: 'price', variant: product.selected_or_first_available_variant %}
+    </div>
 
-    {% render 'quick-buy', product: product %}
+    {% content_for 'block', type: '_quick-buy', id: 'quick_buy', product: product %}
   </div>
 </div>
+
+{% schema %}
+{
+  "name": "Product card"
+}
+{% endschema %}

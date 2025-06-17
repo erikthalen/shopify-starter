@@ -15,7 +15,7 @@
       {% else %}
         {% for product in collection.products %}
           <li style="view-transition-name: main-collection-item-{{ product.id }}">
-            {% render 'product-card', product: product %}
+            {% content_for 'block', type: '_product-card', id: 'product_card', product: product %}
           </li>
         {% endfor %}
       {% endif %}

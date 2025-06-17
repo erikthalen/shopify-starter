@@ -1,4 +1,4 @@
-<div class="flex gap-2 {{ class }}">
+<div class="flex gap-2">
   {% if variant.compare_at_price != blank and variant.compare_at_price != variant.price %}
     <p class="text-gray-400">
       <s>{{ variant.compare_at_price | money }}</s>
@@ -8,3 +8,9 @@
     <p>{{ variant.price | money }}</p>
   {% endif %}
 </div>
+
+{% schema %}
+{
+  "name": "Product price"
+}
+{% endschema %}
