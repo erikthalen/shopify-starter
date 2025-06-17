@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ shop.locale }}">
+<html lang="{{ shop.locale }}" class="no-js">
   <head>
     <title>
       {{ page_title }}
@@ -28,6 +28,10 @@
       render 'vite' with 'theme.css', preload_stylesheet: true
       render 'vite' with 'theme.ts'
     -%}
+
+    <script>
+      document.documentElement.classList.remove('no-js')
+    </script>
   </head>
 
   <body data-barba="wrapper" x-cloak class="grid min-h-screen grid-rows-[auto_1fr] overflow-x-clip">

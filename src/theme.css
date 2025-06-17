@@ -22,6 +22,16 @@ shopify-visual-preview-section-list {
   padding: 0 !important;
 }
 
+html.no-js {
+  &:after {
+    content: "JavaScript must be enabled.";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10vh;
+  }
+}
+
 [x-cloak] {
   display: none !important;
 }
@@ -36,7 +46,7 @@ html {
 }
 
 .button {
-  @apply relative cursor-pointer text-xs tracking-wider uppercase after:absolute after:-inset-x-2 after:-inset-y-1 after:mix-blend-darken after:rounded after:bg-gray-100 after:opacity-0 after:transition-opacity hover:after:opacity-100;
+  @apply relative cursor-pointer text-xs tracking-wider uppercase after:absolute after:-inset-x-2 after:-inset-y-1 after:rounded after:bg-gray-100 after:opacity-0 after:mix-blend-darken after:transition-opacity hover:after:opacity-100;
 }
 
 details > summary {
