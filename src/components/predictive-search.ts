@@ -6,7 +6,7 @@ export default defineComponent(() => ({
   isOpen: false,
   q: "",
 
-  clear: debounce(async () => {}, 500),
+  isClosed: debounce(async () => {}, { delay: 500, silent: true }),
 
   open() {
     setTimeout(() => {
@@ -20,13 +20,9 @@ export default defineComponent(() => ({
   async close() {
     this.isOpen = false
 
-    try {
-      await this.clear()
-
-      if (!this.isOpen) {
-        this.q = ""
-      }
-    } catch (error) {}
+    await this.isClosed().then(() => {
+      if (!this.isOpen) this.q = ""
+    })
   },
 
   toggle() {

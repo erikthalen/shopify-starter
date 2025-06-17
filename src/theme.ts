@@ -3,22 +3,23 @@ import "vite/modulepreload-polyfill"
 import barba from "@barba/core"
 import Alpine from "alpinejs"
 import ajax from "@imacrayon/alpine-ajax"
+import intersect from "@alpinejs/intersect"
 
 import type { ITransitionData } from "@barba/core/dist/src/defs"
-
 import { fixatePageOnNavigation } from "~/utils/utils"
 
 import drawer from "./components/drawer"
+import infiniteScroll from "./components/infinite-scroll"
 import filter from "./components/filter"
-import "./components/is-loading"
 import predictiveSearch from "./components/predictive-search"
 import productForm from "./components/product-form"
+import "./components/is-loading"
 
+Alpine.plugin(intersect)
 Alpine.plugin(ajax)
 
 // makes alpine.d.ts able to create types of each store
 export const stores = {
-  // cartStore,
   /* ... add your stores here ... */
 }
 
@@ -27,13 +28,17 @@ for (const [key, store] of Object.entries(stores)) {
 }
 
 Alpine.data("drawer", drawer)
+Alpine.data("infiniteScroll", infiniteScroll)
 Alpine.data("filter", filter)
 Alpine.data("predictiveSearch", predictiveSearch)
 Alpine.data("productForm", productForm)
 
 Alpine.start()
 
+document.body.removeAttribute("x-cloak")
+
 barba.init({
+  cacheFirstPage: true,
   debug: location.origin.includes("127.0.0.1"),
   prevent: () => window.Shopify.designMode,
   prefetchIgnore: "/cart",
@@ -85,8 +90,6 @@ barba.init({
         custom: ({ trigger }) => !(trigger as HTMLElement)?.dataset?.transition,
       },
       async once({ next }) {
-        document.body.removeAttribute("x-cloak")
-
         const animation = next.container.animate(
           [
             { opacity: 0, translate: "0 20px" },

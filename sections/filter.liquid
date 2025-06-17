@@ -204,7 +204,7 @@
       },
     ]" %}
 
-          {% render 'select', name: 'sort_by', values: sorting_values %}
+          {% comment %} {% render 'select', name: 'sort_by', values: sorting_values %} {% endcomment %}
         </div>
         <a
           href="{{ collection.url }}?sort_by={{ collection.sort_by }}"

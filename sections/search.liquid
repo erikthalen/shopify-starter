@@ -46,7 +46,7 @@
       <h2>Search isn't performed</h2>
     {% endif %}
 
-    <ol class="grid gap-4 md:grid-cols-4">
+    <ol id="paginated_items" class="grid gap-4 md:grid-cols-4">
       {%- for item in search.results -%}
         <li>
           {%- case item.object_type -%}
@@ -61,12 +61,28 @@
       {%- endfor -%}
     </ol>
 
-    {% render 'pagination', paginate: paginate %}
+    {%- if section.settings.pagination_type == 'pagination' -%}
+      {% render 'pagination', paginate: paginate %}
+    {%- else -%}
+      {% render 'infinite-scroll', paginate: paginate %}
+    {%- endif -%}
   {% endpaginate %}
 </section>
 
 {% schema %}
 {
-  "name": "Main search"
+  "name": "Main search",
+  "settings": [
+    {
+      "type": "select",
+      "id": "pagination_type",
+      "label": "Pagination type",
+      "options": [
+        { "label": "Infinite scroll", "value": "infinite_scroll" },
+        { "label": "Pagination", "value": "pagination" }
+      ],
+      "default": "infinite_scroll"
+    }
+  ]
 }
 {% endschema %}

@@ -13,7 +13,7 @@
       selectKeydownClearTimeout: null,
       selectDropdownPosition: 'bottom',
       selectableItemIsActive(item) {
-          return this.selectableItemActive && this.selectableItemActive.value==item.value;
+          return this.selectableItemActive && this.selectableItemActive.value==item?.value;
       },
       selectableItemActiveNext(){
           let index = this.selectableItems.indexOf(this.selectableItemActive);
@@ -141,17 +141,17 @@
     class='ring-opacity-5 absolute mt-1 max-h-56 w-full overflow-auto bg-white py-1 text-sm ring-1 ring-black focus:outline-none'
     x-cloak
   >
-    <template x-for='item in selectableItems' :key='item.value'>
+    <template x-for='item in selectableItems' :key='item?.value'>
       <li
         @click="selectedItem=item; selectOpen=false; $refs.selectButton.focus(); setTimeout(() => $refs.inputField.dispatchEvent(new Event('change', { bubbles: true })));"
-        :id="item.value + '-' + selectId"
-        :data-disabled='item.disabled === true'
+        :id="item?.value + '-' + selectId"
+        :data-disabled='item?.disabled === true'
         :class="{ 'bg-neutral-100 text-gray-900' : selectableItemIsActive(item), '' : !selectableItemIsActive(item) }"
         @mousemove='selectableItemActive=item'
         class='relative flex h-full cursor-default items-center py-2 pl-8 text-gray-700 select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
       >
         <svg
-          x-show='selectedItem.value==item.value'
+          x-show='selectedItem.value==item?.value'
           class='absolute left-0 ml-2 h-4 w-4 stroke-current text-neutral-500'
           xmlns='http://www.w3.org/2000/svg'
           viewBox='0 0 24 24'
@@ -163,7 +163,7 @@
         >
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
-        <span class='block truncate font-medium' x-text='item.title'></span>
+        <span class='block truncate font-medium' x-text='item?.title'></span>
       </li>
     </template>
   </ul>

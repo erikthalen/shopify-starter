@@ -1,5 +1,5 @@
 import barba from "@barba/core"
-import { ProductData, VariantData } from "~/types"
+import type { ProductData, VariantData } from "~/types"
 import { defineComponent } from "~/utils/define"
 import { allAvailableInOption } from "~/utils/all-available-in-option"
 

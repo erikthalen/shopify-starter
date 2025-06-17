@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@alpinejs/intersect':
+        specifier: ^3.14.9
+        version: 3.14.9
       '@barba/core':
         specifier: ^2.10.3
         version: 2.10.3
@@ -30,6 +33,9 @@ importers:
       '@types/alpinejs':
         specifier: ^3.13.11
         version: 3.13.11
+      '@types/alpinejs__intersect':
+        specifier: ^3.13.4
+        version: 3.13.4
       '@virtualstate/navigation':
         specifier: ^1.0.1-alpha.202
         version: 1.0.1-alpha.206
@@ -66,6 +72,9 @@ packages:
   '@alcalzone/ansi-tokenize@0.1.3':
     resolution: {integrity: sha512-3yWxPTq3UQ/FY9p1ErPxIyfT64elWaMvM9lIHnaqpyft63tkxodF5aUElYHrdisWve5cETkh1+KBw1yJuW0aRw==}
     engines: {node: '>=14.13.1'}
+
+  '@alpinejs/intersect@3.14.9':
+    resolution: {integrity: sha512-6LLIqrESA5kxuTbDJshtItfHmZoiiDOpf8lOeRrNtYjSj/FkggDpnjD+ZFGF5btEOVSpWic2VmG2BejR/aMxDw==}
 
   '@apidevtools/json-schema-ref-parser@11.6.4':
     resolution: {integrity: sha512-9K6xOqeevacvweLGik6LnZCb1fBtCOSIWQs8d096XGeqoLKC33UVMGz9+77Gw44KvbH4pKcQPWo4ZpxkXYj05w==}
@@ -712,6 +721,9 @@ packages:
 
   '@types/alpinejs@3.13.11':
     resolution: {integrity: sha512-3KhGkDixCPiLdL3Z/ok1GxHwLxEWqQOKJccgaQL01wc0EVM2tCTaqlC3NIedmxAXkVzt/V6VTM8qPgnOHKJ1MA==}
+
+  '@types/alpinejs__intersect@3.13.4':
+    resolution: {integrity: sha512-yoX6WO7AleeULOQvPz7rrx7FJmu6l033bM7QiGcWyvZjqF2KIut99ByUZO6OWUQuYmbRjxsKthGiUYNaAywHiA==}
 
   '@types/archiver@5.3.2':
     resolution: {integrity: sha512-IctHreBuWE5dvBDz/0WeKtyVKVRs4h75IblxOACL92wU66v+HGAfEYAOyXkOFphvRJMhuXdI9huDXpX0FC6lCw==}
@@ -2513,6 +2525,8 @@ snapshots:
       ansi-styles: 6.2.1
       is-fullwidth-code-point: 4.0.0
 
+  '@alpinejs/intersect@3.14.9': {}
+
   '@apidevtools/json-schema-ref-parser@11.6.4':
     dependencies:
       '@jsdevtools/ono': 7.1.3
@@ -3112,6 +3126,10 @@ snapshots:
       vite: 6.2.0(@types/node@22.10.2)(jiti@2.4.2)(lightningcss@1.29.1)
 
   '@types/alpinejs@3.13.11': {}
+
+  '@types/alpinejs__intersect@3.13.4':
+    dependencies:
+      '@types/alpinejs': 3.13.11
 
   '@types/archiver@5.3.2':
     dependencies:

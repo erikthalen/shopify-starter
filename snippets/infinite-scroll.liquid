@@ -1,0 +1,11 @@
+{%- if paginate.next -%}
+  <div x-data="infiniteScroll">
+    <div
+      id="pagination"
+      x-intersect="$ajax('{{ paginate.next.url }}', { target: 'paginated_items pagination' })"
+      @ajax:success="appendPageToCache($event)"
+    >
+      <a href="{{ paginate.next.url }}"> Next page </a>
+    </div>
+  </div>
+{%- endif -%}
