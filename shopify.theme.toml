@@ -1,6 +1,6 @@
 [environments.development]
 store = "ss-dev-1"
-theme = "129419968596"
+theme = "135066452052"
 allow-live = true
 ignore = [
   "templates/*.json",
