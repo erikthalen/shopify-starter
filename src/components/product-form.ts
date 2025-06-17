@@ -3,7 +3,7 @@ import { ProductData, VariantData } from "~/types"
 import { defineComponent } from "~/utils/define"
 import { allAvailableInOption } from "~/utils/all-available-in-option"
 
-export default defineComponent((parserType: "simple" | undefined) => ({
+export default defineComponent(() => ({
   productData: undefined as ProductData | undefined,
   currentVariant: undefined as VariantData | undefined,
 
@@ -67,7 +67,7 @@ export default defineComponent((parserType: "simple" | undefined) => ({
     const availableOptions = allAvailableInOption(
       this.productData,
       "Color",
-      formValues["Color"].toString()
+      formValues["Color"]?.toString()
     )
 
     this.$root.querySelectorAll(`input[type="radio"]`).forEach(input => {

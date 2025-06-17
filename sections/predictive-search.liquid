@@ -1,68 +1,110 @@
-<section
-  x-data="predictiveSearch"
-  class="absolute top-0 z-1 w-full transition-transform duration-500 ease-in-out after:absolute after:top-full after:h-screen after:w-full after:bg-black/50 after:transition-opacity after:duration-700 after:ease-in-out"
-  :class="isOpen ? 'translate-y-0 after:opacity-100' : '-translate-y-full after:opacity-0 after:pointer-events-none'"
-  @window:navigation.window="close"
-  @predictive-search:toggle.window="toggle"
->
-  <div class="relative z-1 flex max-h-screen w-full justify-center bg-white px-4 pt-30 pb-40" @click.outside="close">
-    <div class="w-full max-w-3xl">
-      <form
-        @submit.prevent="handleFormSubmit"
-        action="{{ routes.search_url }}"
-        class="flex items-center gap-2 border-b border-gray-400"
-      >
-        <div class="w-4 opacity-50">
-          {% render 'icon-magnifier' %}
-        </div>
-
-        <input
-          class="w-full py-2 text-sm uppercase focus:outline-0"
-          type="text"
-          placeholder="Search products and pages"
-          name="q"
-          x-model="q"
-          x-ref="input"
-          @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
+{%- unless predictive_search.performed -%}
+  <section
+    x-data="predictiveSearch"
+    class="absolute top-0 z-1 w-full transition-transform duration-500 ease-in-out after:absolute after:top-full after:h-screen after:w-full after:bg-black/50 after:transition-opacity after:duration-700 after:ease-in-out"
+    :class="isOpen ? 'translate-y-0 after:opacity-100' : '-translate-y-full after:opacity-0 after:pointer-events-none'"
+    @window:navigation.window="close"
+    @predictive-search:toggle.window="toggle"
+  >
+    <div class="relative z-1 flex max-h-screen w-full justify-center bg-white px-4 pt-30 pb-40" @click.outside="close">
+      <div class="w-full max-w-3xl">
+        <form
+          @submit.prevent="handleFormSubmit"
+          action="{{ routes.search_url }}"
+          class="flex items-center gap-2 border-b border-gray-400"
         >
+          <div class="w-4 opacity-50">
+            {% render 'icon-magnifier' %}
+          </div>
 
-        <button type="button" aria-label="Close search" class="button w-4" @click="close">
-          {% render 'icon-cross' %}
-        </button>
+          <input
+            class="w-full py-2 text-sm uppercase focus:outline-0"
+            type="text"
+            placeholder="Search products and pages"
+            name="q"
+            x-model="q"
+            x-ref="input"
+            @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
+          >
 
-        <input type="hidden" name="type" value="product,page">
-        <input type="hidden" name="options[unavailable_products]" value="hide">
-        <input type="hidden" name="options[prefix]" value="last">
-      </form>
+          <button type="button" aria-label="Close search" class="button w-4" @click="close">
+            {% render 'icon-cross' %}
+          </button>
 
-      <form
-        class="sr-only"
-        x-ref="predictiveSearchForm"
-        action="{{ routes.predictive_search_url }}"
-        x-target="predictive-search-results"
-        @ajax:before="
-          if(!q) {
-            $event.preventDefault()
-            $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
-          }
-        "
-        @ajax:after="
-          if(!q) {
-            $event.preventDefault()
-            $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
-          }
-        "
-      >
-        <input type="search" name="q" x-model="q">
-        <input type="hidden" name="section_id" value="predictive-search-results">
-        <input type="hidden" name="type" value="product,page">
-        <input type="hidden" name="options[unavailable_products]" value="hide">
-        <input type="hidden" name="options[prefix]" value="last">
-      </form>
+          <input type="hidden" name="type" value="product,page">
+          <input type="hidden" name="options[unavailable_products]" value="hide">
+          <input type="hidden" name="options[prefix]" value="last">
+        </form>
 
-      <div x-show="q !== ''" x-ref="predictiveSearchResults">
-        <output id="predictive-search-results" class="w-full overflow-auto bg-white py-4"> </output>
+        <form
+          class="sr-only"
+          x-ref="predictiveSearchForm"
+          action="{{ routes.predictive_search_url }}"
+          x-target="predictive-search-results"
+          @ajax:before="
+            if(!q) {
+              $event.preventDefault()
+              $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
+            }
+          "
+          @ajax:after="
+            if(!q) {
+              $event.preventDefault()
+              $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
+            }
+          "
+        >
+          <input type="search" name="q" x-model="q">
+          <input type="hidden" name="section_id" value="predictive-search">
+          <input type="hidden" name="type" value="product,page">
+          <input type="hidden" name="options[unavailable_products]" value="hide">
+          <input type="hidden" name="options[prefix]" value="last">
+        </form>
+
+        <div x-show="q !== ''" x-ref="predictiveSearchResults">
+          <output id="predictive-search-results" class="w-full overflow-auto bg-white py-4"> </output>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+{%- else -%}
+  <section id="predictive-search-results">
+    {%- if predictive_search.resources.products.size > 0 -%}
+      <ul class="grid gap-x-4 lg:grid-cols-2">
+        {%- for product in predictive_search.resources.products -%}
+          <li>
+            <a href="{{ product.url }}" class="flex gap-4 border-b border-gray-300 py-4">
+              {%- if product.selected_or_first_available_variant.featured_image != blank -%}
+                {%- assign image = product.selected_or_first_available_variant.featured_image -%}
+              {%- else -%}
+                {%- assign image = product.featured_image -%}
+              {%- endif -%}
+
+              {% render 'image',
+                image: image,
+                class: 'w-20 rounded overflow-clip',
+                loading: 'eager',
+                sizes: '100px, 100px'
+              %}
+
+              <div class="flex flex-col">
+                <span class="text-sm">{{ product.title }}</span>
+
+                <dl class="mt-1 flex gap-2 text-xs uppercase">
+                  {%- for option in product.options_with_values -%}
+                    <dt>{{ option.name }}:</dt>
+                    <dd>{{ option.selected_value }}</dd>
+                  {%- endfor -%}
+                </dl>
+
+                <span class="mt-auto pt-2">{{ product.price | money }}</span>
+              </div>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {% else %}
+      <h1 class="mt-4">No results</h1>
+    {%- endif -%}
+  </section>
+{%- endunless -%}

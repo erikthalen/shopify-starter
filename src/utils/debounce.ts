@@ -11,9 +11,9 @@
  * const data2 = await getData('/url')
  */
 export default function debounce<A = unknown, R = void>(
-  fn: (arg: A, obj: { signal: AbortSignal }) => Promise<R>,
+  fn: (arg?: A, obj?: { signal: AbortSignal }) => Promise<R>,
   delay: number = 200
-): (arg: A) => Promise<R> {
+): (arg?: A) => Promise<R> {
   let abortController: AbortController | null = null
 
   return arg =>

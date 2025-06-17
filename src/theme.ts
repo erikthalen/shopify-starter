@@ -13,14 +13,12 @@ import filter from "./components/filter"
 import "./components/is-loading"
 import predictiveSearch from "./components/predictive-search"
 import productForm from "./components/product-form"
-import productRecommendations from "./components/product-recommendations"
 
 Alpine.plugin(ajax)
 
 // makes alpine.d.ts able to create types of each store
 export const stores = {
   // cartStore,
-
   /* ... add your stores here ... */
 }
 
@@ -32,7 +30,6 @@ Alpine.data("drawer", drawer)
 Alpine.data("filter", filter)
 Alpine.data("predictiveSearch", predictiveSearch)
 Alpine.data("productForm", productForm)
-Alpine.data("productRecommendations", productRecommendations)
 
 Alpine.start()
 

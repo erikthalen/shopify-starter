@@ -1,9 +1,12 @@
 import barba from "@barba/core"
+import debounce from "./../utils/debounce"
 import { defineComponent } from "~/utils/define"
 
 export default defineComponent(() => ({
   isOpen: false,
   q: "",
+
+  clear: debounce(async () => {}, 500),
 
   open() {
     setTimeout(() => {
@@ -14,9 +17,16 @@ export default defineComponent(() => ({
     })
   },
 
-  close() {
+  async close() {
     this.isOpen = false
-    this.q = ""
+
+    try {
+      await this.clear()
+
+      if (!this.isOpen) {
+        this.q = ""
+      }
+    } catch (error) {}
   },
 
   toggle() {
