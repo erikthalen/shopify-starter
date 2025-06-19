@@ -24,6 +24,12 @@ export default defineComponent(() => ({
     ["@window:navigation.window"]() {
       this.closeDrawer()
     },
+    ["@keydown.escape"]() {
+      this.closeDrawer()
+    },
+    ["x-trap.inert.noscroll"]() {
+      return this.drawerOpen
+    },
   },
 
   drawerContent: {

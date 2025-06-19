@@ -4,6 +4,7 @@ import barba from "@barba/core"
 import Alpine from "alpinejs"
 import ajax from "@imacrayon/alpine-ajax"
 import intersect from "@alpinejs/intersect"
+import focus from '@alpinejs/focus'
 
 import type { ITransitionData } from "@barba/core/dist/src/defs"
 import { fixatePageOnNavigation } from "~/utils/utils"
@@ -17,6 +18,7 @@ import "./components/is-loading"
 
 Alpine.plugin(intersect)
 Alpine.plugin(ajax)
+Alpine.plugin(focus)
 
 // makes alpine.d.ts able to create types of each store
 export const stores = {

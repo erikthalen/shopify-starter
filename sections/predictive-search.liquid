@@ -1,16 +1,18 @@
 {%- unless predictive_search.performed -%}
   <section
-    x-data="predictiveSearch"
+    x-data="drawer"
+    x-bind="drawer"
+    {% comment %} x-data="predictiveSearch" {% endcomment %}
     class="absolute top-0 z-1 w-full transition-transform duration-500 ease-in-out after:absolute after:top-full after:h-screen after:w-full after:bg-black/50 after:transition-opacity after:duration-700 after:ease-in-out"
-    :class="isOpen ? 'translate-y-0 after:opacity-100' : '-translate-y-full after:opacity-0 after:pointer-events-none'"
-    @window:navigation.window="close"
-    @predictive-search:toggle.window="toggle"
+    :class="drawerOpen ? 'translate-y-0 after:opacity-100' : '-translate-y-full after:opacity-0 after:pointer-events-none'"
+    @window:navigation.window="closeDrawer"
+    @predictive-search:toggle.window="toggleDrawer"
   >
     <div
       class="relative z-1 w-full justify-center  bg-white px-4"
-      @click.outside="close"
+      x-bind="drawerContent"
     >
-      <div class="w-full max-w-3xl grid mx-auto grid-rows-[auto_1fr] max-h-dvh">
+      <div x-data="predictiveSearch" class="w-full max-w-3xl grid mx-auto grid-rows-[auto_1fr] max-h-dvh">
         <form
           @submit.prevent="handleFormSubmit"
           action="{{ routes.search_url }}"

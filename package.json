@@ -16,6 +16,7 @@
     "@shopify/prettier-plugin-liquid": "^1.5.2",
     "@tailwindcss/vite": "4.0.0",
     "@types/alpinejs": "^3.13.11",
+    "@types/alpinejs__focus": "^3.13.4",
     "@types/alpinejs__intersect": "^3.13.4",
     "@virtualstate/navigation": "^1.0.1-alpha.202",
     "globals": "^15.12.0",
@@ -29,6 +30,7 @@
     "vite-plugin-top-level-await": "^1.4.1"
   },
   "dependencies": {
+    "@alpinejs/focus": "^3.14.9",
     "@alpinejs/intersect": "^3.14.9",
     "@barba/core": "^2.10.3",
     "@imacrayon/alpine-ajax": "^0.12.2",

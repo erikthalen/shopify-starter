@@ -2,40 +2,27 @@ import barba from "@barba/core"
 import debounce from "./../utils/debounce"
 import { defineComponent } from "~/utils/define"
 
+const isSettled = debounce(async () => {}, { delay: 500, silent: true })
+
 export default defineComponent(() => ({
-  isOpen: false,
   q: "",
-
-  isClosed: debounce(async () => {}, { delay: 500, silent: true }),
-
-  open() {
-    setTimeout(() => {
-      this.isOpen = true
-      this.$refs.input?.focus({
-        preventScroll: true,
-      })
-    })
-  },
-
-  async close() {
-    this.isOpen = false
-
-    await this.isClosed().then(() => {
-      if (!this.isOpen) this.q = ""
-    })
-  },
-
-  toggle() {
-    if (this.isOpen) {
-      this.close()
-    } else {
-      this.open()
-    }
-  },
 
   async handleFormSubmit() {
     const url = new URL("/search", window.location.origin)
     url.searchParams.set("q", this.q)
     barba.go(url.toString())
+  },
+
+  init() {
+    // watches its parent drawer component
+    this.$watch("drawerOpen", async drawerOpen => {
+      if (drawerOpen) {
+        this.$refs.input?.focus({ preventScroll: true })
+      } else {
+        await isSettled().then(() => {
+          if (!(this as any).drawerOpen) this.q = ""
+        })
+      }
+    })
   },
 }))
