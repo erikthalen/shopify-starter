@@ -11,13 +11,12 @@
   <form
     x-data="filter"
     x-target="main_collection"
-    class=""
     @change="$el.requestSubmit()"
     @ajax:send="updateURL()"
   >
     <div
       class="grid gap-4 border-b border-gray-300 bg-white px-4 py-14 md:grid-cols-4"
-      @click.outside="closeDrawer"
+      x-bind="drawerContent"
     >
       {%- for filter in collection.filters -%}
         <div>
@@ -213,7 +212,7 @@
           Clear all
         </a>
 
-        <button type="button" @click="isOpen = false" class="button border-b">Apply</button>
+        <button x-bind="drawerCloseButton" type="button" class="button border-b">Apply</button>
       </div>
     </div>
   </form>

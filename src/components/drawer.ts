@@ -18,4 +18,23 @@ export default defineComponent(() => ({
       this.openDrawer()
     }
   },
+
+  // bindable elements
+  drawer: {
+    ["@window:navigation.window"]() {
+      this.closeDrawer()
+    },
+  },
+
+  drawerContent: {
+    ["@click.outside"]() {
+      this.closeDrawer()
+    },
+  },
+
+  drawerCloseButton: {
+    ["@click"]() {
+      this.closeDrawer()
+    },
+  },
 }))

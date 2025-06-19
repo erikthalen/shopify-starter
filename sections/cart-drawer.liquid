@@ -1,23 +1,27 @@
 <section
   x-data="drawer"
-  class="absolute top-0 right-0 z-3 h-screen w-md max-w-screen bg-white text-sm transition-transform duration-500 ease-in-out after:absolute after:top-0 after:right-full after:h-full after:w-screen after:bg-black/50 after:transition-opacity after:duration-700 after:ease-in-out"
+  x-bind="drawer"
+  class="fixed top-0 right-0 z-11 w-md max-w-screen bg-white text-sm transition-transform duration-500 ease-in-out after:absolute after:top-0 after:right-full after:h-full after:w-screen after:bg-black/50 after:transition-opacity after:duration-700 after:ease-in-out"
   :class='[drawerOpen ? "translate-x-0 after:opacity-100" : "translate-x-full after:opacity-0 after:pointer-events-none"]'
-  @window:navigation.window="closeDrawer"
-  @cart:updated.window="window.location.pathname !== '/cart' && openDrawer"
+  @cart:updated.window="window.location.pathname !== '{{ routes.cart_url }}' && openDrawer"
   @drawer:cart:open.window="openDrawer"
 >
-  <div @click.outside="closeDrawer" class="grid h-full grid-rows-[auto_1fr] pb-4">
+  <div x-bind="drawerContent" class="grid h-dvh grid-rows-[auto_1fr] pb-4">
     <div class="mx-4 flex h-10 items-center justify-between border-b border-gray-300">
       <p class="text-xs uppercase">Your cart ({% render 'cart-amount' %})</p>
 
-      <button aria-label="Close cart drawer" @click="closeDrawer" class="button size-5">
+      <button x-bind="drawerCloseButton" aria-label="Close cart drawer" class="button size-5">
         {% render 'icon-cross' %}
       </button>
     </div>
 
-    {% content_for 'block', type: '_cart-form', id: 'cartDrawerForm' %}
+    {% content_for 'block', type: '_cart-form', id: 'cart_drawer_form' %}
 
-    <a href="{{ routes.cart_url }}" class="button mb-2 mt-4 inline-block justify-self-center text-center">Go to cart</a>
+    {% unless cart.empty? %}
+      <a href="{{ routes.cart_url }}" class="button mb-2 mt-4 inline-block justify-self-center text-center">
+        Go to cart
+      </a>
+    {% endunless %}
   </div>
 </section>
 

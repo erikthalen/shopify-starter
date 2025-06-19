@@ -6,12 +6,15 @@
     @window:navigation.window="close"
     @predictive-search:toggle.window="toggle"
   >
-    <div class="relative z-1 flex max-h-screen w-full justify-center bg-white px-4 pt-30 pb-40" @click.outside="close">
-      <div class="w-full max-w-3xl">
+    <div
+      class="relative z-1 w-full justify-center  bg-white px-4"
+      @click.outside="close"
+    >
+      <div class="w-full max-w-3xl grid mx-auto grid-rows-[auto_1fr] max-h-dvh">
         <form
           @submit.prevent="handleFormSubmit"
           action="{{ routes.search_url }}"
-          class="flex items-center gap-2 border-b border-gray-400"
+          class="flex items-center gap-2 border-b border-gray-400 pt-15 mb-6 md:pt-30 md:mb-40"
         >
           <div class="w-4 opacity-50">
             {% render 'icon-magnifier' %}
@@ -61,8 +64,8 @@
           <input type="hidden" name="options[prefix]" value="last">
         </form>
 
-        <div x-show="q !== ''" x-ref="predictiveSearchResults">
-          <output id="predictive-search-results" class="w-full overflow-auto bg-white py-4"> </output>
+        <div x-show="q !== ''" x-ref="predictiveSearchResults" class="overflow-auto">
+          <output id="predictive-search-results" x-merge="update" class="bg-white pb-4"> </output>
         </div>
       </div>
     </div>
