@@ -51,7 +51,7 @@ You’ll need two themes in your store:
 2. Push the theme to your Shopify store:
 
    ```bash
-   shopify theme push -u your-store.myshopify.com
+   shopify theme push -u --store your-store.myshopify.com
    ```
 
    - When prompted, enter a name for the theme (e.g., `my-new-theme`).
@@ -60,7 +60,7 @@ You’ll need two themes in your store:
 3. Repeat the same process but with a different theme name (e.g., `my-new-theme/develop`) for your development theme:
 
    ```bash
-   shopify theme push -u your-store.myshopify.com
+   shopify theme push -u  --store your-store.myshopify.com
    ```
 
 ---
