@@ -1,7 +1,7 @@
 import barba from "@barba/core"
 import type { ProductData, VariantData } from "~/types"
 import { defineComponent } from "~/utils/define"
-import { allAvailableInOption } from "~/utils/all-available-in-option"
+import { getAvailableVariants } from "~/utils/get-available-variants"
 
 export default defineComponent(() => ({
   productData: undefined as ProductData | undefined,
@@ -35,8 +35,6 @@ export default defineComponent(() => ({
       this.productData = await res.json()
 
       this.disableNonAvailableOptions(this.$root as HTMLFormElement)
-
-      console.log(this.productData)
     } catch (error) {
       console.log(error)
     }
@@ -64,17 +62,41 @@ export default defineComponent(() => ({
 
     if (!this.productData) return
 
-    const availableOptions = allAvailableInOption(
-      this.productData,
-      "Color",
-      formValues["Color"]?.toString()
-    )
+    const mainOptionName = this.productData.options[0].name
+
+    const availableVariantsOfOptions = getAvailableVariants(this.productData, {
+      name: mainOptionName,
+      value: formValues[mainOptionName]?.toString(),
+    })
 
     this.$root.querySelectorAll(`input[type="radio"]`).forEach(input => {
-      if (input.getAttribute("name") === "Color") return
+      const currentOption = availableVariantsOfOptions.current.find(
+        option => option.name === input.getAttribute("name")
+      )
 
-      if (input.parentElement) {
-        input.parentElement.classList.add(
+      if (!currentOption) return
+
+      const o = currentOption.values.find(
+        o => o.value === input.getAttribute("value")
+      )
+
+      if (!!o?.variants.length) {
+        // "disable" button
+        input.parentElement?.classList.remove(
+          "text-gray-400",
+          "after:h-px",
+          "after:w-[150%]",
+          "after:-rotate-[18deg]",
+          "after:absolute",
+          "after:top-1/2",
+          "after:left-1/2",
+          "after:-translate-x-1/2",
+          "after:-translate-y-1/2",
+          "after:bg-zinc-300"
+        )
+      } else {
+        // "enable" button
+        input.parentElement?.classList.add(
           "text-gray-400",
           "after:h-px",
           "after:w-[150%]",
@@ -88,44 +110,6 @@ export default defineComponent(() => ({
         )
       }
     })
-
-    for (const option in availableOptions) {
-      const inputs = this.$root.querySelectorAll(`input[name="${option}"]`)
-
-      inputs.forEach(input => {
-        const element = input as HTMLInputElement
-
-        if (!element.parentElement) return
-
-        if (!availableOptions[option].includes(element.value)) {
-          element.parentElement.classList.add(
-            "text-gray-400",
-            "after:h-px",
-            "after:w-[150%]",
-            "after:-rotate-[18deg]",
-            "after:absolute",
-            "after:top-1/2",
-            "after:left-1/2",
-            "after:-translate-x-1/2",
-            "after:-translate-y-1/2",
-            "after:bg-zinc-300"
-          )
-        } else {
-          element.parentElement.classList.remove(
-            "text-gray-400",
-            "after:h-px",
-            "after:w-[150%]",
-            "after:-rotate-[18deg]",
-            "after:absolute",
-            "after:top-1/2",
-            "after:left-1/2",
-            "after:-translate-x-1/2",
-            "after:-translate-y-1/2",
-            "after:bg-zinc-300"
-          )
-        }
-      })
-    }
   },
 
   updateURL() {
