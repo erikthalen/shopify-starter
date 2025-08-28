@@ -1,6 +1,5 @@
 import { defineConfig } from "vite"
 import shopify from "vite-plugin-shopify"
-import pageReload from "vite-plugin-page-reload"
 import topLevelAwait from "vite-plugin-top-level-await"
 import tailwindcss from "@tailwindcss/vite"
 
@@ -24,7 +23,6 @@ export default defineConfig({
       entrypointsDir: "src",
       sourceCodeDir: "src",
     }),
-    // pageReload("/tmp/theme.update"),
     tailwindcss(),
   ],
   assetsInclude: "**/*.md",

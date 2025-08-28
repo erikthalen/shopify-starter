@@ -63,9 +63,6 @@ importers:
       vite:
         specifier: ^6.2.0
         version: 6.2.0(@types/node@22.10.2)(jiti@2.4.2)(lightningcss@1.29.1)
-      vite-plugin-page-reload:
-        specifier: ^0.2.1
-        version: 0.2.1(vite@6.2.0(@types/node@22.10.2)(jiti@2.4.2)(lightningcss@1.29.1))
       vite-plugin-shopify:
         specifier: 4.0.0
         version: 4.0.0(vite@6.2.0(@types/node@22.10.2)(jiti@2.4.2)(lightningcss@1.29.1))
@@ -2398,11 +2395,6 @@ packages:
   uuid@10.0.0:
     resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
     hasBin: true
-
-  vite-plugin-page-reload@0.2.1:
-    resolution: {integrity: sha512-H7jgvxf8ad61yfaEIsFCr0vymGIyVztxtlRSeKO0T1ePWgyynoTHZ2NNS733BLMcRcYBi1sxQua+wVxO9N2k5Q==}
-    peerDependencies:
-      vite: ^5.0.0 || ^6.0.0
 
   vite-plugin-shopify@4.0.0:
     resolution: {integrity: sha512-ZLu6QZ1HUqnQBqLxQoOZjqWZExyBU5ZavI4jKQ6TsG129eISW6KAirUbRhmA3zwhxkEj3mXjCHznoBvPSj7nXA==}
@@ -4810,12 +4802,6 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   uuid@10.0.0: {}
-
-  vite-plugin-page-reload@0.2.1(vite@6.2.0(@types/node@22.10.2)(jiti@2.4.2)(lightningcss@1.29.1)):
-    dependencies:
-      picocolors: 1.1.1
-      picomatch: 2.3.1
-      vite: 6.2.0(@types/node@22.10.2)(jiti@2.4.2)(lightningcss@1.29.1)
 
   vite-plugin-shopify@4.0.0(vite@6.2.0(@types/node@22.10.2)(jiti@2.4.2)(lightningcss@1.29.1)):
     dependencies:
