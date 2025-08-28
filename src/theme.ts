@@ -4,7 +4,7 @@ import barba from "@barba/core"
 import Alpine from "alpinejs"
 import ajax from "@imacrayon/alpine-ajax"
 import intersect from "@alpinejs/intersect"
-import focus from '@alpinejs/focus'
+import focus from "@alpinejs/focus"
 
 import type { ITransitionData } from "@barba/core/dist/src/defs"
 import { fixatePageOnNavigation } from "~/utils/utils"
@@ -152,6 +152,12 @@ barba.hooks.beforeEnter(data => {
 })
 
 barba.hooks.before(() => {
+  const cart_drawer = document.getElementById(
+    "cart_drawer"
+  ) as HTMLDialogElement
+
+  cart_drawer?.close()
+
   window.dispatchEvent(new CustomEvent("window:navigation"))
 })
 

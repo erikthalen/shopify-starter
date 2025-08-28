@@ -11,7 +11,11 @@
       <h1 class="mb-1">{{ product.title }}</h1>
 
       <div class="mb-4">
-        {% content_for 'block', type: '_product-price', id: 'price', variant: product.selected_or_first_available_variant %}
+        {% content_for 'block',
+          type: '_product-price',
+          id: 'price',
+          variant: product.selected_or_first_available_variant
+        %}
       </div>
 
       {% content_for 'block', type: '_product-form', id: 'product_form' %}
@@ -34,14 +38,6 @@
     {% endfor %}
   </div>
 </section>
-
-<script>
-  console.log({{ product | json }})
-</script>
-
-<script type="application/ld+json">
-  {{ product | structured_data }}
-</script>
 
 {% schema %}
 {

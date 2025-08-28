@@ -1,6 +1,6 @@
 <form
   x-target="cart_form"
-  @ajax:after="$dispatch('cart:updated')"
+  @ajax:after="document.getElementById('cart_drawer')?.showModal()"
 
   action="{{ routes.cart_add_url }}"
   method="post"

@@ -1,4 +1,5 @@
+extends: theme-check:recommended
 MissingTemplate:
   enabled: true
   ignore_missing:
-  - /snippets/vite.liquid
+    - /snippets/vite.liquid

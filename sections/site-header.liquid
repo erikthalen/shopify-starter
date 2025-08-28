@@ -34,7 +34,7 @@
     <button
       x-data="{ active: {% if request.path == '{{ routes.cart_url }}' %}true{% else %}false{% endif %} }"
       @window:navigation.window="active = location.pathname === '{{ routes.cart_url }}'"
-      @click="$dispatch('drawer:cart:open')"
+      onclick="document.getElementById('cart_drawer')?.showModal()"
       :class="active ? 'underline' : ''"
       class="button"
     >

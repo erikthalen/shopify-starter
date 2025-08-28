@@ -1,29 +1,58 @@
-<section
-  x-data="drawer"
-  x-bind="drawer"
-  class="fixed top-0 right-0 z-11 w-md max-w-screen bg-white text-sm transition-transform duration-500 ease-in-out after:absolute after:top-0 after:right-full after:h-full after:w-screen after:bg-black/50 after:transition-opacity after:duration-700 after:ease-in-out"
-  :class='[drawerOpen ? "translate-x-0 after:opacity-100" : "translate-x-full after:opacity-0 after:pointer-events-none"]'
-  @cart:updated.window="window.location.pathname !== '{{ routes.cart_url }}' && openDrawer"
-  @drawer:cart:open.window="openDrawer"
->
-  <div x-bind="drawerContent" class="grid h-dvh grid-rows-[auto_1fr] pb-4">
-    <div class="mx-4 flex h-10 items-center justify-between border-b border-gray-300">
+<dialog id="cart_drawer" closedby="any" class="max-h-none h-screen left-auto right-0">
+  <div class="grid h-screen top-0 grid-rows-[auto_1fr] pb-4 w-md max-w-screen bg-white text-sm">
+    <header class="mx-4 flex h-10 items-center justify-between border-b border-gray-300">
       <p class="text-xs uppercase">Your cart ({% render 'cart-amount' %})</p>
 
-      <button x-bind="drawerCloseButton" aria-label="Close cart drawer" class="button size-5">
+      <button onclick="this.closest('dialog')?.close()" aria-label="Close cart drawer" class="button size-5">
         {% render 'icon-cross' %}
       </button>
-    </div>
+    </header>
 
     {% content_for 'block', type: '_cart-form', id: 'cart_drawer_form' %}
 
-    {% unless cart.empty? %}
-      <a href="{{ routes.cart_url }}" class="button mb-2 mt-4 inline-block justify-self-center text-center">
-        Go to cart
-      </a>
+    {% unless cart.empty %}
+      <footer class="mb-2 mt-4 justify-self-center text-center">
+        <a href="{{ routes.cart_url }}" class="button inline-block"> Go to cart </a>
+      </footer>
     {% endunless %}
   </div>
-</section>
+</dialog>
+
+{% stylesheet %}
+  dialog#cart_drawer:open {
+    transform: translateX(0);
+
+    z-index: 10;
+  }
+
+  dialog#cart_drawer {
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transform: translateX(100%);
+    transition: all 500ms var(--ease-in-out) allow-discrete;
+  }
+
+  @starting-style {
+    dialog#cart_drawer:open {
+      transform: translateX(100%);
+    }
+  }
+
+  dialog#cart_drawer::backdrop {
+    background-color: transparent;
+    transition: all 500ms var(--ease-in-out) allow-discrete;
+  }
+
+  dialog#cart_drawer:open::backdrop {
+    background-color: rgb(0 0 0 / 25%);
+  }
+
+  @starting-style {
+    dialog#cart_drawer:open::backdrop {
+      background-color: transparent;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

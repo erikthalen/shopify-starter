@@ -24,7 +24,7 @@ export default defineConfig({
       entrypointsDir: "src",
       sourceCodeDir: "src",
     }),
-    pageReload("/tmp/theme.update"),
+    // pageReload("/tmp/theme.update"),
     tailwindcss(),
   ],
   assetsInclude: "**/*.md",

@@ -4,11 +4,11 @@
 
   x-data="productForm"
   x-target="cart_form"
-  @ajax:after="$dispatch('cart:updated')"
+  @ajax:after="document.getElementById('cart_drawer')?.showModal()"
   @change="handleChange"
 
   method="post"
-  action="/cart/add"
+  action="{{ routes.cart_add_url }}"
   accept-charset="UTF-8"
   enctype="multipart/form-data"
   novalidate="novalidate"
@@ -66,13 +66,31 @@
   </button>
 </form>
 
-<style>
-  #product_form {
-    button[type='submit'][aria-disabled='true'] {
-      background: red;
+{% stylesheet %}
+  @keyframes product-form-button-loading {
+    from {
+      background-position: calc(25% + 23px) 0;
+    }
+
+    to {
+      background-position: calc(25% - 23px) 0;
     }
   }
-</style>
+
+  #product_form {
+    button[type='submit'][aria-disabled='true'] {
+      animation: product-form-button-loading 1s linear infinite reverse;
+      background: repeating-linear-gradient(
+        120deg,
+        oklch(0.967 0.003 264.542),
+        oklch(0.967 0.003 264.542) 10px,
+        oklch(0.985 0.002 247.839) 10px,
+        oklch(0.985 0.002 247.839) 20px
+      );
+      background-size: 200% 100%;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
