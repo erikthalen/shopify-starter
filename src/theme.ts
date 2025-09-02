@@ -152,11 +152,7 @@ barba.hooks.beforeEnter(data => {
 })
 
 barba.hooks.before(() => {
-  const cart_drawer = document.getElementById(
-    "cart_drawer"
-  ) as HTMLDialogElement
-
-  cart_drawer?.close()
+  document.querySelectorAll("dialog")?.forEach(dialog => dialog?.close())
 
   window.dispatchEvent(new CustomEvent("window:navigation"))
 })

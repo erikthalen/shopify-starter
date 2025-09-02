@@ -5,6 +5,7 @@
       <span class="text-neutral-500">({{ collection.all_products_count }})</span>
     </h1>
 
+    {% comment %} {% render 'filter' %} {% endcomment %}
     <button x-data class="button" @click="$dispatch('drawer:filter:open')">Filter</button>
   </div>
 

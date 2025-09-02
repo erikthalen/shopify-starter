@@ -1,4 +1,4 @@
-<header class="relative z-2 flex h-10 w-full items-center justify-between gap-x-4 border-b border-gray-400 bg-white px-4 text-sm">
+<div class="relative z-2 flex h-10 w-full items-center justify-between gap-x-4 border-b border-gray-400 bg-white px-4 text-sm">
   <nav class="flex items-center gap-x-4">
     <a
       href="{{ routes.root_url }}"
@@ -26,7 +26,13 @@
   </nav>
 
   <nav class="ml-auto flex items-center gap-4">
-    <button x-data class="button" @click="$dispatch('predictive-search:toggle')">Search</button>
+    <button
+      x-data
+      class="button"
+      onclick="document.getElementById('predictive_search')?.getAttribute('open') ? document.getElementById('predictive_search')?.close() : document.getElementById('predictive_search')?.showModal()"
+    >
+      Search
+    </button>
 
     <a data-barba-prevent href="{{ routes.storefront_login_url }}" class="button">Account</a>
 
@@ -41,10 +47,12 @@
       Cart ({% render 'cart-amount' %})
     </button>
   </nav>
-</header>
+</div>
 
 {% schema %}
 {
-  "name": "Site Header"
+  "name": "Site Header",
+  "tag": "header",
+  "class": "sticky top-0 z-10 w-screen"
 }
 {% endschema %}

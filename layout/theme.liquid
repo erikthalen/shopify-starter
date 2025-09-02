@@ -3,8 +3,6 @@
   <head>
     {% render 'meta-tags' %}
 
-    {{ content_for_header }}
-
     {{ settings.custom_head }}
 
     <link
@@ -27,15 +25,15 @@
     <script>
       document.documentElement.classList.remove('no-js')
     </script>
+
+    {{ content_for_header }}
   </head>
 
   <body data-barba="wrapper" x-cloak class="grid min-h-screen grid-rows-[auto_1fr] overflow-x-clip">
-    {% section 'cart-drawer' %}
+    {% section 'site-header' %}
 
-    <section class="sticky top-0 z-10 w-screen">
-      {% section 'site-header' %}
-      {% section 'predictive-search' %}
-    </section>
+    {% section 'cart-drawer' %}
+    {% section 'predictive-search' %}
 
     <main data-barba="container" role="main" class="grid min-h-[calc(100vh-2.5rem)] grid-rows-[1fr_auto] bg-white">
       <div>

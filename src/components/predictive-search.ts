@@ -15,14 +15,14 @@ export default defineComponent(() => ({
 
   init() {
     // watches its parent drawer component
-    this.$watch("drawerOpen", async drawerOpen => {
-      if (drawerOpen) {
-        this.$refs.input?.focus({ preventScroll: true })
-      } else {
-        await isSettled().then(() => {
-          if (!(this as any).drawerOpen) this.q = ""
-        })
-      }
-    })
+    // this.$watch("drawerOpen", async drawerOpen => {
+    //   if (drawerOpen) {
+    //     this.$refs.input?.focus({ preventScroll: true })
+    //   } else {
+    //     await isSettled().then(() => {
+    //       if (!(this as any).drawerOpen) this.q = ""
+    //     })
+    //   }
+    // })
   },
 }))
