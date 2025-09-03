@@ -1,3 +1,13 @@
+<button
+  x-data="{ active: {% if request.path == '{{ routes.cart_url }}' %}true{% else %}false{% endif %} }"
+  @window:navigation.window="active = location.pathname === '{{ routes.cart_url }}'"
+  onclick="document.getElementById('cart_drawer')?.showModal()"
+  :class="active ? 'underline' : ''"
+  class="button"
+>
+  Cart ({% render 'cart-amount' %})
+</button>
+
 <dialog scroll-lock id="cart_drawer" closedby="any" class="max-h-none h-screen left-auto right-0">
   <div class="grid h-screen top-0 grid-rows-[auto_1fr] pb-4 w-md max-w-screen bg-white text-sm">
     <header class="mx-4 flex h-10 items-center justify-between border-b border-gray-300">
@@ -54,6 +64,12 @@
 
 {% schema %}
 {
-  "name": "Cart drawer"
+  "name": "Cart drawer",
+  "presets": [
+    {
+      "name": "Cart drawer",
+      "category": "Secondary menu"
+    }
+  ]
 }
 {% endschema %}

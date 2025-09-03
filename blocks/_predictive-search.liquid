@@ -1,4 +1,11 @@
 {%- unless predictive_search.performed -%}
+  <button
+    class="button"
+    onclick="document.getElementById('predictive_search')?.getAttribute('open') ? document.getElementById('predictive_search')?.close() : document.getElementById('predictive_search')?.showModal()"
+  >
+    Search
+  </button>
+
   <dialog scroll-lock id="predictive_search" closedby="any" class="w-screen max-w-none left-0 right-0">
     <div
       class="relative z-2 w-full justify-center bg-white px-4"
@@ -140,3 +147,14 @@
     }
   }
 {% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Predictive search",
+  "presets": [
+    {
+      "name": "Predictive search"
+    }
+  ]
+}
+{% endschema %}

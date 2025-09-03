@@ -26,26 +26,9 @@
   </nav>
 
   <nav class="ml-auto flex items-center gap-4">
-    <button
-      x-data
-      class="button"
-      onclick="document.getElementById('predictive_search')?.getAttribute('open') ? document.getElementById('predictive_search')?.close() : document.getElementById('predictive_search')?.showModal()"
-    >
-      Search
-    </button>
-
     <a data-barba-prevent href="{{ routes.storefront_login_url }}" class="button">Account</a>
 
-    {% comment %} Cart drawer {% endcomment %}
-    <button
-      x-data="{ active: {% if request.path == '{{ routes.cart_url }}' %}true{% else %}false{% endif %} }"
-      @window:navigation.window="active = location.pathname === '{{ routes.cart_url }}'"
-      onclick="document.getElementById('cart_drawer')?.showModal()"
-      :class="active ? 'underline' : ''"
-      class="button"
-    >
-      Cart ({% render 'cart-amount' %})
-    </button>
+    {% content_for 'blocks' %}
   </nav>
 </div>
 
@@ -53,6 +36,27 @@
 {
   "name": "Site Header",
   "tag": "header",
-  "class": "sticky top-0 z-10 w-screen"
+  "class": "sticky top-0 z-10 w-screen",
+  "blocks": [
+    {
+      "type": "_cart-drawer"
+    },
+    {
+      "type": "_predictive-search"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Site header",
+      "blocks": [
+        {
+          "type": "_cart-drawer"
+        },
+        {
+          "type": "_predictive-search"
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}
