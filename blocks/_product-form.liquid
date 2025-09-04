@@ -1,11 +1,12 @@
+{% render 'variant-picker' %}
+
 <form
   id="product_form"
   class="inline-grid w-full justify-items-start gap-4"
 
-  x-data="productForm"
+  x-data
   x-target="cart_form"
   @ajax:after="document.getElementById('cart_drawer')?.showModal()"
-  @change="handleChange"
 
   method="post"
   action="{{ routes.cart_add_url }}"
@@ -18,51 +19,18 @@
   <input type="hidden" name="product-id" value="{{ product.id }}">
 
   <input type="hidden" name="quantity" value="1">
-  <input type="hidden" name="id" :value="currentVariant?.id || {{ product.selected_or_first_available_variant.id }}">
-
-  {% unless product.variants.size == 1 %}
-    {% for option in product.options_with_values %}
-      <div class="grid w-full gap-1">
-        <p class="mb-2 text-xs tracking-wider uppercase">{{ option.name }}</p>
-
-        <div class="flex gap-4">
-          {% for value in option.values %}
-            <label
-              {% if value.swatch != blank %}
-                style="
-                  --color: {{ value.swatch.color }};
-                  --image: url({{ value.swatch.image | image_url }});
-                  background-image: var(--image);
-                  background-color: var(--color);
-                "
-              {% endif %}
-              class="relative whitespace-nowrap w-full overflow-clip rounded-md border border-gray-300 bg-cover bg-center px-5 py-2 text-center text-xs tracking-wider uppercase hover:bg-gray-50 has-checked:border-gray-600"
-            >
-              <input
-                type="radio"
-                {% if value == option.selected_value %}
-                  checked
-                {% endif %}
-                value="{{ value | escape }}"
-                name="{{ option.name }}"
-                class="hidden"
-              >
-              {{ value }}
-            </label>
-          {% endfor %}
-        </div>
-      </div>
-    {% endfor %}
-  {% endunless %}
+  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
 
   <button
-    class="my-4 w-full cursor-pointer rounded border border-gray-300 bg-gray-100 p-2 text-sm tracking-wider uppercase"
+    class="{% if product.selected_or_first_available_variant.available %}text-black{% else %}text-gray-400{% endif %} my-4 w-full cursor-pointer rounded border border-gray-300 bg-gray-100 p-2 text-sm tracking-wider uppercase"
     type="submit"
     name="add"
-    x-text="(!currentVariant && {{ product.selected_or_first_available_variant.available }}) || currentVariant?.available ? 'Add to cart' : 'Notify me'"
-    :class="(!currentVariant && {{ product.selected_or_first_available_variant.available }}) || currentVariant?.available ? 'text-black' : 'text-gray-400'"
   >
-    Add to cart
+    {% if product.selected_or_first_available_variant.available %}
+      Add to cart
+    {% else %}
+      Notify me
+    {% endif %}
   </button>
 </form>
 

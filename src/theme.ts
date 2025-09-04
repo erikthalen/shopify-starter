@@ -13,8 +13,8 @@ import drawer from "./components/drawer"
 import infiniteScroll from "./components/infinite-scroll"
 import filter from "./components/filter"
 import predictiveSearch from "./components/predictive-search"
-import productForm from "./components/product-form"
 import "./components/is-loading"
+import variantPicker from "./components/variant-picker"
 
 Alpine.plugin(intersect)
 Alpine.plugin(ajax)
@@ -33,7 +33,7 @@ Alpine.data("drawer", drawer)
 Alpine.data("infiniteScroll", infiniteScroll)
 Alpine.data("filter", filter)
 Alpine.data("predictiveSearch", predictiveSearch)
-Alpine.data("productForm", productForm)
+Alpine.data("variantPicker", variantPicker)
 
 Alpine.start()
 

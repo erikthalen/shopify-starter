@@ -167,44 +167,17 @@
 
       <div class="absolute right-4 bottom-4 flex items-end gap-4">
         <div>
-          <label for="sort-by" class="mb-2 inline-block text-xs tracking-wider uppercase">Sort by:</label>
-
-          {% assign sorting_values = "[
-      {
-        title: 'Manual',
-        value: 'manual'
-      },
-      {
-        title: 'Best selling',
-        value: 'best-selling',
-      },
-      {
-        title: 'Title ascending',
-        value: 'title-ascending'
-      },
-      {
-        title: 'Title descending',
-        value: 'title-descending'
-      },
-      {
-        title: 'Price ascending',
-        value: 'price-ascending'
-      },
-      {
-        title: 'Price descending',
-        value: 'price-descending'
-      },
-      {
-        title: 'Created ascending',
-        value: 'created-ascending'
-      },
-      {
-        title: 'Created descending',
-        value: 'created-descending'
-      },
-    ]" %}
-
-          {% comment %} {% render 'select', name: 'sort_by', values: sorting_values %} {% endcomment %}
+          <label for="sort-by" class="inline-block text-xs tracking-wider uppercase">Sort by:</label>
+          <select id="sort-by" name="sort_by" class="inline-block">
+            <option name="manual">Manual</option>
+            <option name="best-selling">Best selling</option>
+            <option name="title-ascending">Title ascending</option>
+            <option name="title-descending">Title descending</option>
+            <option name="price-ascending">Price ascending</option>
+            <option name="price-descending">Price descending</option>
+            <option name="created-ascending">Created ascending</option>
+            <option name="created-descending">Created descending</option>
+          </select>
         </div>
         <a
           href="{{ collection.url }}?sort_by={{ collection.sort_by }}"

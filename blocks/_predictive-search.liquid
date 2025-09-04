@@ -1,118 +1,76 @@
-{%- unless predictive_search.performed -%}
-  <button
-    class="button"
-    onclick="document.getElementById('predictive_search')?.getAttribute('open') ? document.getElementById('predictive_search')?.close() : document.getElementById('predictive_search')?.showModal()"
+<button
+  class="button"
+  onclick="document.getElementById('predictive_search')?.getAttribute('open') ? document.getElementById('predictive_search')?.close() : document.getElementById('predictive_search')?.showModal()"
+>
+  Search
+</button>
+
+<dialog scroll-lock id="predictive_search" closedby="any" class="w-screen max-w-none left-0 right-0">
+  <div
+    class="relative z-2 w-full justify-center bg-white px-4"
+    x-bind="drawerContent"
   >
-    Search
-  </button>
-
-  <dialog scroll-lock id="predictive_search" closedby="any" class="w-screen max-w-none left-0 right-0">
-    <div
-      class="relative z-2 w-full justify-center bg-white px-4"
-      x-bind="drawerContent"
-    >
-      <div x-data="predictiveSearch" class="w-full max-w-3xl grid mx-auto grid-rows-[auto_1fr] md:pb-40 max-h-dvh">
-        <form
-          @submit.prevent="handleFormSubmit"
-          action="{{ routes.search_url }}"
-          class="flex items-center gap-2 border-b border-gray-400 pt-15 mb-6 md:pt-30"
-        >
-          <div class="w-4 opacity-50">
-            {% render 'icon-magnifier' %}
-          </div>
-
-          <input
-            class="w-full py-2 text-sm uppercase focus:outline-0"
-            type="text"
-            placeholder="Search products and pages"
-            autofocus
-            name="q"
-            x-model="q"
-            x-ref="input"
-            @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
-          >
-
-          <button type="button" aria-label="Close search" class="button w-4" onclick="this.closest('dialog')?.close()">
-            {% render 'icon-cross' %}
-          </button>
-
-          <input type="hidden" name="type" value="product,page">
-          <input type="hidden" name="options[unavailable_products]" value="hide">
-          <input type="hidden" name="options[prefix]" value="last">
-        </form>
-
-        <form
-          class="sr-only"
-          x-ref="predictiveSearchForm"
-          action="{{ routes.predictive_search_url }}"
-          x-target="predictive-search-results"
-          @ajax:before="
-            if(!q) {
-              $event.preventDefault()
-              $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
-            }
-          "
-          @ajax:after="
-            if(!q) {
-              $event.preventDefault()
-              $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
-            }
-          "
-        >
-          <input type="search" name="q" x-model="q">
-          <input type="hidden" name="section_id" value="predictive-search">
-          <input type="hidden" name="type" value="product,page">
-          <input type="hidden" name="options[unavailable_products]" value="hide">
-          <input type="hidden" name="options[prefix]" value="last">
-        </form>
-
-        <div x-show="q !== ''" x-ref="predictiveSearchResults" class="overflow-auto">
-          <output id="predictive-search-results" x-merge="update" class="bg-white pb-4"> </output>
+    <div x-data="predictiveSearch" class="w-full max-w-3xl grid mx-auto grid-rows-[auto_1fr] md:pb-40 max-h-dvh">
+      <form
+        @submit.prevent="handleFormSubmit"
+        action="{{ routes.search_url }}"
+        class="flex items-center gap-2 border-b border-gray-400 pt-15 mb-6 md:pt-30"
+      >
+        <div class="w-4 opacity-50">
+          {% render 'icon-magnifier' %}
         </div>
+
+        <input
+          class="w-full py-2 text-sm uppercase focus:outline-0"
+          type="text"
+          placeholder="Search products and pages"
+          autofocus
+          name="q"
+          x-model="q"
+          x-ref="input"
+          @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
+        >
+
+        <button type="button" aria-label="Close search" class="button w-4" onclick="this.closest('dialog')?.close()">
+          {% render 'icon-cross' %}
+        </button>
+
+        <input type="hidden" name="type" value="product,page">
+        <input type="hidden" name="options[unavailable_products]" value="hide">
+        <input type="hidden" name="options[prefix]" value="last">
+      </form>
+
+      <form
+        class="sr-only"
+        x-ref="predictiveSearchForm"
+        action="{{ routes.predictive_search_url }}"
+        x-target="predictive-search-results"
+        @ajax:before="
+          if(!q) {
+            $event.preventDefault()
+            $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
+          }
+        "
+        @ajax:after="
+          if(!q) {
+            $event.preventDefault()
+            $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
+          }
+        "
+      >
+        <input type="search" name="q" x-model="q">
+        <input type="hidden" name="section_id" value="predictive-search-results">
+        <input type="hidden" name="type" value="product,page">
+        <input type="hidden" name="options[unavailable_products]" value="hide">
+        <input type="hidden" name="options[prefix]" value="last">
+      </form>
+
+      <div x-show="q !== ''" x-ref="predictiveSearchResults" class="overflow-auto">
+        <output id="predictive-search-results" x-merge="update" class="bg-white pb-4"> </output>
       </div>
     </div>
-  </dialog>
-{%- else -%}
-  <section id="predictive-search-results">
-    {%- if predictive_search.resources.products.size > 0 -%}
-      <ul class="grid gap-x-4 lg:grid-cols-2">
-        {%- for product in predictive_search.resources.products -%}
-          <li>
-            <a href="{{ product.url }}" class="flex gap-4 border-b border-gray-300 py-4">
-              {%- if product.selected_or_first_available_variant.featured_image != blank -%}
-                {%- assign image = product.selected_or_first_available_variant.featured_image -%}
-              {%- else -%}
-                {%- assign image = product.featured_image -%}
-              {%- endif -%}
-
-              {% render 'image',
-                image: image,
-                class: 'w-20 rounded overflow-clip',
-                loading: 'eager',
-                sizes: '100px, 100px'
-              %}
-
-              <div class="flex flex-col">
-                <span class="text-sm">{{ product.title }}</span>
-
-                <dl class="mt-1 flex gap-2 text-xs uppercase">
-                  {%- for option in product.options_with_values -%}
-                    <dt>{{ option.name }}:</dt>
-                    <dd>{{ option.selected_value }}</dd>
-                  {%- endfor -%}
-                </dl>
-
-                <span class="mt-auto pt-2">{{ product.price | money }}</span>
-              </div>
-            </a>
-          </li>
-        {%- endfor -%}
-      </ul>
-    {% else %}
-      <h1 class="mt-4">No results</h1>
-    {%- endif -%}
-  </section>
-{%- endunless -%}
+  </div>
+</dialog>
 
 {% stylesheet %}
   dialog#predictive_search[open] {

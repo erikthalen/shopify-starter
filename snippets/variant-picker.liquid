@@ -1,0 +1,68 @@
+{% comment %}
+  This snippet renders all product options as links to the corresponding variant.
+  The javascript hijacks the redirect and swaps the markup of itself as well as a target (product form).
+
+  The target form only needs to care about the currently selected variant,
+  as the form is always the "current" form.
+
+  @example
+  {% render 'variant-picker' %}
+
+  {% form 'product' %}
+    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+    <input type="hidden" name="quantity" value="1">
+    <button>Add to cart</button>
+  {% endform %}
+{% endcomment %}
+
+{% assign disabled_classes = 'text-gray-400 after:h-px after:w-[150%] after:-rotate-[18deg] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:bg-zinc-300' %}
+
+<section
+  id="variant_picker"
+  x-data="variantPicker"
+  data-swap-target="product_form"
+  class="variant-picker grid gap-4"
+>
+  {%- for option in product.options_with_values -%}
+    <fieldset>
+      <legend class="mb-2 text-xs tracking-wider uppercase">{{ option.name }}</legend>
+
+      <ul class="flex gap-4">
+        {%- for option_value in option.values -%}
+          <li>
+            {% assign variants = product.variants %}
+
+            {% comment %} get url to this option's variant, given what's selected of the other options {% endcomment %}
+            {%- for other_option in product.options_with_values -%}
+              {% if other_option.name == option.name %}
+                {% assign option_key = 'option' | append: option.position %}
+                {% assign variants = variants | where: option_key, option_value.name %}
+              {% else %}
+                {% assign option_key = 'option' | append: other_option.position %}
+                {% assign variants = variants | where: option_key, other_option.selected_value %}
+              {% endif %}
+            {% endfor %}
+
+            <a
+              data-barba-prevent
+              class="{% unless option_value.available %}disabled {{ disabled_classes }} {% endunless %} {% if option_value.selected %}checked border-gray-600{% endif %} relative inline-block whitespace-nowrap w-full overflow-clip rounded-md border border-gray-300 bg-cover bg-center px-5 py-2 text-center text-xs tracking-wider uppercase hover:bg-gray-50"
+              href="{{ product.url }}?variant={{ variants.first.id }}"
+            >
+              {{ option_value -}}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </fieldset>
+  {%- endfor -%}
+</section>
+
+{% stylesheet %}
+  .variant-picker {
+    a.checked {
+    }
+
+    a.disabled {
+    }
+  }
+{% endstylesheet %}
