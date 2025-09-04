@@ -26,8 +26,6 @@
   </nav>
 
   <nav class="ml-auto flex items-center gap-4">
-    <a data-barba-prevent href="{{ routes.storefront_login_url }}" class="button">Account</a>
-
     {% content_for 'blocks' %}
   </nav>
 </div>
@@ -43,6 +41,9 @@
     },
     {
       "type": "_predictive-search"
+    },
+    {
+      "type": "_account-link"
     }
   ],
   "presets": [

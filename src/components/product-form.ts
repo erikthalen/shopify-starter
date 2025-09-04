@@ -62,6 +62,11 @@ export default defineComponent(() => ({
 
     if (!this.productData) return
 
+    /**
+     * It's only changes in the main option's values that will change what's enabled/disabled.
+     * Say a product has "color" and "size" options; changing the color value will enable/disable
+     * the size options, but changing the size value will keep the colors enable/disable state as they where.
+     */
     const mainOptionName = this.productData.options[0].name
 
     const availableVariantsOfOptions = getAvailableVariants(this.productData, {

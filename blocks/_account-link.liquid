@@ -1,0 +1,21 @@
+{%- if shop.customer_accounts_enabled -%}
+  <a
+    data-barba-prevent
+    href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.storefront_login_url }}{%- endif -%}"
+    class="button"
+    rel="nofollow"
+  >
+    Account
+  </a>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Account link",
+  "presets": [
+    {
+      "name": "Account link"
+    }
+  ]
+}
+{% endschema %}
