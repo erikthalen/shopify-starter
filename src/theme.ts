@@ -39,6 +39,8 @@ Alpine.start()
 
 document.body.removeAttribute("x-cloak")
 
+let leaveAnimation: Animation
+
 barba.init({
   debug: location.origin.includes("127.0.0.1"),
   prevent: () => window.Shopify.designMode,
@@ -112,8 +114,7 @@ barba.init({
           { duration: 100, easing: "ease-in", fill: "forwards" }
         )
 
-        // @ts-expect-error: Property 'leaveAnimation' does not exist on type 'ITransitionData'.
-        data.leaveAnimation = animation as Animation
+        leaveAnimation = animation
 
         return animation.finished
       },
@@ -121,8 +122,7 @@ barba.init({
         data.next.container.style.opacity = "0"
 
         // fake the { sync: false } option
-        // @ts-expect-error: Property 'leaveAnimation' does not exist on type 'ITransitionData'.
-        await data.leaveAnimation.finished
+        await leaveAnimation.finished
 
         const animation = data.next.container.animate(
           [
