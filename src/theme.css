@@ -22,18 +22,10 @@ shopify-visual-preview-section-list {
   padding: 0 !important;
 }
 
-html.no-js {
-  &:after {
-    content: "JavaScript must be enabled.";
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 10vh;
+html:not(.no-js) {
+  [x-cloak] {
+    display: none !important;
   }
-}
-
-[x-cloak] {
-  display: none !important;
 }
 
 html {
