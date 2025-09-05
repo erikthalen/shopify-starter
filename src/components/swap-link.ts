@@ -1,10 +1,21 @@
 import { defineComponent } from "~/utils/define"
 
+/**
+ * Swap link
+ * When the lick is clicked, the href is fetched,
+ * what ever ids are defined as data-swap-ids (separated with a space) are swapped.
+ * Resulting in a partial update of the page.
+ *
+ * @example
+ * <a href="/cart" data-swap-ids="cart product_form">Click me</a>
+ */
+
 const fetches = new Map()
 
 export default defineComponent(() => ({
   abortController: new AbortController(),
 
+  idsToSwap: [] as string[],
   isLoading: false,
 
   async swap(link: HTMLAnchorElement) {
@@ -18,26 +29,13 @@ export default defineComponent(() => ({
 
     const markup = new DOMParser().parseFromString(text, "text/html")
 
-    // swap target form
-    if (this.$root.dataset.swapTarget) {
-      const source = document.getElementById(this.$root.dataset.swapTarget)
-      const target = markup.getElementById(this.$root.dataset.swapTarget)
+    for (const id of this.idsToSwap) {
+      const source = document.getElementById(id)
+      const target = markup.getElementById(id)
 
-      if (!source || !target) {
-        window.location.reload()
-      } else {
+      if (source && target) {
         source.innerHTML = target?.innerHTML
       }
-    }
-
-    // swap itself
-    const source = document.getElementById(this.$root.id)
-    const target = markup.getElementById(this.$root.id)
-
-    if (!source || !target) {
-      window.location.reload()
-    } else {
-      source.outerHTML = target?.outerHTML
     }
 
     this.isLoading = false
@@ -64,14 +62,14 @@ export default defineComponent(() => ({
   },
 
   init() {
-    this.$root.querySelectorAll("a").forEach(link => {
-      link.addEventListener("pointerover", this.prefetch.bind(this), {
-        signal: this.abortController.signal,
-      })
+    this.idsToSwap = this.$root.dataset.swapIds?.split(" ") || []
 
-      link.addEventListener("click", this.handleClick.bind(this), {
-        signal: this.abortController.signal,
-      })
+    this.$root.addEventListener("pointerover", this.prefetch.bind(this), {
+      signal: this.abortController.signal,
+    })
+
+    this.$root.addEventListener("click", this.handleClick.bind(this), {
+      signal: this.abortController.signal,
     })
   },
 

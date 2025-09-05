@@ -17,12 +17,7 @@
 
 {% assign disabled_classes = 'text-gray-400 after:h-px after:w-[150%] after:-rotate-[18deg] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:bg-zinc-300' %}
 
-<section
-  id="variant_picker"
-  x-data="variantPicker"
-  data-swap-target="product_form"
-  class="variant-picker grid gap-4"
->
+<section id="variant_picker" class="variant-picker grid gap-4">
   {%- for option in product.options_with_values -%}
     <fieldset>
       <legend class="mb-2 text-xs tracking-wider uppercase">{{ option.name }}</legend>
@@ -44,8 +39,10 @@
             {% endfor %}
 
             <a
+              x-data="swapLink"
+              data-swap-ids="variant_picker product_form"
               data-barba-prevent
-              class="{% unless option_value.available %}disabled {{ disabled_classes }} {% endunless %} {% if option_value.selected %}checked border-gray-600{% endif %} relative inline-block whitespace-nowrap w-full overflow-clip rounded-md border border-gray-300 bg-cover bg-center px-5 py-2 text-center text-xs tracking-wider uppercase hover:bg-gray-50"
+              class="{% unless option_value.available %}disabled {{ disabled_classes }} {% endunless %} {% if option_value.selected %}checked border-gray-600{% endif %} relative inline-block w-full overflow-clip rounded-md border border-gray-300 bg-cover bg-center px-5 py-2 text-center text-xs tracking-wider whitespace-nowrap uppercase hover:bg-gray-50"
               href="{{ product.url }}?variant={{ variants.first.id }}"
             >
               {{ option_value -}}
