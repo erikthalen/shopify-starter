@@ -1,22 +1,6 @@
 {% render 'variant-picker' %}
 
-<form
-  id="product_form"
-  class="inline-grid w-full justify-items-start gap-4"
-
-  x-target="cart_form"
-  @ajax:after="document.getElementById('cart_drawer')?.showModal()"
-
-  method="post"
-  action="{{ routes.cart_add_url }}"
-  accept-charset="UTF-8"
-  enctype="multipart/form-data"
-  novalidate="novalidate"
->
-  <input type="hidden" name="form_type" value="product">
-  <input type="hidden" name="utf8" value="✓">
-  <input type="hidden" name="product-id" value="{{ product.id }}">
-
+{% form 'product', product, id: 'product_form', class: 'w-full', x-target: 'cart_form' %}
   <input type="hidden" name="quantity" value="1">
   <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
 
@@ -31,7 +15,9 @@
       Notify me
     {% endif %}
   </button>
-</form>
+
+  {{ form | payment_button }}
+{% endform %}
 
 {% stylesheet %}
   @keyframes product-form-button-loading {

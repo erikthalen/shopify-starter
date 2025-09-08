@@ -1,15 +1,6 @@
-<form
-  x-target="cart_form"
-  @ajax:after="document.getElementById('cart_drawer')?.showModal()"
-
-  action="{{ routes.cart_add_url }}"
-  method="post"
-  accept-charset="UTF-8"
-  enctype="multipart/form-data"
-  novalidate="novalidate"
->
-  <input type="hidden" value="1" name="quantity">
-  <input type="hidden" value="{{ product.selected_or_first_available_variant.id }}" name="id">
+{% form 'product', product, x-target: 'cart_form' %}
+  <input type="hidden" name="quantity" value="1">
+  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
 
   <button
     class="button disabled:text-gray-300"
@@ -21,7 +12,7 @@
   >
     Add to cart
   </button>
-</form>
+{% endform %}
 
 {% schema %}
 {

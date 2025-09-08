@@ -1,3 +1,4 @@
+import barba from "@barba/core"
 import { defineComponent } from "~/utils/define"
 
 /**
@@ -38,6 +39,8 @@ export default defineComponent(() => ({
       }
     }
 
+    this.updateURL(link.href)
+
     this.isLoading = false
   },
 
@@ -59,6 +62,10 @@ export default defineComponent(() => ({
     e.stopPropagation()
 
     await this.swap(e.target as HTMLAnchorElement)
+  },
+
+  updateURL(url: string) {
+    barba.history.add(url, "popstate", "replace")
   },
 
   init() {
