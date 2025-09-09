@@ -113,6 +113,9 @@
     {% if style != blank %}
       style="{{ style }}"
     {% endif %}
+    {% if id != blank %}
+      id="{{ id }}"
+    {% endif %}
   >
     {%- if image_mobile != blank -%}
       <source

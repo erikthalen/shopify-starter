@@ -45,7 +45,8 @@ export default defineComponent(() => ({
   },
 
   async prefetch(e: PointerEvent | null, href?: string) {
-    const url = href || (e?.target as HTMLAnchorElement)?.href
+    const target = e?.target as HTMLElement
+    const url = href || (target?.closest("a") as HTMLAnchorElement)?.href
 
     if (!href && fetches.get(url)) return
 
@@ -61,7 +62,9 @@ export default defineComponent(() => ({
     e.preventDefault()
     e.stopPropagation()
 
-    await this.swap(e.target as HTMLAnchorElement)
+    const target = e.target as HTMLElement
+
+    await this.swap(target.closest("a") as HTMLAnchorElement)
   },
 
   updateURL(url: string) {

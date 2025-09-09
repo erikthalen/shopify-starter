@@ -1,0 +1,47 @@
+{% comment %}
+  This snippet renders all variants in option1 as links to the corresponding variant,
+  given what's selected in the other options.
+
+  The javascript hijacks the redirect and swaps the markup.
+{% endcomment %}
+
+<section id="variant_images">
+  <ul class="flex gap-4">
+    {%- for option_value in product.options_with_values[0].values -%}
+      <li class="w-full">
+        {% assign variants = product.variants %}
+
+        {% comment %} get url to this option1 variant, given what's selected of the other options {% endcomment %}
+        {%- for other_option in product.options_with_values -%}
+          {% if other_option.name == product.options_with_values[0].name %}
+            {% assign variants = variants | where: 'option1', option_value.name %}
+          {% else %}
+            {% assign option_key = 'option' | append: other_option.position %}
+            {% assign variants = variants | where: option_key, other_option.selected_value %}
+          {% endif %}
+        {% endfor %}
+
+        <a
+          x-data="swapLink"
+          data-swap-ids="main_product"
+          data-barba-prevent
+          class="{% if option_value.selected %}checked border-gray-600{% else %}border-transparent{% endif %} flex border"
+          href="{{ product.url }}?variant={{ variants.first.id }}"
+          aria-label="Go to {{ product.title }} {{ variants.first.title }}"
+        >
+          {% render 'image', image: variants.first.featured_image, sizes: '33vw, 16vw', aspect_ratio: '1/1' %}
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</section>
+
+{% stylesheet %}
+  .variant-picker {
+    a.checked {
+    }
+
+    a.disabled {
+    }
+  }
+{% endstylesheet %}

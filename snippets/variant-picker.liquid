@@ -40,7 +40,7 @@
 
             <a
               x-data="swapLink"
-              data-swap-ids="variant_picker product_form"
+              data-swap-ids="main_product"
               data-barba-prevent
               class="{% unless option_value.available %}disabled {{ disabled_classes }} {% endunless %} {% if option_value.selected %}checked border-gray-600{% endif %} relative inline-block w-full overflow-clip rounded-md border border-gray-300 bg-cover bg-center px-5 py-2 text-center text-xs tracking-wider whitespace-nowrap uppercase hover:bg-gray-50"
               href="{{ product.url }}?variant={{ variants.first.id }}"

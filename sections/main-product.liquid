@@ -1,16 +1,16 @@
-<section class="grid gap-4 md:grid-cols-2">
+<section id="main_product" class="grid gap-4 md:grid-cols-2">
   <div class="col-span-2 grid place-items-center gap-4 md:grid-cols-2">
-    {% render 'image', image: product.featured_image, sizes: '100vw, 40vw', loading: 'eager' %}
+    {% render 'image',
+      image: product.selected_or_first_available_variant.featured_image,
+      sizes: '100vw, 40vw',
+      loading: 'eager',
+      id: 'product_image'
+    %}
 
     <div class="w-full max-md:px-4 md:w-sm p-5">
-      {% comment %}
-        {% for variant in product.variants %}
-          <div class="size-4" style="background-color: {{ variant.metafields.custom.swatch.value.color }};"></div>
-        {% endfor %}
-      {% endcomment %}
       <h1 class="mb-1">{{ product.title }}</h1>
 
-      <div class="mb-4">
+      <div class="mb-4" id="product_price">
         {% content_for 'block',
           type: '_product-price',
           id: 'price',
@@ -30,12 +30,23 @@
     </div>
   </div>
 
-  <div class="flex gap-4">
-    {% for variant in product.variants %}
-      {% if variant.featured_image != blank %}
-        {% render 'image', image: variant.featured_image, sizes: '33vw, 16vw', aspect_ratio: '1/1', class: 'shink-0' %}
-      {% endif %}
-    {% endfor %}
+  <div class="flex gap-4 pl-4">
+    {% render 'variant-images' %}
+    {% comment %}
+      {% assign rendered_options = '' %}
+
+      {% for variant in product.variants %}
+        {% assign rendered_options_arr = rendered_options | split: '; ' %}
+
+        {% unless rendered_options_arr contains variant.options[0] %}
+          {% if variant.featured_image != blank %}
+            {% render 'image', image: variant.featured_image, sizes: '33vw, 16vw', aspect_ratio: '1/1', class: 'w-full' %}
+
+            {% assign rendered_options = rendered_options | append: '; ' | append: variant.options[0] %}
+          {% endif %}
+        {% endunless %}
+      {% endfor %}
+    {% endcomment %}
   </div>
 </section>
 
