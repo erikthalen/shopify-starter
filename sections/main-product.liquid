@@ -29,21 +29,6 @@
 
   <div class="flex gap-4 pl-4">
     {% render 'variant-images' %}
-    {% comment %}
-      {% assign rendered_options = '' %}
-
-      {% for variant in product.variants %}
-        {% assign rendered_options_arr = rendered_options | split: '; ' %}
-
-        {% unless rendered_options_arr contains variant.options[0] %}
-          {% if variant.featured_image != blank %}
-            {% render 'image', image: variant.featured_image, sizes: '33vw, 16vw', aspect_ratio: '1/1', class: 'w-full' %}
-
-            {% assign rendered_options = rendered_options | append: '; ' | append: variant.options[0] %}
-          {% endif %}
-        {% endunless %}
-      {% endfor %}
-    {% endcomment %}
   </div>
 </section>
 
