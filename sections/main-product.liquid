@@ -1,13 +1,10 @@
 <section id="main_product" class="grid gap-4 md:grid-cols-2">
   <div class="col-span-2 grid place-items-center gap-4 md:grid-cols-2">
-    {% render 'image',
-      image: product.selected_or_first_available_variant.featured_image,
-      sizes: '100vw, 40vw',
-      loading: 'eager',
-      id: 'product_image'
-    %}
+    {% assign image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
 
-    <div class="w-full max-md:px-4 md:w-sm p-5">
+    {% render 'image', image: image, sizes: '100vw, 40vw', loading: 'eager', id: 'product_image' %}
+
+    <div class="sticky top-30 w-full max-md:px-4 md:w-sm p-5">
       <h1 class="mb-1">{{ product.title }}</h1>
 
       <div class="mb-4" id="product_price">
