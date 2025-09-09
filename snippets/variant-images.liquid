@@ -26,7 +26,7 @@
             x-data="swapLink"
             data-swap-ids="main_product"
             data-barba-prevent
-            class="{% if option_value.selected %}checked border-gray-600{% else %}border-transparent{% endif %} flex border"
+            class="{% if option_value.selected %}border-gray-600{% else %}border-transparent{% endif %} flex border"
             href="{{ product.url }}?variant={{ variants.first.id }}"
             aria-label="Go to {{ product.title }} {{ variants.first.title }}"
           >

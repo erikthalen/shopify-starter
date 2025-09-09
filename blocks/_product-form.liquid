@@ -16,7 +16,9 @@
     {% endif %}
   </button>
 
-  {{ form | payment_button }}
+  <div class="text-xs uppercase text-gray-600">
+    {{ form | payment_button }}
+  </div>
 {% endform %}
 
 {% stylesheet %}
