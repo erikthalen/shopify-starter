@@ -1,10 +1,22 @@
 <section id="main_product" class="grid gap-4 md:grid-cols-2">
-  <div class="col-span-2 grid place-items-center gap-4 md:grid-cols-2">
-    {% assign image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+  <div class="col-span-2 grid justify-items-center items-start gap-4 md:grid-cols-2">
+    <div class="w-full">
+      {% if section.settings.image_carousel %}
+        {% render 'variant-images-carousel' %}
+      {% else %}
+        {% assign image = product.selected_or_first_available_variant.featured_image
+          | default: product.featured_image
+        %}
 
-    {% render 'image', image: image, sizes: '100vw, 40vw', loading: 'eager', id: 'product_image' %}
+        {% render 'image', image: image, sizes: '100vw, 40vw', loading: 'eager', id: 'product_image' %}
 
-    <div class="sticky top-30 w-full max-md:px-4 md:w-sm p-5">
+        <div class="flex gap-4 pl-4 mt-4">
+          {% render 'variant-images' %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div id="product_info" class="lg:sticky lg:top-[20vh] w-full max-md:px-4 md:w-sm p-5">
       <h1 class="mb-1">{{ product.title }}</h1>
 
       <div class="mb-4" id="product_price">
@@ -14,6 +26,14 @@
           variant: product.selected_or_first_available_variant
         %}
       </div>
+
+      {% assign target = 'main_product' %}
+
+      {% if section.settings.image_carousel == true %}
+        {% assign target = 'product_info' %}
+      {% endif %}
+
+      {% render 'variant-picker', target: target %}
 
       {% content_for 'block', type: '_product-form', id: 'product_form' %}
 
@@ -26,10 +46,6 @@
       {%- endunless -%}
     </div>
   </div>
-
-  <div class="flex gap-4 pl-4">
-    {% render 'variant-images' %}
-  </div>
 </section>
 
 {% schema %}
@@ -38,6 +54,14 @@
   "enabled_on": {
     "templates": ["product"]
   },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "image_carousel",
+      "label": "Image carousel",
+      "info": "Makes a carousel of the product images"
+    }
+  ],
   "presets": [
     {
       "name": "Main product"

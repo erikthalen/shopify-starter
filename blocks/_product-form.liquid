@@ -1,14 +1,16 @@
-{% render 'variant-picker' %}
-
 {% form 'product', product, id: 'product_form', class: 'w-full', x-target: 'cart_form' %}
   <input type="hidden" name="quantity" value="1">
   <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
 
   <button
-    class="{% if product.selected_or_first_available_variant.available %}text-black{% else %}text-gray-400{% endif %} my-4 w-full cursor-pointer rounded border border-gray-300 bg-gray-100 p-2 text-sm tracking-wider uppercase"
+    class="{% if product.selected_or_first_available_variant.available %}text-black{% else %}text-gray-400{% endif %} my-4 flex justify-center gap-2 items-center w-full cursor-pointer rounded border border-gray-300 bg-gray-100 p-2 text-sm tracking-wider uppercase"
     type="submit"
     name="add"
   >
+    <span class="size-4 -ml-4 opacity-0">
+      {% render 'icon-spinner' %}
+    </span>
+
     {% if product.selected_or_first_available_variant.available %}
       Add to cart
     {% else %}
@@ -43,6 +45,10 @@
         oklch(0.985 0.002 247.839) 20px
       );
       background-size: 200% 100%;
+
+      span {
+        opacity: 0.7;
+      }
     }
   }
 {% endstylesheet %}

@@ -1,0 +1,139 @@
+{% assign first_option = product.options_with_values[0] %}
+
+{% assign init_slide = first_option.values | find_index: 'name', first_option.selected_value %}
+
+<div x-data="emblaCarousel({{ init_slide }})" class="embla">
+  <div class="grid grid-cols-1 grid-rows-1">
+    <div x-ref="emblaViewport" class="embla__viewport col-start-1 row-start-1">
+      <div class="embla__container">
+        {%- for option_value in product.options_with_values[0].values -%}
+          <div class="embla__slide">
+            {% assign variants = product.variants %}
+
+            {% comment %} get url to each variant in option1, given what's selected of the other options {% endcomment %}
+            {%- for other_option in product.options_with_values -%}
+              {% if other_option.name == product.options_with_values[0].name %}
+                {% assign variants = variants | where: 'option1', option_value.name %}
+              {% else %}
+                {% assign option_key = 'option' | append: other_option.position %}
+                {% assign variants = variants | where: option_key, other_option.selected_value %}
+              {% endif %}
+            {% endfor %}
+
+            {% if variants.first.featured_image != blank %}
+              {% render 'image', image: variants.first.featured_image, sizes: '33vw, 16vw', aspect_ratio: '1/1' %}
+            {% endif %}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="embla__controls col-start-1 row-start-1 relative z-1 self-center justify-between flex w-full px-4 text-gray-600">
+      <button
+        x-ref="emblaButtonPrev"
+        class="cursor-pointer flex bg-white rounded-full border border-gray-200 disabled:opacity-30"
+        type="button"
+      >
+        <svg class="size-7" viewBox="0 0 16 16">
+          <!-- Icon from HeroIcons by Refactoring UI Inc - https://github.com/tailwindlabs/heroicons/blob/master/LICENSE --><path fill="currentColor" fill-rule="evenodd" d="M9.78 4.22a.75.75 0 0 1 0 1.06L7.06 8l2.72 2.72a.75.75 0 1 1-1.06 1.06L5.47 8.53a.75.75 0 0 1 0-1.06l3.25-3.25a.75.75 0 0 1 1.06 0" clip-rule="evenodd"/>
+        </svg>
+      </button>
+
+      <button
+        x-ref="emblaButtonNext"
+        class="cursor-pointer flex bg-white rounded-full border border-gray-200 disabled:opacity-30"
+        type="button"
+      >
+        <svg class="size-7" viewBox="0 0 16 16">
+          <!-- Icon from HeroIcons by Refactoring UI Inc - https://github.com/tailwindlabs/heroicons/blob/master/LICENSE --><path fill="currentColor" fill-rule="evenodd" d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8L6.22 5.28a.75.75 0 0 1 0-1.06" clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="embla-thumbs">
+    <div x-ref="emblaThumbsViewport" class="embla-thumbs__viewport">
+      <div class="embla-thumbs__container">
+        {%- for option_value in product.options_with_values[0].values -%}
+          <div class="embla-thumbs__slide rounded-lg overflow-hidden">
+            {% assign variants = product.variants %}
+
+            {% comment %} get url to each variant in option1, given what's selected of the other options {% endcomment %}
+            {%- for other_option in product.options_with_values -%}
+              {% if other_option.name == product.options_with_values[0].name %}
+                {% assign variants = variants | where: 'option1', option_value.name %}
+              {% else %}
+                {% assign option_key = 'option' | append: other_option.position %}
+                {% assign variants = variants | where: option_key, other_option.selected_value %}
+              {% endif %}
+            {% endfor %}
+
+            {% if variants.first.featured_image != blank %}
+              <button type="button" class="embla-thumbs__slide__button">
+                {% render 'image', image: variants.first.featured_image, sizes: '33vw, 16vw', aspect_ratio: '1/1' %}
+              </button>
+            {% endif %}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .embla {
+    --slide-spacing: 0rem;
+    --slide-size: 100%;
+  }
+
+  .embla__viewport {
+    overflow: hidden;
+  }
+
+  .embla__container {
+    display: flex;
+    touch-action: pan-y pinch-zoom;
+    margin-left: calc(var(--slide-spacing) * -1);
+  }
+
+  .embla__slide {
+    transform: translate3d(0, 0, 0);
+    flex: 0 0 var(--slide-size);
+    min-width: 0;
+    padding-left: var(--slide-spacing);
+
+    user-select: none;
+  }
+
+  .embla-thumbs {
+    --thumbs-slide-spacing: 1rem;
+    margin-top: var(--thumbs-slide-spacing);
+  }
+
+  .embla-thumbs__viewport {
+    overflow: hidden;
+  }
+
+  .embla-thumbs__container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--thumbs-slide-spacing);
+    padding-inline: var(--thumbs-slide-spacing);
+    padding-block: 1px;
+  }
+
+  .embla-thumbs__slide {
+    min-width: 0;
+    width: 100%;
+    display: flex;
+  }
+
+  .embla-thumbs__slide__button {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .embla-thumbs__slide--selected {
+    outline: 1px solid;
+  }
+{% endstylesheet %}

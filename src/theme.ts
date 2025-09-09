@@ -15,6 +15,7 @@ import filter from "./components/filter"
 import predictiveSearch from "./components/predictive-search"
 import "./components/is-loading"
 import swapLink from "./components/swap-link"
+import emblaCarousel from "./components/embla-carousel"
 
 Alpine.plugin(intersect)
 Alpine.plugin(ajax)
@@ -30,8 +31,9 @@ for (const [key, store] of Object.entries(stores)) {
 }
 
 Alpine.data("drawer", drawer)
-Alpine.data("infiniteScroll", infiniteScroll)
+Alpine.data("emblaCarousel", emblaCarousel)
 Alpine.data("filter", filter)
+Alpine.data("infiniteScroll", infiniteScroll)
 Alpine.data("predictiveSearch", predictiveSearch)
 Alpine.data("swapLink", swapLink)
 
