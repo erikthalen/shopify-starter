@@ -1,0 +1,38 @@
+{
+  "name": "Header Group",
+  "type": "header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "blocks": {
+        "predictive_search": {
+          "type": "_predictive-search",
+          "settings": {},
+          "blocks": {}
+        },
+        "account_link": {
+          "type": "_account-link",
+          "settings": {},
+          "blocks": {}
+        },
+        "cart_drawer": {
+          "type": "_cart-drawer",
+          "settings": {},
+          "blocks": {
+            "cart_drawer_form": {
+              "type": "_cart-form",
+              "static": true,
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        }
+      },
+      "block_order": ["predictive_search", "account_link", "cart_drawer"],
+      "name": "Header",
+      "settings": {}
+    }
+  },
+  "order": ["header"]
+}

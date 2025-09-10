@@ -32,9 +32,13 @@
 
 {% schema %}
 {
-  "name": "Site Header",
+  "name": "Header",
   "tag": "header",
   "class": "sticky top-0 z-10 w-screen",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "limit": 1,
   "blocks": [
     {
       "type": "_cart-drawer"
@@ -48,16 +52,16 @@
   ],
   "presets": [
     {
-      "name": "Site header",
+      "name": "Header",
       "blocks": [
         {
-          "type": "_cart-drawer"
+          "type": "_predictive-search"
         },
         {
           "type": "_account-link"
         },
         {
-          "type": "_predictive-search"
+          "type": "_cart-drawer"
         }
       ]
     }

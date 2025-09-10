@@ -13,10 +13,19 @@
 
 {% schema %}
 {
+  "name": "Welcome",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
   "settings": [
     {
       "type": "header",
       "content": "Delete me before you start"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Welcome"
     }
   ]
 }
