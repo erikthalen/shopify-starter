@@ -1,3 +1,6 @@
+{% assign product = closest.product %}
+{% assign variant = product.selected_or_first_available_variant %}
+
 <div class="flex gap-2">
   {% if variant.compare_at_price != blank and variant.compare_at_price != variant.price %}
     <p class="text-gray-400">
@@ -11,6 +14,18 @@
 
 {% schema %}
 {
-  "name": "Product price"
+  "name": "Product price",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Price"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product price",
+      "category": "Product"
+    }
+  ]
 }
 {% endschema %}

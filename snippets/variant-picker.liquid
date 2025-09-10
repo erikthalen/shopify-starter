@@ -41,7 +41,7 @@
             {% comment %} change to data-swap-ids="main_product" if you use variant-images.liquid {% endcomment %}
             <a
               x-data="swapLink"
-              data-swap-ids="{{ target }}"
+              data-swap-ids="{{ swap_ids }}"
               data-barba-prevent
               class="{% unless option_value.available %}disabled {{ disabled_classes }}{% else %} border-gray-400 {% endunless %} {% if option_value.selected %}checked bg-zinc-100 {% else %} hover:bg-gray-50 {% endif %} relative inline-block w-full overflow-clip rounded-md border bg-cover bg-center px-5 py-2 text-center text-xs tracking-wider whitespace-nowrap uppercase"
               href="{{ product.url }}?variant={{ variants.first.id }}"

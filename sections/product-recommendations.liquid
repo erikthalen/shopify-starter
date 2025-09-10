@@ -13,6 +13,7 @@
     </div>
 
     <form
+      {% comment %} automatically submit the form that requests recommendations {% endcomment %}
       x-init="setTimeout(() => $el.requestSubmit())"
       x-target="{{ unique_id }}"
       action="{{ routes.product_recommendations_url }}"
@@ -27,7 +28,7 @@
   <ul id="{{ unique_id }}" class="grid grid-cols-2 lg:grid-cols-4 gap-4">
     {%- for product in recommendations.products -%}
       <li>
-        {% content_for 'block', type: '_product-card', id: 'product_card', product: product %}
+        {% content_for 'block', type: '_product-card', id: 'product_card', closest.product: product %}
       </li>
     {%- endfor -%}
   </ul>

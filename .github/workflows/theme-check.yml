@@ -1,0 +1,17 @@
+name: Theme Check
+
+on: [push]
+
+permissions:
+  contents: write
+
+jobs:
+  theme-check:
+    name: Theme Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Theme Check
+        uses: shopify/theme-check-action@v2
+        with:
+          base: main
