@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@shopify/prettier-plugin-liquid": "^1.5.2",
-    "@tailwindcss/vite": "4.0.0",
+    "@tailwindcss/vite": "4.1.13",
     "@types/alpinejs": "^3.13.11",
     "@types/alpinejs__focus": "^3.13.4",
     "@types/alpinejs__intersect": "^3.13.4",
@@ -24,7 +24,7 @@
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.9",
     "typescript-eslint": "^8.12.2",
-    "vite": "^6.2.0",
+    "vite": "^7.1.5",
     "vite-plugin-shopify": "4.0.0",
     "vite-plugin-top-level-await": "^1.4.1"
   },
@@ -35,7 +35,7 @@
     "@imacrayon/alpine-ajax": "^0.12.2",
     "alpinejs": "^3.14.7",
     "embla-carousel": "^8.6.0",
-    "tailwindcss": "4.0.0"
+    "tailwindcss": "4.1.13"
   },
   "prettier": {
     "trailingComma": "es5",
