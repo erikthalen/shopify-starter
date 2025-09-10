@@ -1,5 +1,9 @@
 name: Theme Check
 on: [push]
+
+permissions:
+  contents: write
+
 jobs:
   theme-check:
     name: Theme Check
