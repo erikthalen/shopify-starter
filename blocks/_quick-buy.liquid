@@ -1,16 +1,23 @@
+{% assign product = closest.product %}
+{% assign variant = product.selected_or_first_available_variant %}
+
 {% form 'product', product, x-target: 'cart_form' %}
   <input type="hidden" name="quantity" value="1">
-  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+  <input type="hidden" name="id" value="{{ variant.id }}">
 
   <button
     class="button disabled:text-gray-300"
     type="submit"
     name="add"
-    {%- unless product.selected_or_first_available_variant.available -%}
+    {%- unless variant.available -%}
       disabled
     {%- endunless -%}
   >
-    Add to cart
+    {%- if variant.available -%}
+      Add to cart
+    {%- else -%}
+      Sold out
+    {%- endif -%}
   </button>
 {% endform %}
 

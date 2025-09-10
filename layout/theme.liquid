@@ -1,20 +1,24 @@
 <!doctype html>
-<html lang="{{ shop.locale }}" class="no-js">
+<html lang="{{ shop.locale.iso_code }}" class="no-js">
   <head>
     {% render 'meta-tags' %}
 
     {{ settings.custom_head }}
 
+    {% assign default_favicon = 'favicon.png' | asset_img_url %}
+
     <link
       rel="icon"
+      type="image/png"
       media="(prefers-color-scheme: light)"
-      href="{%- if settings.favicon_dark != blank -%}{{ settings.favicon_dark | image_url: width: 512, crop: false }}{%- else -%}{{ 'favicon.png' | asset_img_url }}{%- endif -%}"
+      href="{{ settings.favicon_dark | image_url: width: 64, crop: false | default: default_favicon }}"
     >
 
     <link
       rel="icon"
+      type="image/png"
       media="(prefers-color-scheme: dark)"
-      href="{%- if settings.favicon_light != blank -%}{{ settings.favicon_light | image_url: width: 512, crop: false }}{%- else -%}{{ 'favicon.png' | asset_img_url }}{%- endif -%}"
+      href="{{ settings.favicon_light | image_url: width: 64, crop: false | default: default_favicon }}"
     >
 
     {%- liquid

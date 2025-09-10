@@ -1,3 +1,5 @@
+{% assign product = closest.product %}
+
 {% form 'product', product, id: 'product_form', class: 'w-full', x-target: 'cart_form' %}
   <input type="hidden" name="quantity" value="1">
   <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">

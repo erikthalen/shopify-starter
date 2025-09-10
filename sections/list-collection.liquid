@@ -5,7 +5,7 @@
   </h1>
 
   <ol class="grid grid-cols-2 gap-4 md:grid-cols-4">
-    {% paginate collections by 1000 %}
+    {% paginate collections by 250 %}
       {% for collection in collections %}
         <li>
           <a href="{{ collection.url }}">

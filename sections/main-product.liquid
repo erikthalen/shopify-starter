@@ -27,13 +27,13 @@
         %}
       </div>
 
-      {% assign target = 'main_product' %}
+      {% assign swap_ids = 'main_product' %}
 
       {% if section.settings.image_carousel == true %}
-        {% assign target = 'product_info' %}
+        {% assign swap_ids = 'product_info' %}
       {% endif %}
 
-      {% render 'variant-picker', target: target %}
+      {% render 'variant-picker', swap_ids: swap_ids %}
 
       {% content_for 'block', type: '_product-form', id: 'product_form' %}
 
