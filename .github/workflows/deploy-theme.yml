@@ -7,6 +7,7 @@ on:
 
 jobs:
   deploy:
+    if: false # [REMOVE THIS LINE TO ENABLE ACTION]
     name: Deploy
     runs-on: ubuntu-latest
     steps:
@@ -16,38 +17,38 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install PNPM
         uses: pnpm/action-setup@v4
-      
+
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1
-          bundler: 'latest'
-        
+          bundler: "latest"
+
       - name: Install Shopify CLI
         run: pnpm install -g @shopify/cli
-        
+
       - name: Install project dependencies
         run: pnpm install
-        
+
       - name: Build source directory
         run: pnpm run vite:build
-        
+
       - name: Deploy Production theme
         env:
           # Store URL, like your-store.myshopify.com
-          SHOPIFY_FLAG_STORE: '${{ secrets.SHOPIFY_STORE }}'
+          SHOPIFY_FLAG_STORE: "${{ secrets.SHOPIFY_STORE }}"
           # Password generated from Theme Access app
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
           SHOPIFY_CLI_TTY: 0
         run: shopify theme push -e production
-        
+
       - name: Deploy Development theme
         env:
-          SHOPIFY_FLAG_STORE: '${{ secrets.SHOPIFY_STORE }}'
+          SHOPIFY_FLAG_STORE: "${{ secrets.SHOPIFY_STORE }}"
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
           SHOPIFY_CLI_TTY: 0
         run: shopify theme push -e development
