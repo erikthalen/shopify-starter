@@ -1,0 +1,24 @@
+{% if video %}
+  <div
+    class="video"
+    style="--aspect-ratio-sm: {{ aspect_ratio_sm | default: aspect_ratio }}; --aspect-ratio-md: {{ aspect_ratio_md | default: aspect_ratio }}"
+  >
+    {{ video | video_tag: image_size: '1200x', autoplay: true, loop: true, muted: true }}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .video {
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+
+      aspect-ratio: var(--aspect-ratio-sm);
+
+      @media (width >= 48rem) {
+        aspect-ratio: var(--aspect-ratio-md);
+      }
+    }
+  }
+{% endstylesheet %}
