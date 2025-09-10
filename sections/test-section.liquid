@@ -12,6 +12,8 @@
     aspect_ratio_md: '2/1',
     sizes: '100vw, 100vw'
   %}
+
+  {% render 'video', video: section.settings.video, aspect_ratio_sm: '3/4', aspect_ratio_md: '16/9' %}
 </div>
 
 {% render '_shopify-preview' %}
@@ -42,6 +44,11 @@
       "type": "image_picker",
       "id": "image_mobile",
       "label": "Image - mobile"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
     }
   ],
   "presets": [
