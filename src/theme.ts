@@ -15,14 +15,15 @@ import infiniteScroll from "./components/infinite-scroll"
 import filter from "./components/filter"
 import predictiveSearch from "./components/predictive-search"
 import "./components/is-loading"
-import swapLink from "./components/swap-link"
 import emblaCarousel from "./components/embla-carousel"
 import quantitySelector from "./components/quantity-selector"
+import swap from "./utils/alpine-swap"
 
 Alpine.plugin(intersect)
 Alpine.plugin(focus)
 Alpine.plugin(morph)
 Alpine.plugin(ajax)
+Alpine.plugin(swap)
 
 // makes alpine.d.ts able to create types of each store
 export const stores = {
@@ -39,7 +40,6 @@ Alpine.data("filter", filter)
 Alpine.data("infiniteScroll", infiniteScroll)
 Alpine.data("predictiveSearch", predictiveSearch)
 Alpine.data("quantitySelector", quantitySelector)
-Alpine.data("swapLink", swapLink)
 
 Alpine.start()
 

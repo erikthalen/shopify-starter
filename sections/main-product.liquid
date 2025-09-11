@@ -21,7 +21,10 @@
         %}
       </div>
 
-      {% render 'variant-picker', swap_ids: 'product_info' %}
+      {% render 'variant-picker',
+        swap_ids: 'product_info',
+        swap_skip_ids: 'quantity_selector product_description shopify_payment_button'
+      %}
 
       {% content_for 'block', type: '_product-form', id: 'product_form' %}
 
