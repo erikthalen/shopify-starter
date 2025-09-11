@@ -1,19 +1,13 @@
 <section id="main_product" class="grid gap-4 md:grid-cols-2">
   <div class="col-span-2 grid justify-items-center items-start gap-4 md:grid-cols-2">
     <div class="w-full">
-      {% if section.settings.image_carousel %}
-        {% render 'variant-images-carousel' %}
-      {% else %}
-        {% assign image = product.selected_or_first_available_variant.featured_image
-          | default: product.featured_image
-        %}
+      {% render 'product-images-carousel' %}
 
-        {% render 'image', image: image, sizes: '100vw, 40vw', loading: 'eager', id: 'product_image' %}
-
+      {% comment %}
         <div class="flex gap-4 pl-4 mt-4">
           {% render 'variant-images' %}
         </div>
-      {% endif %}
+      {% endcomment %}
     </div>
 
     <div id="product_info" class="lg:sticky lg:top-[20vh] w-full max-md:px-4 md:w-sm p-5">
@@ -27,18 +21,12 @@
         %}
       </div>
 
-      {% assign swap_ids = 'main_product' %}
-
-      {% if section.settings.image_carousel == true %}
-        {% assign swap_ids = 'product_info' %}
-      {% endif %}
-
-      {% render 'variant-picker', swap_ids: swap_ids %}
+      {% render 'variant-picker', swap_ids: 'product_info' %}
 
       {% content_for 'block', type: '_product-form', id: 'product_form' %}
 
       {%- unless product.description == '<p></p>' -%}
-        <details class="mt-4 border-t border-gray-200">
+        <details id="product_description" class="mt-4 border-t border-gray-200">
           <summary class="my-4 cursor-pointer text-xs tracking-wider uppercase">Description</summary>
 
           <div class="mb-4 text-xs leading-normal">{{ product.description }}</div>
@@ -54,14 +42,6 @@
   "enabled_on": {
     "templates": ["product"]
   },
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "image_carousel",
-      "label": "Image carousel",
-      "info": "Makes a carousel of the product images"
-    }
-  ],
   "presets": [
     {
       "name": "Main product"

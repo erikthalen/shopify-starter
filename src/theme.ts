@@ -2,9 +2,10 @@ import "vite/modulepreload-polyfill"
 
 import barba from "@barba/core"
 import Alpine from "alpinejs"
-import ajax from "@imacrayon/alpine-ajax"
 import intersect from "@alpinejs/intersect"
 import focus from "@alpinejs/focus"
+import morph from "@alpinejs/morph"
+import ajax from "@imacrayon/alpine-ajax"
 
 import type { ITransitionData } from "@barba/core/dist/src/defs"
 import { fixatePageOnNavigation } from "~/utils/utils"
@@ -16,10 +17,12 @@ import predictiveSearch from "./components/predictive-search"
 import "./components/is-loading"
 import swapLink from "./components/swap-link"
 import emblaCarousel from "./components/embla-carousel"
+import quantitySelector from "./components/quantity-selector"
 
 Alpine.plugin(intersect)
-Alpine.plugin(ajax)
 Alpine.plugin(focus)
+Alpine.plugin(morph)
+Alpine.plugin(ajax)
 
 // makes alpine.d.ts able to create types of each store
 export const stores = {
@@ -35,6 +38,7 @@ Alpine.data("emblaCarousel", emblaCarousel)
 Alpine.data("filter", filter)
 Alpine.data("infiniteScroll", infiniteScroll)
 Alpine.data("predictiveSearch", predictiveSearch)
+Alpine.data("quantitySelector", quantitySelector)
 Alpine.data("swapLink", swapLink)
 
 Alpine.start()

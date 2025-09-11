@@ -1,7 +1,31 @@
 {% assign product = closest.product %}
 
-{% form 'product', product, id: 'product_form', class: 'w-full', x-target: 'cart_form' %}
-  <input type="hidden" name="quantity" value="1">
+{% form 'product', product, id: 'product_form', class: 'w-full my-4', x-target: 'cart_form' %}
+  <p class="mb-2 text-xs tracking-wider uppercase">Quantity</p>
+
+  <div id="quantity_selector" x-data="quantitySelector({ min: 1 })" class="flex items-center gap-3">
+    <button
+      type="button"
+      @click="decrease"
+      class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+      aria-label="Decrease quantity of {{ product.title }}"
+    >
+      -
+    </button>
+
+    <input type="hidden" name="quantity" value="1">
+    <output for="quantity">1</output>
+
+    <button
+      type="button"
+      @click="increase"
+      class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+      aria-label="Increase quantity of {{ product.title }}"
+    >
+      +
+    </button>
+  </div>
+
   <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
 
   <button
@@ -20,7 +44,7 @@
     {% endif %}
   </button>
 
-  <div class="text-xs uppercase text-gray-600">
+  <div id="shopify_payment_button" class="text-xs uppercase text-gray-600">
     {{ form | payment_button }}
   </div>
 {% endform %}

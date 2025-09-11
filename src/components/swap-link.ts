@@ -1,4 +1,5 @@
 import barba from "@barba/core"
+import Alpine from "alpinejs"
 import { defineComponent } from "~/utils/define"
 
 /**
@@ -17,6 +18,8 @@ export default defineComponent(() => ({
   abortController: new AbortController(),
 
   idsToSwap: [] as string[],
+  idsToSkip: [] as string[],
+
   isLoading: false,
 
   async swap(link: HTMLAnchorElement) {
@@ -35,7 +38,17 @@ export default defineComponent(() => ({
       const target = markup.getElementById(id)
 
       if (source && target) {
-        source.innerHTML = target?.innerHTML
+        Alpine.morph(source, target.outerHTML, {
+          updating: (el, toEl, childrenOnly, skip) => {
+            if (!(el instanceof HTMLElement)) return
+
+            const id = el.getAttribute("id")
+
+            if (id && this.idsToSkip.includes(id)) {
+              skip()
+            }
+          },
+        })
       }
     }
 
@@ -73,6 +86,7 @@ export default defineComponent(() => ({
 
   init() {
     this.idsToSwap = this.$root.dataset.swapIds?.split(" ") || []
+    this.idsToSkip = this.$root.dataset.skipIds?.split(" ") || []
 
     this.$root.addEventListener("pointerover", this.prefetch.bind(this), {
       signal: this.abortController.signal,

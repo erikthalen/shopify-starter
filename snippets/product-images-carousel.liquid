@@ -1,0 +1,129 @@
+{% unless product.media.size < 2 %}
+  {% assign first_option = product.options_with_values[0] %}
+  {% assign init_slide = first_option.values | find_index: 'name', first_option.selected_value %}
+
+  <div x-data="emblaCarousel({{ init_slide }})" class="embla">
+    <div class="grid grid-cols-1 grid-rows-1">
+      <div x-ref="emblaViewport" class="embla__viewport col-start-1 row-start-1">
+        <div class="embla__container">
+          {% for media in product.media %}
+            <div class="embla__slide">
+              {% if media.media_type == 'image' %}
+                {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1' %}
+              {% elsif media.media_type == 'video' %}
+                {% render 'video', video: media, aspect_ratio: '1/1' %}
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="embla__controls pointer-events-none col-start-1 row-start-1 relative z-1 self-center justify-between flex w-full px-4 text-gray-600">
+        <button
+          x-ref="emblaButtonPrev"
+          class="cursor-pointer pointer-events-auto flex bg-white rounded-full border border-gray-200 disabled:opacity-30"
+          type="button"
+          aria-label="Previous slide"
+        >
+          <svg class="size-7" viewBox="0 0 16 16">
+            <!-- Icon from HeroIcons by Refactoring UI Inc - https://github.com/tailwindlabs/heroicons/blob/master/LICENSE -->
+            <path fill="currentColor" fill-rule="evenodd" d="M9.78 4.22a.75.75 0 0 1 0 1.06L7.06 8l2.72 2.72a.75.75 0 1 1-1.06 1.06L5.47 8.53a.75.75 0 0 1 0-1.06l3.25-3.25a.75.75 0 0 1 1.06 0" clip-rule="evenodd"/>
+          </svg>
+        </button>
+
+        <button
+          x-ref="emblaButtonNext"
+          class="cursor-pointer pointer-events-auto flex bg-white rounded-full border border-gray-200 disabled:opacity-30"
+          type="button"
+          aria-label="Next slide"
+        >
+          <svg class="size-7" viewBox="0 0 16 16">
+            <!-- Icon from HeroIcons by Refactoring UI Inc - https://github.com/tailwindlabs/heroicons/blob/master/LICENSE -->
+            <path fill="currentColor" fill-rule="evenodd" d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8L6.22 5.28a.75.75 0 0 1 0-1.06" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="embla-thumbs">
+      <div x-ref="emblaThumbsViewport" class="embla-thumbs__viewport">
+        <div class="embla-thumbs__container">
+          {% for media in product.media %}
+            <button class="embla-thumbs__slide cursor-pointer rounded-lg overflow-hidden">
+              {% if media.media_type == 'image' %}
+                {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1' %}
+              {% elsif media.media_type == 'video' %}
+                {% render 'video', video: media, aspect_ratio: '1/1' %}
+              {% endif %}
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+  {% render 'image', image: product.featured_image, sizes: '100vw, 50vw', aspect_ratio: '1/1' %}
+{% endunless %}
+
+{% stylesheet %}
+  .embla {
+    --slide-spacing: 0rem;
+    --slide-size: 100%;
+    --thumb-size: 10%;
+  }
+
+  .embla__viewport {
+    overflow: hidden;
+  }
+
+  .embla__container {
+    display: flex;
+    touch-action: pan-y pinch-zoom;
+    margin-left: calc(var(--slide-spacing) * -1);
+  }
+
+  .embla__slide {
+    transform: translate3d(0, 0, 0);
+    flex: 0 0 var(--slide-size);
+    min-width: 0;
+    padding-left: var(--slide-spacing);
+
+    user-select: none;
+  }
+
+  .embla-thumbs {
+    --thumbs-slide-spacing: 1rem;
+    margin-top: var(--thumbs-slide-spacing);
+  }
+
+  .embla-thumbs__viewport {
+    overflow: hidden;
+  }
+
+  .embla-thumbs__container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--thumbs-slide-spacing);
+    padding-inline: var(--thumbs-slide-spacing);
+    padding-block: 1px;
+    margin-right: 1px;
+  }
+
+  .embla-thumbs__slide {
+    flex: 0 0 var(--thumb-size);
+    display: flex;
+
+    &:last-of-type {
+      margin-right: var(--thumbs-slide-spacing);
+    }
+  }
+
+  .embla-thumbs__slide__button {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .embla-thumbs__slide--selected {
+    outline: 1px solid;
+  }
+{% endstylesheet %}

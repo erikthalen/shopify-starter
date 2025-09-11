@@ -108,30 +108,29 @@
 
           <div class="mt-auto">
             <div class="mt-3 flex items-end justify-between gap-4">
-              <div class="flex items-center gap-3" x-data="{ count: {{ item.quantity }} }">
+              <div
+                id="quantity_selector"
+                x-data="quantitySelector({ min: 1, init: {{ item.quantity }} })"
+                class="flex items-center gap-3"
+              >
                 <button
                   type="button"
-                  @click="(e) => count--"
+                  @click="decrease"
                   @click.debounce="$el.form.requestSubmit()"
-                  class="inline-flex aspect-square w-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+                  class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
                   aria-label="Decrease quantity of {{ item.title }}"
                 >
                   -
                 </button>
 
-                <input
-                  type="hidden"
-                  name="updates[]"
-                  :value="typeof count === 'number' ? count : {{ item.quantity }}"
-                >
-
-                <span x-text="count">{{ item.quantity }}</span>
+                <input type="hidden" name="updates[]" value="{{ item.quantity }}">
+                <output for="updates[]">{{ item.quantity }}</output>
 
                 <button
                   type="button"
-                  @click="(e) => count++"
+                  @click="increase"
                   @click.debounce="$el.form.requestSubmit()"
-                  class="inline-flex aspect-square w-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+                  class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
                   aria-label="Increase quantity of {{ item.title }}"
                 >
                   +
