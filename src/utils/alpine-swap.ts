@@ -4,8 +4,7 @@ import Alpine from "alpinejs"
  * @module x-swap
  *
  * @description
- * Hijacks a link and partially swaps out elements on the current page,
- * with elements from the new page.
+ * Hijacks a link and partially swaps out elements on the current page with elements from the new page.
  *
  * "x-swap" is a list of ids to swap, separated with spaces
  * If Alpine.morph is active:
@@ -15,8 +14,8 @@ import Alpine from "alpinejs"
  * <a
  *  href="/new-page"
  *  x-swap="section_id"
- *  @swap:loading="console.log"
- *  @swap:update="console.log"
+ *  @swap:loading="(e) => {}"
+ *  @swap:update="(e) => {}"
  * >
  *  Click me
  * </a>

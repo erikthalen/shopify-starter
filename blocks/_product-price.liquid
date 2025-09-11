@@ -3,10 +3,10 @@
 
 <div class="flex gap-2">
   {% if variant.compare_at_price != blank and variant.compare_at_price != variant.price %}
+    <p>{{ variant.price | money }}</p>
     <p class="text-gray-400">
       <s>{{ variant.compare_at_price | money }}</s>
     </p>
-    <p>{{ variant.price | money }}</p>
   {% else %}
     <p>{{ variant.price | money }}</p>
   {% endif %}

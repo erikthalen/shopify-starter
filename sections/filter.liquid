@@ -10,10 +10,10 @@
   :class="drawerOpen ? 'translate-y-0 after:opacity-100' : '-translate-y-full after:opacity-0 after:pointer-events-none'"
 >
   <form
-    x-data="filter"
+    x-data
+    x-sync-params
     x-target="main_collection"
     @change="$el.requestSubmit()"
-    @ajax:send="updateURL()"
   >
     <div
       class="grid gap-4 border-b border-gray-300 bg-white px-4 py-14 md:grid-cols-4"

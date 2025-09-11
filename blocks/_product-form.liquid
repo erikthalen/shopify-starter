@@ -1,6 +1,6 @@
 {% assign product = closest.product %}
 
-{% form 'product', product, id: 'product_form', class: 'w-full my-4', x-target: 'cart_form' %}
+{% form 'product', product, id: 'product_form', class: 'w-full my-4', x-target: 'cart cart_drawer_content' %}
   <p class="mb-2 text-xs tracking-wider uppercase">Quantity</p>
 
   <div id="quantity_selector" x-data="quantitySelector({ min: 1 })" class="flex items-center gap-3">

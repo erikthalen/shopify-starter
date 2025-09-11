@@ -1,7 +1,7 @@
 {% assign product = closest.product %}
 {% assign variant = product.selected_or_first_available_variant %}
 
-{% form 'product', product, x-target: 'cart_form' %}
+{% form 'product', product, x-target: 'cart cart_drawer_content' %}
   <input type="hidden" name="quantity" value="1">
   <input type="hidden" name="id" value="{{ variant.id }}">
 

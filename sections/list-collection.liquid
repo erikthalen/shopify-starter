@@ -10,7 +10,7 @@
         <li>
           <a href="{{ collection.url }}">
             {% render 'image', image: collection.featured_image, sizes: '100vw, 20vw', aspect_ratio: '1/1' %}
-            <div class="mt-2">
+            <div class="mt-2 text-xs uppercase tracking-wide">
               {{ collection.title }}
               <span class="text-neutral-500">({{ collection.all_products_count }})</span>
             </div>

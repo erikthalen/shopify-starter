@@ -9,149 +9,142 @@
     </a>
   </div>
 {%- else -%}
-  <form
-    id="cart_form"
-    x-target="cart_form cart"
-    x-headers="{'accept': 'text/html'}"
-    x-merge.transition
+  {% form 'cart',
+    cart,
+    id: 'cart_form',
+    class: 'flex h-full flex-col overflow-auto px-4',
+    x-target: 'cart cart_drawer_content',
+    x-headers: '{"accept": "text/html"}'
+  %}
+    <ul>
+      {%- for item in cart.items -%}
+        <li
+          style="view-transition-name: cart-form-item-{{ item.variant_id }}-{{ block.id }}"
+          class="flex gap-2 overflow-clip border-b border-gray-200 py-4 last-of-type:border-0"
+        >
+          {%- if item.image -%}
+            {% render 'image', image: item.image, class: 'w-30', sizes: '100px, 100px' %}
+          {%- endif -%}
 
-    action="{{ routes.cart_url }}"
-    method="post"
-    class="flex h-full flex-col overflow-auto px-4"
+          <div class="flex w-full flex-col">
+            <div class="mb-1 flex justify-between">
+              <a class="" href="{{ item.url }}">{{ item.product.title | escape }}</a>
 
-    accept-charset="UTF-8"
-    enctype="multipart/form-data"
-  >
-    <input type="hidden" name="form_type" value="cart">
-    <input type="hidden" name="utf8" value="✓">
-
-    {%- for item in cart.items -%}
-      <div
-        style="view-transition-name: cart-form-item-{{ item.variant_id }}-{{ block.id }}"
-        class="flex gap-2 overflow-clip border-b border-gray-200 py-4"
-      >
-        {%- if item.image -%}
-          {% render 'image', image: item.image, class: 'w-30', sizes: '100px, 100px' %}
-        {%- endif -%}
-
-        <div class="flex w-full flex-col">
-          <div class="mb-1 flex justify-between">
-            <a class="" href="{{ item.url }}">{{ item.product.title | escape }}</a>
-
-            <div class="text-right">
-              {% comment %} per item price {% endcomment %}
-              {% comment %}
-                {%- if item.original_price != item.final_price -%}
-                  <p>
-                    <s>{{ item.original_price | money -}}</s>
-                  </p>
-                  <p>{{ item.final_price | money -}}</p>
-                {%- else -%}
-                  <p>{{ item.original_price | money }}</p>
-                {%- endif -%}
-              {% endcomment %}
-
-              {% comment %} multiple items price {% endcomment %}
-              <div>
-                {%- if item.original_line_price != item.final_line_price -%}
-                  <p>
-                    <s>{{ item.original_line_price | money }}</s>
-                  </p>
-                  <p>{{ item.final_line_price | money }}</p>
-                {%- else -%}
-                  <p>{{ item.original_line_price | money }}</p>
-                {%- endif -%}
-
-                {%- if item.variant.available and item.unit_price_measurement -%}
-                  {{ item.unit_price | money }}
-
-                  {%- if item.unit_price_measurement.reference_value != 1 -%}
-                    {{- item.unit_price_measurement.reference_value -}}
-                  {%- endif -%}
-
-                  {{ item.unit_price_measurement.reference_unit }}
-                {%- endif -%}
-              </div>
-            </div>
-          </div>
-
-          <dl class="inline-grid w-fit grid-cols-2 gap-x-2 text-xs uppercase">
-            {%- if item.product.has_only_default_variant == false -%}
-              {%- for option in item.options_with_values -%}
-                <dt>{{ option.name }}:</dt>
-                <dd>{{ option.value }}</dd>
-              {%- endfor -%}
-            {%- endif -%}
-
-            {%- for property in item.properties -%}
-              {%- assign property_first_char = property.first | slice: 0 -%}
-              {%- if property.last != blank and property_first_char != '_' -%}
-                <dt>{{ property.first }}:</dt>
-                <dd>
-                  {%- if property.last contains '/uploads/' -%}
-                    <a href="{{ property.last }}" class="link" target="_blank">
-                      {{ property.last | split: '/' | last }}
-                    </a>
+              <div class="text-right">
+                {% comment %} per item price {% endcomment %}
+                {% comment %}
+                  {%- if item.original_price != item.final_price -%}
+                    <p>
+                      <s>{{ item.original_price | money -}}</s>
+                    </p>
+                    <p>{{ item.final_price | money -}}</p>
                   {%- else -%}
-                    {{ property.last }}
+                    <p>{{ item.original_price | money }}</p>
                   {%- endif -%}
-                </dd>
-              {%- endif -%}
-            {%- endfor -%}
-          </dl>
+                {% endcomment %}
 
-          {{ item.selling_plan_allocation.selling_plan.name }}
+                {% comment %} multiple items price {% endcomment %}
+                <div>
+                  {%- if item.original_line_price != item.final_line_price -%}
+                    <p>
+                      <s>{{ item.original_line_price | money }}</s>
+                    </p>
+                    <p>{{ item.final_line_price | money }}</p>
+                  {%- else -%}
+                    <p>{{ item.original_line_price | money }}</p>
+                  {%- endif -%}
 
-          {%- for discount in item.line_level_discount_allocations -%}
-            {{ discount.discount_application.title }}
-          {%- endfor -%}
+                  {%- if item.variant.available and item.unit_price_measurement -%}
+                    {{ item.unit_price | money }}
 
-          <div class="mt-auto">
-            <div class="mt-3 flex items-end justify-between gap-4">
-              <div
-                id="quantity_selector"
-                x-data="quantitySelector({ min: 1, init: {{ item.quantity }} })"
-                class="flex items-center gap-3"
-              >
-                <button
-                  type="button"
-                  @click="decrease"
-                  @click.debounce="$el.form.requestSubmit()"
-                  class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
-                  aria-label="Decrease quantity of {{ item.title }}"
-                >
-                  -
-                </button>
+                    {%- if item.unit_price_measurement.reference_value != 1 -%}
+                      {{- item.unit_price_measurement.reference_value -}}
+                    {%- endif -%}
 
-                <input type="hidden" name="updates[]" value="{{ item.quantity }}">
-                <output for="updates[]">{{ item.quantity }}</output>
-
-                <button
-                  type="button"
-                  @click="increase"
-                  @click.debounce="$el.form.requestSubmit()"
-                  class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
-                  aria-label="Increase quantity of {{ item.title }}"
-                >
-                  +
-                </button>
+                    {{ item.unit_price_measurement.reference_unit }}
+                  {%- endif -%}
+                </div>
               </div>
+            </div>
 
-              <a
-                x-target="cart cart_form"
-                data-barba-prevent
-                class="inline-block border-b border-dotted text-xs text-gray-600 uppercase hover:text-black"
-                href="{{ item.url_to_remove }}"
-              >
-                Remove
-              </a>
+            <dl class="inline-grid w-fit grid-cols-2 gap-x-2 text-xs uppercase">
+              {%- if item.product.has_only_default_variant == false -%}
+                {%- for option in item.options_with_values -%}
+                  <dt>{{ option.name }}:</dt>
+                  <dd>{{ option.value }}</dd>
+                {%- endfor -%}
+              {%- endif -%}
+
+              {%- for property in item.properties -%}
+                {%- assign property_first_char = property.first | slice: 0 -%}
+                {%- if property.last != blank and property_first_char != '_' -%}
+                  <dt>{{ property.first }}:</dt>
+                  <dd>
+                    {%- if property.last contains '/uploads/' -%}
+                      <a href="{{ property.last }}" class="link" target="_blank">
+                        {{ property.last | split: '/' | last }}
+                      </a>
+                    {%- else -%}
+                      {{ property.last }}
+                    {%- endif -%}
+                  </dd>
+                {%- endif -%}
+              {%- endfor -%}
+            </dl>
+
+            {{ item.selling_plan_allocation.selling_plan.name }}
+
+            {%- for discount in item.line_level_discount_allocations -%}
+              {{ discount.discount_application.title }}
+            {%- endfor -%}
+
+            <div class="mt-auto">
+              <div class="mt-3 flex items-end justify-between gap-4">
+                <div
+                  id="quantity_selector"
+                  x-data="quantitySelector({ min: 1, init: {{ item.quantity }} })"
+                  class="flex items-center gap-3"
+                >
+                  <button
+                    type="button"
+                    @click="decrease"
+                    @click.debounce="$el.form.requestSubmit()"
+                    class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+                    aria-label="Decrease quantity of {{ item.title }}"
+                  >
+                    -
+                  </button>
+
+                  <input type="hidden" name="updates[]" value="{{ item.quantity }}">
+                  <output for="updates[]">{{ item.quantity }}</output>
+
+                  <button
+                    type="button"
+                    @click="increase"
+                    @click.debounce="$el.form.requestSubmit()"
+                    class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+                    aria-label="Increase quantity of {{ item.title }}"
+                  >
+                    +
+                  </button>
+                </div>
+
+                <a
+                  x-target="cart cart_drawer_content"
+                  data-barba-prevent
+                  class="inline-block border-b border-dotted text-xs text-gray-600 uppercase hover:text-black"
+                  href="{{ item.url_to_remove }}"
+                >
+                  Remove
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    {%- endfor -%}
+        </li>
+      {%- endfor -%}
+    </ul>
 
-    <div class="sticky bottom-0 mt-auto grid w-full border-t border-gray-300 bg-white pt-4">
+    <div class="sticky bottom-0 mt-auto grid w-full border-t border-gray-200 bg-white pt-4">
       <p class="text-right uppercase">Total: {{ cart.total_price | money_with_currency }}</p>
 
       <button
@@ -163,7 +156,7 @@
         Checkout
       </button>
     </div>
-  </form>
+  {% endform %}
 {%- endif -%}
 
 {% schema %}

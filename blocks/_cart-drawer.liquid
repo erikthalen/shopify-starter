@@ -5,13 +5,16 @@
   :class="active ? 'underline' : ''"
   class="button"
   {% comment %} open the drawer on changes to the cart form (when products are added to cart) {% endcomment %}
-  @ajax:after.window="(e) => e.target.getAttribute('x-target') === 'cart_form' && document.getElementById('cart_drawer')?.showModal()"
+  @ajax:after.window="(e) => e.target.getAttribute('x-target')?.includes('cart_drawer_content') && document.getElementById('cart_drawer')?.showModal()"
 >
   Cart ({% render 'cart-amount' %})
 </button>
 
 <dialog scroll-lock id="cart_drawer" closedby="any" class="max-h-none h-screen left-auto right-0">
-  <div class="grid h-screen top-0 grid-rows-[auto_1fr] pb-4 w-md max-w-screen bg-white text-sm">
+  <div
+    id="cart_drawer_content"
+    class="grid h-screen top-0 grid-rows-[auto_1fr] pb-4 w-md max-w-screen bg-white text-sm"
+  >
     <header class="mx-4 flex h-10 items-center justify-between border-b border-gray-300">
       <p class="text-xs uppercase">Your cart ({% render 'cart-amount' %})</p>
 

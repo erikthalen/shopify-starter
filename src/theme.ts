@@ -10,20 +10,22 @@ import ajax from "@imacrayon/alpine-ajax"
 import type { ITransitionData } from "@barba/core/dist/src/defs"
 import { fixatePageOnNavigation } from "~/utils/utils"
 
-import drawer from "./components/drawer"
-import infiniteScroll from "./components/infinite-scroll"
-import filter from "./components/filter"
-import predictiveSearch from "./components/predictive-search"
 import "./components/is-loading"
+import drawer from "./components/drawer"
 import emblaCarousel from "./components/embla-carousel"
+import infiniteScroll from "./components/infinite-scroll"
+import predictiveSearch from "./components/predictive-search"
 import quantitySelector from "./components/quantity-selector"
+
 import swap from "./utils/alpine-swap"
+import syncParams from "./utils/alpine-sync-params"
 
 Alpine.plugin(intersect)
 Alpine.plugin(focus)
 Alpine.plugin(morph)
 Alpine.plugin(ajax)
 Alpine.plugin(swap)
+Alpine.plugin(syncParams)
 
 // makes alpine.d.ts able to create types of each store
 export const stores = {
@@ -36,7 +38,6 @@ for (const [key, store] of Object.entries(stores)) {
 
 Alpine.data("drawer", drawer)
 Alpine.data("emblaCarousel", emblaCarousel)
-Alpine.data("filter", filter)
 Alpine.data("infiniteScroll", infiniteScroll)
 Alpine.data("predictiveSearch", predictiveSearch)
 Alpine.data("quantitySelector", quantitySelector)
