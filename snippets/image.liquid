@@ -241,8 +241,8 @@
       x-data="{ show: false }"
       x-init="if($el.complete) show = true"
       @load="show = true"
-      :class="show ? 'opacity-100' : ''"
-      class="object-cover opacity-0 transition-opacity duration-300 {{ fill_class }}"
+      :class="{ show }"
+      class="image object-cover transition-opacity duration-300 {{ fill_class }}"
       src="{{ image | image_url: width: 2000, format: 'webp' }}"
       alt="{{ alt | default: image.alt }}"
       width="{{ image.width }}"
@@ -251,3 +251,15 @@
     >
   </picture>
 {%- endif -%}
+
+{% stylesheet %}
+  html:not(.no-js) {
+    .image {
+      opacity: 0;
+
+      &.show {
+        opacity: 1
+      }
+    }
+  }
+{% endstylesheet %}

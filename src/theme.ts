@@ -10,7 +10,6 @@ import ajax from "@imacrayon/alpine-ajax"
 import type { ITransitionData } from "@barba/core/dist/src/defs"
 import { fixatePageOnNavigation } from "~/utils/utils"
 
-import "./components/is-loading"
 import drawer from "./components/drawer"
 import emblaCarousel from "./components/embla-carousel"
 import infiniteScroll from "./components/infinite-scroll"
@@ -166,3 +165,10 @@ barba.hooks.before(() => {
 
 // place the old page "where it was" on navigation/scroll
 fixatePageOnNavigation({ top: "2.5rem" })
+
+/**
+ * listen for loading events
+ */
+window.addEventListener("app:loading", (e: CustomEventInit) => {
+  document.body.classList.toggle("is-loading", e.detail)
+})

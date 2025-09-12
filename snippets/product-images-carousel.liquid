@@ -18,10 +18,10 @@
         </div>
       </div>
 
-      <div class="embla__controls pointer-events-none col-start-1 row-start-1 relative z-1 self-center justify-between flex w-full px-4 text-gray-600">
+      <div class="embla__controls pointer-events-none relative z-1 col-start-1 row-start-1 flex w-full justify-between self-center px-4 text-gray-600">
         <button
           x-ref="emblaButtonPrev"
-          class="cursor-pointer pointer-events-auto flex bg-white rounded-full border border-gray-200 disabled:opacity-30"
+          class="pointer-events-auto flex cursor-pointer rounded-full border border-gray-200 bg-white disabled:opacity-30"
           type="button"
           aria-label="Previous slide"
         >
@@ -33,7 +33,7 @@
 
         <button
           x-ref="emblaButtonNext"
-          class="cursor-pointer pointer-events-auto flex bg-white rounded-full border border-gray-200 disabled:opacity-30"
+          class="pointer-events-auto flex cursor-pointer rounded-full border border-gray-200 bg-white disabled:opacity-30"
           type="button"
           aria-label="Next slide"
         >
@@ -49,7 +49,7 @@
       <div x-ref="emblaThumbsViewport" class="embla-thumbs__viewport">
         <div class="embla-thumbs__container">
           {% for media in product.media %}
-            <button class="embla-thumbs__slide cursor-pointer rounded-lg overflow-hidden">
+            <button class="embla-thumbs__slide cursor-pointer overflow-hidden rounded-lg">
               {% if media.media_type == 'image' %}
                 {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1' %}
               {% elsif media.media_type == 'video' %}

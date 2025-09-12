@@ -1,20 +1,11 @@
 <section id="cart" class="mx-auto my-4 max-w-xl">
-  <h1 class="px-4 text-sm uppercase">{{ section.settings.title }}</h1>
+  <h1 class="px-4 text-sm uppercase">Cart</h1>
 
   {% content_for 'block', type: '_cart-form', id: 'cartForm' %}
 </section>
 
 {% schema %}
 {
-  "name": "Main cart",
-  "class": "main-cart",
-  "settings": [
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Title",
-      "default": "Cart"
-    }
-  ]
+  "name": "Main cart"
 }
 {% endschema %}

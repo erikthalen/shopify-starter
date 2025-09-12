@@ -13,7 +13,7 @@
     cart,
     id: 'cart_form',
     class: 'flex h-full flex-col overflow-auto px-4',
-    x-target: 'cart cart_drawer_content',
+    x-target: 'cart cart_drawer_content cart_amount',
     x-headers: '{"accept": "text/html"}'
   %}
     <ul>
@@ -130,7 +130,7 @@
                 </div>
 
                 <a
-                  x-target="cart cart_drawer_content"
+                  x-target="cart cart_drawer_content cart_amount"
                   data-barba-prevent
                   class="inline-block border-b border-dotted text-xs text-gray-600 uppercase hover:text-black"
                   href="{{ item.url_to_remove }}"

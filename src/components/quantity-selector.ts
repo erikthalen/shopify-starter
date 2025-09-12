@@ -23,13 +23,11 @@ export default defineComponent(
 
     increase() {
       this.value++
-
       this.update()
     },
 
     decrease() {
       this.value = Math.max(min, this.value - 1)
-
       this.update()
     },
 
@@ -37,13 +35,8 @@ export default defineComponent(
       const input = this.$root.querySelector("input")
       const output = this.$root.querySelector("output")
 
-      if (input) {
-        input.value = this.value.toString()
-      }
-
-      if (output) {
-        output.value = this.value.toString()
-      }
+      if (input) input.value = this.value.toString()
+      if (output) output.value = this.value.toString()
     },
   })
 )

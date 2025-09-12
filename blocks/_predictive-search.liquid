@@ -5,16 +5,13 @@
   Search
 </button>
 
-<dialog scroll-lock id="predictive_search" closedby="any" class="w-screen max-w-none left-0 right-0">
-  <div
-    class="relative z-2 w-full justify-center bg-white px-4"
-    x-bind="drawerContent"
-  >
-    <div x-data="predictiveSearch" class="w-full max-w-3xl grid mx-auto grid-rows-[auto_1fr] md:pb-40 max-h-dvh">
+<dialog scroll-lock id="predictive_search" closedby="any" class="right-0 left-0 w-screen max-w-none">
+  <div class="relative z-2 w-full justify-center bg-white px-4">
+    <div x-data="predictiveSearch" class="mx-auto grid max-h-dvh w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40">
       <form
         @submit.prevent="handleFormSubmit"
         action="{{ routes.search_url }}"
-        class="flex items-center gap-2 border-b border-gray-400 pt-15 mb-6 md:pt-30"
+        class="mb-6 flex items-center gap-2 border-b border-gray-400 pt-15 md:pt-30"
       >
         <div class="w-4 opacity-50">
           {% render 'icon-magnifier' %}

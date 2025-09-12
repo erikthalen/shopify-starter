@@ -5,6 +5,11 @@
     "header": {
       "type": "header",
       "blocks": {
+        "localization_form": {
+          "type": "_localization-form",
+          "settings": {},
+          "blocks": {}
+        },
         "predictive_search": {
           "type": "_predictive-search",
           "settings": {},
@@ -29,7 +34,7 @@
           "block_order": []
         }
       },
-      "block_order": ["predictive_search", "account_link", "cart_drawer"],
+      "block_order": ["localization_form", "predictive_search", "account_link", "cart_drawer"],
       "name": "Header",
       "settings": {}
     }
