@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@alpinejs/focus':
-        specifier: ^3.14.9
-        version: 3.14.9
       '@alpinejs/intersect':
         specifier: ^3.14.9
         version: 3.14.9
@@ -42,9 +39,6 @@ importers:
       '@types/alpinejs':
         specifier: ^3.13.11
         version: 3.13.11
-      '@types/alpinejs__focus':
-        specifier: ^3.13.4
-        version: 3.13.4
       '@types/alpinejs__intersect':
         specifier: ^3.13.4
         version: 3.13.4
@@ -84,9 +78,6 @@ packages:
   '@alcalzone/ansi-tokenize@0.1.3':
     resolution: {integrity: sha512-3yWxPTq3UQ/FY9p1ErPxIyfT64elWaMvM9lIHnaqpyft63tkxodF5aUElYHrdisWve5cETkh1+KBw1yJuW0aRw==}
     engines: {node: '>=14.13.1'}
-
-  '@alpinejs/focus@3.14.9':
-    resolution: {integrity: sha512-+OMOcdkyEUr3gYWD0ZVqojLotI9D67F5BxGesDfZcPaGtNifXMoq0vt0UVDivGnXQXosOfNpO++GF4NzGrWE9Q==}
 
   '@alpinejs/intersect@3.14.9':
     resolution: {integrity: sha512-6LLIqrESA5kxuTbDJshtItfHmZoiiDOpf8lOeRrNtYjSj/FkggDpnjD+ZFGF5btEOVSpWic2VmG2BejR/aMxDw==}
@@ -782,9 +773,6 @@ packages:
   '@types/alpinejs@3.13.11':
     resolution: {integrity: sha512-3KhGkDixCPiLdL3Z/ok1GxHwLxEWqQOKJccgaQL01wc0EVM2tCTaqlC3NIedmxAXkVzt/V6VTM8qPgnOHKJ1MA==}
 
-  '@types/alpinejs__focus@3.13.4':
-    resolution: {integrity: sha512-g7pQNxST7palODhfg6DJoKWS59pD8EK1wNjkJydBP2u8LntlO8oD4f2uj6Ywh2CL/olM/bPSyYxwr+WQQPlphg==}
-
   '@types/alpinejs__intersect@3.13.4':
     resolution: {integrity: sha512-yoX6WO7AleeULOQvPz7rrx7FJmu6l033bM7QiGcWyvZjqF2KIut99ByUZO6OWUQuYmbRjxsKthGiUYNaAywHiA==}
 
@@ -1397,9 +1385,6 @@ packages:
 
   flatted@3.3.1:
     resolution: {integrity: sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==}
-
-  focus-trap@6.9.4:
-    resolution: {integrity: sha512-v2NTsZe2FF59Y+sDykKY+XjqZ0cPfhq/hikWVL88BqLivnNiEffAsac6rP6H45ff9wG9LL5ToiDqrLEP9GX9mw==}
 
   form-data-encoder@2.1.4:
     resolution: {integrity: sha512-yDYSgNMraqvnxiEXO4hi88+YZxaHC6QKzb5N84iRCTDeRO7ZALpir/lVmf/uXUhnwUr2O4HU8s/n6x+yNjQkHw==}
@@ -2366,9 +2351,6 @@ packages:
     resolution: {integrity: sha512-2rn0BZ+/f7puLOHZm1HOJfwBggfaHXUpPUSSG/SWM4TWp5KCfmNYwnC3hruy2rZlMnmWZ+QAGpZfchu3f3695A==}
     engines: {node: '>=14.18'}
 
-  tabbable@5.3.3:
-    resolution: {integrity: sha512-QD9qKY3StfbZqWOPLp0++pOrAVb/HbUi5xCc8cUo4XjP19808oaMiDzn0leBY5mCespIBM0CIZePzZjgzR83kA==}
-
   tailwindcss@4.1.13:
     resolution: {integrity: sha512-i+zidfmTqtwquj4hMEwdjshYYgMbOrPzb9a0M3ZgNa0JMoZeFC6bxZvO8yr8ozS6ix2SDz0+mvryPeBs2TFE+w==}
 
@@ -2635,11 +2617,6 @@ snapshots:
     dependencies:
       ansi-styles: 6.2.1
       is-fullwidth-code-point: 4.0.0
-
-  '@alpinejs/focus@3.14.9':
-    dependencies:
-      focus-trap: 6.9.4
-      tabbable: 5.3.3
 
   '@alpinejs/intersect@3.14.9': {}
 
@@ -3283,10 +3260,6 @@ snapshots:
       vite: 7.1.5(jiti@2.5.1)(lightningcss@1.30.1)
 
   '@types/alpinejs@3.13.11': {}
-
-  '@types/alpinejs__focus@3.13.4':
-    dependencies:
-      '@types/alpinejs': 3.13.11
 
   '@types/alpinejs__intersect@3.13.4':
     dependencies:
@@ -4002,10 +3975,6 @@ snapshots:
       keyv: 4.5.4
 
   flatted@3.3.1: {}
-
-  focus-trap@6.9.4:
-    dependencies:
-      tabbable: 5.3.3
 
   form-data-encoder@2.1.4: {}
 
@@ -4868,8 +4837,6 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
       supports-color: 7.2.0
-
-  tabbable@5.3.3: {}
 
   tailwindcss@4.1.13: {}
 

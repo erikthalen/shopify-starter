@@ -6,7 +6,7 @@
   <input type="hidden" name="id" value="{{ variant.id }}">
 
   <button
-    class="button disabled:text-gray-300"
+    class="quick-buy relative button flex items-center disabled:text-gray-300"
     type="submit"
     name="add"
     {%- unless variant.available -%}
@@ -18,8 +18,20 @@
     {%- else -%}
       Sold out
     {%- endif -%}
+
+    <span class="size-3 absolute -right-6 opacity-0 transition-opacity">
+      {% render 'icon-spinner' %}
+    </span>
   </button>
 {% endform %}
+
+{% stylesheet %}
+  .quick-buy[aria-disabled='true'] {
+    span {
+      opacity: 1;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

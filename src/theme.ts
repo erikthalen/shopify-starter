@@ -3,14 +3,9 @@ import "vite/modulepreload-polyfill"
 import barba from "@barba/core"
 import Alpine from "alpinejs"
 import intersect from "@alpinejs/intersect"
-import focus from "@alpinejs/focus"
 import morph from "@alpinejs/morph"
 import ajax from "@imacrayon/alpine-ajax"
 
-import type { ITransitionData } from "@barba/core/dist/src/defs"
-import { fixatePageOnNavigation } from "~/utils/utils"
-
-import drawer from "./components/drawer"
 import emblaCarousel from "./components/embla-carousel"
 import infiniteScroll from "./components/infinite-scroll"
 import predictiveSearch from "./components/predictive-search"
@@ -18,9 +13,11 @@ import quantitySelector from "./components/quantity-selector"
 
 import swap from "./utils/alpine-swap"
 import syncParams from "./utils/alpine-sync-params"
+import { fixatePageOnNavigation } from "~/utils/utils"
+
+import type { ITransitionData } from "@barba/core/dist/src/defs"
 
 Alpine.plugin(intersect)
-Alpine.plugin(focus)
 Alpine.plugin(morph)
 Alpine.plugin(ajax)
 Alpine.plugin(swap)
@@ -35,7 +32,6 @@ for (const [key, store] of Object.entries(stores)) {
   Alpine.store(key, store)
 }
 
-Alpine.data("drawer", drawer)
 Alpine.data("emblaCarousel", emblaCarousel)
 Alpine.data("infiniteScroll", infiniteScroll)
 Alpine.data("predictiveSearch", predictiveSearch)

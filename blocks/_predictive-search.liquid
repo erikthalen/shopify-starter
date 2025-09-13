@@ -5,20 +5,20 @@
   Search
 </button>
 
-<dialog scroll-lock id="predictive_search" closedby="any" class="right-0 left-0 w-screen max-w-none">
-  <div class="relative z-2 w-full justify-center bg-white px-4">
+<dialog scroll-lock id="predictive_search" closedby="any" class="right-0 left-0 max-h-dvh w-screen max-w-none">
+  <div class="relative z-2 w-full justify-center bg-white px-4 overscroll-contain">
     <div x-data="predictiveSearch" class="mx-auto grid max-h-dvh w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40">
       <form
         @submit.prevent="handleFormSubmit"
         action="{{ routes.search_url }}"
-        class="mb-6 flex items-center gap-2 border-b border-gray-400 pt-15 md:pt-30"
+        class="sticky top-0 mb-6 flex items-center gap-2 border-b border-gray-400 bg-white pt-5 md:pt-30"
       >
         <div class="w-4 opacity-50">
           {% render 'icon-magnifier' %}
         </div>
 
         <input
-          class="w-full py-2 text-sm uppercase focus:outline-0"
+          class="w-full py-2 text-base uppercase focus:outline-0"
           type="text"
           placeholder="Search products and pages"
           autofocus
@@ -62,7 +62,7 @@
         <input type="hidden" name="options[prefix]" value="last">
       </form>
 
-      <div x-show="q !== ''" x-ref="predictiveSearchResults" class="overflow-auto">
+      <div x-show="q !== ''" x-ref="predictiveSearchResults" class="">
         <output id="predictive-search-results" x-merge="update" class="bg-white pb-4"> </output>
       </div>
     </div>

@@ -10,13 +10,17 @@
   Cart (<span id="cart_amount">{{- cart.item_count -}}</span>)
 </button>
 
-<dialog scroll-lock id="cart_drawer" closedby="any" class="right-0 left-auto h-screen max-h-none">
+<dialog scroll-lock id="cart_drawer" closedby="any" class="right-0 left-auto h-screen max-h-none w-full max-w-md">
   <div
     id="cart_drawer_content"
-    class="top-0 grid h-screen w-md max-w-screen grid-rows-[auto_1fr] bg-white pb-4 text-sm"
+    class="top-0 grid h-dvh grid-rows-[auto_1fr] bg-white pb-4 text-sm"
   >
     <header class="mx-4 flex h-10 items-center justify-between border-b border-gray-300">
-      <p class="text-xs uppercase">Your cart ({{- cart.item_count -}})</p>
+      <p class="text-xs uppercase">
+        Your cart (
+        {{- cart.item_count -}}
+        )
+      </p>
 
       <button onclick="this.closest('dialog')?.close()" aria-label="Close cart drawer" class="button size-5">
         {% render 'icon-cross' %}

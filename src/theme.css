@@ -45,6 +45,10 @@ html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   overflow: hidden;
 }
 
+html:has([aria-busy="true"]) * {
+  cursor: wait !important;
+}
+
 body.is-loading * {
   cursor: wait !important;
 }
@@ -54,6 +58,7 @@ details > summary {
 }
 
 [aria-busy="true"] {
+  transition: opacity 200ms;
   opacity: 0.4;
 }
 

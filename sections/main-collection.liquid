@@ -5,7 +5,7 @@
       <span class="text-neutral-500">({{ collection.all_products_count }})</span>
     </h1>
 
-    <button x-data class="button" @click="$dispatch('drawer:filter:open')">Filter</button>
+    {% content_for 'block', type: '_filter', id: 'filter' %}
   </div>
 
   {% paginate collection.products by 12 %}

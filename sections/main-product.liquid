@@ -1,5 +1,5 @@
 <section id="main_product" class="grid gap-4 md:grid-cols-2">
-  <div class="col-span-2 grid justify-items-center items-start gap-4 md:grid-cols-2">
+  <div class="col-span-2 grid items-start justify-items-center gap-4 md:grid-cols-2">
     <div class="w-full">
       {% render 'product-images-carousel' %}
 
@@ -10,29 +10,31 @@
       {% endcomment %}
     </div>
 
-    <div id="product_info" class="lg:sticky lg:top-[20vh] w-full max-md:px-4 md:w-sm p-5">
-      <h1 class="mb-1">{{ product.title }}</h1>
+    <div class="w-full p-5 max-md:px-4 md:w-sm lg:sticky lg:top-[20vh]">
+      <div id="product_info">
+        <h1 class="mb-1">{{ product.title }}</h1>
 
-      <div class="mb-4" id="product_price">
-        {% content_for 'block',
-          type: '_product-price',
-          id: 'price',
-          variant: product.selected_or_first_available_variant
-        %}
+        <div class="mb-4" id="product_price">
+          {%
+            content_for 'block',
+            type: '_product-price',
+            id: 'price',
+            variant: product.selected_or_first_available_variant
+          %}
+        </div>
+
+        {% render 'variant-picker', swap_ids: 'product_info variant_id' %}
       </div>
-
-      {% render 'variant-picker',
-        swap_ids: 'product_info',
-        swap_skip_ids: 'quantity_selector product_description shopify_payment_button'
-      %}
 
       {% content_for 'block', type: '_product-form', id: 'product_form' %}
 
       {%- unless product.description == '<p></p>' -%}
         <details id="product_description" class="mt-4 border-t border-gray-200">
-          <summary class="my-4 cursor-pointer text-xs tracking-wider uppercase">Description</summary>
+          <summary class="py-4 cursor-pointer text-xs tracking-wider uppercase">Description</summary>
 
-          <div class="mb-4 text-xs leading-normal">{{ product.description }}</div>
+          <div>
+            <div class="pb-4 text-xs leading-normal">{{ product.description }}</div>
+          </div>
         </details>
       {%- endunless -%}
     </div>

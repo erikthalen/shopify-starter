@@ -1,5 +1,5 @@
-<div class="relative z-2 flex h-10 w-full items-center justify-between gap-x-4 border-b border-gray-400 bg-white px-4 text-sm">
-  <nav class="flex items-center gap-x-4">
+<div class="relative z-2 flex h-10 w-full items-center justify-between  gap-3 border-b border-gray-400 bg-white px-4 text-sm md:gap-4">
+  <nav class="flex items-center  gap-3 md:gap-4">
     <a
       href="{{ routes.root_url }}"
       x-data="{ active: {% if request.path == '{{ routes.root_url }}' %}true{% else %}false{% endif %} }"
@@ -25,7 +25,7 @@
     </a>
   </nav>
 
-  <nav class="ml-auto flex items-center gap-4">
+  <nav class="ml-auto flex items-center gap-3 md:gap-4">
     {% content_for 'blocks' %}
   </nav>
 </div>

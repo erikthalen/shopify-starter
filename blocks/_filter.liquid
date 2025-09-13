@@ -2,21 +2,17 @@
   https://help.shopify.com/en/manual/online-store/search-and-discovery
 {% endcomment %}
 
-<div
-  x-data="drawer"
-  x-bind="drawer"
-  @drawer:filter:open.window="openDrawer"
-  class="fixed top-0 z-9 w-full transition-transform duration-500 ease-in-out after:absolute after:top-full after:h-screen after:w-full after:bg-black/50 after:transition-opacity after:duration-700 after:ease-in-out"
-  :class="drawerOpen ? 'translate-y-0 after:opacity-100' : '-translate-y-full after:opacity-0 after:pointer-events-none'"
->
+<button class="button" onclick="document.getElementById('filter_drawer')?.show()">Filter</button>
+
+<dialog scroll-lock id="filter_drawer" closedby="any" class="fixed top-0 z-9 w-full">
   <form
-    x-data
     x-sync-params
     x-target="main_collection"
     @change="$el.requestSubmit()"
+    class="max-h-dvh overflow-auto overscroll-contain"
   >
     <div
-      class="grid gap-4 border-b border-gray-300 bg-white px-4 py-14 md:grid-cols-4"
+      class="grid justify-center gap-4 border-b border-gray-300 bg-white px-4 pt-14 md:grid-cols-4 md:pb-14"
       x-bind="drawerContent"
     >
       {%- for filter in collection.filters -%}
@@ -165,29 +161,81 @@
         </div>
       {%- endfor -%}
 
-      <div class="absolute right-4 bottom-4 flex items-end gap-4">
+      <div class="sticky right-0 bottom-px flex items-end gap-4 bg-white p-4 md:absolute">
         <div>
           <label for="sort-by" class="inline-block text-xs tracking-wider uppercase">Sort by:</label>
           <select id="sort-by" name="sort_by" class="inline-block">
-            <option name="manual">Manual</option>
-            <option name="best-selling">Best selling</option>
-            <option name="title-ascending">Title ascending</option>
-            <option name="title-descending">Title descending</option>
-            <option name="price-ascending">Price ascending</option>
-            <option name="price-descending">Price descending</option>
-            <option name="created-ascending">Created ascending</option>
-            <option name="created-descending">Created descending</option>
+            <option value="manual">Manual</option>
+            <option value="best-selling">Best selling</option>
+            <option value="title-ascending">Title ascending</option>
+            <option value="title-descending">Title descending</option>
+            <option value="price-ascending">Price ascending</option>
+            <option value="price-descending">Price descending</option>
+            <option value="created-ascending">Created ascending</option>
+            <option value="created-descending">Created descending</option>
           </select>
         </div>
         <a
           href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
-          class="inline-block border-b border-dotted text-xs text-gray-600 uppercase hover:text-black"
+          class="inline-block border-b border-dotted text-xs whitespace-nowrap text-gray-600 uppercase hover:text-black"
         >
           Clear all
         </a>
 
-        <button x-bind="drawerCloseButton" type="button" class="button border-b">Apply</button>
+        <button onclick="this.closest('dialog')?.close()" type="button" class="button border-b">Apply</button>
       </div>
     </div>
   </form>
-</div>
+</dialog>
+
+{% comment %} backdrop {% endcomment %}
+<div
+  class="pointer-events-none fixed top-0 left-0 z-8 h-screen w-screen bg-black/25 opacity-0 transition-opacity duration-500"
+></div>
+
+{% stylesheet %}
+  dialog#filter_drawer[open] {
+    transform: translateY(0);
+
+    /* show backdrop */
+    + div {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+
+  dialog#filter_drawer {
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transform: translateY(-100%);
+    transition: all 500ms var(--ease-in-out) allow-discrete;
+  }
+
+  @starting-style {
+    dialog#filter_drawer[open] {
+      transform: translateY(-100%);
+    }
+  }
+
+  dialog#filter_drawer::backdrop {
+    background-color: transparent;
+    transition: all 500ms var(--ease-in-out) allow-discrete;
+  }
+
+  dialog#filter_drawer[open]::backdrop {
+    background-color: rgb(0 0 0 / 25%);
+  }
+
+  @starting-style {
+    dialog#filter_drawer[open]::backdrop {
+      background-color: transparent;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Filter",
+  "presets": [{ "name": "Filter" }]
+}
+{% endschema %}
