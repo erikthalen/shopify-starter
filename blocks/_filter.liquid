@@ -190,7 +190,7 @@
 
 {% comment %} backdrop {% endcomment %}
 <div
-  class="pointer-events-none fixed top-0 left-0 z-8 h-screen w-screen bg-black/25 opacity-0 transition-opacity duration-500"
+  class="pointer-events-none fixed top-0 left-0 backdrop-blur-[2px] z-8 h-screen w-screen bg-black/25 opacity-0 transition-opacity duration-500"
 ></div>
 
 {% stylesheet %}
@@ -217,20 +217,22 @@
     }
   }
 
-  dialog#filter_drawer::backdrop {
-    background-color: transparent;
+  /* dialog#filter_drawer::backdrop {
+    background-color: rgb(0 0 0 / 25%);
+    opacity: 0;
+    backdrop-filter: blur(2px);
     transition: all 500ms var(--ease-in-out) allow-discrete;
   }
 
   dialog#filter_drawer[open]::backdrop {
-    background-color: rgb(0 0 0 / 25%);
+    opacity: 1;
   }
 
   @starting-style {
     dialog#filter_drawer[open]::backdrop {
-      background-color: transparent;
+      opacity: 0;
     }
-  }
+  } */
 {% endstylesheet %}
 
 {% schema %}

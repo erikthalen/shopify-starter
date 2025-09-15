@@ -23,7 +23,7 @@
           class="flex gap-2 overflow-clip border-b border-gray-200 py-4 last-of-type:border-0"
         >
           {%- if item.image -%}
-            {% render 'image', image: item.image, class: 'w-30', sizes: '100px, 100px' %}
+            {% render 'image', image: item.image, class: 'w-30 rounded overflow-hidden', sizes: '100px, 100px' %}
           {%- endif -%}
 
           <div class="flex w-full flex-col">

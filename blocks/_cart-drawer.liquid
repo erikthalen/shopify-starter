@@ -1,4 +1,3 @@
-{% comment %} open the drawer on changes to the cart form (when products are added to cart) {% endcomment %}
 <a
   href="{{ routes.cart_url }}"
   x-data="{ active: {% if request.path == '{{ routes.cart_url }}' %}true{% else %}false{% endif %} }"
@@ -58,17 +57,19 @@
   }
 
   dialog#cart_drawer::backdrop {
-    background-color: transparent;
+    background-color: rgb(0 0 0 / 25%);
+    opacity: 0;
+    backdrop-filter: blur(2px);
     transition: all 500ms var(--ease-in-out) allow-discrete;
   }
 
   dialog#cart_drawer[open]::backdrop {
-    background-color: rgb(0 0 0 / 25%);
+    opacity: 1;
   }
 
   @starting-style {
     dialog#cart_drawer[open]::backdrop {
-      background-color: transparent;
+      opacity: 0;
     }
   }
 {% endstylesheet %}
