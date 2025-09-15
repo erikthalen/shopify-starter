@@ -27,14 +27,6 @@ export default defineComponent(() => ({
 
   async init() {
     window.addEventListener(
-      "ajax:send",
-      (e: CustomEventInit) => {
-        console.log("ajax:redirect", Date.now(), e.detail)
-      },
-      { signal: this.abortController.signal }
-    )
-
-    window.addEventListener(
       "ajax:after",
       async (e: CustomEventInit) => {
         // @ts-expect-error alpine-ajax adds a target, ts doesn't know
@@ -48,17 +40,13 @@ export default defineComponent(() => ({
         if (!content) return
 
         this.$root.innerHTML = content.innerHTML || ""
-        ;(this.$root as HTMLDialogElement).show()
-        console.log("ajax:after", Date.now(), content)
+
+        const dialog = this.$root as HTMLDialogElement
+
+        dialog.show()
       },
       { signal: this.abortController.signal }
     )
-
-    // const content = await this.getSection(42055706280020)
-
-    // if (content) {
-    //   this.$root.innerHTML = content.innerHTML
-    // }
   },
 
   destroy() {
