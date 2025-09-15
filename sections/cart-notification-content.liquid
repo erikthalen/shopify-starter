@@ -1,0 +1,38 @@
+{% assign product = product_variant.product %}
+{% assign image = product_variant.featured_image | default: product.featured_image %}
+
+<section class="grid gap-4">
+  <header class="flex justify-between gap-4 items-center pb-2 border-b border-gray-300">
+    <span class="text-xs uppercase tracking-wide text-gray-400">Added to your cart</span>
+
+    <button onclick="this.closest('dialog')?.close()" aria-label="Close cart notification" class="button size-5">
+      {% render 'icon-cross' %}
+    </button>
+  </header>
+
+  <div class="grid grid-cols-[100px_1fr] gap-4">
+    {% render 'image', image: image, class: 'rounded overflow-hidden' %}
+
+    <div>
+      <h1 class="text-sm uppercase tracking-wide mb-2">{{ product.title }}</h1>
+
+      <span class="text-xs uppercase tracking-wide">
+        {% content_for 'block', type: '_product-price', id: 'price', closest.product: product %}
+      </span>
+    </div>
+  </div>
+
+  <footer class="flex justify-between gap-4 items-center border-t border-gray-300 pt-2">
+    <a
+      href="{{ routes.cart_url }}"
+      onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_notification')?.close(); document.getElementById('cart_drawer')?.showModal()"
+      class="button"
+    >
+      See cart
+    </a>
+
+    {% form 'cart', cart %}
+      <button class="button" type="submit" name="checkout">Checkout</button>
+    {% endform %}
+  </footer>
+</section>

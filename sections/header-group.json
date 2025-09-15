@@ -23,18 +23,15 @@
         "cart_drawer": {
           "type": "_cart-drawer",
           "settings": {},
-          "blocks": {
-            "cart_drawer_form": {
-              "type": "_cart-form",
-              "static": true,
-              "settings": {},
-              "blocks": {}
-            }
-          },
-          "block_order": []
+          "blocks": {}
         }
       },
-      "block_order": ["localization_form", "predictive_search", "account_link", "cart_drawer"],
+      "block_order": [
+        "localization_form",
+        "predictive_search",
+        "account_link",
+        "cart_drawer"
+      ],
       "name": "Header",
       "settings": {}
     }

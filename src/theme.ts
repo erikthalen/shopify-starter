@@ -16,6 +16,7 @@ import syncParams from "./utils/alpine-sync-params"
 import { fixatePageOnNavigation } from "~/utils/utils"
 
 import type { ITransitionData } from "@barba/core/dist/src/defs"
+import cartNotification from "./components/cart-notification"
 
 Alpine.plugin(intersect)
 Alpine.plugin(morph)
@@ -32,6 +33,7 @@ for (const [key, store] of Object.entries(stores)) {
   Alpine.store(key, store)
 }
 
+Alpine.data("cartNotification", cartNotification)
 Alpine.data("emblaCarousel", emblaCarousel)
 Alpine.data("infiniteScroll", infiniteScroll)
 Alpine.data("predictiveSearch", predictiveSearch)

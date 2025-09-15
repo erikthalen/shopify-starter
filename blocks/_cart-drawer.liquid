@@ -6,7 +6,8 @@
   onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_drawer')?.showModal()"
   :class="active ? 'underline' : ''"
   class="button"
-  @ajax:after.window="(e) => e.target.getAttribute('x-target')?.includes('cart_drawer_content') && location.pathname !== '{{ routes.cart_url }}' && document.getElementById('cart_drawer')?.showModal()"
+  {% comment %} uncomment this to show drawer when product is added to cart {% endcomment %}
+  {% comment %} @ajax:after.window="(e) => e.target.getAttribute('x-target')?.includes('cart_drawer_content') && location.pathname !== '{{ routes.cart_url }}' && document.getElementById('cart_drawer')?.showModal()" {% endcomment %}
 >
   Cart (<span id="cart_amount">{{- cart.item_count -}}</span>)
 </a>
@@ -28,7 +29,7 @@
       </button>
     </header>
 
-    {% content_for 'block', type: '_cart-form', id: 'cart_drawer_form' %}
+    {% render 'cart-form' %}
 
     {% unless cart == empty %}
       <footer class="mt-4 mb-2 justify-self-center text-center">

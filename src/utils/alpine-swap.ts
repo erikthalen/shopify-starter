@@ -112,7 +112,13 @@ export default function (Alpine: Alpine.Alpine) {
       e.preventDefault()
       e.stopPropagation()
 
-      await swap((e.target as HTMLElement).closest("a") as HTMLAnchorElement)
+      const link = (e.target as HTMLElement).closest("a") as HTMLAnchorElement
+
+      try {
+        await swap(link)
+      } catch (error) {
+        window.location.href = link.href
+      }
     }
 
     el.addEventListener("pointerover", prefetch, {

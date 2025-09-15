@@ -15,18 +15,15 @@
         <h1 class="mb-1">{{ product.title }}</h1>
 
         <div class="mb-4" id="product_price">
-          {%
-            content_for 'block',
+          {% content_for 'block',
             type: '_product-price',
             id: 'price',
             variant: product.selected_or_first_available_variant
           %}
         </div>
-
-        {% render 'variant-picker', swap_ids: 'product_info variant_id' %}
       </div>
 
-      {% content_for 'block', type: '_product-form', id: 'product_form' %}
+      {% content_for 'block', type: '_product-form', id: 'productForm', closest.product: product %}
 
       {%- unless product.description == '<p></p>' -%}
         <details id="product_description" class="mt-4 border-t border-gray-200">
