@@ -1,14 +1,15 @@
-<button
+{% comment %} open the drawer on changes to the cart form (when products are added to cart) {% endcomment %}
+<a
+  href="{{ routes.cart_url }}"
   x-data="{ active: {% if request.path == '{{ routes.cart_url }}' %}true{% else %}false{% endif %} }"
   @window:navigation.window="active = location.pathname === '{{ routes.cart_url }}'"
-  onclick="document.getElementById('cart_drawer')?.showModal()"
+  onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_drawer')?.showModal()"
   :class="active ? 'underline' : ''"
   class="button"
-  {% comment %} open the drawer on changes to the cart form (when products are added to cart) {% endcomment %}
   @ajax:after.window="(e) => e.target.getAttribute('x-target')?.includes('cart_drawer_content') && location.pathname !== '{{ routes.cart_url }}' && document.getElementById('cart_drawer')?.showModal()"
 >
   Cart (<span id="cart_amount">{{- cart.item_count -}}</span>)
-</button>
+</a>
 
 <dialog scroll-lock id="cart_drawer" closedby="any" class="right-0 left-auto h-screen max-h-none w-full max-w-md">
   <div

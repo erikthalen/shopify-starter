@@ -1,73 +1,99 @@
-<section class="p-4">
-  {% paginate search.results by 24 %}
-    <div class="mb-2 flex justify-between">
-      <h1 class="text-sm uppercase">
-        Results for: "{{ search.terms }}"
-        <span class="text-neutral-500">({{ search.results_count }})</span>
-      </h1>
-
-      <div class="grid justify-items-end text-xs uppercase">
-        <p class="mb-2 text-neutral-500">Sort by:</p>
-        {%- for option in search.sort_options -%}
-          <a
-            x-data
-            @click="window.forcePageRefresh = true"
-            class="mb-1 border-b border-dotted"
-            href="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
-          >
-            {{- option.name -}}
-          </a>
-        {%- endfor -%}
-      </div>
+<div class="flex justify-center">
+  <form
+    action="{{ routes.search_url }}"
+    x-target="search_results"
+    class="w-full max-w-md m-4 mb-6 flex items-center gap-2 border-b border-gray-400 bg-white"
+  >
+    <div class="w-4 opacity-50">
+      {% render 'icon-magnifier' %}
     </div>
 
-    {% comment %}
-      <p>Filters:</p>
-      <ol>
-        {% for filter in search.filters %}
-          {% comment %} https://shopify.dev/docs/api/liquid/objects/filter {% endcomment %}
-          <li>{{ filter.label }}</li>
-        {% endfor %}
-      </ol>
-    {% endcomment %}
-    {% comment %}
-      <p>Sort by: {{ search.sort_by }}</p>
-      <p>Default sort by: {{ search.default_sort_by }}</p>
+    <input
+      class="w-full py-2 text-base uppercase focus:outline-0"
+      type="text"
+      placeholder="Search products and pages"
+      autofocus
+      name="q"
+    >
 
-      <p>Product count: {{ search.products_count }}</p>
-      <p>All product count: {{ search.all_products_count }}</p>
-    {% endcomment %}
+    <button class="button text-xs uppercase tracking-wide">Search</button>
 
+    <input type="hidden" name="type" value="product,page">
+    <input type="hidden" name="options[unavailable_products]" value="hide">
+    <input type="hidden" name="options[prefix]" value="last">
+  </form>
+</div>
+
+{% unless search.performed %}
+  <h2 id="search_results" class="m-4">Search isn't performed</h2>
+{% else %}
+  <section id="search_results" class="p-4">
     {% if search.results_count == 0 %}
-      <h1>No results</h1>
+      <h1 class="text-sm uppercase">No results for "{{ search.terms }}"</h1>
+    {% else %}
+      {% paginate search.results by 24 %}
+        <div class="mb-2 flex justify-between">
+          <h1 class="text-sm uppercase">
+            Results for: "{{ search.terms }}"
+            <span class="text-neutral-500">({{ search.results_count }})</span>
+          </h1>
+
+          <div class="grid justify-items-end text-xs uppercase">
+            <p class="mb-2 text-neutral-500">Sort by:</p>
+            {%- for option in search.sort_options -%}
+              <a
+                x-data
+                @click="window.forcePageRefresh = true"
+                class="mb-1 border-b border-dotted"
+                href="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
+              >
+                {{- option.name -}}
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        {% comment %}
+          <p>Filters:</p>
+          <ol>
+            {% for filter in search.filters %}
+              {% comment %} https://shopify.dev/docs/api/liquid/objects/filter {% endcomment %}
+              <li>{{ filter.label }}</li>
+            {% endfor %}
+          </ol>
+        {% endcomment %}
+        {% comment %}
+          <p>Sort by: {{ search.sort_by }}</p>
+          <p>Default sort by: {{ search.default_sort_by }}</p>
+
+          <p>Product count: {{ search.products_count }}</p>
+          <p>All product count: {{ search.all_products_count }}</p>
+        {% endcomment %}
+
+        <ol id="paginated_items" class="grid gap-4 md:grid-cols-4">
+          {%- for item in search.results -%}
+            <li>
+              {%- case item.object_type -%}
+                {%- when 'product' -%}
+                  {% content_for 'block', type: '_product-card', id: 'product_card', closest.product: item %}
+                {%- when 'article' -%}
+                  <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
+                {%- when 'page' -%}
+                  <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
+              {%- endcase -%}
+            </li>
+          {%- endfor -%}
+        </ol>
+
+        {%- if section.settings.pagination_type == 'pagination' -%}
+          {% render 'pagination', paginate: paginate %}
+        {%- else -%}
+          {% render 'infinite-scroll', paginate: paginate %}
+        {%- endif -%}
+      {% endpaginate %}
     {% endif %}
-
-    {% if search.performed == false %}
-      <h2>Search isn't performed</h2>
-    {% endif %}
-
-    <ol id="paginated_items" class="grid gap-4 md:grid-cols-4">
-      {%- for item in search.results -%}
-        <li>
-          {%- case item.object_type -%}
-            {%- when 'product' -%}
-              {% content_for 'block', type: '_product-card', id: 'product_card', product: item %}
-            {%- when 'article' -%}
-              <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
-            {%- when 'page' -%}
-              <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
-          {%- endcase -%}
-        </li>
-      {%- endfor -%}
-    </ol>
-
-    {%- if section.settings.pagination_type == 'pagination' -%}
-      {% render 'pagination', paginate: paginate %}
-    {%- else -%}
-      {% render 'infinite-scroll', paginate: paginate %}
-    {%- endif -%}
-  {% endpaginate %}
-</section>
+  </section>
+{% endunless %}
 
 {% schema %}
 {

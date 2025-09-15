@@ -1,9 +1,10 @@
-<button
+<a
+  href="{{ routes.search_url }}"
   class="button"
-  onclick="document.getElementById('predictive_search')?.getAttribute('open') ? document.getElementById('predictive_search')?.close() : document.getElementById('predictive_search')?.showModal()"
+  onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('predictive_search')?.getAttribute('open') ? document.getElementById('predictive_search')?.close() : document.getElementById('predictive_search')?.showModal()"
 >
   Search
-</button>
+</a>
 
 <dialog scroll-lock id="predictive_search" closedby="any" class="right-0 left-0 max-h-dvh w-screen max-w-none">
   <div class="relative z-2 w-full justify-center bg-white px-4 overscroll-contain">
