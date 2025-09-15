@@ -69,21 +69,24 @@ export default function (Alpine: Alpine.Alpine) {
         const target = markup.getElementById(id)
 
         if (source && target) {
-          if (Alpine.morph) {
-            Alpine.morph(source, target.outerHTML, {
-              updating: (el, _, __, skip) => {
-                if (!(el instanceof HTMLElement)) return
+          /**
+           * This messes up the image fade ins
+           */
+          // if (Alpine.morph) {
+          //   Alpine.morph(source, target.outerHTML, {
+          //     updating: (el, _, __, skip) => {
+          //       if (!(el instanceof HTMLElement)) return
 
-                const id = el.getAttribute("id")
+          //       const id = el.getAttribute("id")
 
-                if (id && idsToSkip.includes(id)) {
-                  skip()
-                }
-              },
-            })
-          } else {
-            source.outerHTML = target.outerHTML
-          }
+          //       if (id && idsToSkip.includes(id)) {
+          //         skip()
+          //       }
+          //     },
+          //   })
+          // } else {
+          source.outerHTML = target.outerHTML
+          // }
         }
       }
 

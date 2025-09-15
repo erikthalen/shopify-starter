@@ -42,8 +42,9 @@
             <p class="mb-2 text-neutral-500">Sort by:</p>
             {%- for option in search.sort_options -%}
               <a
-                x-data
-                @click="window.forcePageRefresh = true"
+                x-swap="search_results"
+                @swap:update="e => window.history.replaceState(null, '', e.detail)"
+                data-barba-prevent
                 class="mb-1 border-b border-dotted"
                 href="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
               >
