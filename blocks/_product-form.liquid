@@ -1,63 +1,61 @@
 {% assign product = closest.product %}
 
-{% render 'variant-picker', swap_ids: 'variant_picker product_info variant_id' %}
+{% render 'variant-picker', swap_ids: 'variant_picker product_info variant_id add_to_cart_button' %}
 
-{% comment %} form-tag can't have "@ajax:send" as param, therefore listen from the outside {% endcomment %}
-<div x-data @ajax:send="console.log('hehe')">
-  {% form 'product',
-    product,
-    id: 'product_form',
-    class: 'w-full my-4',
-    x-target: 'cart cart_drawer_content cart_amount'
-  %}
-    <p class="mb-2 text-xs tracking-wider uppercase">Quantity</p>
+{% form 'product',
+  product,
+  id: 'product_form',
+  class: 'w-full my-4',
+  x-target: 'cart cart_drawer_content cart_amount'
+%}
+  <p class="mb-2 text-xs tracking-wider uppercase">Quantity</p>
 
-    <div id="quantity_selector" x-data="quantitySelector({ min: 1 })" class="flex items-center gap-3">
-      <button
-        type="button"
-        @click="decrease"
-        class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
-        aria-label="Decrease quantity of {{ product.title }}"
-      >
-        -
-      </button>
-
-      <input type="hidden" name="quantity" value="1">
-      <output for="quantity">1</output>
-
-      <button
-        type="button"
-        @click="increase"
-        class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
-        aria-label="Increase quantity of {{ product.title }}"
-      >
-        +
-      </button>
-    </div>
-
-    <input id="variant_id" type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-
+  <div id="quantity_selector" x-data="quantitySelector({ min: 1 })" class="flex items-center gap-3">
     <button
-      class="{% if product.selected_or_first_available_variant.available %}text-black{% else %}text-gray-400{% endif %} my-4 flex justify-center gap-2 items-center w-full cursor-pointer rounded border border-gray-400 bg-gray-100 p-2 text-xs tracking-wider uppercase"
-      type="submit"
-      name="add"
+      type="button"
+      @click="decrease"
+      class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+      aria-label="Decrease quantity of {{ product.title }}"
     >
-      <span class="size-4 -ml-4 opacity-0">
-        {% render 'icon-spinner' %}
-      </span>
-
-      {% if product.selected_or_first_available_variant.available %}
-        Add to cart
-      {% else %}
-        Notify me
-      {% endif %}
+      -
     </button>
 
-    <div id="shopify_payment_button" class="text-xs uppercase text-gray-600">
-      {{ form | payment_button }}
-    </div>
-  {% endform %}
-</div>
+    <input type="hidden" name="quantity" value="1">
+    <output for="quantity">1</output>
+
+    <button
+      type="button"
+      @click="increase"
+      class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+      aria-label="Increase quantity of {{ product.title }}"
+    >
+      +
+    </button>
+  </div>
+
+  <input id="variant_id" type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+  <button
+    id="add_to_cart_button"
+    class="{% if product.selected_or_first_available_variant.available %}text-black{% else %}text-gray-400{% endif %} my-4 flex justify-center gap-2 items-center w-full cursor-pointer rounded border border-gray-400 bg-gray-100 p-2 text-xs tracking-wider uppercase"
+    type="submit"
+    name="add"
+  >
+    <span class="size-4 -ml-4 opacity-0">
+      {% render 'icon-spinner' %}
+    </span>
+
+    {% if product.selected_or_first_available_variant.available %}
+      Add to cart
+    {% else %}
+      Notify me
+    {% endif %}
+  </button>
+
+  <div id="shopify_payment_button" class="text-xs uppercase text-gray-600">
+    {{ form | payment_button }}
+  </div>
+{% endform %}
 
 {% stylesheet %}
   @keyframes product-form-button-loading {

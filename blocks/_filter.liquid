@@ -2,12 +2,21 @@
   https://help.shopify.com/en/manual/online-store/search-and-discovery
 {% endcomment %}
 
-<button class="button" onclick="document.getElementById('filter_drawer')?.show()">Filter</button>
+{% assign active_values = collection.filters | map: 'active_values' %}
+{% assign active_values_amount = 0 %}
+{% for value in active_values %}
+  {% assign active_values_amount = active_values_amount | plus: value.size %}
+{% endfor %}
+
+<button id="filter_button" class="button" onclick="document.getElementById('filter_drawer')?.show()">
+  Filter <span class="text-gray-500">({{ active_values_amount }})</span>
+</button>
 
 <dialog scroll-lock id="filter_drawer" closedby="any" class="fixed top-0 z-9 w-full">
   <form
+    id="filter_form"
     x-sync-params
-    x-target="main_collection"
+    x-target="filter_result filter_button"
     @change="$el.requestSubmit()"
     class="max-h-dvh overflow-auto overscroll-contain"
   >
@@ -176,6 +185,7 @@
           </select>
         </div>
         <a
+          x-swap="filter_form filter_result filter_button"
           href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
           class="inline-block border-b border-dotted text-xs whitespace-nowrap text-gray-600 uppercase hover:text-black"
         >

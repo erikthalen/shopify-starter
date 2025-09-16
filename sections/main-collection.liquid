@@ -8,25 +8,27 @@
     {% content_for 'block', type: '_filter', id: 'filter' %}
   </div>
 
-  {% paginate collection.products by 12 %}
-    {% if collection.products.size == 0 %}
-      <p class="col-span-4 text-sm">No results</p>
-    {% else %}
-      <ol id="paginated_items" x-merge="append" class="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-3">
-        {% for product in collection.products %}
-          <li>
-            {% content_for 'block', type: '_product-card', id: 'product_card', closest.product: product %}
-          </li>
-        {% endfor %}
-      </ol>
-    {% endif %}
+  <div id="filter_result">
+    {% paginate collection.products by 12 %}
+      {% if collection.products.size == 0 %}
+        <p class="col-span-4 text-sm">No results</p>
+      {% else %}
+        <ol id="paginated_items" x-merge="append" class="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-3">
+          {% for product in collection.products %}
+            <li>
+              {% content_for 'block', type: '_product-card', id: 'product_card', closest.product: product %}
+            </li>
+          {% endfor %}
+        </ol>
+      {% endif %}
 
-    {%- if section.settings.pagination_type == 'pagination' -%}
-      {% render 'pagination', paginate: paginate %}
-    {%- else -%}
-      {% render 'infinite-scroll', paginate: paginate %}
-    {%- endif -%}
-  {% endpaginate %}
+      {%- if section.settings.pagination_type == 'pagination' -%}
+        {% render 'pagination', paginate: paginate %}
+      {%- else -%}
+        {% render 'infinite-scroll', paginate: paginate %}
+      {%- endif -%}
+    {% endpaginate %}
+  </div>
 </section>
 
 {% schema %}
