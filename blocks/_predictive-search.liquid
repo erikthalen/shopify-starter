@@ -84,21 +84,6 @@
 </dialog>
 
 {% stylesheet %}
-  @keyframes blink_input_opacity_to_prevent_scrolling_when_focus {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  dialog#predictive_search[open] {
-    input {
-      animation: blink_input_opacity_to_prevent_scrolling_when_focus 1s;
-    }
-  }
-
   dialog#predictive_search[open] {
     transform: translateY(0);
   }
