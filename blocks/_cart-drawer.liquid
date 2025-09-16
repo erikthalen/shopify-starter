@@ -11,12 +11,17 @@
   Cart (<span id="cart_amount">{{- cart.item_count -}}</span>)
 </a>
 
-<dialog scroll-lock id="cart_drawer" closedby="any" class="right-0 left-auto h-screen max-h-none w-full max-w-md">
+<dialog
+  scroll-lock
+  id="cart_drawer"
+  closedby="any"
+  class="right-0 left-auto h-(--vvh) max-h-none w-full max-w-md overflow-auto overscroll-contain"
+>
   <div
     id="cart_drawer_content"
-    class="top-0 grid h-dvh grid-rows-[auto_1fr] bg-white pb-4 text-sm"
+    class="top-0 grid grid-rows-[auto_1fr] bg-white pb-4 text-sm"
   >
-    <header class="mx-4 flex h-10 items-center justify-between border-b border-gray-300">
+    <header class="sticky top-0 z-1 mx-4 flex h-10 items-center justify-between bg-white border-b border-gray-300">
       <p class="text-xs uppercase">
         Your cart (
         {{- cart.item_count -}}
@@ -31,7 +36,7 @@
     {% render 'cart-form' %}
 
     {% unless cart == empty %}
-      <footer class="mt-4 mb-2 justify-self-center text-center">
+      <footer class="pb-4 justify-self-center text-center">
         <a href="{{ routes.cart_url }}" class="button inline-block"> Go to cart </a>
       </footer>
     {% endunless %}

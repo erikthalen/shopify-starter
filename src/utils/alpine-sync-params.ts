@@ -24,6 +24,9 @@ export default function (Alpine: Alpine.Alpine) {
       }
 
       window.history.replaceState(null, "", url.href)
+      window.dispatchEvent(
+        new CustomEvent("sync-params:update", { detail: url })
+      )
     }
 
     el.addEventListener("change", updateURL, {

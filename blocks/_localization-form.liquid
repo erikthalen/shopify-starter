@@ -77,8 +77,9 @@
     </div>
 
     <input
-      x-data="{ currentPath: window.location.pathname }"
-      @window:navigation.window="currentPath = window.location.pathname"
+      x-data="{ currentPath: window.location.href }"
+      @window:navigation.window="currentPath = window.location.href"
+      @sync-params:update.window="currentPath = window.location.href"
       type="hidden"
       name="return_to"
       :value="currentPath"

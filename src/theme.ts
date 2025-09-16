@@ -11,6 +11,7 @@ import infiniteScroll from "./components/infinite-scroll"
 import predictiveSearch from "./components/predictive-search"
 import quantitySelector from "./components/quantity-selector"
 
+import "./utils/vvh"
 import swap from "./utils/alpine-swap"
 import syncParams from "./utils/alpine-sync-params"
 import { fixatePageOnNavigation } from "~/utils/utils"

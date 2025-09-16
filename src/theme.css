@@ -41,8 +41,9 @@ html {
   );
 }
 
-html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
+body:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   overflow: hidden;
+  touch-action: none;
 }
 
 html:has([aria-busy="true"]) * {

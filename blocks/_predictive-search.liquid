@@ -6,9 +6,17 @@
   Search
 </a>
 
-<dialog scroll-lock id="predictive_search" closedby="any" class="right-0 left-0 max-h-dvh w-screen max-w-none">
-  <div class="relative z-2 w-full justify-center bg-white px-4 overscroll-contain">
-    <div x-data="predictiveSearch" class="mx-auto grid max-h-dvh w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40">
+<dialog
+  scroll-lock
+  id="predictive_search"
+  closedby="any"
+  class="fixed right-0 left-0 top-0 max-h-(--vvh) w-screen max-w-none bg-white overflow-auto overscroll-contain"
+>
+  <div class="relative z-2 w-full justify-center px-4">
+    <div
+      x-data="predictiveSearch"
+      class="mx-auto grid w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40"
+    >
       <form
         @submit.prevent="handleFormSubmit"
         action="{{ routes.search_url }}"
@@ -71,6 +79,21 @@
 </dialog>
 
 {% stylesheet %}
+  @keyframes blink_input_opacity_to_prevent_scrolling_when_focus {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  dialog#predictive_search[open] {
+    input {
+      animation: blink_input_opacity_to_prevent_scrolling_when_focus 1s;
+    }
+  }
+
   dialog#predictive_search[open] {
     transform: translateY(0);
   }

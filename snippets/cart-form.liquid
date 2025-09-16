@@ -1,5 +1,5 @@
 {%- if cart == empty -%}
-  <div id="cart_form" class="flex flex-col items-start overflow-auto px-4">
+  <div id="cart_form" class="flex flex-col items-start px-4">
     <p class="py-4">Your cart is empty</p>
     <a
       href="{{ routes.collections_url }}"
@@ -12,7 +12,7 @@
   {% form 'cart',
     cart,
     id: 'cart_form',
-    class: 'flex h-full flex-col overflow-auto px-4',
+    class: 'flex h-full flex-col px-4',
     x-target: 'cart cart_drawer_content cart_amount',
     x-headers: '{"accept": "text/html"}'
   %}
@@ -144,7 +144,7 @@
       {%- endfor -%}
     </ul>
 
-    <div class="sticky bottom-0 mt-auto grid w-full border-t border-gray-200 bg-white pt-4">
+    <div class="mt-auto grid w-full border-t border-gray-200 bg-white py-4">
       <p class="text-right uppercase">Total: {{ cart.total_price | money_with_currency }}</p>
 
       <button
