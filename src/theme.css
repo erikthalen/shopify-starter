@@ -17,11 +17,6 @@
   --font-sans: "DMMono", sans-serif;
 }
 
-/* make it so sections in preview popup in cms don't overflow */
-shopify-visual-preview-section-list {
-  padding: 0 !important;
-}
-
 shopify-editor {
   background-color: white;
 }
@@ -46,21 +41,18 @@ body:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   touch-action: none;
 }
 
-html:has([aria-busy="true"]) * {
-  cursor: wait !important;
-}
-
+html:has([aria-busy="true"]) *,
 body.is-loading * {
   cursor: wait !important;
-}
-
-details > summary {
-  list-style: none;
 }
 
 [aria-busy="true"] {
   transition: opacity 200ms;
   opacity: 0.4;
+}
+
+details > summary {
+  list-style: none;
 }
 
 .button {
