@@ -1,29 +1,15 @@
 import "vite/modulepreload-polyfill"
-
 import barba from "@barba/core"
 import Alpine from "alpinejs"
-import intersect from "@alpinejs/intersect"
-import morph from "@alpinejs/morph"
-import ajax from "@imacrayon/alpine-ajax"
-
-import emblaCarousel from "./components/embla-carousel"
-import infiniteScroll from "./components/infinite-scroll"
-import predictiveSearch from "./components/predictive-search"
-import quantitySelector from "./components/quantity-selector"
-
 import "./utils/vvh"
-import swap from "./utils/alpine-swap"
-import syncParams from "./utils/alpine-sync-params"
 import { fixatePageOnNavigation } from "~/utils/utils"
-
 import type { ITransitionData } from "@barba/core/dist/src/defs"
-import cartNotification from "./components/cart-notification"
 
-Alpine.plugin(intersect)
-Alpine.plugin(morph)
-Alpine.plugin(ajax)
-Alpine.plugin(swap)
-Alpine.plugin(syncParams)
+Alpine.plugin((await import("@alpinejs/intersect")).default)
+Alpine.plugin((await import("@alpinejs/morph")).default)
+Alpine.plugin((await import("@imacrayon/alpine-ajax")).default)
+Alpine.plugin((await import("./utils/alpine-swap")).default)
+Alpine.plugin((await import("./utils/alpine-sync-params")).default)
 
 // makes alpine.d.ts able to create types of each store
 export const stores = {
@@ -34,11 +20,26 @@ for (const [key, store] of Object.entries(stores)) {
   Alpine.store(key, store)
 }
 
-Alpine.data("cartNotification", cartNotification)
-Alpine.data("emblaCarousel", emblaCarousel)
-Alpine.data("infiniteScroll", infiniteScroll)
-Alpine.data("predictiveSearch", predictiveSearch)
-Alpine.data("quantitySelector", quantitySelector)
+Alpine.data(
+  "cartNotification",
+  (await import("./components/cart-notification")).default
+)
+Alpine.data(
+  "emblaCarousel",
+  (await import("./components/embla-carousel")).default
+)
+Alpine.data(
+  "infiniteScroll",
+  (await import("./components/infinite-scroll")).default
+)
+Alpine.data(
+  "predictiveSearch",
+  (await import("./components/predictive-search")).default
+)
+Alpine.data(
+  "quantitySelector",
+  (await import("./components/quantity-selector")).default
+)
 
 Alpine.start()
 

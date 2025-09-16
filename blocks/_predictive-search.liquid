@@ -37,8 +37,13 @@
           @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
         >
 
-        <button type="button" aria-label="Close search" class="button w-4" onclick="this.closest('dialog')?.close()">
-          {% render 'icon-cross' %}
+        <button
+          type="button"
+          aria-label="Close search"
+          class="button flex items-center gap-2"
+          onclick="this.closest('dialog')?.close()"
+        >
+          Close <span class="size-4">{% render 'icon-cross' %}</span>
         </button>
 
         <input type="hidden" name="type" value="product,page">
