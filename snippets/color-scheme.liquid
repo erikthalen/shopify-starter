@@ -1,18 +1,14 @@
-{%- comment -%}
-  Used to output a color scheme as inline css variables
-  Loops through all/any colors defined in the current scheme of a section
+{% doc %}
+  Used to output a color scheme as inline css variables.
+  Loops through all/any colors defined in the supplied scheme.
 
-  usage:
+  @param {object} [color_scheme] - The color_scheme to output, defaults to `section.settings.color_scheme`
 
-  <div style="{% render 'color-scheme' %}">
-    ...
-  </div>
-
-  Defaults to finding a scheme under the key "section.settings.color_scheme"
-  overwrite this with "color_scheme":
+  @example
+  <div style="{% render 'color-scheme' %}">...</div>
 
   <div style="{% render 'color-scheme', color_scheme: block.settings.my_scheme %}"></div>
-{%- endcomment -%}
+{% enddoc %}
 
 {%- assign scheme = color_scheme | default: section.settings.color_scheme | default: block.settings.color_scheme -%}
 {%- assign colors = scheme.settings | remove_first: '{' | remove_last: '}' | split: ', ' -%}

@@ -1,3 +1,7 @@
+{% doc %}
+  Outputs a `<dialog>` that holds the `{{ cart }}` content, and a button that toggles the `open` state.
+{% enddoc %}
+
 <a
   href="{{ routes.cart_url }}"
   x-data="{ active: {% if request.path == '{{ routes.cart_url }}' %}true{% else %}false{% endif %} }"

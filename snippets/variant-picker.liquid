@@ -1,9 +1,10 @@
-{% comment %}
+{% doc %}
   This snippet renders all product options as links to the corresponding variant.
   The javascript hijacks the redirect and swaps the markup of itself as well as a target (product form).
+  Requires [Alpine.js](https://alpinejs.dev/) and `src/utils/alpine-swap.ts`.
 
   The target form only needs to care about the currently selected variant,
-  as the form is always the "current" form.
+  as the form is always the "current" variant's form.
 
   @example
   {% render 'variant-picker' %}
@@ -13,7 +14,7 @@
     <input type="hidden" name="quantity" value="1">
     <button>Add to cart</button>
   {% endform %}
-{% endcomment %}
+{% enddoc %}
 
 {% unless product.has_only_default_variant %}
   {% assign disabled_classes = 'text-gray-300 border-gray-200 after:h-px after:w-[150%] after:-rotate-[18deg] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:bg-zinc-200' %}

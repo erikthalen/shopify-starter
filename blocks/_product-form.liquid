@@ -1,3 +1,12 @@
+{% doc %}
+  Outputs a `{% form 'product' %}`.  
+  Requires that the `closest.product` is set to the product to render.
+  Includes a variant picker.
+
+  @example
+  {% content_for 'block', type: '_product-form', id: 'pf', closest.product: product %}
+{% enddoc %}
+
 {% assign product = closest.product %}
 
 {% render 'variant-picker', swap_ids: 'variant_picker product_info variant_id add_to_cart_button' %}
@@ -14,7 +23,7 @@
     <button
       type="button"
       @click="decrease"
-      class="inline-flex size-6 items-center justify-center rounded-full border border-gray-300 hover:border-black"
+      class="button"
       aria-label="Decrease quantity of {{ product.title }}"
     >
       -
@@ -26,7 +35,7 @@
     <button
       type="button"
       @click="increase"
-      class="inline-flex size-6 items-center justify-center rounded-full border border-gray-300 hover:border-black"
+      class="button"
       aria-label="Increase quantity of {{ product.title }}"
     >
       +

@@ -1,3 +1,8 @@
+{% doc %}
+  Outputs a `<dialog>` that holds the `{{ localization }}` content, and a button that toggles the `open` state.
+  The dialog has a `<form>` where the language and currency can be changed.
+{% enddoc %}
+
 <button id="localization_button" class="button" onclick="document.getElementById('localization_form')?.showModal()">
   {{ localization.language.iso_code }} / {{ localization.country.currency.symbol }}
 </button>

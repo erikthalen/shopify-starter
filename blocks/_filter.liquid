@@ -1,6 +1,7 @@
-{% comment %}
+{% doc %}
+  Outputs a `<dialog>` that holds the `{{ filter }}` content, and a button that toggles the `open` state.
   https://help.shopify.com/en/manual/online-store/search-and-discovery
-{% endcomment %}
+{% enddoc %}
 
 {% assign active_values = collection.filters | map: 'active_values' %}
 {% assign active_values_amount = 0 %}

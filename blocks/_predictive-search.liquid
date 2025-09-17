@@ -1,3 +1,8 @@
+{% doc %}
+  Outputs a `<dialog>` with a `<form>` to use the `{{ predictive_search }}`-api, and a button that toggles the `open` state.
+  Requires the section `predictive-search-results.liquid` where the search result items are rendered.
+{% enddoc %}
+
 <a
   href="{{ routes.search_url }}"
   class="button"

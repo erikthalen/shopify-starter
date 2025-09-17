@@ -1,3 +1,11 @@
+{% doc %}
+  Outputs `{% form 'product' %}` hardcoded with 1 of the current variant.  
+  Requires that the `closest.product` is set to the product to render.
+
+  @example
+  {% content_for 'block', type: '_quick-buy', id: 'qb', closest.product: product %}
+{% enddoc %}
+
 {% assign product = closest.product %}
 {% assign variant = product.selected_or_first_available_variant %}
 

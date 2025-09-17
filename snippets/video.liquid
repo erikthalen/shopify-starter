@@ -1,3 +1,12 @@
+{% doc %}
+  Outputs a <video> in a optionally defined aspect ratio.
+
+  @param {object} video - A Shopify "video"
+  @param {string} [aspect_ratio] - CSS property value for aspect-ratio
+  @param {string} [aspect_ratio_sm] - Aspect ratio for small screens (overrides `aspect_ratio`)
+  @param {string} [aspect_ratio_md] - Aspect ratio for large screens (overrides `aspect_ratio`)
+{% enddoc %}
+
 {% if video %}
   <div
     class="video"

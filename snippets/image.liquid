@@ -1,21 +1,18 @@
-{%- comment -%}
-  Image snippet that supports aspect-ratios, using the Shopify "crop: 'ratio'" attribute.
-  The snippet respects FocalPoint set in Shopify image editor.
+{% doc %}
+  Outputs an image, supports aspect-ratios and respects FocalPoint set in Shopify image editor.
 
-  props:
+  @param {object} image - A Shopify "image"
+  @param {object} [image_mobile] - Another image shown on small screens
+  @param {string} [sizes] - Value for the `sizes` attribute, defaults to `100vw, 100vw`
+  @param {string} [loading] - Sets `loading` attribute, defaults to `lazy`
+  @param {string} [aspect_ratio] - CSS property value defining aspect ratio, f.ex: `16/9`
+  @param {string} [aspect_ratio_sm] - Value defining aspect ratio on small screens (overwrites aspect_ratio)
+  @param {string} [aspect_ratio_md] - Value defining aspect ratio on large screens (overwrites aspect_ratio)
+  @param {string} [style] - Any inline style to apply to the `<img>`
+  @param {string} [class] - Any classes to apply to the `<img>`
+  @param {string} [fill] - `'h'` | `'w'` | `'both'`. Make `<img>` have same hight/width as its container
 
-  image:           the shopify image object,
-  image_mobile:    optionally another image for mobile
-  sizes:           value for the sizes attribute, defaults to '100vw, 100vw'
-  loading:         sets loading attribute, defaults to 'lazy'
-  aspect_ratio:    css string defining aspect ratio, f.ex: '16/9'
-  aspect_ratio_sm: css string defining aspect ratio on small screens (overwrites aspect_ratio)
-  aspect_ratio_md: css string defining aspect ratio on large screens (overwrites aspect_ratio)
-  style:           any inline style to apply to the <img>
-  fill:            'h' | 'w' | 'both'. make <img> have same hight/width as its container
-
-  example usages:
-
+  @example
   {% render 'image', image: product.featured_image %}
 
   {% render 'image',
@@ -31,7 +28,7 @@
     aspect_ratio_sm: '3/4'
     aspect_ratio_md: '16/9'
   %}
-{%- endcomment -%}
+{% enddoc %}
 
 {%- assign image_name_desktop = image | image_url | split: '/' | last | split: '?' | first -%}
 {%- assign fpd = images[image_name_desktop].presentation.focal_point -%}
@@ -258,7 +255,7 @@
       opacity: 0;
 
       &.show {
-        opacity: 1
+        opacity: 1;
       }
     }
   }

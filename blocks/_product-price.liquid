@@ -1,3 +1,11 @@
+{% doc %}
+  Outputs the price of a product.  
+  Requires that the `closest.product` is set to the product to render.
+
+  @example
+  {% content_for 'block', type: '_product-price', id: 'p', closest.product: product %}
+{% enddoc %}
+
 {% assign product = closest.product %}
 {% assign variant = product.selected_or_first_available_variant %}
 

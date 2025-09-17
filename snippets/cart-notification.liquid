@@ -1,15 +1,15 @@
+{% doc %}
+  Shows a notification when products are added to the cart.
+  Requires a section named "cart-notification-content.liquid", that holds the content.
+  The logic is defined as an [Alpine.js](https://alpinejs.dev/) component in `cart-notification.ts`
+{% enddoc %}
+
 <dialog
   id="cart_notification"
   x-data="cartNotification"
   class="fixed z-11 left-auto top-14 right-4 rounded px-4 py-3 w-full max-w-[calc(100vw-2rem)] md:max-w-md"
   closedby="any"
->
-  {% comment %}
-    Content is injected from
-    `/sections/cart-notification-content.liquid`
-    by typescript
-  {% endcomment %}
-</dialog>
+></dialog>
 
 {% comment %} backdrop {% endcomment %}
 <div

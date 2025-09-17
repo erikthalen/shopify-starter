@@ -1,3 +1,22 @@
+{% doc %}
+  Place this below a paginated list,
+  and the next page will render automatically when it reached the bottom.
+  The logic is defined as an [Alpine.js](https://alpinejs.dev/) component in `infinite-scroll.ts`
+
+  @param {object} paginate - A Shopify {{ paginate }} object
+
+  @example
+  {% paginate collection.products by 12 %}
+    <ol id="paginated_items" x-merge="append">
+      {% for product in collection.products %}
+        <li>{{ product.title }}</li>
+      {% endfor %}
+    </ol>
+      
+    {% render 'infinite-scroll', paginate: paginate %}  
+  {% endpaginate %}
+{% enddoc %}
+
 {%- if paginate.next -%}
   <div x-data="infiniteScroll">
     <div

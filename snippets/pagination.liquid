@@ -1,3 +1,20 @@
+{% doc %}
+  Outputs a default Shopify pagination.
+
+  @param {object} paginate - A Shopify {{ paginate }} object
+
+  @example
+  {% paginate collection.products by 12 %}
+    <ol>
+      {% for product in collection.products %}
+        <li>{{ product.title }}</li>
+      {% endfor %}
+    </ol>
+      
+    {% render 'pagination', paginate: paginate %}  
+  {% endpaginate %}
+{% enddoc %}
+
 {%- if paginate.pages > 1 -%}
   <nav role="navigation" class="mt-20 flex justify-center" x-data>
     <ol class="flex gap-4">
