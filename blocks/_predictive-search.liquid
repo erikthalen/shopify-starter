@@ -27,7 +27,7 @@
         </div>
 
         <input
-          class="w-full py-2 text-base uppercase focus:outline-0"
+          class="w-full py-2 focus:outline-0"
           type="text"
           placeholder="Search products and pages"
           autofocus
@@ -76,7 +76,7 @@
         <input type="hidden" name="options[prefix]" value="last">
       </form>
 
-      <div x-show="q !== ''" x-ref="predictiveSearchResults" class="">
+      <div x-show="q !== ''" x-ref="predictiveSearchResults">
         <output id="predictive-search-results" x-merge="update" class="bg-white pb-4"> </output>
       </div>
     </div>

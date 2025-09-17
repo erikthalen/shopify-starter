@@ -9,14 +9,14 @@
     </div>
 
     <input
-      class="w-full py-2 text-base uppercase focus:outline-0"
+      class="w-full py-2 focus:outline-0"
       type="text"
       placeholder="Search products and pages"
       autofocus
       name="q"
     >
 
-    <button class="button text-xs uppercase tracking-wide">Search</button>
+    <button class="button">Search</button>
 
     <input type="hidden" name="type" value="product,page">
     <input type="hidden" name="options[unavailable_products]" value="hide">
@@ -29,16 +29,16 @@
 {% else %}
   <section id="search_results" class="p-4">
     {% if search.results_count == 0 %}
-      <h1 class="text-sm uppercase">No results for "{{ search.terms }}"</h1>
+      <h1>No results for "{{ search.terms }}"</h1>
     {% else %}
       {% paginate search.results by 24 %}
         <div class="mb-2 flex justify-between">
-          <h1 class="text-sm uppercase">
+          <h1>
             Results for: "{{ search.terms }}"
             <span class="text-neutral-500">({{ search.results_count }})</span>
           </h1>
 
-          <div class="grid justify-items-end text-xs uppercase">
+          <div class="grid justify-items-end">
             <p class="mb-2 text-neutral-500">Sort by:</p>
             {%- for option in search.sort_options -%}
               <a

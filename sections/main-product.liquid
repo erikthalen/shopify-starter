@@ -27,10 +27,10 @@
 
       {%- unless product.description == '<p></p>' -%}
         <details id="product_description" class="mt-4 border-t border-gray-200">
-          <summary class="py-4 cursor-pointer text-xs tracking-wider uppercase">Description</summary>
+          <summary class="py-4 cursor-pointer">Description</summary>
 
           <div>
-            <div class="pb-4 text-xs leading-normal">{{ product.description }}</div>
+            <div class="pb-4">{{ product.description }}</div>
           </div>
         </details>
       {%- endunless -%}

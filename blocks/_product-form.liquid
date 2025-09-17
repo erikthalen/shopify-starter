@@ -8,13 +8,13 @@
   class: 'w-full my-4',
   x-target: 'cart cart_drawer_content cart_amount'
 %}
-  <p class="mb-2 text-xs tracking-wider uppercase">Quantity</p>
+  <p class="mb-2">Quantity</p>
 
   <div id="quantity_selector" x-data="quantitySelector({ min: 1 })" class="flex items-center gap-3">
     <button
       type="button"
       @click="decrease"
-      class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+      class="inline-flex size-6 items-center justify-center rounded-full border border-gray-300 hover:border-black"
       aria-label="Decrease quantity of {{ product.title }}"
     >
       -
@@ -26,7 +26,7 @@
     <button
       type="button"
       @click="increase"
-      class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+      class="inline-flex size-6 items-center justify-center rounded-full border border-gray-300 hover:border-black"
       aria-label="Increase quantity of {{ product.title }}"
     >
       +
@@ -37,7 +37,7 @@
 
   <button
     id="add_to_cart_button"
-    class="{% if product.selected_or_first_available_variant.available %}text-black{% else %}text-gray-400{% endif %} my-4 flex justify-center gap-2 items-center w-full cursor-pointer rounded border border-gray-400 bg-gray-100 p-2 text-xs tracking-wider uppercase"
+    class="{% if product.selected_or_first_available_variant.available %}text-black{% else %}text-gray-400{% endif %} my-4 flex justify-center gap-2 items-center w-full rounded border border-gray-400 bg-gray-100 p-2"
     type="submit"
     name="add"
   >
@@ -52,7 +52,7 @@
     {% endif %}
   </button>
 
-  <div id="shopify_payment_button" class="text-xs uppercase text-gray-600">
+  <div id="shopify_payment_button" class="text-gray-600">
     {{ form | payment_button }}
   </div>
 {% endform %}

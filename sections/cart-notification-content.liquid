@@ -3,7 +3,7 @@
 
 <section class="grid gap-4">
   <header class="flex justify-between gap-4 items-center pb-2 border-b border-gray-300">
-    <span class="text-xs uppercase tracking-wide text-gray-400">Added to your cart</span>
+    <span class="text-gray-400">Added to your cart</span>
 
     <button onclick="this.closest('dialog')?.close()" aria-label="Close cart notification" class="button size-5">
       {% render 'icon-cross' %}
@@ -14,15 +14,15 @@
     {% render 'image', image: image, class: 'rounded overflow-hidden', sizes: '100px, 100px' %}
 
     <div>
-      <h1 class="text-sm uppercase tracking-wide mb-2">{{ product.title }}</h1>
+      <h1 class="mb-2">{{ product.title }}</h1>
 
-      <span class="text-xs uppercase tracking-wide">
+      <span>
         {% content_for 'block', type: '_product-price', id: 'price', closest.product: product %}
       </span>
     </div>
   </div>
 
-  <footer class="flex justify-between gap-4 items-center border-t border-gray-300 pt-2">
+  <footer class="flex justify-between gap-4 items-center border-t border-gray-300 pt-3">
     <a
       href="{{ routes.cart_url }}"
       onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_notification')?.close(); document.getElementById('cart_drawer')?.showModal()"

@@ -18,9 +18,9 @@
             %}
 
             <div class="flex flex-col">
-              <span class="text-sm">{{ product.title }}</span>
+              <span>{{ product.title }}</span>
 
-              <dl class="mt-1 grid grid-cols-[auto_1fr] gap-x-2 text-xs uppercase">
+              <dl class="mt-1 grid grid-cols-[auto_1fr] gap-x-2">
                 {%- for option in product.options_with_values -%}
                   <dt>{{ option.name }}:</dt>
                   <dd>{{ option.selected_value }}</dd>

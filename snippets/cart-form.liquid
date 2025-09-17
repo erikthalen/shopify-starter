@@ -28,7 +28,7 @@
 
           <div class="flex w-full flex-col">
             <div class="mb-1 flex justify-between">
-              <a class="text-sm uppercase tracking-wide" href="{{ item.url }}">{{ item.product.title | escape }}</a>
+              <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
 
               <div class="text-right">
                 {% comment %} per item price {% endcomment %}
@@ -67,7 +67,7 @@
               </div>
             </div>
 
-            <dl class="inline-grid w-fit grid-cols-2 gap-x-2 text-xs uppercase">
+            <dl class="inline-grid w-fit grid-cols-[auto_1fr] gap-x-2">
               {%- if item.product.has_only_default_variant == false -%}
                 {%- for option in item.options_with_values -%}
                   <dt class="text-gray-400">{{ option.name }}:</dt>
@@ -109,7 +109,7 @@
                     type="button"
                     @click="decrease"
                     @click.debounce="$el.form.requestSubmit()"
-                    class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+                    class="inline-flex aspect-square size-6 items-center justify-center rounded-full border border-gray-300 hover:border-black"
                     aria-label="Decrease quantity of {{ item.title }}"
                   >
                     -
@@ -122,7 +122,7 @@
                     type="button"
                     @click="increase"
                     @click.debounce="$el.form.requestSubmit()"
-                    class="inline-flex aspect-square size-6 cursor-pointer items-center justify-center rounded-full border border-gray-300 hover:border-black"
+                    class="inline-flex aspect-square size-6 items-center justify-center rounded-full border border-gray-300 hover:border-black"
                     aria-label="Increase quantity of {{ item.title }}"
                   >
                     +
@@ -132,7 +132,7 @@
                 <a
                   x-target="cart cart_drawer_content cart_amount"
                   data-barba-prevent
-                  class="inline-block border-b border-dotted text-xs text-gray-600 uppercase hover:text-black"
+                  class="inline-block border-b border-dotted text-gray-600 hover:text-black"
                   href="{{ item.url_to_remove }}"
                 >
                   Remove
@@ -145,10 +145,10 @@
     </ul>
 
     <div class="mt-auto grid w-full border-t border-gray-200 bg-white py-4">
-      <p class="text-right uppercase">Total: {{ cart.total_price | money_with_currency }}</p>
+      <p class="text-right">Total: {{ cart.total_price | money_with_currency }}</p>
 
       <button
-        class="cursor-pointer mt-4 w-full rounded border border-gray-300 bg-gray-100 p-2 text-xs tracking-wider uppercase"
+        class="mt-4 w-full rounded border border-gray-300 bg-gray-100 p-2"
         type="submit"
         name="checkout"
         formnoajax

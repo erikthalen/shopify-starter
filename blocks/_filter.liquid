@@ -23,7 +23,7 @@
     <div class="grid justify-center gap-4 border-b border-gray-300 bg-white px-4 pt-14 md:grid-cols-4 md:pb-14">
       {%- for filter in collection.filters -%}
         <div>
-          <p class="mb-2 text-xs tracking-wider uppercase">{{ filter.label }}</p>
+          <p class="mb-2">{{ filter.label }}</p>
 
           {%- case filter.type -%}
               {% comment %} BOOLEAN FILTER {% endcomment %}
@@ -66,12 +66,12 @@
                         {%- endif -%}
                       "
                     {% endif %}
-                    class="ml-2 inline-flex items-center gap-2 text-sm text-gray-900"
+                    class="ml-2 inline-flex items-center gap-2 text-gray-900"
                   >
                     {{ filter_value.swatch.image }}
                     <input
                       type="checkbox"
-                      class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-neutral-900 focus:ring-neutral-900"
+                      class="size-4 rounded border-gray-300 bg-gray-100 text-neutral-900 focus:ring-neutral-900"
                       name="{{ filter_value.param_name }}"
                       value="{{ filter_value.value }}"
                       {% if filter_value.active -%}
@@ -169,7 +169,7 @@
 
       <div class="sticky right-0 bottom-0 flex items-end gap-4 bg-white md:px-4 pb-4 pt-2 max-md:border-t max-md:border-gray-300 md:absolute">
         <div>
-          <label for="sort-by" class="inline-block text-xs tracking-wider uppercase">Sort by:</label>
+          <label for="sort-by" class="inline-block">Sort by:</label>
           <select id="sort-by" name="sort_by" class="inline-block">
             <option value="manual">Manual</option>
             <option value="best-selling">Best selling</option>
@@ -184,7 +184,7 @@
         <a
           x-swap="filter_form filter_result filter_button"
           href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
-          class="inline-block border-b border-dotted text-xs whitespace-nowrap text-gray-600 uppercase hover:text-black"
+          class="inline-block border-b border-dotted whitespace-nowrap text-gray-600 hover:text-black"
         >
           Clear all
         </a>
