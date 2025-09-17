@@ -20,10 +20,7 @@
     @change="$el.requestSubmit()"
     class="max-h-dvh overflow-auto overscroll-contain"
   >
-    <div
-      class="grid justify-center gap-4 border-b border-gray-300 bg-white px-4 pt-14 md:grid-cols-4 md:pb-14"
-      x-bind="drawerContent"
-    >
+    <div class="grid justify-center gap-4 border-b border-gray-300 bg-white px-4 pt-14 md:grid-cols-4 md:pb-14">
       {%- for filter in collection.filters -%}
         <div>
           <p class="mb-2 text-xs tracking-wider uppercase">{{ filter.label }}</p>
