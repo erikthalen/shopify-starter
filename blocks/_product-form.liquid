@@ -17,49 +17,49 @@
   class: 'w-full my-4',
   x-target: 'cart cart_drawer_content cart_amount'
 %}
-  <p class="mb-2">Quantity</p>
-
-  <div id="quantity_selector" x-data="quantitySelector({ min: 1 })" class="flex items-center gap-3">
-    <button
-      type="button"
-      @click="decrease"
-      class="button"
-      aria-label="Decrease quantity of {{ product.title }}"
-    >
-      -
-    </button>
-
-    <input type="hidden" name="quantity" value="1">
-    <output for="quantity">1</output>
-
-    <button
-      type="button"
-      @click="increase"
-      class="button"
-      aria-label="Increase quantity of {{ product.title }}"
-    >
-      +
-    </button>
-  </div>
-
   <input id="variant_id" type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
 
-  <button
-    id="add_to_cart_button"
-    class="{% if product.selected_or_first_available_variant.available %}text-black{% else %}text-gray-400{% endif %} my-4 flex justify-center gap-2 items-center w-full rounded border border-gray-400 bg-gray-100 p-2"
-    type="submit"
-    name="add"
-  >
-    <span class="size-4 -ml-4 opacity-0">
-      {% render 'icon-spinner' %}
-    </span>
+  <fieldset class="flex gap-4 my-6">
+    <div id="quantity_selector" x-data="quantitySelector({ min: 1 })" class="flex items-center gap-3">
+      <button
+        type="button"
+        @click="decrease"
+        class="checkbox w-8"
+        aria-label="Decrease quantity of {{ product.title }}"
+      >
+        -
+      </button>
 
-    {% if product.selected_or_first_available_variant.available %}
-      Add to cart
-    {% else %}
-      Notify me
-    {% endif %}
-  </button>
+      <input type="hidden" name="quantity" value="1">
+      <output for="quantity">1</output>
+
+      <button
+        type="button"
+        @click="increase"
+        class="checkbox w-8"
+        aria-label="Increase quantity of {{ product.title }}"
+      >
+        +
+      </button>
+    </div>
+
+    <button
+      id="add_to_cart_button"
+      class="button-solid {% if product.selected_or_first_available_variant.available %}text-black{% else %}text-gray-400{% endif %}"
+      type="submit"
+      name="add"
+    >
+      <span class="size-4 -ml-4 opacity-0">
+        {% render 'icon-spinner' %}
+      </span>
+
+      {% if product.selected_or_first_available_variant.available %}
+        Add to cart
+      {% else %}
+        Notify me
+      {% endif %}
+    </button>
+  </fieldset>
 
   <div id="shopify_payment_button" class="text-gray-600">
     {{ form | payment_button }}
