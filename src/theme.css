@@ -51,6 +51,8 @@ html {
     16px,
     calc(16px + 16 * var(--zoom-amount) * (100vw - 1440px) / 1440)
   );
+
+  scroll-padding-top: 2.5rem; /* header height */
 }
 
 body:has(dialog[scroll-lock][open], details[scroll-lock][open]) {

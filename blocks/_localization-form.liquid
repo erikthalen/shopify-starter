@@ -8,12 +8,12 @@
 </button>
 
 <dialog id="localization_form" closedby="any" class="top-1/3 left-1/2 w-full max-w-md -translate-1/2 rounded-lg">
-  {% form 'localization', x-target: 'content_for_layout localization_button cart cart_form' %}
+  {% form 'localization', x-target: 'main localization_button cart cart_form' %}
     <div class="p-5">
       <header class="flex items-center justify-between">
         <h1 class="text-gray-500">Shop in your local currency</h1>
 
-        <button type="button" aria-label="Close modal" class="button w-4" onclick="this.closest('dialog')?.close()">
+        <button type="button" aria-title="Close modal" class="button w-4" onclick="this.closest('dialog')?.close()">
           {% render 'icon-cross' %}
         </button>
       </header>

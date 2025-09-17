@@ -17,6 +17,7 @@
     class="quick-buy relative border-b border-dotted button flex items-center disabled:text-gray-300"
     type="submit"
     name="add"
+    aria-name="Add {{ product.title }} - {{ variant.options | join: ' / ' }} to cart"
     {%- unless variant.available -%}
       disabled
     {%- endunless -%}

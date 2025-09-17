@@ -2,9 +2,19 @@ import barba from "@barba/core"
 import { defineComponent } from "~/utils/define"
 
 export default defineComponent(() => ({
-  async appendPageToCache(e: CustomEventInit) {
+  init() {
+    // mimic barba's `cacheFirstPage` option
+    setTimeout(() => {
+      if (!barba.cache.get(barba.history.current.url)) {
+        this.createCache({ html: document.documentElement.outerHTML })
+      }
+    })
+  },
+
+  async updateBarbaCache(e: CustomEventInit) {
     const currentCache =
-      barba.cache.get(barba.history.current.url) || this.createCache(e)
+      barba.cache.get(barba.history.current.url) ||
+      this.createCache({ html: e.detail.raw })
 
     const currentCacheRequest = await currentCache.request
 
@@ -45,13 +55,13 @@ export default defineComponent(() => ({
   },
 
   // mimics barba's functionality of adding to its cache
-  createCache(e: CustomEventInit) {
+  createCache({ html }: { html: string }) {
     const url = new URL(barba.history.current.url)
 
     return barba.cache.set(
       barba.history.current.url,
       Promise.resolve({
-        html: e.detail.raw,
+        html,
         url: {
           hash: url.hash,
           href: url.href,

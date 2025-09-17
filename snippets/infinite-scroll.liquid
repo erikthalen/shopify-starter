@@ -22,9 +22,9 @@
     <div
       id="pagination"
       x-intersect="$ajax('{{ paginate.next.url }}', { target: 'paginated_items pagination' })"
-      @ajax:success="appendPageToCache($event)"
+      @ajax:success="updateBarbaCache($event)"
     >
-      <a href="{{ paginate.next.url }}"> Next page </a>
+      <a class="sr-only" href="{{ paginate.next.url }}"> Next page </a>
     </div>
   </div>
 {%- endif -%}

@@ -52,18 +52,18 @@ barba.init({
   prevent: () => window.Shopify.designMode,
   cacheIgnore: "/cart",
   transitions: [
-    {
-      name: "self",
-      beforeLeave() {
-        document.documentElement.style.scrollBehavior = "smooth"
-      },
-      enter() {
-        return new Promise(resolve => setTimeout(resolve, 1000))
-      },
-      after() {
-        document.documentElement.style.removeProperty("scroll-behavior")
-      },
-    },
+    // {
+    //   name: "self",
+    //   beforeLeave() {
+    //     document.documentElement.style.scrollBehavior = "smooth"
+    //   },
+    //   enter() {
+    //     return new Promise(resolve => setTimeout(resolve, 1000))
+    //   },
+    //   after() {
+    //     document.documentElement.style.removeProperty("scroll-behavior")
+    //   },
+    // },
     {
       name: "slide-right",
       sync: true, // make browser keep history scroll position

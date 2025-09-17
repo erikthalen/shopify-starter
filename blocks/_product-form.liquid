@@ -8,6 +8,7 @@
 {% enddoc %}
 
 {% assign product = closest.product %}
+{% assign variant = product.selected_or_first_available_variant %}
 
 {% render 'variant-picker', swap_ids: 'variant_picker product_info variant_id add_to_cart_button' %}
 
@@ -17,7 +18,7 @@
   class: 'w-full my-4',
   x-target: 'cart cart_drawer_content cart_amount'
 %}
-  <input id="variant_id" type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+  <input id="variant_id" type="hidden" name="id" value="{{ variant.id }}">
 
   <fieldset class="flex gap-4 my-6">
     <div id="quantity_selector" x-data="quantitySelector({ min: 1 })" class="flex items-center gap-3">
@@ -25,7 +26,7 @@
         type="button"
         @click="decrease"
         class="checkbox w-8"
-        aria-label="Decrease quantity of {{ product.title }}"
+        aria-title="Decrease quantity of {{ product.title }}"
       >
         -
       </button>
@@ -37,7 +38,7 @@
         type="button"
         @click="increase"
         class="checkbox w-8"
-        aria-label="Increase quantity of {{ product.title }}"
+        aria-title="Increase quantity of {{ product.title }}"
       >
         +
       </button>
@@ -45,15 +46,16 @@
 
     <button
       id="add_to_cart_button"
-      class="button-solid {% if product.selected_or_first_available_variant.available %}text-black{% else %}text-gray-400{% endif %}"
+      class="button-solid {% if variant.available %}text-black{% else %}text-gray-400{% endif %}"
       type="submit"
       name="add"
+      aria-name="Add {{ product.title }} - {{ variant.options | join: ' / ' }} to cart"
     >
       <span class="size-4 -ml-4 opacity-0">
         {% render 'icon-spinner' %}
       </span>
 
-      {% if product.selected_or_first_available_variant.available %}
+      {% if variant.available %}
         Add to cart
       {% else %}
         Notify me

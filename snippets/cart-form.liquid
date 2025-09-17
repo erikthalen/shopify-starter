@@ -110,7 +110,7 @@
                     @click="decrease"
                     @click.debounce="$el.form.requestSubmit()"
                     class="button"
-                    aria-label="Decrease quantity of {{ item.title }}"
+                    aria-title="Decrease cart quantity of {{ item.title }}"
                   >
                     -
                   </button>
@@ -123,7 +123,7 @@
                     @click="increase"
                     @click.debounce="$el.form.requestSubmit()"
                     class="button"
-                    aria-label="Increase quantity of {{ item.title }}"
+                    aria-title="Increase cart quantity of {{ item.title }}"
                   >
                     +
                   </button>
@@ -134,6 +134,7 @@
                   data-barba-prevent
                   class="inline-block border-b border-dotted text-gray-600 hover:text-black"
                   href="{{ item.url_to_remove }}"
+                  aria-title="Remove {{ item.title }} from cart"
                 >
                   Remove
                 </a>
