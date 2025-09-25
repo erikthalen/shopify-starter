@@ -22,39 +22,38 @@
       x-data="predictiveSearch"
       class="mx-auto grid w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40"
     >
-      <form
-        @submit.prevent="handleFormSubmit"
-        action="{{ routes.search_url }}"
-        class="sticky top-0 mb-6 flex items-center gap-2 border-b border-gray-400 bg-white pt-5 md:pt-30"
-      >
-        <div class="w-4 opacity-50">
-          {% render 'icon-magnifier' %}
-        </div>
-
-        <input
-          class="w-full py-2 focus:outline-0"
-          type="text"
-          placeholder="Search products and pages"
-          autofocus
-          name="q"
-          x-model="q"
-          x-ref="input"
-          @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
+      <div class="sticky top-0 mb-6 flex items-center gap-2 border-b border-gray-400 bg-white pt-5 md:pt-30">
+        <form
+          class="contents"
+          @submit.prevent="handleFormSubmit"
+          action="{{ routes.search_url }}"
         >
+          <div class="w-4 opacity-50">
+            {% render 'icon-magnifier' %}
+          </div>
 
-        <button
-          type="button"
-          aria-title="Close search"
-          class="button flex items-center gap-2"
-          onclick="this.closest('dialog')?.close()"
-        >
-          Close <span class="size-4">{% render 'icon-cross' %}</span>
-        </button>
+          <input
+            class="w-full py-2 focus:outline-0"
+            type="text"
+            placeholder="Search products and pages"
+            autofocus
+            name="q"
+            x-model="q"
+            x-ref="input"
+            @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
+          >
 
-        <input type="hidden" name="type" value="product,page">
-        <input type="hidden" name="options[unavailable_products]" value="hide">
-        <input type="hidden" name="options[prefix]" value="last">
-      </form>
+          <input type="hidden" name="type" value="product,page">
+          <input type="hidden" name="options[unavailable_products]" value="hide">
+          <input type="hidden" name="options[prefix]" value="last">
+        </form>
+
+        <form method="dialog">
+          <button class="button flex items-center gap-2">
+            Close <span class="size-4">{% render 'icon-cross' %}</span>
+          </button>
+        </form>
+      </div>
 
       <form
         class="sr-only"
@@ -100,6 +99,10 @@
     transition: all 500ms var(--ease-in-out) allow-discrete;
   }
 
+  dialog#predictive_search:not(:has(output:first-child)) {
+    touch-action: none;
+  }
+
   @starting-style {
     dialog#predictive_search[open] {
       transform: translateY(-100%);
@@ -111,6 +114,8 @@
     opacity: 0;
     backdrop-filter: blur(2px);
     transition: all 500ms var(--ease-in-out) allow-discrete;
+
+    touch-action: none;
   }
 
   dialog#predictive_search[open]::backdrop {
