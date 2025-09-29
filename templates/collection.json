@@ -1,13 +1,9 @@
 {
   "sections": {
-    "filter": {
-      "type": "filter",
-      "settings": {}
-    },
     "default": {
       "type": "main-collection",
       "settings": {}
     }
   },
-  "order": ["filter", "default"]
+  "order": ["default"]
 }
