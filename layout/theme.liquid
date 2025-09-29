@@ -42,14 +42,15 @@
       {% render 'cart-notification' %}
 
       <main
-        id="main"
         data-barba="container"
         role="main"
         class="grid min-h-[calc(100vh-2.5rem)] grid-rows-[1fr_auto] bg-white"
       >
-        {{ content_for_layout }}
+        <div id="content" class="contents">
+          {{ content_for_layout }}
 
-        {% sections 'footer-group' %}
+          {% sections 'footer-group' %}
+        </div>
       </main>
     </div>
   </body>
