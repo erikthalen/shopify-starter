@@ -165,7 +165,7 @@ barba.hooks.before(() => {
 
 // place the old page "where it was" on navigation/scroll
 fixatePageOnNavigation({
-  top: "calc(2.5rem + var(--announcement-bar-height, 0px))",
+  top: "calc(var(--header-height, 0rem) + var(--announcement-bar-height, 0rem))",
 })
 
 /**
