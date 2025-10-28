@@ -1,0 +1,35 @@
+<div id="announcement_bar" class="bg-gray-100 relative z-10 h-10 flex items-center justify-center px-4">
+  {{ section.settings.text }}
+</div>
+
+{% stylesheet %}
+  body {
+    --announcement-bar-height: 0rem;
+  }
+
+  body:has(#announcement_bar) {
+    --announcement-bar-height: 2.5rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Announcement"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar"
+    }
+  ]
+}
+{% endschema %}
