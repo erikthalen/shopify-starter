@@ -38,12 +38,6 @@ shopify-editor {
   background-color: white;
 }
 
-html:not(.no-js) {
-  [x-cloak] {
-    display: none !important;
-  }
-}
-
 html {
   /* apply zooming of everything on screens > 1440px */
   --zoom-amount: 0.2;
@@ -53,6 +47,12 @@ html {
   );
 
   scroll-padding-top: 2.5rem; /* header height */
+
+  &:not(.no-js) {
+    [x-cloak] {
+      display: none !important;
+    }
+  }
 }
 
 body:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
@@ -72,6 +72,14 @@ body.is-loading * {
 
 details > summary {
   list-style: none;
+}
+
+img:not([class*="h-"]):not([class*="size-"]) {
+  height: auto;
+}
+
+img:not([class*="w-"]):not([class*="size-"]) {
+  width: 100%;
 }
 
 .checkbox {

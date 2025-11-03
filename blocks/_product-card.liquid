@@ -10,9 +10,13 @@
 <div>
   <a class="grid gap-3" href="{{ product.url }}" data-transition="slide-right">
     {% if product.selected_or_first_available_variant.featured_image != blank %}
-      {% render 'image', image: product.selected_or_first_available_variant.featured_image, sizes: '50vw, 20vw' %}
+      {% render 'image',
+        image: product.selected_or_first_available_variant.featured_image,
+        sizes: '50vw, 20vw',
+        class: 'rounded'
+      %}
     {% else %}
-      {% render 'image', image: product.featured_image, sizes: '50vw, 20vw' %}
+      {% render 'image', image: product.featured_image, sizes: '50vw, 20vw', class: 'rounded' %}
     {% endif %}
 
     <span>{{ product.title }}</span>

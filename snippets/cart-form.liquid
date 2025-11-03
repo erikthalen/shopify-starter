@@ -20,7 +20,7 @@
       {%- for item in cart.items -%}
         <li
           style="view-transition-name: cart-form-item-{{ item.variant_id }}-{{ block.id }}"
-          class="flex gap-2 overflow-clip border-b border-gray-200 py-4 last-of-type:border-0"
+          class="flex gap-2 items-start overflow-clip border-b border-gray-200 py-4 last-of-type:border-0"
         >
           {%- if item.image -%}
             {% render 'image', image: item.image, class: 'w-30 rounded overflow-hidden', sizes: '100px, 100px' %}

@@ -8,9 +8,10 @@
   @param {string} [aspect_ratio] - CSS property value defining aspect ratio, f.ex: `16/9`
   @param {string} [aspect_ratio_sm] - Value defining aspect ratio on small screens (overwrites aspect_ratio)
   @param {string} [aspect_ratio_md] - Value defining aspect ratio on large screens (overwrites aspect_ratio)
+  @param {string} [alt] - Optional alt attribute (overwrites alt defined in Shopify Admin UI)
   @param {string} [style] - Any inline style to apply to the `<img>`
   @param {string} [class] - Any classes to apply to the `<img>`
-  @param {string} [fill] - `'h'` | `'w'` | `'both'`. Make `<img>` have same hight/width as its container
+  @param {string} [id] - An html id to apply to the `<img>`
 
   @example
   {% render 'image', image: product.featured_image %}
@@ -88,32 +89,12 @@
   {%- assign height_attribute_md = image.width | divided_by: active_aspect_radio_md -%}
 {%- endif -%}
 
-{%- assign fill_class = '' -%}
-
-{%- if fill == 'h' -%}
-  {%- assign fill_class = 'h-full w-auto' -%}
-{%- elsif fill == 'w' -%}
-  {%- assign fill_class = 'h-auto w-full' -%}
-{%- elsif fill == 'both' -%}
-  {%- assign fill_class = 'h-full w-full' -%}
-{%- endif -%}
-
 {%- if image == blank -%}
   <div style="aspect-ratio: {{ aspect_ratio }}">
     {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg size-full' }}
   </div>
 {%- else -%}
-  <picture
-    {% if class != blank %}
-      class="{{ class }}"
-    {% endif %}
-    {% if style != blank %}
-      style="{{ style }}"
-    {% endif %}
-    {% if id != blank %}
-      id="{{ id }}"
-    {% endif %}
-  >
+  <picture class="contents">
     {%- if image_mobile != blank -%}
       <source
         srcset="
@@ -238,8 +219,14 @@
       x-data="{ show: false }"
       x-init="if($el.complete) show = true"
       @load="show = true"
+      class="image object-cover transition-opacity duration-300 {{ class }}"
       :class="{ show }"
-      class="image object-cover transition-opacity duration-300 {{ fill_class }}"
+      {% if style != blank %}
+        style="{{ style }}"
+      {% endif %}
+      {% if id != blank %}
+        id="{{ id }}"
+      {% endif %}
       src="{{ image | image_url: width: 2000, format: 'webp' }}"
       alt="{{ alt | default: image.alt }}"
       width="{{ image.width }}"
