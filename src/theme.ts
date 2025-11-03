@@ -174,7 +174,3 @@ fixatePageOnNavigation({
 window.addEventListener("app:loading", (e: CustomEventInit) => {
   document.body.classList.toggle("is-loading", e.detail)
 })
-
-window.addEventListener("announcement-bar:visible", (e: CustomEventInit) => {
-  console.log(e.detail)
-})

@@ -2,14 +2,27 @@
   <div
     x-data="{ shown: false }"
     x-init="$watch('shown', (value) => $dispatch('announcement-bar:visible', value))"
-    x-intersect="shown = true"
-    x-intersect:leave="shown = false"
     id="announcement_bar"
-    class="bg-gray-100 relative z-10 h-10 flex items-center justify-center px-4"
+    class="bg-gray-100 relative z-10 h-(--announcement-bar-height) flex items-center justify-center px-4"
   >
     {{ section.settings.text }}
+
+    <template x-teleport="body">
+      <div
+        x-intersect="shown = true"
+        x-intersect:leave="shown = false"
+        class="opacity pointer-events-none absolute top-0 left-0 right-0 h-(--announcement-bar-height)"
+      ></div>
+    </template>
   </div>
 {% endif %}
+
+<!-- Append after target -->
+{% comment %}
+  <template x-teleport.append="#page">
+    <div>Appended content</div>
+  </template>
+{% endcomment %}
 
 {% stylesheet %}
   body {

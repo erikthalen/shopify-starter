@@ -37,7 +37,14 @@
     <div id="page">
       {% render 'skip-to-content-link' %}
 
-      {% sections 'header-group' %}
+      <section
+        x-data="{ translated: false }"
+        @announcement-bar:visible.window="value => translated = !value.detail"
+        class="sticky top-0 z-10 w-screen transition-transform"
+        :class="translated ? '-translate-y-(--announcement-bar-height)' : ''"
+      >
+        {% sections 'header-group' %}
+      </section>
 
       {% render 'cart-notification' %}
 
