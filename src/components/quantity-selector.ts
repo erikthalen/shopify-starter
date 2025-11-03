@@ -3,14 +3,14 @@ import { defineComponent } from "~/utils/define"
 /**
  * component that creates a quantity input.
  * reacts to "decrease" and "increase" functions.
- * outputs current value into any child <input> and <output>
+ * outputs current value into any child-`<input>` and -`<output>`
  *
  * @example
  * <div x-data="quantitySelector({ value: 4, min: 1 })">
- *  <button @click="decrease">Decrease</button>
- *  <button @click="increase">Increase</button>
- *  <input type="hidden" value="4">
- *  <output>4</output>
+ *   <button x-on:click="decrease">Decrease</button>
+ *   <button x-on:click="increase">Increase</button>
+ *   <input type="hidden" value="4">
+ *   <output>4</output>
  * </div>
  */
 export default defineComponent(
@@ -18,20 +18,20 @@ export default defineComponent(
     value: init,
 
     init() {
-      this.update()
+      this.render()
     },
 
     increase() {
       this.value++
-      this.update()
+      this.render()
     },
 
     decrease() {
       this.value = Math.max(min, this.value - 1)
-      this.update()
+      this.render()
     },
 
-    update() {
+    render() {
       const input = this.$root.querySelector("input")
       const output = this.$root.querySelector("output")
 

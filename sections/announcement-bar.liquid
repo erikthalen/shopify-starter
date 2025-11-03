@@ -1,6 +1,15 @@
-<div id="announcement_bar" class="bg-gray-100 relative z-10 h-10 flex items-center justify-center px-4">
-  {{ section.settings.text }}
-</div>
+{% if section.settings.text != blank %}
+  <div
+    x-data="{ shown: false }"
+    x-init="$watch('shown', (value) => $dispatch('announcement-bar:visible', value))"
+    x-intersect="shown = true"
+    x-intersect:leave="shown = false"
+    id="announcement_bar"
+    class="bg-gray-100 relative z-10 h-10 flex items-center justify-center px-4"
+  >
+    {{ section.settings.text }}
+  </div>
+{% endif %}
 
 {% stylesheet %}
   body {

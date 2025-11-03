@@ -25,7 +25,7 @@
       <div class="sticky top-0 mb-6 flex items-center gap-2 border-b border-gray-400 bg-white pt-5 md:pt-30">
         <form
           class="contents"
-          @submit.prevent="handleFormSubmit"
+          @submit.prevent="onSubmit"
           action="{{ routes.search_url }}"
         >
           <div class="w-4 opacity-50">
