@@ -26,30 +26,38 @@ export default defineComponent(() => ({
   },
 
   async init() {
-    window.addEventListener(
-      "ajax:after",
-      async (e: CustomEventInit) => {
-        // @ts-expect-error alpine-ajax adds a target, ts doesn't know
-        const formData = new FormData(e.target as HTMLFormElement)
-        const data = Object.fromEntries(formData?.entries())
+    try {
+      window.addEventListener(
+        "ajax:after",
+        async (e: CustomEventInit) => {
+          // @ts-expect-error alpine-ajax adds a target, ts doesn't know
+          const formData = new FormData(e.target as HTMLFormElement)
+          const data = Object.fromEntries(formData?.entries())
 
-        if (data?.form_type !== "product") return
+          if (data?.form_type !== "product") return
 
-        const content = await this.getSection(data.id.toString())
+          const content = await this.getSection(data.id.toString())
 
-        if (!content) return
+          if (!content) return
 
-        this.$root.innerHTML = content.innerHTML || ""
+          this.$root.innerHTML = content.innerHTML || ""
 
-        const dialog = this.$root as HTMLDialogElement
+          const dialog = this.$root as HTMLDialogElement
 
-        dialog.show()
-      },
-      { signal: this.abortController.signal }
-    )
+          dialog.show()
+        },
+        { signal: this.abortController.signal }
+      )
+    } catch (error) {
+      console.log(error)
+    }
   },
 
   destroy() {
-    this.abortController.abort()
+    try {
+      this.abortController.abort()
+    } catch (error) {
+      console.log(error)
+    }
   },
 }))

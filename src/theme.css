@@ -24,14 +24,6 @@ body {
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
-
-  /* don't zoom page when focused on mobile */
-  @media (width < 48rem) {
-    input[type="text"] {
-      font-size: 16px;
-      letter-spacing: 0.02em;
-    }
-  }
 }
 
 shopify-editor {
@@ -80,6 +72,16 @@ img:not([class*="h-"]):not([class*="size-"]) {
 
 img:not([class*="w-"]):not([class*="size-"]) {
   width: 100%;
+}
+
+@keyframes prevent-scroll {
+  from {
+    opacity: 0;
+  }
+}
+
+input:focus {
+  animation: prevent-scroll 10ms forwards;
 }
 
 .checkbox {

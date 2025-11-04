@@ -77,7 +77,7 @@ barba.init({
       async leave({ current }) {
         return current.container.animate(
           { opacity: 0, translate: "-20px 0" },
-          { duration: 100, easing: "ease-in", fill: "forwards" }
+          { duration: 1000, easing: "ease-in", fill: "forwards" }
         ).finished
       },
       async enter({ next }) {
@@ -86,7 +86,7 @@ barba.init({
             { opacity: 0, translate: "20px 0" },
             { opacity: 1, translate: "0 0" },
           ],
-          { duration: 100, easing: "ease-out", fill: "forwards" }
+          { duration: 1000, easing: "ease-out", fill: "forwards" }
         )
 
         await animation.finished
@@ -118,7 +118,7 @@ barba.init({
       async leave(data) {
         const animation = data.current.container.animate(
           { opacity: 0, translate: "0 20px" },
-          { duration: 100, easing: "ease-in", fill: "forwards" }
+          { duration: 1000, easing: "ease-in", fill: "forwards" }
         )
 
         leaveAnimation = animation
@@ -136,7 +136,7 @@ barba.init({
             { opacity: 0, translate: "0 -20px" },
             { opacity: 1, translate: "0 0" },
           ],
-          { duration: 100, easing: "ease-out", fill: "forwards" }
+          { duration: 1000, easing: "ease-out", fill: "forwards" }
         )
 
         await animation.finished

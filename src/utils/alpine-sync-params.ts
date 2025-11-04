@@ -29,12 +29,20 @@ export default function (Alpine: Alpine.Alpine) {
       )
     }
 
-    el.addEventListener("change", updateURL, {
-      signal: abortController.signal,
-    })
+    try {
+      el.addEventListener("change", updateURL, {
+        signal: abortController.signal,
+      })
+    } catch (error) {
+      console.log(error)
+    }
 
     cleanup(() => {
-      abortController.abort()
+      try {
+        abortController.abort()
+      } catch (error) {
+        console.log(error)
+      }
     })
   })
 }

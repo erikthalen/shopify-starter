@@ -45,9 +45,6 @@ importers:
       '@types/alpinejs__morph':
         specifier: ^3.13.5
         version: 3.13.5
-      '@virtualstate/navigation':
-        specifier: ^1.0.1-alpha.202
-        version: 1.0.1-alpha.206
       globals:
         specifier: ^15.12.0
         version: 15.12.0
@@ -859,12 +856,6 @@ packages:
   '@typescript-eslint/visitor-keys@8.13.0':
     resolution: {integrity: sha512-7N/+lztJqH4Mrf0lb10R/CbI1EaAMMGyF5y0oJvFoAhafwgiRA7TXyd8TFn8FC8k5y2dTsYogg238qavRGNnlw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@virtualstate/composite-key@1.0.0':
-    resolution: {integrity: sha512-5G3RT87X1w39UQyBvqQpTfsxK9FjoKlXfonvIY9esAHe9d0vOWVGtbElJppwJKWzh508Ja6gWn7W7dWHwj50Jw==}
-
-  '@virtualstate/navigation@1.0.1-alpha.206':
-    resolution: {integrity: sha512-DgwtJV2CA+e0A+jJdWKXi+HI/S9qw4HY0IkNwkJtmVfWFqn62f/7YKkBVCR/EYB9XvX5vDZsr4B/+OudB9VViw==}
 
   '@vue/reactivity@3.1.5':
     resolution: {integrity: sha512-1tdfLmNjWG6t/CsPldh+foumYFo3cpyCHgBYQ34ylaMsJ+SNHQ1kApMIa8jN+i593zQuaw3AdWH0nJTARzCFhg==}
@@ -3373,12 +3364,6 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.13.0
       eslint-visitor-keys: 3.4.3
-
-  '@virtualstate/composite-key@1.0.0': {}
-
-  '@virtualstate/navigation@1.0.1-alpha.206':
-    dependencies:
-      '@virtualstate/composite-key': 1.0.0
 
   '@vue/reactivity@3.1.5':
     dependencies:

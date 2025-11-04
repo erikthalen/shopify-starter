@@ -18,7 +18,6 @@
     "@types/alpinejs": "^3.13.11",
     "@types/alpinejs__intersect": "^3.13.4",
     "@types/alpinejs__morph": "^3.13.5",
-    "@virtualstate/navigation": "^1.0.1-alpha.202",
     "globals": "^15.12.0",
     "navigation-api-types": "^0.6.1",
     "prettier": "^3.3.3",

@@ -121,16 +121,24 @@ export default function (Alpine: Alpine.Alpine) {
       }
     }
 
-    el.addEventListener("pointerover", prefetch, {
-      signal: abortController.signal,
-    })
+    try {
+      el.addEventListener("pointerover", prefetch, {
+        signal: abortController.signal,
+      })
 
-    el.addEventListener("click", handleClick, {
-      signal: abortController.signal,
-    })
+      el.addEventListener("click", handleClick, {
+        signal: abortController.signal,
+      })
+    } catch (error) {
+      console.log(error)
+    }
 
     cleanup(() => {
-      abortController.abort()
+      try {
+        abortController.abort()
+      } catch (error) {
+        console.log(error)
+      }
     })
   })
 }
