@@ -54,7 +54,9 @@
         class="grid min-h-[calc(100vh-var(--header-height)-var(--announcement-bar-height))] grid-rows-[1fr_auto] bg-white"
       >
         <div id="content" class="contents">
-          {{ content_for_layout }}
+          <div>
+            {{ content_for_layout }}
+          </div>
 
           {% sections 'footer-group' %}
         </div>

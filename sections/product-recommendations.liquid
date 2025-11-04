@@ -4,12 +4,17 @@
 
 {%- assign unique_id = 'product_recommendations-' | append: section.id | append: product.id -%}
 
-{%- unless recommendations.performed -%}
-  <div class="my-4 px-4">
-    <h2 class="mb-4">You may also like</h2>
+{%- assign amount = section.settings.limit | times: 1 | default: 4 -%}
 
-    <div id="{{ unique_id }}">
+<div class="my-4 px-4">
+  <h2 class="mb-4">You may also like</h2>
+
+  {%- unless recommendations.performed -%}
+    <div id="{{ unique_id }}" class="product-recommendation-results grid grid-cols-2 lg:grid-cols-4 gap-4">
       {% comment %} results are appended here {% endcomment %}
+      {% for i in (1..amount) %}
+        {% render 'product-card-skeleton' %}
+      {% endfor %}
     </div>
 
     <form
@@ -20,19 +25,31 @@
     >
       <input type="hidden" name="section_id" value="{{ section.id }}">
       <input type="hidden" name="product_id" value="{{ product.id }}">
-      <input type="hidden" name="limit" value="{{ section.settings.limit | default: 4 }}">
+      <input type="hidden" name="limit" value="{{ amount }}">
       <input type="hidden" name="intent" value="{{ section.settings.intent | default: 'related' }}">
     </form>
-  </div>
-{%- else -%}
-  <ul id="{{ unique_id }}" class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-    {%- for product in recommendations.products -%}
-      <li>
-        {% content_for 'block', type: '_product-card', id: 'product_card', closest.product: product %}
-      </li>
-    {%- endfor -%}
-  </ul>
-{%- endunless -%}
+  {%- else -%}
+    <ul id="{{ unique_id }}" class="product-recommendation-results grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {%- for product in recommendations.products -%}
+        <li>
+          {% content_for 'block', type: '_product-card', id: 'product_card', closest.product: product %}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endunless -%}
+</div>
+
+{% stylesheet %}
+  @keyframes product-recommendation-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .product-recommendation-results > * {
+    animation: product-recommendation-fade-in 400ms forwards;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

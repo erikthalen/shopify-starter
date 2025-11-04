@@ -97,6 +97,7 @@
   <picture class="contents">
     {%- if image_mobile != blank -%}
       <source
+        class="hidden"
         srcset="
           {%- for width in widths -%}
             {%- assign width_int = width | times: 1 -%}
@@ -156,6 +157,7 @@
     {%- endif -%}
 
     <source
+      class="hidden"
       srcset="
         {%- for width in widths -%}
           {%- assign width_int = width | times: 1 -%}

@@ -4,6 +4,7 @@ import Alpine from "alpinejs"
 import "./utils/vvh"
 import { fixatePageOnNavigation } from "~/utils/utils"
 import type { ITransitionData } from "@barba/core/dist/src/defs"
+import { barbaPrefetch } from "./utils/barba-prefetch"
 
 Alpine.plugin((await import("@alpinejs/intersect")).default)
 Alpine.plugin((await import("@alpinejs/morph")).default)
@@ -162,6 +163,9 @@ barba.hooks.before(() => {
 
   window.dispatchEvent(new CustomEvent("window:navigation"))
 })
+
+barbaPrefetch()
+barba.hooks.after(barbaPrefetch)
 
 // place the old page "where it was" on navigation/scroll
 fixatePageOnNavigation({
