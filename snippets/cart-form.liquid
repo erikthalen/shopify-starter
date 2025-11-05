@@ -100,34 +100,12 @@
 
             <div class="mt-auto">
               <div class="mt-3 flex items-end justify-between gap-4">
-                <div
-                  id="quantity_selector"
-                  x-data="quantitySelector({ min: 0, init: {{ item.quantity }} })"
-                  class="flex items-center gap-3 ml-2"
-                >
-                  <button
-                    type="button"
-                    @click="decrease"
-                    @click.debounce="$el.form.requestSubmit()"
-                    class="button"
-                    aria-title="Decrease cart quantity of {{ item.title }}"
-                  >
-                    -
-                  </button>
-
-                  <input type="hidden" name="updates[]" value="{{ item.quantity }}">
-                  <output for="updates[]">{{ item.quantity }}</output>
-
-                  <button
-                    type="button"
-                    @click="increase"
-                    @click.debounce="$el.form.requestSubmit()"
-                    class="button"
-                    aria-title="Increase cart quantity of {{ item.title }}"
-                  >
-                    +
-                  </button>
-                </div>
+                {% render 'quantity-selector',
+                  min: 0,
+                  name: 'updates[]',
+                  value: item.quantity,
+                  on-change: '$el.form.requestSubmit()'
+                %}
 
                 <a
                   x-target="cart cart_drawer_content cart_amount"

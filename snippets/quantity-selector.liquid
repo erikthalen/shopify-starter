@@ -1,0 +1,37 @@
+{% doc %}
+  Number input with buttons for changing the value
+
+  @param {string} [name] - name attribute, default to 1
+  @param {number} [value] - value attribute, default to 1
+  @param {number} [min] - min attribute, default to 0
+  @param {string} [on-change] - Alpine callback to run on quantity change (debounced)
+{% enddoc %}
+
+<div
+  id="quantity_selector"
+  x-data="quantitySelector({ min: {{ min | default: 0 }}, init: {{ value | default: 1 }} })"
+  class="flex items-center gap-3"
+>
+  <button
+    type="button"
+    @click="decrease"
+    @click.debounce="{{ on-change | default: '' }}"
+    class="checkbox w-8"
+    aria-title="Decrease quantity"
+  >
+    -
+  </button>
+
+  <input type="hidden" name="{{ name }}" value="{{ value | default: 1 }}">
+  <output for="{{ name }}">{{ value | default: 1 }}</output>
+
+  <button
+    type="button"
+    @click="increase"
+    @click.debounce="{{ on-change | default: '' }}"
+    class="checkbox w-8"
+    aria-title="Increase quantity"
+  >
+    +
+  </button>
+</div>

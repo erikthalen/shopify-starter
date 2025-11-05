@@ -100,7 +100,9 @@ barba.init({
       name: "default",
       sync: true, // make browser keep history scroll position
       from: {
-        custom: ({ trigger }) => !(trigger as HTMLElement)?.dataset?.transition,
+        custom: ({ trigger }) => {
+          return !(trigger as HTMLElement)?.dataset?.transition
+        },
       },
       async once({ next }) {
         const animation = next.container.animate(
@@ -146,6 +148,16 @@ barba.init({
 
         return
       },
+    },
+    {
+      name: "noop",
+      from: {
+        custom: ({ trigger }) => {
+          return trigger === "back"
+        },
+      },
+      leave() {},
+      enter() {},
     },
   ],
 })
