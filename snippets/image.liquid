@@ -217,12 +217,14 @@
       {%- endif -%}
     >
 
-    <img
+    {% comment %}
       x-data="{ show: false }"
       x-init="if($el.complete) show = true"
       @load="show = true"
-      class="image object-cover transition-opacity duration-300 {{ class }}"
       :class="{ show }"
+    {% endcomment %}
+    <img
+      class="image object-cover {{ class }}"
       {% if style != blank %}
         style="{{ style }}"
       {% endif %}
@@ -241,7 +243,7 @@
 {% stylesheet %}
   html:not(.no-js) {
     .image {
-      opacity: 0;
+      /* opacity: 0; */
 
       &.show {
         opacity: 1;

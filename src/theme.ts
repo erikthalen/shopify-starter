@@ -153,7 +153,7 @@ barba.init({
       name: "noop",
       from: {
         custom: ({ trigger }) => {
-          return trigger === "back"
+          return trigger === "back" || trigger === "forward"
         },
       },
       leave() {},
