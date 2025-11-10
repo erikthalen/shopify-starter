@@ -52,19 +52,9 @@ barba.init({
   debug: location.origin.includes("127.0.0.1"),
   prevent: () => window.Shopify.designMode,
   cacheIgnore: "/cart",
+  prefetchIgnore: "/cart",
+  timeout: 10000,
   transitions: [
-    // {
-    //   name: "self",
-    //   beforeLeave() {
-    //     document.documentElement.style.scrollBehavior = "smooth"
-    //   },
-    //   enter() {
-    //     return new Promise(resolve => setTimeout(resolve, 1000))
-    //   },
-    //   after() {
-    //     document.documentElement.style.removeProperty("scroll-behavior")
-    //   },
-    // },
     {
       name: "slide-right",
       sync: true, // make browser keep history scroll position

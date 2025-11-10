@@ -1,7 +1,6 @@
 <div class="relative z-2 flex h-10 w-full items-center justify-between gap-3 border-b border-gray-400 bg-white px-4 md:gap-4">
   <nav class="flex items-center gap-3 md:gap-4">
     <a
-      data-barba-prefetch
       href="{{ routes.root_url }}"
       x-data="{ active: {% if request.path == '{{ routes.root_url }}' %}true{% else %}false{% endif %} }"
       @window:navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"

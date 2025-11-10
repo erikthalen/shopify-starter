@@ -1,13 +1,41 @@
 import barba from "@barba/core"
 
 export function barbaPrefetch() {
+  if (barba.cacheIgnore === true || barba.prefetchIgnore === true) {
+    return
+  }
+
   document.querySelectorAll("*[href]").forEach(link => {
     const href = link.getAttribute("href")
 
     if (!href) return
 
-    // is not a prefetch link
-    if (link.getAttribute("data-barba-prefetch") === null) {
+    // is not a barba link
+    if (link.getAttribute("data-barba-prevent") !== null) {
+      return
+    }
+
+    const cacheIgnore = Array.isArray(barba.cacheIgnore)
+      ? barba.cacheIgnore
+      : [barba.cacheIgnore]
+
+    if (
+      cacheIgnore.find(
+        ignore => typeof ignore === "string" && href.includes(ignore)
+      )
+    ) {
+      return
+    }
+
+    const prefetchIgnore = Array.isArray(barba.prefetchIgnore)
+      ? barba.prefetchIgnore
+      : [barba.prefetchIgnore]
+
+    if (
+      prefetchIgnore.find(
+        ignore => typeof ignore === "string" && href.includes(ignore)
+      )
+    ) {
       return
     }
 
