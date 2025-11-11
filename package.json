@@ -2,6 +2,11 @@
   "name": "shopify-starter",
   "version": "0.0.0-beta",
   "private": true,
+  "author": {
+    "name": "Erik Thalén",
+    "url": "https://github.com/erikthalen"
+  },
+  "repository": "github:erikthalen/shopify-starter",
   "type": "module",
   "scripts": {
     "dev": "pnpm run vite:dev & pnpm run shopify:dev",
