@@ -1,3 +1,4 @@
+import { swup } from "~/swup"
 import { defineComponent } from "~/utils/define"
 import {
   swupUpdateCache,
@@ -6,15 +7,13 @@ import {
 
 export default defineComponent(() => ({
   async updateCache(e: CustomEventInit) {
-    if (!window.swup) return
+    const newDocument = e.detail.raw
 
     const targets: CacheUpdateStrategy = [
       { merge: "append", id: "paginated_items" },
       { merge: "replace", id: "pagination" },
     ]
 
-    const newDocument = e.detail.raw
-
-    swupUpdateCache(window.swup, newDocument, targets)
+    swupUpdateCache(swup, newDocument, targets)
   },
 }))

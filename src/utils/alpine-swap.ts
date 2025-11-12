@@ -49,6 +49,8 @@ export default function (Alpine: Alpine.Alpine) {
   Alpine.directive("swap", (el, { expression }, { cleanup }) => {
     const abortController = new AbortController()
 
+    const href = window.location.origin + el.getAttribute("href")
+
     const idsToSwap = expression?.split(" ") || []
     const idsToSkip =
       el.getAttribute(Alpine.prefixed("swap-skip"))?.split(" ") || []
@@ -88,6 +90,17 @@ export default function (Alpine: Alpine.Alpine) {
             source.outerHTML = target.outerHTML
           }
         }
+
+        /**
+         * Automatically prefetch all new urls
+         */
+        source?.querySelectorAll("*[href]").forEach(el => {
+          const href = window.location.origin + el.getAttribute("href")
+
+          if (href) {
+            prefetch(null, href)
+          }
+        })
       }
 
       dispatch(el, "swap:loading", false)
@@ -117,14 +130,19 @@ export default function (Alpine: Alpine.Alpine) {
       try {
         await swap(link)
       } catch (error) {
+        console.log(error)
         window.location.href = link.href
       }
     }
 
+    if (href) {
+      prefetch(null, href)
+    }
+
     try {
-      el.addEventListener("pointerover", prefetch, {
-        signal: abortController.signal,
-      })
+      // el.addEventListener("pointerover", prefetch, {
+      //   signal: abortController.signal,
+      // })
 
       el.addEventListener("click", handleClick, {
         signal: abortController.signal,
