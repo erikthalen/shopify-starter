@@ -5,6 +5,9 @@ import Alpine, { type Stores } from "alpinejs"
 
 import "./utils/vvh"
 
+/**
+ * Register Alpine plugins
+ */
 Alpine.plugin((await import("@alpinejs/intersect")).default)
 Alpine.plugin((await import("@alpinejs/morph")).default)
 Alpine.plugin((await import("@imacrayon/alpine-ajax")).default)
@@ -20,6 +23,9 @@ for (const [key, store] of Object.entries(stores)) {
   Alpine.store(key, store)
 }
 
+/**
+ * Register Alpine components
+ */
 Alpine.data(
   "cartNotification",
   (await import("./components/cart-notification")).default
@@ -45,11 +51,10 @@ Alpine.data(
   (await import("./components/quantity-selector")).default
 )
 
-document.body.removeAttribute("x-cloak")
-
 /**
  * Intro animation
  */
+document.body.removeAttribute("x-cloak")
 document
   .getElementById("swup")
   ?.animate([{ opacity: 0, translate: "0 20px" }, { opacity: 1 }], {
@@ -57,12 +62,30 @@ document
     easing: "cubic-bezier(0.5, 0, 0, 1)",
   })
 
+/**
+ * Init Alpine
+ */
 Alpine.start()
 
+/**
+ * Global hooks
+ */
 swup.hooks.on("animation:out:start", () => {
   document.querySelectorAll("dialog")?.forEach(dialog => dialog?.close())
   window.dispatchEvent(new CustomEvent("window:navigation"))
 })
+
+window.addEventListener("ajax:send", async (e: CustomEventInit) => {
+  const cartUpdated = e.detail.action.includes("/cart")
+
+  if (cartUpdated) {
+    swup.cache.delete("/cart")
+  }
+})
+
+/**
+ * Global events
+ */
 window.addEventListener("app:loading", (e: CustomEventInit) => {
   document.body.classList.toggle("is-loading", e.detail)
 })

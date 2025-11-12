@@ -30,7 +30,7 @@ export default defineComponent(() => ({
       window.addEventListener(
         "ajax:after",
         async (e: CustomEventInit) => {
-          // @ts-expect-error alpine-ajax adds a target, ts doesn't know
+          // @ts-expect-error alpine-ajax adds a target that ts doesn't know about
           const formData = new FormData(e.target as HTMLFormElement)
           const data = Object.fromEntries(formData?.entries())
 
