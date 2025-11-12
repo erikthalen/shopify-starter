@@ -44,7 +44,7 @@
               <a
                 x-swap="search_results"
                 @swap:update="e => window.history.replaceState(null, '', e.detail)"
-                data-barba-prevent
+                data-no-swup
                 class="mb-1 border-b border-dotted"
                 href="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
               >

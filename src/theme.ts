@@ -1,10 +1,14 @@
 import "vite/modulepreload-polyfill"
-import barba from "@barba/core"
+
+import Swup from "swup"
+import SwupA11yPlugin from "@swup/a11y-plugin"
+import SwupPreloadPlugin from "@swup/preload-plugin"
+import SwupJsPlugin from "@swup/js-plugin"
+import SwupDebugPlugin from "@swup/debug-plugin"
 import Alpine from "alpinejs"
+
 import "./utils/vvh"
-import { fixatePageOnNavigation } from "~/utils/utils"
-import type { ITransitionData } from "@barba/core/dist/src/defs"
-import { barbaPrefetch } from "./utils/barba-prefetch"
+import type { Transitions } from "./types"
 
 Alpine.plugin((await import("@alpinejs/intersect")).default)
 Alpine.plugin((await import("@alpinejs/morph")).default)
@@ -42,137 +46,68 @@ Alpine.data(
   (await import("./components/quantity-selector")).default
 )
 
-Alpine.start()
-
 document.body.removeAttribute("x-cloak")
 
-let leaveAnimation: Animation
+const __debug__ = false
 
-barba.init({
-  debug: location.origin.includes("127.0.0.1"),
-  prevent: () => window.Shopify.designMode,
-  cacheIgnore: "/cart",
-  prefetchIgnore: "/cart",
-  timeout: 10000,
-  transitions: [
-    {
-      name: "slide-right",
-      sync: true, // make browser keep history scroll position
-      from: {
-        custom: ({ trigger }) => {
-          // link looks like <a data-transition="slide-right"></a>
-          return (trigger as HTMLElement).dataset.transition === "slide-right"
+const transitions: Transitions = {
+  "slide-right": {
+    in: [[{ opacity: 0, translate: "10px 0" }, { opacity: 1 }], 100],
+    out: [[{ opacity: 1 }, { opacity: 0, translate: "-10px 0" }], 100],
+  },
+
+  default: {
+    in: [[{ opacity: 0, translate: "0 -10px" }, { opacity: 1 }], 100],
+    out: [[{ opacity: 1 }, { opacity: 0, translate: "0 10px" }], 100],
+  },
+}
+
+window.swup = new Swup({
+  plugins: [
+    ...(__debug__ && location.origin.includes("127.0.0.1")
+      ? [new SwupDebugPlugin()]
+      : []),
+    new SwupA11yPlugin(),
+    new SwupPreloadPlugin({
+      preloadVisibleLinks: {
+        ignore: el => el.href.toString().includes("/cart"),
+      },
+    }),
+    new SwupJsPlugin({
+      animations: [
+        {
+          from: "(.*)",
+          to: "(.*)",
+          in: async (_, data) => {
+            const trigger = data.visit.trigger.el as HTMLElement
+            const transitionName = trigger?.dataset.transition
+            const transition = transitions[transitionName || "default"].in
+
+            await document.querySelector("#swup")?.animate(...transition)
+              .finished
+
+            return
+          },
+          out: async (_, data) => {
+            const trigger = data.visit.trigger.el as HTMLElement
+            const transitionName = trigger?.dataset.transition
+            const transition = transitions[transitionName || "default"].out
+
+            await document.querySelector("#swup")?.animate(...transition)
+              .finished
+          },
         },
-      },
-      async leave({ current }) {
-        return current.container.animate(
-          { opacity: 0, translate: "-20px 0" },
-          { duration: 100, easing: "ease-in", fill: "forwards" }
-        ).finished
-      },
-      async enter({ next }) {
-        const animation = next.container.animate(
-          [
-            { opacity: 0, translate: "20px 0" },
-            { opacity: 1, translate: "0 0" },
-          ],
-          { duration: 100, easing: "ease-out", fill: "forwards" }
-        )
-
-        await animation.finished
-
-        animation.cancel()
-
-        return
-      },
-    },
-    {
-      name: "default",
-      sync: true, // make browser keep history scroll position
-      from: {
-        custom: ({ trigger }) => {
-          return !(trigger as HTMLElement)?.dataset?.transition
-        },
-      },
-      async once({ next }) {
-        const animation = next.container.animate(
-          [
-            { opacity: 0, translate: "0 20px" },
-            { opacity: 1, translate: "0 0" },
-          ],
-          { duration: 800, easing: "ease", fill: "forwards" }
-        )
-
-        await animation.finished
-
-        animation.cancel()
-      },
-      async leave(data) {
-        const animation = data.current.container.animate(
-          { opacity: 0, translate: "0 20px" },
-          { duration: 100, easing: "ease-in", fill: "forwards" }
-        )
-
-        leaveAnimation = animation
-
-        return animation.finished
-      },
-      async enter(data) {
-        data.next.container.style.opacity = "0"
-
-        // fake the { sync: false } option
-        await leaveAnimation.finished
-
-        const animation = data.next.container.animate(
-          [
-            { opacity: 0, translate: "0 -20px" },
-            { opacity: 1, translate: "0 0" },
-          ],
-          { duration: 100, easing: "ease-out", fill: "forwards" }
-        )
-
-        await animation.finished
-
-        animation.cancel()
-        data.next.container.style.removeProperty("opacity")
-
-        return
-      },
-    },
-    {
-      name: "noop",
-      from: {
-        custom: ({ trigger }) => {
-          return trigger === "back" || trigger === "forward"
-        },
-      },
-      leave() {},
-      enter() {},
-    },
+      ],
+    }),
   ],
 })
 
-// bug: chrome doesn't scroll to top if new page is prefetched and cached.
-barba.hooks.beforeEnter(data => {
-  const { trigger } = data as ITransitionData
-  if (trigger !== "back" && trigger !== "forward") {
-    setTimeout(() => window.scrollTo(0, 0))
-  }
-})
-
-barba.hooks.before(() => {
+window.swup.hooks.on("animation:out:start", () => {
   document.querySelectorAll("dialog")?.forEach(dialog => dialog?.close())
-
   window.dispatchEvent(new CustomEvent("window:navigation"))
 })
 
-barbaPrefetch()
-barba.hooks.after(barbaPrefetch)
-
-// place the old page "where it was" on navigation/scroll
-fixatePageOnNavigation({
-  top: "calc(var(--header-height, 0rem) + var(--announcement-bar-height, 0rem))",
-})
+Alpine.start()
 
 /**
  * listen for loading events

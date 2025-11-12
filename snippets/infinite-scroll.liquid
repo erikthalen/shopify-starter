@@ -22,8 +22,15 @@
     <div
       id="pagination"
       x-intersect="$ajax('{{ paginate.next.url }}', { target: 'paginated_items pagination' })"
-      @ajax:success="updateBarbaCache($event)"
+      @ajax:success="updateCache($event)"
     >
+      {% comment %} Loading skeletons {% endcomment %}
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {% for i in (1..3) %}
+          {% render 'product-card-skeleton' %}
+        {% endfor %}
+      </div>
+
       <a class="sr-only" href="{{ paginate.next.url }}"> Next page </a>
     </div>
   </div>
