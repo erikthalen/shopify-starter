@@ -17,6 +17,23 @@
   --font-sans: "DMMono", sans-serif;
 }
 
+html {
+  /* apply zooming of everything on screens > 1440px */
+  --zoom-amount: 0.2;
+  font-size: max(
+    16px,
+    calc(16px + 16 * var(--zoom-amount) * (100vw - 1440px) / 1440)
+  );
+
+  scroll-padding-top: var(--header-height); /* header height */
+
+  &:not(.no-js) {
+    [x-cloak] {
+      display: none !important;
+    }
+  }
+}
+
 body {
   * {
     font-size: 12px;
@@ -30,23 +47,6 @@ shopify-editor {
   background-color: white;
 }
 
-html {
-  /* apply zooming of everything on screens > 1440px */
-  --zoom-amount: 0.2;
-  font-size: max(
-    16px,
-    calc(16px + 16 * var(--zoom-amount) * (100vw - 1440px) / 1440)
-  );
-
-  scroll-padding-top: 2.5rem; /* header height */
-
-  &:not(.no-js) {
-    [x-cloak] {
-      display: none !important;
-    }
-  }
-}
-
 body:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   overflow: hidden;
   touch-action: none;
@@ -57,10 +57,10 @@ body.is-loading * {
   cursor: wait !important;
 }
 
-[aria-busy="true"] {
+/* [aria-busy="true"] {
   transition: opacity 200ms;
   opacity: 0.4;
-}
+} */
 
 details > summary {
   list-style: none;
