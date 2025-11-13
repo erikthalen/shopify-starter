@@ -127,6 +127,8 @@ This will launch the site in your browser at `http://127.0.0.1:9292` using the c
 
 To deploy your theme, we use GitHub Actions for automation. This will allow the theme to automatically deploy whenever changes are pushed to the `main` branch.
 
+Beware that changes made in .json files **will not** be pushed and need to be implemented manually via the Shopify code editor. This includes translation files, theme settings, new template files etc.
+
 #### Step 1: Install Shopify's Theme Access App
 
 Follow the official [Shopify Theme Access guide](https://shopify.dev/docs/storefronts/themes/tools/theme-access) to install and configure the Theme Access app.
@@ -156,6 +158,8 @@ pnpm run deploy
 ```
 
 This will push the theme to your Shopify store as configured in your `shopify.theme.toml`.
+
+Beware that changes made in .json files **will not** be pushed and need to be implemented manually via the Shopify code editor. This includes translation files, theme settings, new template files etc.
 
 ---
 
