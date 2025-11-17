@@ -9,13 +9,25 @@ const __debug__ = false
 
 const transitions: Transitions = {
   "slide-right": {
-    in: [[{ opacity: 0, translate: "10px 0" }, { opacity: 1 }], 100],
-    out: [[{ opacity: 1 }, { opacity: 0, translate: "-10px 0" }], 100],
+    out: [
+      [{ opacity: 1 }, { opacity: 0, translate: "-10px 0" }],
+      { duration: 100, fill: "forwards" },
+    ],
+    in: [
+      [{ opacity: 0, translate: "10px 0" }, { opacity: 1 }],
+      { duration: 100 },
+    ],
   },
 
   default: {
-    in: [[{ opacity: 0, translate: "0 -10px" }, { opacity: 1 }], 100],
-    out: [[{ opacity: 1 }, { opacity: 0, translate: "0 10px" }], 100],
+    out: [
+      [{ opacity: 1 }, { opacity: 0, translate: "0 10px" }],
+      { duration: 100, fill: "forwards" },
+    ],
+    in: [
+      [{ opacity: 0, translate: "0 -10px" }, { opacity: 1 }],
+      { duration: 100 },
+    ],
   },
 }
 
@@ -28,6 +40,7 @@ export const swup = new Swup({
     new SwupPreloadPlugin({
       preloadVisibleLinks: {
         ignore: el => el.href.toString().includes("/cart"),
+        delay: 0,
       },
     }),
     new SwupJsPlugin({
@@ -44,18 +57,22 @@ export const swup = new Swup({
             const transitionName = trigger?.dataset.transition
             const transition = transitions[transitionName || "default"].in
 
-            await document.querySelector("#swup")?.animate(...transition)
-              .finished
+            const animation = document
+              .querySelector("#swup")
+              ?.animate(...transition)
 
-            return
+            await animation?.finished
           },
           out: async (_, data) => {
             const trigger = data.visit.trigger.el as HTMLElement
             const transitionName = trigger?.dataset.transition
             const transition = transitions[transitionName || "default"].out
 
-            await document.querySelector("#swup")?.animate(...transition)
-              .finished
+            const animation = document
+              .querySelector("#swup")
+              ?.animate(...transition)
+
+            await animation?.finished
           },
         },
       ],
