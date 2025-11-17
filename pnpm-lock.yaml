@@ -23,9 +23,6 @@ importers:
       '@swup/debug-plugin':
         specifier: ^4.1.0
         version: 4.1.0(swup@4.8.2)
-      '@swup/forms-plugin':
-        specifier: ^3.6.0
-        version: 3.6.0(swup@4.8.2)
       '@swup/js-plugin':
         specifier: ^3.2.0
         version: 3.2.0(swup@4.8.2)
@@ -712,11 +709,6 @@ packages:
     resolution: {integrity: sha512-R+RP4hjoeXrO+wowSswaTM4P05lu6iDg6UwdbQn0wfJ082KiUpH+DDwHYNOatxusKVExFuhLec+X9IbyAyiv8w==}
     peerDependencies:
       swup: ^4.0.0
-
-  '@swup/forms-plugin@3.6.0':
-    resolution: {integrity: sha512-pRN6OR5wR27LvJqQOlCgu1fP9Z0ZsGauxWOE6nRCtjP1+98wlGTMiMsQ+jGvvs+IOK9IDTJQ7jvprnJAZaw9zw==}
-    peerDependencies:
-      swup: ^4.6.0
 
   '@swup/js-plugin@3.2.0':
     resolution: {integrity: sha512-lWqQqFEBs+ndEvBdyyGLrS+WQqLiPfX6aHzoCa6cxps8hSU3KK0/uXU/F6urMjMh7PHbJ7slaJe2acEqX9SDvw==}
@@ -3269,11 +3261,6 @@ snapshots:
       swup: 4.8.2
 
   '@swup/debug-plugin@4.1.0(swup@4.8.2)':
-    dependencies:
-      '@swup/plugin': 4.0.0
-      swup: 4.8.2
-
-  '@swup/forms-plugin@3.6.0(swup@4.8.2)':
     dependencies:
       '@swup/plugin': 4.0.0
       swup: 4.8.2

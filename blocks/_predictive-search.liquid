@@ -23,6 +23,7 @@
       class="mx-auto grid w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40"
     >
       <div class="sticky top-0 mb-6 flex items-center gap-2 border-b border-gray-400 bg-white pt-5 md:pt-30">
+        {% comment %} Used as input to the (hidden) predictive search below {% endcomment %}
         <form
           class="contents"
           @submit.prevent="onSubmit"

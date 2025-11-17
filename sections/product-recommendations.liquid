@@ -10,7 +10,7 @@
   <h2 class="mb-4">You may also like</h2>
 
   {%- unless recommendations.performed -%}
-    <div id="{{ unique_id }}" class="product-recommendation-results grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div id="{{ unique_id }}" class="product-recommendation-results grid grid-cols-2 lg:grid-cols-4 gap-4 pt-8">
       {% comment %} results are appended here {% endcomment %}
       {% for i in (1..amount) %}
         {% render 'product-card-skeleton' %}

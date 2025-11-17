@@ -9,7 +9,7 @@
   "repository": "github:erikthalen/shopify-starter",
   "type": "module",
   "scripts": {
-    "dev": "pnpm run vite:dev & pnpm run shopify:dev",
+    "dev": "pnpm run shopify:dev & pnpm run vite:dev",
     "deploy": "pnpm run vite:build && pnpm run shopify:deploy",
     "vite:dev": "vite",
     "vite:build": "vite build",
@@ -37,7 +37,6 @@
     "@imacrayon/alpine-ajax": "^0.12.2",
     "@swup/a11y-plugin": "^5.0.0",
     "@swup/debug-plugin": "^4.1.0",
-    "@swup/forms-plugin": "^3.6.0",
     "@swup/js-plugin": "^3.2.0",
     "@swup/preload-plugin": "^3.2.11",
     "alpinejs": "3.15.1",

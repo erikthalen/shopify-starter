@@ -11,46 +11,81 @@ import { defineComponent } from "~/utils/define"
  * can't know about what product was added to the cart, that's why this is needed.
  */
 export default defineComponent(() => ({
+  notificationContent: null as Promise<Element | null> | null,
+
   abortController: new AbortController(),
 
-  async getSection(variantId: string | number) {
-    const response = await fetch(
+  /**
+   * Fetches the `sections/cart-notification-content.liquid` of a given Product Variant.
+   * Using the [Shopify Section Rendering API](https://shopify.dev/docs/api/ajax/section-rendering)
+   */
+  async getNotificationSection(variantId: string | number) {
+    return fetch(
       `${window.Shopify.routes.root}variants/${variantId}?section_id=cart-notification-content`
     )
-    const text = await response.text()
-    const markup = new DOMParser()
-      .parseFromString(text, "text/html")
-      ?.querySelector(".shopify-section")
+      .then(async response => {
+        return new DOMParser()
+          .parseFromString(await response.text(), "text/html")
+          ?.querySelector(".shopify-section")
+      })
+      .catch(() => null)
+  },
 
-    return markup
+  getNotificationContent(form: HTMLFormElement) {
+    const data = this.parseForm(form)
+    if (!data) return
+    this.notificationContent = this.getNotificationSection(data.id.toString())
+  },
+
+  async updateAndShowNotification(form: HTMLFormElement) {
+    const data = this.parseForm(form)
+    const notificationContent = await this.notificationContent
+
+    if (!data || !notificationContent) return
+
+    this.$root.innerHTML = notificationContent.innerHTML || ""
+
+    const dialog = this.$root as HTMLDialogElement
+
+    dialog.show()
   },
 
   async init() {
     try {
       window.addEventListener(
-        "ajax:after",
+        "ajax:send",
         async (e: CustomEventInit) => {
           // @ts-expect-error alpine-ajax adds a target that ts doesn't know about
-          const formData = new FormData(e.target as HTMLFormElement)
-          const data = Object.fromEntries(formData?.entries())
+          this.getNotificationContent(e.target as HTMLFormElement)
+        },
+        { signal: this.abortController.signal }
+      )
 
-          if (data?.form_type !== "product") return
+      window.addEventListener(
+        "ajax:after",
+        async (e: CustomEventInit) => {
+          if (!e.detail.response.ok) {
+            this.notificationContent = null
+            return
+          }
 
-          const content = await this.getSection(data.id.toString())
-
-          if (!content) return
-
-          this.$root.innerHTML = content.innerHTML || ""
-
-          const dialog = this.$root as HTMLDialogElement
-
-          dialog.show()
+          // @ts-expect-error alpine-ajax adds a target that ts doesn't know about
+          this.updateAndShowNotification(e.target as HTMLFormElement)
         },
         { signal: this.abortController.signal }
       )
     } catch (error) {
       console.log(error)
     }
+  },
+
+  parseForm(form: HTMLFormElement) {
+    const formData = new FormData(form)
+    const data = Object.fromEntries(formData?.entries())
+
+    if (data?.form_type !== "product") return
+
+    return data
   },
 
   destroy() {
