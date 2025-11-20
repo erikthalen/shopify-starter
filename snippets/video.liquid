@@ -17,17 +17,17 @@
 {% endif %}
 
 {% stylesheet %}
-  .video {
-    video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+  .video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 
-      aspect-ratio: var(--aspect-ratio-sm);
+    aspect-ratio: var(--aspect-ratio-sm);
+  }
 
-      @media (width >= 48rem) {
-        aspect-ratio: var(--aspect-ratio-md);
-      }
+  @media (width >= 48rem) {
+    .video video {
+      aspect-ratio: var(--aspect-ratio-md);
     }
   }
 {% endstylesheet %}

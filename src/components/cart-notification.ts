@@ -33,8 +33,8 @@ export default defineComponent(() => ({
 
   getNotificationContent(form: HTMLFormElement) {
     const data = this.parseForm(form)
-    if (!data) return
-    this.notificationContent = this.getNotificationSection(data.id.toString())
+    if (!data?.id) return
+    this.notificationContent = this.getNotificationSection(data.id?.toString())
   },
 
   async updateAndShowNotification(form: HTMLFormElement) {
@@ -51,41 +51,41 @@ export default defineComponent(() => ({
   },
 
   async init() {
-    try {
-      window.addEventListener(
-        "ajax:send",
-        async (e: CustomEventInit) => {
-          // @ts-expect-error alpine-ajax adds a target that ts doesn't know about
-          this.getNotificationContent(e.target as HTMLFormElement)
-        },
-        { signal: this.abortController.signal }
-      )
+    window.addEventListener(
+      "ajax:send",
+      async (e: CustomEventInit) => {
+        // @ts-expect-error
+        this.getNotificationContent(e.target as HTMLFormElement)
+      },
+      { signal: this.abortController.signal }
+    )
 
-      window.addEventListener(
-        "ajax:after",
-        async (e: CustomEventInit) => {
-          if (!e.detail.response.ok) {
-            this.notificationContent = null
-            return
-          }
+    window.addEventListener(
+      "ajax:after",
+      async (e: CustomEventInit) => {
+        if (!e.detail.response.ok) {
+          this.notificationContent = null
+          return
+        }
 
-          // @ts-expect-error alpine-ajax adds a target that ts doesn't know about
-          this.updateAndShowNotification(e.target as HTMLFormElement)
-        },
-        { signal: this.abortController.signal }
-      )
-    } catch (error) {
-      console.log(error)
-    }
+        // @ts-expect-error alpine-ajax adds a target that ts doesn't know about
+        this.updateAndShowNotification(e.target as HTMLFormElement)
+      },
+      { signal: this.abortController.signal }
+    )
   },
 
   parseForm(form: HTMLFormElement) {
-    const formData = new FormData(form)
-    const data = Object.fromEntries(formData?.entries())
+    try {
+      const formData = new FormData(form)
+      const data = Object.fromEntries(formData?.entries())
 
-    if (data?.form_type !== "product") return
+      if (data?.form_type !== "product") return
 
-    return data
+      return data
+    } catch (error) {
+      return {}
+    }
   },
 
   destroy() {

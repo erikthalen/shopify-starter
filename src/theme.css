@@ -89,9 +89,9 @@ input:focus {
 }
 
 .button {
-  @apply relative cursor-pointer after:absolute after:-inset-x-2 after:-inset-y-1 after:rounded after:bg-gray-100 after:opacity-0 after:mix-blend-darken after:transition-opacity hover:after:opacity-100;
+  @apply relative cursor-pointer appearance-none after:absolute after:-inset-x-2 after:-inset-y-1 after:rounded after:bg-gray-100 after:opacity-0 after:mix-blend-darken after:transition-opacity hover:after:opacity-100;
 }
 
 .button-solid {
-  @apply flex w-full cursor-pointer items-center justify-center gap-2 rounded border border-gray-400 bg-gray-100 p-2 hover:border-gray-600;
+  @apply flex w-full cursor-pointer appearance-none items-center justify-center gap-2 rounded border border-gray-400 bg-gray-100 p-2 hover:border-gray-600;
 }
