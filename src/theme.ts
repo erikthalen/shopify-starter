@@ -94,6 +94,7 @@ window.addEventListener("ajax:after", async (e: CustomEventInit) => {
         )
       })
       .flat()
+      .filter((href: string) => !href.includes("/cart/change"))
 
     if (allHrefsInAppendedElement.length) {
       await swup.preload(allHrefsInAppendedElement)
