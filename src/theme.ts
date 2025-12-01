@@ -83,6 +83,24 @@ window.addEventListener("ajax:send", async (e: CustomEventInit) => {
   }
 })
 
+window.addEventListener("ajax:after", async (e: CustomEventInit) => {
+  // preload all links in any element appended by Alpine Ajax
+  if (typeof swup.preload === "function") {
+    const allHrefsInAppendedElement: string[] = e.detail.render
+      .map((el: HTMLElement) => {
+        const elementsWithHref = [...el.querySelectorAll("*[href]")]
+        return elementsWithHref.map(
+          el => window.location.origin + el.getAttribute("href")
+        )
+      })
+      .flat()
+
+    if (allHrefsInAppendedElement.length) {
+      await swup.preload(allHrefsInAppendedElement)
+    }
+  }
+})
+
 /**
  * Global events
  */
