@@ -74,6 +74,30 @@ img:not([class*="w-"]):not([class*="size-"]) {
   width: 100%;
 }
 
+.desktop-only {
+  @media (width < 48rem) {
+    display: none !important;
+  }
+}
+
+.mobile-only {
+  @media (width >= 48rem) {
+    display: none !important;
+  }
+}
+
+.touchscreen-only {
+  @media (hover: hover) {
+    display: none !important;
+  }
+}
+
+.non-touchscreen-only {
+  @media (hover: none) {
+    display: none !important;
+  }
+}
+
 @keyframes prevent-scroll {
   from {
     opacity: 0;
