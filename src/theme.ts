@@ -4,6 +4,7 @@ import { swup } from "./swup"
 import Alpine, { type Stores } from "alpinejs"
 
 import "./utils/vvh"
+import { swupPreloadChildren } from "./utils/swup-preload-children"
 
 /**
  * Register Alpine plugins
@@ -81,6 +82,10 @@ window.addEventListener("ajax:send", async (e: CustomEventInit) => {
   if (cartUpdated) {
     swup.cache.delete("/cart")
   }
+})
+
+window.addEventListener("ajax:after", async (e: CustomEventInit) => {
+  swupPreloadChildren({ container: e.detail.render, exclude: "/cart/change" })
 })
 
 /**
