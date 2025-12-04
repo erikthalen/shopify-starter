@@ -8,8 +8,12 @@
         <div class="embla__container">
           {% for media in product.media %}
             <div class="embla__slide">
+              {% assign loading = 'lazy' %}
+              {% if forloop.first %}
+                {% assign loading = 'eager' %}
+              {% endif %}
               {% if media.media_type == 'image' %}
-                {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1' %}
+                {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1', loading: loading %}
               {% elsif media.media_type == 'video' %}
                 {% render 'video', video: media, aspect_ratio: '1/1' %}
               {% endif %}
