@@ -28,7 +28,7 @@
       class="button-solid {% if variant.available %}text-black{% else %}text-gray-400{% endif %}"
       type="submit"
       name="add"
-      aria-name="Add {{ product.title }} - {{ variant.options | join: ' / ' }} to cart"
+      aria-label="Add {{ product.title }} - {{ variant.options | join: ' / ' }} to cart"
     >
       <span class="size-4 -ml-4 opacity-0">
         {% render 'icon-spinner' %}
