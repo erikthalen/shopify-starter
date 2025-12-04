@@ -236,6 +236,9 @@
       width="{{ image.width }}"
       height="{{ height_attribute_md }}"
       loading="{{ loading | default: 'lazy' }}"
+      {% if loading == 'eager' %}
+        fetchpriority="high"
+      {% endif %}
     >
   </picture>
 {%- endif -%}
