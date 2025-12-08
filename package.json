@@ -1,6 +1,6 @@
 {
   "name": "shopify-starter",
-  "version": "0.0.0-beta",
+  "version": "1.0.0",
   "private": true,
   "author": {
     "name": "Erik Thalén",
@@ -28,7 +28,7 @@
     "prettier-plugin-tailwindcss": "^0.6.9",
     "typescript-eslint": "^8.12.2",
     "vite": "^7.1.5",
-    "vite-plugin-shopify": "4.0.0",
+    "vite-plugin-shopify": "4.1.0",
     "vite-plugin-top-level-await": "^1.4.1"
   },
   "dependencies": {
