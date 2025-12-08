@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     topLevelAwait(),
     shopify({
-      tunnel: true,
+      // tunnel: true,
       snippetFile: "vite.liquid",
       entrypointsDir: "src",
       sourceCodeDir: "src",
