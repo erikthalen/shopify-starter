@@ -1,4 +1,5 @@
 import Alpine from "alpinejs"
+import { createHistoryRecord } from "swup"
 
 /**
  * @module x-sync-params
@@ -23,7 +24,9 @@ export default function (Alpine: Alpine.Alpine) {
         url.searchParams.append(key, value.toString())
       }
 
-      window.history.replaceState(null, "", url.href)
+      createHistoryRecord(url.href)
+      // window.history.replaceState(null, "", url.href)
+      
       window.dispatchEvent(
         new CustomEvent("sync-params:update", { detail: url })
       )
