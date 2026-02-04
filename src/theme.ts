@@ -16,7 +16,7 @@ Alpine.plugin((await import("./utils/alpine-swap")).default)
 Alpine.plugin((await import("./utils/alpine-sync-params")).default)
 
 // makes alpine.d.ts able to create types of each store
-export const stores: Record<string, Stores> = {
+export const stores = {
   /* ... add your stores here ... */
 }
 
