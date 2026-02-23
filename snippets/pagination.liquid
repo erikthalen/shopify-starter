@@ -16,7 +16,7 @@
 {% enddoc %}
 
 {%- if paginate.pages > 1 -%}
-  <nav role="navigation" class="mt-20 flex justify-center" x-data>
+  <nav role="navigation" aria-label="Pagination" class="mt-20 flex justify-center" x-data>
     <ol class="flex gap-4">
       {%- if paginate.previous -%}
         <li>

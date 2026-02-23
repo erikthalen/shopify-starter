@@ -30,4 +30,10 @@
       aspect-ratio: var(--aspect-ratio-md);
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .video video {
+      animation-play-state: paused;
+    }
+  }
 {% endstylesheet %}

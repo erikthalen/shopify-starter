@@ -3,6 +3,8 @@
     x-data="{ shown: false }"
     x-init="$watch('shown', (value) => $dispatch('announcement-bar:visible', value))"
     id="announcement_bar"
+    role="region"
+    aria-label="Announcement"
     class="bg-gray-100 relative z-10 h-(--announcement-bar-height) flex items-center justify-center px-4"
   >
     {{ section.settings.text }}

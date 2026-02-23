@@ -28,7 +28,8 @@
             data-no-swup
             class="{% if option_value.selected %}outline outline-gray-600{% endif %} flex"
             href="{{ product.url }}?variant={{ variants.first.id }}"
-            aria-title="Go to {{ product.title }} {{ variants.first.title }}"
+            aria-label="Go to {{ product.title }} {{ variants.first.title }}"
+            {% if option_value.selected %}aria-current="true"{% endif %}
           >
             {% render 'image', image: variants.first.featured_image, sizes: '33vw, 16vw', aspect_ratio: '1/1' %}
           </a>
