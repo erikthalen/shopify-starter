@@ -14,6 +14,7 @@ export default defineConfig({
     }),
     tailwindcss(),
   ],
+  publicDir: "public",
   build: {
     manifest: "manifest.json",
   },
