@@ -19,13 +19,15 @@
               {% content_for 'block', type: '_product-card', id: 'product_card', closest.product: product %}
             </li>
           {% endfor %}
+
+          {%- if section.settings.pagination_type == 'infinite_scroll' -%}
+            {% render 'infinite-scroll', paginate: paginate %}
+          {%- endif -%}
         </ol>
       {% endif %}
 
       {%- if section.settings.pagination_type == 'pagination' -%}
         {% render 'pagination', paginate: paginate %}
-      {%- else -%}
-        {% render 'infinite-scroll', paginate: paginate %}
       {%- endif -%}
     {% endpaginate %}
   </div>

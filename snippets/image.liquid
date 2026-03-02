@@ -31,63 +31,64 @@
   %}
 {% enddoc %}
 
-{%- assign image_name_desktop = image | image_url | split: '/' | last | split: '?' | first -%}
-{%- assign fpd = images[image_name_desktop].presentation.focal_point -%}
+{%- comment -%} ── 1. PARAMETERS ─────────────────────────────────────────── {%- endcomment -%}
 
 {%- assign image_mobile = image_mobile | default: image -%}
 
-{%- if image_mobile != blank -%}
-  {%- assign image_name_mobile = image_mobile | image_url | split: '/' | last | split: '?' | first -%}
-  {%- assign fpm = images[image_name_mobile].presentation.focal_point -%}
-{%- endif -%}
+{%- assign widths = '10,50,100,150,165,256,360,535,750,1070,1500,2200,2800,4500,6000' | split: ',' -%}
 
-{%- assign focal_points_sm = fpm | split: ' ' -%}
-{%- assign focal_point_sm_x = focal_points_sm | first | replace: '%', '' | times: 0.01 -%}
-{%- assign focal_point_sm_y = focal_points_sm | last | replace: '%', '' | times: 0.01 -%}
+{%- comment -%} ── 2. FOCAL POINTS ───────────────────────────────────────── {%- endcomment -%}
 
+{%- assign image_name_desktop = image | image_url | split: '/' | last | split: '?' | first -%}
+{%- assign fpd = images[image_name_desktop].presentation.focal_point -%}
 {%- assign focal_points_md = fpd | split: ' ' -%}
 {%- assign focal_point_md_x = focal_points_md | first | replace: '%', '' | times: 0.01 -%}
 {%- assign focal_point_md_y = focal_points_md | last | replace: '%', '' | times: 0.01 -%}
 
-{%- comment -%} ASPECT RATIO DEFAULT/GLOBAL {%- endcomment -%}
-{%- assign aspect_ratio_int = blank -%}
+{%- if image_mobile != blank -%}
+  {%- assign image_name_mobile = image_mobile | image_url | split: '/' | last | split: '?' | first -%}
+  {%- assign fpm = images[image_name_mobile].presentation.focal_point -%}
+  {%- assign focal_points_sm = fpm | split: ' ' -%}
+  {%- assign focal_point_sm_x = focal_points_sm | first | replace: '%', '' | times: 0.01 -%}
+  {%- assign focal_point_sm_y = focal_points_sm | last | replace: '%', '' | times: 0.01 -%}
+{%- endif -%}
 
+{%- comment -%} ── 3. ASPECT RATIOS ──────────────────────────────────────── {%- endcomment -%}
+
+{%- assign aspect_ratio_int = blank -%}
 {%- if aspect_ratio != blank -%}
   {%- assign aspect_ratio_ints = aspect_ratio | split: '/' -%}
   {%- assign aspect_ratio_int = aspect_ratio_ints[0] | times: 1.0 | divided_by: aspect_ratio_ints[1] -%}
 {%- endif -%}
 
-{%- comment -%} ASPECT RATIO SM {%- endcomment -%}
 {%- assign aspect_ratio_sm_int = blank -%}
-
 {%- if aspect_ratio_sm != blank -%}
   {%- assign aspect_ratio_sm_ints = aspect_ratio_sm | split: '/' -%}
   {%- assign aspect_ratio_sm_int = aspect_ratio_sm_ints[0] | times: 1.0 | divided_by: aspect_ratio_sm_ints[1] -%}
 {%- endif -%}
 
-{%- comment -%} ASPECT RATIO MD {%- endcomment -%}
 {%- assign aspect_ratio_md_int = blank -%}
-
 {%- if aspect_ratio_md != blank -%}
   {%- assign aspect_ratio_md_ints = aspect_ratio_md | split: '/' -%}
   {%- assign aspect_ratio_md_int = aspect_ratio_md_ints[0] | times: 1.0 | divided_by: aspect_ratio_md_ints[1] -%}
 {%- endif -%}
 
-{%- assign active_aspect_radio_sm = aspect_ratio_sm_int | default: aspect_ratio_int -%}
-{%- assign active_aspect_radio_md = aspect_ratio_md_int | default: aspect_ratio_int -%}
+{%- assign active_aspect_ratio_sm = aspect_ratio_sm_int | default: aspect_ratio_int -%}
+{%- assign active_aspect_ratio_md = aspect_ratio_md_int | default: aspect_ratio_int -%}
 
-{%- comment -%} Widths to generate <srcset> for {%- endcomment -%}
-{%- assign widths = '10,50,100,150,165,256,360,535,750,1070,1500,2200,2800,4500,6000' | split: ',' -%}
+{%- comment -%} ── 4. DIMENSIONS ─────────────────────────────────────────── {%- endcomment -%}
 
 {%- assign height_attribute_sm = image_mobile.height -%}
-{%- if active_aspect_radio_sm != blank -%}
-  {%- assign height_attribute_sm = image_mobile.width | divided_by: active_aspect_radio_sm -%}
+{%- if active_aspect_ratio_sm != blank -%}
+  {%- assign height_attribute_sm = image_mobile.width | divided_by: active_aspect_ratio_sm -%}
 {%- endif -%}
 
 {%- assign height_attribute_md = image.height -%}
-{%- if active_aspect_radio_md != blank -%}
-  {%- assign height_attribute_md = image.width | divided_by: active_aspect_radio_md -%}
+{%- if active_aspect_ratio_md != blank -%}
+  {%- assign height_attribute_md = image.width | divided_by: active_aspect_ratio_md -%}
 {%- endif -%}
+
+{%- comment -%} ── 5. RENDER ─────────────────────────────────────────────── {%- endcomment -%}
 
 {%- if image == blank -%}
   <div style="aspect-ratio: {{ aspect_ratio }}">
@@ -103,34 +104,30 @@
             {%- assign width_int = width | times: 1 -%}
 
             {%- if image_mobile.width >= width_int -%}
-              {%- if active_aspect_radio_sm == blank -%}
+              {%- if active_aspect_ratio_sm == blank -%}
                 {{ image_mobile | image_url: width: width_int, format: 'webp' }} {{ width_int }}w,
               {%- else -%}
                 {%- assign original_image_ratio = image.width | times: 1.0 | divided_by: image.height -%}
 
-                {%- if original_image_ratio > active_aspect_radio_sm -%}
-                  {%- assign crop_width = image.height | times: active_aspect_radio_sm -%}
+                {%- if original_image_ratio > active_aspect_ratio_sm -%}
+                  {%- assign crop_width = image.height | times: active_aspect_ratio_sm -%}
                   {%- assign crop_height = image.height -%}
                 {%- else -%}
                   {%- assign crop_width = image.width -%}
-                  {%- assign crop_height = crop_width | divided_by: active_aspect_radio_sm -%}
+                  {%- assign crop_height = crop_width | divided_by: active_aspect_ratio_sm -%}
                 {%- endif -%}
 
                 {%- assign focal_left = focal_point_sm_x | times: image_mobile.width -%}
                 {%- assign focal_top = focal_point_sm_y | times: image_mobile.height -%}
 
-                {%- assign minus_value_left = crop_width | divided_by: 2 -%}
-                {%- assign crop_left = focal_left | minus: minus_value_left -%}
-                {%- assign minus_value_top = crop_height | divided_by: 2 -%}
-                {%- assign crop_top = focal_top | minus: minus_value_top -%}
+                {%- assign crop_left = crop_width | divided_by: 2 | times: -1 | plus: focal_left -%}
+                {%- assign crop_top = crop_height | divided_by: 2 | times: -1 | plus: focal_top -%}
 
                 {%- assign crop_left_max = image_mobile.width | minus: crop_width -%}
-                {%- assign crop_left = crop_left | at_most: crop_left_max -%}
-                {%- assign crop_left = crop_left | at_least: 0 -%}
+                {%- assign crop_left = crop_left | at_most: crop_left_max | at_least: 0 -%}
 
                 {%- assign crop_top_max = image_mobile.height | minus: crop_height -%}
-                {%- assign crop_top = crop_top | at_most: crop_top_max -%}
-                {%- assign crop_top = crop_top | at_least: 0 -%}
+                {%- assign crop_top = crop_top | at_most: crop_top_max | at_least: 0 -%}
 
                 {%- assign crop_width = crop_width | at_most: 5760 -%}
                 {%- assign crop_height = crop_height | at_most: 5760 -%}
@@ -147,7 +144,6 @@
               {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
-          {{ url }}
         "
         sizes="(max-width: 750px) {{ sizes | default: '100vw, 100vw' }}"
         width="{{ image_mobile.width }}"
@@ -163,33 +159,30 @@
           {%- assign width_int = width | times: 1 -%}
 
           {%- if image.width >= width_int -%}
-            {%- if active_aspect_radio_md == blank -%}
+            {%- if active_aspect_ratio_md == blank -%}
               {{ image | image_url: width: width_int, format: 'webp' }} {{ width_int }}w,
             {%- else -%}
               {%- assign original_image_ratio = image.width | times: 1.0 | divided_by: image.height -%}
-              {%- if original_image_ratio > active_aspect_radio_md -%}
-                {%- assign crop_width = image.height | times: active_aspect_radio_md -%}
+
+              {%- if original_image_ratio > active_aspect_ratio_md -%}
+                {%- assign crop_width = image.height | times: active_aspect_ratio_md -%}
                 {%- assign crop_height = image.height -%}
               {%- else -%}
                 {%- assign crop_width = image.width -%}
-                {%- assign crop_height = crop_width | divided_by: active_aspect_radio_md -%}
+                {%- assign crop_height = crop_width | divided_by: active_aspect_ratio_md -%}
               {%- endif -%}
 
               {%- assign focal_left = focal_point_md_x | times: image.width -%}
               {%- assign focal_top = focal_point_md_y | times: image.height -%}
 
-              {%- assign minus_value_left = crop_width | divided_by: 2 -%}
-              {%- assign crop_left = focal_left | minus: minus_value_left -%}
-              {%- assign minus_value_top = crop_height | divided_by: 2 -%}
-              {%- assign crop_top = focal_top | minus: minus_value_top -%}
+              {%- assign crop_left = crop_width | divided_by: 2 | times: -1 | plus: focal_left -%}
+              {%- assign crop_top = crop_height | divided_by: 2 | times: -1 | plus: focal_top -%}
 
               {%- assign crop_left_max = image.width | minus: crop_width -%}
-              {%- assign crop_left = crop_left | at_most: crop_left_max -%}
-              {%- assign crop_left = crop_left | at_least: 0 -%}
+              {%- assign crop_left = crop_left | at_most: crop_left_max | at_least: 0 -%}
 
               {%- assign crop_top_max = image.height | minus: crop_height -%}
-              {%- assign crop_top = crop_top | at_most: crop_top_max -%}
-              {%- assign crop_top = crop_top | at_least: 0 -%}
+              {%- assign crop_top = crop_top | at_most: crop_top_max | at_least: 0 -%}
 
               {%- assign crop_width = crop_width | at_most: 5760 -%}
               {%- assign crop_height = crop_height | at_most: 5760 -%}
@@ -206,7 +199,6 @@
             {%- endif -%}
           {%- endif -%}
         {%- endfor -%}
-        {{ url }}
       "
       sizes="(max-width: 750px) {{ sizes | default: '100vw, 100vw' }}"
       width="{{ image.width }}"
@@ -217,12 +209,6 @@
       {%- endif -%}
     >
 
-    {% comment %}
-      x-data="{ show: false }"
-      x-init="if($el.complete) show = true"
-      @load="show = true"
-      :class="{ show }"
-    {% endcomment %}
     <img
       class="image object-cover {{ class }}"
       {% if style != blank %}
@@ -242,15 +228,3 @@
     >
   </picture>
 {%- endif -%}
-
-{% stylesheet %}
-  html:not(.no-js) {
-    .image {
-      /* opacity: 0; */
-
-      &.show {
-        opacity: 1;
-      }
-    }
-  }
-{% endstylesheet %}

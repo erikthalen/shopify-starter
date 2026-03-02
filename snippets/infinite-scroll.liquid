@@ -11,25 +11,32 @@
       {% for product in collection.products %}
         <li>{{ product.title }}</li>
       {% endfor %}
+      
+      {% render 'infinite-scroll', paginate: paginate %}  
     </ol>
       
-    {% render 'infinite-scroll', paginate: paginate %}  
   {% endpaginate %}
 {% enddoc %}
 
 {%- if paginate.next -%}
-  <div x-data="infiniteScroll">
+  <div x-data="infiniteScroll" class="contents">
     <div
       id="pagination"
-      x-intersect="$ajax('{{ paginate.next.url }}', { target: 'paginated_items pagination' })"
-      @ajax:success="updateCache($event)"
+      class="contents"
     >
       {% comment %} Loading skeletons {% endcomment %}
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {% for i in (1..3) %}
+      {% for i in (1..3) %}
+        {% if forloop.first %}
+          <div
+            x-intersect="$ajax('{{ paginate.next.url }}', { target: 'paginated_items pagination' })"
+            @ajax:success="updateCache($event)"
+          >
+            {% render 'product-card-skeleton' %}
+          </div>
+        {% else %}
           {% render 'product-card-skeleton' %}
-        {% endfor %}
-      </div>
+        {% endif %}
+      {% endfor %}
 
       <a class="sr-only" href="{{ paginate.next.url }}"> Next page </a>
     </div>
