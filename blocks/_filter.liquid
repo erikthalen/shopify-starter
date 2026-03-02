@@ -1,6 +1,13 @@
 {% doc %}
-  Outputs a `<dialog>` that holds the `{{ filter }}` content, and a button that toggles the `open` state.
-  https://help.shopify.com/en/manual/online-store/search-and-discovery
+  Outputs a filter button and a slide-down `<dialog>` with filter controls for the current collection.
+  Supports boolean, list (with optional color swatches), and price range filter types,
+  as well as a sort-by selector. Filter changes are applied automatically on change via `x-sync-params`.
+  Active filter count is shown on the button.
+
+  See https://help.shopify.com/en/manual/online-store/search-and-discovery for setting up filters.
+
+  @example
+  {% content_for 'block', type: '_filter', id: 'filter' %}
 {% enddoc %}
 
 {% assign active_values = collection.filters | map: 'active_values' %}

@@ -17,7 +17,7 @@
       <h2 class="mb-2">{{ product.title }}</h2>
 
       <span>
-        {% content_for 'block', type: '_product-price', id: 'price', closest.product: product %}
+        {% render 'product-price', product: product %}
       </span>
     </div>
   </div>

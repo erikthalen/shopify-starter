@@ -1,9 +1,10 @@
 {% doc %}
-  Place this below a paginated list,
-  and the next page will render automatically when it reached the bottom.
-  The logic is defined as an [Alpine.js](https://alpinejs.dev/) component in `infinite-scroll.ts`
+  Place this inside a paginated list container. When the snippet scrolls into view,
+  the next page is fetched automatically and its items are appended to the list.
+  The container must have `id="paginated_items"` and `x-merge="append"` for the swap to work.
+  The intersection/fetch logic is handled by the `infiniteScroll` [Alpine.js](https://alpinejs.dev/) component in `infinite-scroll.ts`.
 
-  @param {object} paginate - A Shopify {{ paginate }} object
+  @param {object} paginate - Shopify `paginate` object.
 
   @example
   {% paginate collection.products by 12 %}
@@ -11,10 +12,9 @@
       {% for product in collection.products %}
         <li>{{ product.title }}</li>
       {% endfor %}
-      
-      {% render 'infinite-scroll', paginate: paginate %}  
+
+      {% render 'infinite-scroll', paginate: paginate %}
     </ol>
-      
   {% endpaginate %}
 {% enddoc %}
 

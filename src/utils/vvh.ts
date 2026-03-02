@@ -5,7 +5,9 @@
  */
 window.visualViewport?.addEventListener("resize", viewportHandler)
 
-viewportHandler()
+setTimeout(() => {
+  viewportHandler()
+}, 100)
 
 function viewportHandler() {
   document.body.style.setProperty("--vvh", window.visualViewport?.height + "px")

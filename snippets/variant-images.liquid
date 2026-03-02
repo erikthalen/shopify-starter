@@ -1,8 +1,13 @@
 {% doc %}
-  This snippet renders all variants in option1 as links to the corresponding variant,
-  given what's selected in the other options.
+  Renders the featured image of each option1 value as a link to the matching variant,
+  taking into account the currently selected values of all other options.
+  Clicking a swatch navigates to the corresponding variant URL; the `swapLink` Alpine.js component
+  intercepts the navigation and swaps the `#main_product` section instead of doing a full page reload.
 
-  The javascript hijacks the redirect and swaps the markup.
+  Uses the global `product` object — place this on product pages.
+
+  @example
+  {% render 'variant-images' %}
 {% enddoc %}
 
 <section id="variant_images">

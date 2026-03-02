@@ -1,10 +1,22 @@
 {% doc %}
-  Number input with buttons for changing the value
+  Outputs a number input with increment and decrement buttons.
+  The value is stored in a hidden `<input>` and displayed in an `<output>` element.
+  Managed by the `quantitySelector` [Alpine.js](https://alpinejs.dev/) component in `quantity-selector.ts`.
 
-  @param {string} [name] - name attribute, default to 1
-  @param {number} [value] - value attribute, default to 1
-  @param {number} [min] - min attribute, default to 0
-  @param {string} [on-change] - Alpine callback to run on quantity change (debounced)
+  @param {string} [name] - `name` attribute of the hidden input. Defaults to `quantity`.
+  @param {number} [value] - Initial value. Defaults to `1`.
+  @param {number} [min] - Minimum allowed value. Defaults to `0`.
+  @param {string} [on-change] - Alpine.js expression called after the value changes (debounced).
+
+  @example
+  {% render 'quantity-selector', name: 'quantity', value: 1, min: 1 %}
+
+  {% render 'quantity-selector',
+    name: 'quantity',
+    value: line_item.quantity,
+    min: 0,
+    on-change: 'submitForm()'
+  %}
 {% enddoc %}
 
 <div

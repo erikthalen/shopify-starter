@@ -1,7 +1,9 @@
 {% doc %}
-  Outputs a default Shopify pagination.
+  Outputs a standard previous/next and numbered pagination nav.
+  Only renders when there is more than one page. The current page is underlined.
+  Use this as a fallback or alternative to the `infinite-scroll` snippet.
 
-  @param {object} paginate - A Shopify {{ paginate }} object
+  @param {object} paginate - Shopify `paginate` object.
 
   @example
   {% paginate collection.products by 12 %}
@@ -10,8 +12,8 @@
         <li>{{ product.title }}</li>
       {% endfor %}
     </ol>
-      
-    {% render 'pagination', paginate: paginate %}  
+
+    {% render 'pagination', paginate: paginate %}
   {% endpaginate %}
 {% enddoc %}
 

@@ -1,6 +1,12 @@
 {% doc %}
-  Outputs a `<dialog>` with a `<form>` to use the `{{ predictive_search }}`-api, and a button that toggles the `open` state.
-  Requires the section `predictive-search-results.liquid` where the search result items are rendered.
+  Outputs a search button and a full-screen `<dialog>` with a live predictive search field.
+  Results are fetched as you type using the Shopify Predictive Search API and rendered inside
+  the `predictive-search-results` section via AJAX. Submitting the form navigates to the full search page.
+  Requires the section `predictive-search-results.liquid`.
+  The search logic is handled by the `predictiveSearch` [Alpine.js](https://alpinejs.dev/) component.
+
+  @example
+  {% content_for 'block', type: '_predictive-search', id: 'search' %}
 {% enddoc %}
 
 <a

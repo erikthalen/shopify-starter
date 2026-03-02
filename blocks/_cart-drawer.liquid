@@ -1,5 +1,11 @@
 {% doc %}
-  Outputs a `<dialog>` that holds the `{{ cart }}` content, and a button that toggles the `open` state.
+  Outputs a cart icon link and a slide-in `<dialog>` from the right showing the cart contents.
+  Clicking the link opens the drawer instead of navigating to the cart page.
+  Cart items are rendered by the `cart-form` snippet.
+  The cart item count (`#cart_amount`) is updated when products are added via `x-target`.
+
+  @example
+  {% content_for 'block', type: '_cart-drawer', id: 'cart_drawer' %}
 {% enddoc %}
 
 <a

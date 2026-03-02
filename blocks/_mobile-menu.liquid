@@ -1,6 +1,10 @@
 {% doc %}
-  Outputs a `<dialog>` with a `<form>` to use the `{{ mobile_menu }}`-api, and a button that toggles the `open` state.
-  Requires the section `predictive-search-results.liquid` where the search result items are rendered.
+  Outputs a menu button and a full-screen `<dialog>` that slides in from the left.
+  Contains navigation links. The active link is highlighted using [Alpine.js](https://alpinejs.dev/)
+  and updated on client-side navigation events.
+
+  @example
+  {% content_for 'block', type: '_mobile-menu', id: 'mobile_menu' %}
 {% enddoc %}
 
 <button
