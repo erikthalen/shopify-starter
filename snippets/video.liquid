@@ -1,10 +1,20 @@
 {% doc %}
-  Outputs a <video> in a optionally defined aspect ratio.
+  Outputs a `<video>` tag that autoplays, loops, and is muted by default.
+  The aspect ratio is applied via CSS custom properties and can differ between screen sizes.
 
-  @param {object} video - A Shopify "video"
-  @param {string} [aspect_ratio] - CSS property value for aspect-ratio
-  @param {string} [aspect_ratio_sm] - Aspect ratio for small screens (overrides `aspect_ratio`)
-  @param {string} [aspect_ratio_md] - Aspect ratio for large screens (overrides `aspect_ratio`)
+  @param {object} video - Shopify `video` object.
+  @param {string} [aspect_ratio] - CSS `aspect-ratio` value, e.g. `16/9`.
+  @param {string} [aspect_ratio_sm] - Aspect ratio on small screens. Overrides `aspect_ratio`.
+  @param {string} [aspect_ratio_md] - Aspect ratio on large screens. Overrides `aspect_ratio`.
+
+  @example
+  {% render 'video', video: section.settings.video, aspect_ratio: '16/9' %}
+
+  {% render 'video',
+    video: section.settings.video,
+    aspect_ratio_sm: '1/1',
+    aspect_ratio_md: '16/9'
+  %}
 {% enddoc %}
 
 {% if video %}

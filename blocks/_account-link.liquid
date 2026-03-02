@@ -1,5 +1,9 @@
 {% doc %}
-  Outputs a link where the customer can login, or go to its accout page when logged in.
+  Outputs a link to the login page, or to the customer's account page if already logged in.
+  Only renders if `shop.customer_accounts_enabled` is true.
+
+  @example
+  {% content_for 'block', type: '_account-link', id: 'account' %}
 {% enddoc %}
 
 {%- if shop.customer_accounts_enabled -%}

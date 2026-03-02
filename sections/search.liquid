@@ -2,7 +2,7 @@
   <form
     action="{{ routes.search_url }}"
     x-target="search_results"
-    class="w-full max-w-md m-4 mb-6 flex items-center gap-2 border-b border-gray-400 bg-white"
+    class="m-4 mb-6 flex w-full max-w-md items-center gap-2 border-b border-gray-400 bg-white"
   >
     <div class="w-4 opacity-50">
       {% render 'icon-magnifier' %}
@@ -78,7 +78,7 @@
             <li>
               {%- case item.object_type -%}
                 {%- when 'product' -%}
-                  {% content_for 'block', type: '_product-card', id: 'product_card', closest.product: item %}
+                  {% render 'product-card', product: item %}
                 {%- when 'article' -%}
                   <a href="{{ item.url }}">{{ item.title | truncate: 50 | escape }}</a>
                 {%- when 'page' -%}
@@ -86,12 +86,14 @@
               {%- endcase -%}
             </li>
           {%- endfor -%}
+
+          {%- if section.settings.pagination_type == 'infinite_scroll' -%}
+            {% render 'infinite-scroll', paginate: paginate %}
+          {%- endif -%}
         </ol>
 
         {%- if section.settings.pagination_type == 'pagination' -%}
           {% render 'pagination', paginate: paginate %}
-        {%- else -%}
-          {% render 'infinite-scroll', paginate: paginate %}
         {%- endif -%}
       {% endpaginate %}
     {% endif %}

@@ -1,12 +1,14 @@
 {% doc %}
-  Outputs `{% form 'product' %}` hardcoded with 1 of the current variant.  
-  Requires that the `closest.product` is set to the product to render.
+  Outputs a minimal add-to-cart button for the selected or first available variant.
+  Quantity is fixed at 1. Shows "Sold out" and disables the button when the variant is unavailable.
+  Includes a spinner icon that appears while the cart request is pending.
+
+  @param {object} product - Shopify `product` object.
 
   @example
-  {% content_for 'block', type: '_quick-buy', id: 'qb', closest.product: product %}
+  {% render 'quick-buy', product: product %}
 {% enddoc %}
 
-{% assign product = closest.product %}
 {% assign variant = product.selected_or_first_available_variant %}
 
 {% form 'product', product, x-target: 'cart cart_drawer_content cart_amount' %}
@@ -41,9 +43,3 @@
     }
   }
 {% endstylesheet %}
-
-{% schema %}
-{
-  "name": "Quick buy"
-}
-{% endschema %}

@@ -1,6 +1,10 @@
 {% doc %}
-  Outputs a `<dialog>` that holds the `{{ localization }}` content, and a button that toggles the `open` state.
-  The dialog has a `<form>` where the language and currency can be changed.
+  Outputs a button showing the current language and currency, and a centered `<dialog>` with selectors
+  to change the store language and currency. Changes are applied immediately on selection via form submission.
+  The return URL is kept in sync with the current page so the customer stays on the same page after switching.
+
+  @example
+  {% content_for 'block', type: '_localization-form', id: 'localization' %}
 {% enddoc %}
 
 <button id="localization_button" class="button" onclick="document.getElementById('localization_form')?.showModal()">

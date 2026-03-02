@@ -1,0 +1,22 @@
+{% doc %}
+  Outputs the price of a product's selected or first available variant.
+  Shows both the sale price and the original compare-at price (struck through) when on sale.
+
+  @param {object} product - Shopify `product` object.
+
+  @example
+  {% render 'product-price', product: product %}
+{% enddoc %}
+
+{% assign variant = product.selected_or_first_available_variant %}
+
+<div class="flex gap-2">
+  {% if variant.compare_at_price != blank and variant.compare_at_price != variant.price %}
+    <p>{{ variant.price | money }}</p>
+    <p class="text-gray-500">
+      <s>{{ variant.compare_at_price | money }}</s>
+    </p>
+  {% else %}
+    <p>{{ variant.price | money }}</p>
+  {% endif %}
+</div>

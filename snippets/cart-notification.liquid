@@ -1,7 +1,11 @@
 {% doc %}
-  Shows a notification when products are added to the cart.
-  Requires a section named "cart-notification-content.liquid", that holds the content.
-  The logic is defined as an [Alpine.js](https://alpinejs.dev/) component in `cart-notification.ts`
+  Outputs a slide-down notification `<dialog>` that appears in the top-right corner when a product is added to the cart.
+  The dialog content is loaded from the `cart-notification-content` section via AJAX.
+  Closing it (e.g. clicking outside) is handled by `closedby="any"`.
+  The open/close logic is defined as an [Alpine.js](https://alpinejs.dev/) component in `cart-notification.ts`.
+
+  @example
+  {% render 'cart-notification' %}
 {% enddoc %}
 
 <dialog

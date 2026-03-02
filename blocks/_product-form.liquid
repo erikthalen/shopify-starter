@@ -1,7 +1,7 @@
 {% doc %}
-  Outputs a `{% form 'product' %}`.  
-  Requires that the `closest.product` is set to the product to render.
-  Includes a variant picker.
+  Outputs a full product form including a variant picker, quantity selector, add-to-cart button,
+  and Shopify payment button. Shows a striped loading animation on the button while the cart request is pending.
+  Requires `closest.product` to be set to the product to render.
 
   @example
   {% content_for 'block', type: '_product-form', id: 'pf', closest.product: product %}

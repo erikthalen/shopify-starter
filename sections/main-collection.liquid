@@ -16,16 +16,18 @@
         <ol id="paginated_items" x-merge="append" class="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-3">
           {% for product in collection.products %}
             <li>
-              {% content_for 'block', type: '_product-card', id: 'product_card', closest.product: product %}
+              {% render 'product-card', product: product %}
             </li>
           {% endfor %}
+
+          {%- if section.settings.pagination_type == 'infinite_scroll' -%}
+            {% render 'infinite-scroll', paginate: paginate %}
+          {%- endif -%}
         </ol>
       {% endif %}
 
       {%- if section.settings.pagination_type == 'pagination' -%}
         {% render 'pagination', paginate: paginate %}
-      {%- else -%}
-        {% render 'infinite-scroll', paginate: paginate %}
       {%- endif -%}
     {% endpaginate %}
   </div>

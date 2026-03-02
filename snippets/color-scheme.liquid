@@ -1,8 +1,9 @@
 {% doc %}
-  Used to output a color scheme as inline css variables.
-  Loops through all/any colors defined in the supplied scheme.
+  Outputs a color scheme as inline CSS custom properties (e.g. `--scheme-background`, `--scheme-text`).
+  Loops through the colors defined in the scheme and skips unset values (transparent `rgba(0,0,0,0)`).
+  Falls back to `section.settings.color_scheme` or `block.settings.color_scheme` if no param is passed.
 
-  @param {object} [color_scheme] - The color_scheme to output, defaults to `section.settings.color_scheme`
+  @param {object} [color_scheme] - Color scheme to output. Defaults to `section.settings.color_scheme` or `block.settings.color_scheme`.
 
   @example
   <div style="{% render 'color-scheme' %}">...</div>
