@@ -1,7 +1,7 @@
 import "vite/modulepreload-polyfill"
 
 import { swup } from "./swup"
-import Alpine, { type Stores } from "alpinejs"
+import Alpine from "alpinejs"
 
 import "./utils/vvh"
 import { swupPreloadChildren } from "./utils/swup-preload-children"
