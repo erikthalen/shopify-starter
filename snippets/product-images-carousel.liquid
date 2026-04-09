@@ -53,7 +53,10 @@
       <div x-ref="emblaThumbsViewport" class="embla-thumbs__viewport">
         <div class="embla-thumbs__container">
           {% for media in product.media %}
-            <button class="embla-thumbs__slide cursor-pointer overflow-hidden rounded-lg" aria-label="Go to slide {{ forloop.index }}">
+            <button
+              class="embla-thumbs__slide cursor-pointer overflow-hidden rounded-lg"
+              aria-label="Go to slide {{ forloop.index }}"
+            >
               {% if media.media_type == 'image' %}
                 {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1' %}
               {% elsif media.media_type == 'video' %}

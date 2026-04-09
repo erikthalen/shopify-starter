@@ -10,7 +10,7 @@
   <h2 class="mb-4">You may also like</h2>
 
   {%- unless recommendations.performed -%}
-    <div id="{{ unique_id }}" class="product-recommendation-results grid grid-cols-2 lg:grid-cols-4 gap-4 pt-8">
+    <div id="{{ unique_id }}" class="product-recommendation-results grid grid-cols-2 gap-4 lg:grid-cols-4">
       {% comment %} results are appended here {% endcomment %}
       {% for i in (1..amount) %}
         {% render 'product-card-skeleton' %}
@@ -19,9 +19,12 @@
 
     <form
       {% comment %} automatically submit the form that requests recommendations {% endcomment %}
-      x-init="setTimeout(() => $el.requestSubmit())"
-      x-target="{{ unique_id }}"
       action="{{ routes.product_recommendations_url }}"
+      hx-get="{{ routes.product_recommendations_url }}"
+      hx-select="#{{ unique_id }}"
+      hx-target="#{{ unique_id }}"
+      hx-swap="outerHTML"
+      {% comment %} x-init="setTimeout(() => $el.requestSubmit(), 100)" {% endcomment %}
     >
       <input type="hidden" name="section_id" value="{{ section.id }}">
       <input type="hidden" name="product_id" value="{{ product.id }}">
@@ -29,7 +32,7 @@
       <input type="hidden" name="intent" value="{{ section.settings.intent | default: 'related' }}">
     </form>
   {%- else -%}
-    <ul id="{{ unique_id }}" class="product-recommendation-results grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <ul id="{{ unique_id }}" class="product-recommendation-results grid grid-cols-2 gap-4 lg:grid-cols-4">
       {%- for product in recommendations.products -%}
         <li>
           {% render 'product-card', product: product %}
@@ -38,18 +41,6 @@
     </ul>
   {%- endunless -%}
 </div>
-
-{% stylesheet %}
-  @keyframes product-recommendation-fade-in {
-    from {
-      opacity: 0;
-    }
-  }
-
-  .product-recommendation-results > * {
-    animation: product-recommendation-fade-in 400ms forwards;
-  }
-{% endstylesheet %}
 
 {% schema %}
 {

@@ -2,7 +2,7 @@
   Outputs a cart icon link and a slide-in `<dialog>` from the right showing the cart contents.
   Clicking the link opens the drawer instead of navigating to the cart page.
   Cart items are rendered by the `cart-form` snippet.
-  The cart item count (`#cart_amount`) is updated when products are added via `x-target`.
+  The cart item count (`#cart_amount`) is updated when products are added via htmx.
 
   @example
   {% content_for 'block', type: '_cart-drawer', id: 'cart_drawer' %}
@@ -18,7 +18,7 @@
   {% comment %} uncomment this to show drawer when product is added to cart {% endcomment %}
   {% comment %} @ajax:after.window="(e) => e.target.getAttribute('x-target')?.includes('cart_drawer_content') && location.pathname !== '{{ routes.cart_url }}' && document.getElementById('cart_drawer')?.showModal()" {% endcomment %}
 >
-  Cart (<span id="cart_amount">{{- cart.item_count -}}</span>)
+  Cart (<span hx-swap-oob="innerHTML" id="cart_amount">{{- cart.item_count -}}</span>)
 </a>
 
 <dialog
@@ -29,9 +29,9 @@
 >
   <div
     id="cart_drawer_content"
-    class="top-0 grid grid-rows-[auto_1fr] bg-white pb-4 h-full"
+    class="top-0 grid h-full grid-rows-[auto_1fr] bg-white pb-4"
   >
-    <header class="sticky top-0 z-1 mx-4 flex h-10 items-center justify-between bg-white border-b border-gray-300">
+    <header class="sticky top-0 z-1 mx-4 flex h-10 items-center justify-between border-b border-gray-300 bg-white">
       <p>
         Your cart (
         {{- cart.item_count -}}
@@ -48,7 +48,7 @@
     {% render 'cart-form' %}
 
     {% unless cart == empty %}
-      <footer class="pb-4 justify-self-center text-center">
+      <footer class="justify-self-center pb-4 text-center">
         <a href="{{ routes.cart_url }}" class="button inline-block"> Go to cart </a>
       </footer>
     {% endunless %}

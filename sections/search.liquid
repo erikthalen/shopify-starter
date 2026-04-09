@@ -1,7 +1,10 @@
 <div class="flex justify-center">
   <form
     action="{{ routes.search_url }}"
-    x-target="search_results"
+    hx-post="{{ routes.search_url }}"
+    hx-select="#search_results"
+    hx-target="#search_results"
+    hx-swap="outerHTML"
     class="m-4 mb-6 flex w-full max-w-md items-center gap-2 border-b border-gray-400 bg-white"
   >
     <div class="w-4 opacity-50">

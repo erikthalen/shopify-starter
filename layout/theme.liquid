@@ -37,7 +37,7 @@
     {{ content_for_header }}
   </head>
 
-  <body x-cloak class="grid min-h-screen grid-rows-[auto_1fr] overflow-x-clip">
+  <body class="grid min-h-screen grid-rows-[auto_1fr] overflow-x-clip">
     <div id="page">
       {% render 'skip-to-content-link' %}
 
@@ -55,7 +55,7 @@
       <main
         id="swup"
         role="main"
-        class="grid min-h-[calc(100vh-var(--header-height)-var(--announcement-bar-height))] grid-rows-[1fr_auto] bg-white"
+        class="transition-fade grid min-h-[calc(100vh-var(--header-height)-var(--announcement-bar-height))] grid-rows-[1fr_auto] bg-white"
       >
         <div id="content" class="contents">
           <div>

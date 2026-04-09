@@ -21,7 +21,7 @@
   scroll-lock
   id="predictive_search"
   closedby="any"
-  class="fixed right-0 left-0 top-0 max-h-(--vvh) w-screen max-w-none bg-white overflow-auto overscroll-contain"
+  class="fixed top-0 right-0 left-0 max-h-(--vvh) w-screen max-w-none overflow-auto overscroll-contain bg-white"
 >
   <div class="relative z-2 w-full justify-center px-4">
     <div
@@ -66,19 +66,10 @@
         class="sr-only"
         x-ref="predictiveSearchForm"
         action="{{ routes.predictive_search_url }}"
-        x-target="predictive-search-results"
-        @ajax:before="
-          if(!q) {
-            $event.preventDefault()
-            $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
-          }
-        "
-        @ajax:after="
-          if(!q) {
-            $event.preventDefault()
-            $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
-          }
-        "
+        hx-get="{{ routes.predictive_search_url }}"
+        hx-select="#predictive-search-results"
+        hx-target="#predictive-search-results"
+        hx-swap="outerHTML"
       >
         <input type="search" name="q" x-model="q">
         <input type="hidden" name="section_id" value="predictive-search-results">

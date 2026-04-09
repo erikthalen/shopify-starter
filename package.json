@@ -14,35 +14,31 @@
     "vite:dev": "vite",
     "vite:build": "vite build",
     "shopify:dev": "shopify theme dev -e development --open",
-    "shopify:deploy": "shopify theme push -e development && shopify theme push -e production",
-    "lint": "npx eslint"
+    "shopify:deploy": "shopify theme push -e development && shopify theme push -e production"
   },
   "devDependencies": {
     "@shopify/prettier-plugin-liquid": "^1.5.2",
-    "@tailwindcss/vite": "4.1.13",
+    "@tailwindcss/vite": "4.2.2",
     "@types/alpinejs": "^3.13.11",
     "@types/alpinejs__intersect": "^3.13.4",
     "@types/alpinejs__morph": "^3.13.5",
-    "globals": "^15.12.0",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.9",
-    "typescript-eslint": "^8.12.2",
-    "vite": "^7.1.5",
-    "vite-plugin-shopify": "4.1.0",
-    "vite-plugin-top-level-await": "^1.4.1"
+    "vite": "^8.0.7",
+    "vite-plugin-shopify": "4.1.2",
+    "vite-plugin-top-level-await": "^1.6.0"
   },
   "dependencies": {
     "@alpinejs/intersect": "^3.14.9",
     "@alpinejs/morph": "^3.15.0",
     "@imacrayon/alpine-ajax": "^0.12.2",
     "@swup/a11y-plugin": "^5.0.0",
-    "@swup/debug-plugin": "^4.1.0",
-    "@swup/js-plugin": "^3.2.0",
     "@swup/preload-plugin": "^3.2.11",
-    "alpinejs": "3.15.1",
+    "alpinejs": "3.15.11",
     "embla-carousel": "^8.6.0",
+    "htmx.org": "^2.0.8",
     "swup": "^4.8.2",
-    "tailwindcss": "4.1.13"
+    "tailwindcss": "4.2.2"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -54,6 +50,5 @@
       "@shopify/prettier-plugin-liquid",
       "prettier-plugin-tailwindcss"
     ]
-  },
-  "packageManager": "pnpm@9.12.2"
+  }
 }

@@ -12,13 +12,13 @@
   id="cart_notification"
   x-data="cartNotification"
   aria-label="Cart notification"
-  class="fixed z-11 left-auto top-14 right-4 rounded px-4 py-3 w-full max-w-[calc(100vw-2rem)] md:max-w-md"
+  class="fixed top-14 right-4 left-auto z-11 w-full max-w-[calc(100vw-2rem)] rounded px-4 py-3 md:max-w-md"
   closedby="any"
 ></dialog>
 
 {% comment %} backdrop {% endcomment %}
 <div
-  class="pointer-events-none fixed top-0 backdrop-blur-[2px] left-0 z-8 h-screen w-screen bg-black/25 opacity-0 transition-opacity duration-500"
+  class="pointer-events-none fixed top-0 left-0 z-8 h-screen w-screen bg-black/25 opacity-0 backdrop-blur-[2px] transition-opacity duration-500"
 ></div>
 
 {% stylesheet %}

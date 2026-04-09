@@ -13,13 +13,17 @@
     cart,
     id: 'cart_form',
     class: 'flex h-full flex-col px-4',
-    x-target: 'cart cart_drawer_content cart_amount',
-    x-headers: '{"accept": "text/html"}'
+    hx-post: routes.cart_url,
+    hx-select: '#cart_drawer_content',
+    hx-target: '#cart_drawer_content',
+    hx-swap: 'outerHTML',
+    hx-headers: '{"accept": "text/html"}'
   %}
     <ul>
       {%- for item in cart.items -%}
         <li
-          class="flex gap-2 items-start overflow-clip border-b border-gray-200 py-4 last-of-type:border-0"
+          style="view-transition-name: cart-item-{{ item.key | handleize }}"
+          class="flex items-start gap-2 overflow-clip border-b border-gray-200 py-4 last-of-type:border-0"
         >
           {%- if item.image -%}
             {% render 'image', image: item.image, class: 'w-30 rounded overflow-hidden', sizes: '100px, 100px' %}
@@ -107,7 +111,10 @@
                 %}
 
                 <a
-                  x-target="cart cart_drawer_content cart_amount"
+                  hx-post="{{ item.url_to_remove }}"
+                  hx-select="#cart_drawer_content"
+                  hx-target="#cart_drawer_content"
+                  hx-swap="outerHTML"
                   data-no-swup
                   class="inline-block border-b border-dotted text-gray-600 hover:text-black"
                   href="{{ item.url_to_remove }}"

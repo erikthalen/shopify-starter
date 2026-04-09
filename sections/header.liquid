@@ -19,13 +19,13 @@
       x-data="{ active: {% if request.path contains '{{ routes.collections_url }}' %}true{% else %}false{% endif %} }"
       @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
       :class="active ? 'underline' : ''"
-      class="non-touchscreen-only button"
+      class="desktop-only button"
     >
       Shop
     </a>
   </nav>
 
-  <div class="touchscreen-only">
+  <div class="mobile-only">
     {% content_for 'block', type: '_mobile-menu', id: 'mobile_menu' %}
   </div>
 

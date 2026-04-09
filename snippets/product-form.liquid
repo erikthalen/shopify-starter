@@ -1,13 +1,8 @@
 {% doc %}
   Outputs a full product form including a variant picker, quantity selector, add-to-cart button,
   and Shopify payment button. Shows a striped loading animation on the button while the cart request is pending.
-  Requires `closest.product` to be set to the product to render.
-
-  @example
-  {% content_for 'block', type: '_product-form', id: 'pf', closest.product: product %}
 {% enddoc %}
 
-{% assign product = closest.product %}
 {% assign variant = product.selected_or_first_available_variant %}
 
 {% render 'variant-picker', swap_ids: 'variant_picker product_info variant_id add_to_cart_button' %}
@@ -16,11 +11,15 @@
   product,
   id: 'product_form',
   class: 'w-full my-4',
-  x-target: 'cart cart_drawer_content cart_amount'
+  hx-post: routes.cart_add_url,
+  hx-select: '#cart_drawer_content',
+  hx-target: '#cart_drawer_content',
+  hx-swap: 'outerHTML',
+  hx-headers: '{"accept": "text/html"}'
 %}
   <input id="variant_id" type="hidden" name="id" value="{{ variant.id }}">
 
-  <fieldset class="flex gap-4 my-6">
+  <fieldset class="my-6 flex gap-4">
     {% render 'quantity-selector', min: 1, name: 'quantity', value: 1 %}
 
     <button
@@ -30,7 +29,7 @@
       name="add"
       aria-label="Add {{ product.title }} - {{ variant.options | join: ' / ' }} to cart"
     >
-      <span class="size-4 -ml-4 opacity-0">
+      <span class="-ml-4 size-4 opacity-0">
         {% render 'icon-spinner' %}
       </span>
 
@@ -76,9 +75,3 @@
     }
   }
 {% endstylesheet %}
-
-{% schema %}
-{
-  "name": "Product form"
-}
-{% endschema %}

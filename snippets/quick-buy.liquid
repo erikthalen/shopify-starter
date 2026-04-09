@@ -11,12 +11,18 @@
 
 {% assign variant = product.selected_or_first_available_variant %}
 
-{% form 'product', product, x-target: 'cart cart_drawer_content cart_amount' %}
+{% form 'product',
+  product,
+  hx-post: routes.cart_add_url,
+  hx-select: '#cart_drawer_content',
+  hx-target: '#cart_drawer_content',
+  hx-swap: 'outerHTML'
+%}
   <input type="hidden" name="quantity" value="1">
   <input type="hidden" name="id" value="{{ variant.id }}">
 
   <button
-    class="quick-buy relative border-b border-dotted button flex items-center disabled:text-gray-300"
+    class="quick-buy button relative flex items-center border-b border-dotted disabled:text-gray-300"
     type="submit"
     name="add"
     aria-label="Add {{ product.title }} - {{ variant.options | join: ' / ' }} to cart"
@@ -30,7 +36,7 @@
       Sold out
     {%- endif -%}
 
-    <span class="size-3 absolute -right-6 opacity-0 transition-opacity">
+    <span class="absolute -right-6 size-3 opacity-0 transition-opacity">
       {% render 'icon-spinner' %}
     </span>
   </button>

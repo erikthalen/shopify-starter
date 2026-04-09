@@ -2,7 +2,7 @@
 {% assign image = product_variant.featured_image | default: product.featured_image %}
 
 <section class="grid gap-4">
-  <header class="flex justify-between gap-4 items-center pb-2 border-b border-gray-300">
+  <header class="flex items-center justify-between gap-4 border-b border-gray-300 pb-2">
     <span class="text-gray-400">Added to your cart</span>
 
     <button onclick="this.closest('dialog')?.close()" aria-label="Close cart notification" class="button size-5">
@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <footer class="flex justify-between gap-4 items-center border-t border-gray-300 pt-3">
+  <footer class="flex items-center justify-between gap-4 border-t border-gray-300 pt-3">
     <a
       href="{{ routes.cart_url }}"
       onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_notification')?.close(); document.getElementById('cart_drawer')?.showModal()"

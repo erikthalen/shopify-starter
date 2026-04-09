@@ -1,5 +1,11 @@
 import { swup } from "~/swup"
 
+/**
+ * Mimic Swup's preload plugin by adding pointerover listeners to
+ * any links in the given container(s).
+ * This is used to preload pages linked from any content added by Alpine Ajax.
+ */
+
 export const swupPreloadChildren = async ({
   container,
   exclude,
@@ -13,21 +19,26 @@ export const swupPreloadChildren = async ({
     const excludes =
       exclude === undefined || Array.isArray(exclude) ? exclude : [exclude]
 
-    const allHrefsInAppendedElement: string[] = containers
-      .map((el: HTMLElement) => {
-        const elementsWithHref = [...el.querySelectorAll("*[href]")]
-        return elementsWithHref.map(
-          el => window.location.origin + el.getAttribute("href")
+    const linksToPreload: Element[] = containers
+      .map((el: HTMLElement) => [...el.querySelectorAll("*[href]")])
+      .flat()
+      .filter(link => {
+        return (
+          !excludes ||
+          !excludes.find(exclude =>
+            link.getAttribute("href")?.includes(exclude)
+          )
         )
       })
-      .flat()
-      .filter(
-        (href: string) =>
-          !excludes || !excludes.find(exclude => href.includes(exclude))
-      )
 
-    if (allHrefsInAppendedElement.length) {
-      await swup.preload(allHrefsInAppendedElement)
+    if (linksToPreload.length) {
+      linksToPreload.forEach(link => {
+        link.addEventListener("pointerover", async () => {
+          if (typeof swup.preload === "function") {
+            swup.preload(window.location.origin + link.getAttribute("href"))
+          }
+        })
+      })
     }
   }
 }

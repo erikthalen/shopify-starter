@@ -21,6 +21,8 @@ jobs:
 
       - name: Install PNPM
         uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
@@ -28,14 +30,20 @@ jobs:
           ruby-version: 3.1
           bundler: "latest"
 
-      - name: Install Shopify CLI
-        run: pnpm install -g @shopify/cli
-
       - name: Install project dependencies
         run: pnpm install
 
       - name: Build source directory
         run: pnpm run vite:build
+
+      - name: Remove node_modules folder
+        run: rm -r node_modules
+
+      - name: Theme Check
+        uses: shopify/theme-check-action@v2
+
+      - name: Install Shopify CLI
+        run: pnpm install -g @shopify/cli
 
       - name: Deploy Production theme
         env:

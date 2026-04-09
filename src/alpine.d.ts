@@ -1,4 +1,4 @@
-import type { stores } from "./theme"
+import type { stores } from "./alpine"
 
 type ThemeStores = typeof stores
 

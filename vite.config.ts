@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite"
 
 export default defineConfig({
   plugins: [
-    topLevelAwait(),
+    // topLevelAwait(),
     shopify({
       // tunnel: true,
       snippetFile: "vite.liquid",

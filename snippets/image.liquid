@@ -31,7 +31,6 @@
   %}
 {% enddoc %}
 
-
 {%- comment -%} ── 1. PARAMETERS ─────────────────────────────────────────── {%- endcomment -%}
 {% liquid
   assign image_mobile = image_mobile | default: image
@@ -100,7 +99,6 @@
   </div>
 {%- else -%}
   <picture class="contents">
-
     {%- if image_mobile != blank -%}
       <source
         class="hidden"
@@ -233,10 +231,8 @@
         fetchpriority="high"
       {% endif %}
     >
-
   </picture>
 {%- endif -%}
-
 
 {%- comment -%} ── 6. STYLES ─────────────────────────────────────────────── {%- endcomment -%}
 
