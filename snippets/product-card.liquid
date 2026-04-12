@@ -8,26 +8,25 @@
   {% render 'product-card', product: product %}
 {% enddoc %}
 
-<div>
-  <a class="flex flex-col gap-3" href="{{ product.url }}" data-transition="slide-right">
-    {% if product.selected_or_first_available_variant.featured_image != blank %}
-      {% render 'image',
-        image: product.selected_or_first_available_variant.featured_image,
-        sizes: '50vw, 20vw',
-        class: 'rounded'
-      %}
-    {% else %}
-      {% render 'image', image: product.featured_image, sizes: '50vw, 20vw', class: 'rounded' %}
-    {% endif %}
+<div
+  class="relative flex flex-col items-start gap-3"
+  style="view-transition-name: product-card-{{ product.selected_or_first_available_variant.id }}"
+>
+  {% if product.selected_or_first_available_variant.featured_image != blank %}
+    {% render 'image',
+      image: product.selected_or_first_available_variant.featured_image,
+      sizes: '50vw, 20vw',
+      class: 'rounded'
+    %}
+  {% else %}
+    {% render 'image', image: product.featured_image, sizes: '50vw, 20vw', class: 'rounded' %}
+  {% endif %}
 
-    <span>{{ product.title }}</span>
+  <a href="{{ product.url }}" class="after:absolute after:inset-0">
+    {{ product.title }}
   </a>
 
-  <div class="mt-2 flex flex-col justify-between gap-3">
-    <div>
-      {% render 'product-price', product: product %}
-    </div>
+  {% render 'product-price', product: product %}
 
-    {% render 'quick-buy', product: product %}
-  </div>
+  {% render 'quick-buy', product: product %}
 </div>

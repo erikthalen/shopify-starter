@@ -33,10 +33,10 @@ export default defineComponent(
 
     render() {
       const input = this.$root.querySelector("input")
-      const output = this.$root.querySelector("output")
+      const span = this.$root.querySelector("span")
 
       if (input) input.value = this.value.toString()
-      if (output) output.value = this.value.toString()
+      if (span) span.textContent = this.value.toString()
     },
   })
 )

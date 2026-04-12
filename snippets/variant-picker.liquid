@@ -1,13 +1,7 @@
 {% doc %}
-  Renders all product options as links. Clicking a value navigates to the corresponding variant URL;
-  the `x-swap` Alpine.js directive intercepts the navigation and swaps the listed target elements
-  instead of doing a full page reload. Unavailable variants are shown with a strikethrough diagonal line.
-  Requires [Alpine.js](https://alpinejs.dev/) and `src/utils/alpine-swap.ts`.
-
-  The form that renders alongside this only needs to handle the currently selected variant,
-  since the swap always re-renders it with the correct variant in context.
-
-  @param {string} [swap_ids] - Space-separated element IDs to swap on variant navigation.
+  Renders all product options as links. Clicking a value fetches the corresponding variant URL
+  and swaps `#main_product` in place via htmx, updating the URL without a history entry.
+  Unavailable variants are shown with a strikethrough diagonal line.
 
   @example
   {% render 'variant-picker', swap_ids: 'variant_picker product_info variant_id add_to_cart_button' %}
@@ -20,8 +14,6 @@
 {% enddoc %}
 
 {% unless product.has_only_default_variant %}
-  {% assign disabled_classes = 'text-gray-300 border-gray-200 bg-cover bg-center after:h-px after:w-[150%] after:-rotate-[18deg] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:bg-zinc-200' %}
-
   <section id="variant_picker" class="variant-picker grid gap-4">
     {%- for option in product.options_with_values -%}
       <fieldset>
@@ -43,17 +35,21 @@
                 {% endif %}
               {% endfor %}
 
+              {% comment %} TODO: these links should be preloaded on hover {% endcomment %}
               <a
                 data-no-swup
-                x-swap="{{ swap_ids }}"
-                @swap:update="e => window.history.replaceState(null, '', e.detail)"
-                class="checkbox {% unless option_value.available %}disabled {{ disabled_classes }}{% else %} border-gray-400 {% endunless %} {% if option_value.selected %}checked text-white bg-zinc-600 {% else %} hover:bg-gray-50 {% endif %}"
+                hx-get="{{ product.url }}?variant={{ variants.first.id }}"
+                hx-target="#main_product"
+                hx-select="#main_product"
+                hx-swap="morph:outerHTML"
+                hx-replace-url="true"
+                class="button w-full {% if option_value.selected %}bg-neutral-300 text-black{% else %} outlined {% endif %}"
                 href="{{ product.url }}?variant={{ variants.first.id }}"
                 {% if option_value.selected %}
                   aria-current="true"
                 {% endif %}
                 {% unless option_value.available %}
-                  aria-disabled="true"
+                  disabled="true"
                 {% endunless %}
               >
                 {{ option_value -}}
@@ -65,18 +61,3 @@
     {%- endfor -%}
   </section>
 {% endunless %}
-
-{% stylesheet %}
-  .variant-picker {
-    a {
-      transition: all 200ms;
-    }
-
-    a.checked {
-      /* scale: 1.2; */
-    }
-
-    a.disabled {
-    }
-  }
-{% endstylesheet %}

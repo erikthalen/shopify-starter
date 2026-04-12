@@ -1,27 +1,28 @@
 <div class="flex justify-center">
   <form
     action="{{ routes.search_url }}"
-    hx-post="{{ routes.search_url }}"
+    hx-get="{{ routes.search_url }}"
     hx-select="#search_results"
     hx-target="#search_results"
     hx-swap="outerHTML"
-    class="m-4 mb-6 flex w-full max-w-md items-center gap-2 border-b border-gray-400 bg-white"
+    hx-replace-url="true"
+    class="m-4 mb-6 flex w-full max-w-md items-center gap-2"
   >
-    <div class="w-4 opacity-50">
-      {% render 'icon-magnifier' %}
-    </div>
+    <label class="w-full py-2">
+      <span data-prefix>
+        {% render 'icon-magnifier' %}
+      </span>
 
-    <label for="search_input" class="sr-only">Search products and pages</label>
-    <input
-      id="search_input"
-      class="w-full py-2 focus:outline-0"
-      type="text"
-      placeholder="Search products and pages"
-      autofocus
-      name="q"
-    >
+      <input
+        id="search_input"
+        type="text"
+        placeholder="Search products and pages"
+        autofocus
+        name="q"
+      >
 
-    <button class="button">Search</button>
+      <button data-suffix class="button">Search</button>
+    </label>
 
     <input type="hidden" name="type" value="product,page">
     <input type="hidden" name="options[unavailable_products]" value="hide">
@@ -47,9 +48,11 @@
             <p class="mb-2 text-neutral-500">Sort by:</p>
             {%- for option in search.sort_options -%}
               <a
-                x-swap="search_results"
-                @swap:update="e => window.history.replaceState(null, '', e.detail)"
-                data-no-swup
+                hx-get="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
+                hx-target="#search_results"
+                hx-select="#search_results"
+                hx-swap="outerHTML"
+                hx-replace-url="true"
                 class="mb-1 border-b border-dotted"
                 href="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
               >

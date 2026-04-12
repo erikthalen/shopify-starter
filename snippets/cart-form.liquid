@@ -3,7 +3,7 @@
     <p class="py-4">Your cart is empty</p>
     <a
       href="{{ routes.collections_url }}"
-      class="button my-2 border-b border-dotted"
+      class="button my-2"
     >
       Go to shop
     </a>
@@ -23,7 +23,7 @@
       {%- for item in cart.items -%}
         <li
           style="view-transition-name: cart-item-{{ item.key | handleize }}"
-          class="flex items-start gap-2 overflow-clip border-b border-gray-200 py-4 last-of-type:border-0"
+          class="mb-4 flex items-start gap-2 overflow-clip border-b border-gray-200 pb-4 last-of-type:border-0"
         >
           {%- if item.image -%}
             {% render 'image', image: item.image, class: 'w-30 rounded overflow-hidden', sizes: '100px, 100px' %}
@@ -116,9 +116,8 @@
                   hx-target="#cart_drawer_content"
                   hx-swap="outerHTML"
                   data-no-swup
-                  class="inline-block border-b border-dotted text-gray-600 hover:text-black"
+                  class="button link -mr-2"
                   href="{{ item.url_to_remove }}"
-                  aria-label="Remove {{ item.title }} from cart"
                 >
                   Remove
                 </a>
@@ -129,7 +128,7 @@
       {%- endfor -%}
     </ul>
 
-    <div class="mt-auto grid w-full border-t border-gray-200 bg-white py-4">
+    <div class="mt-auto grid w-full border-t border-gray-200 bg-white pt-4">
       <p class="text-right">Total: {{ cart.total_price | money_with_currency }}</p>
 
       <button
@@ -142,4 +141,8 @@
       </button>
     </div>
   {% endform %}
+
+  <footer class="justify-center">
+    <a href="{{ routes.cart_url }}" class="button ghost"> Go to cart </a>
+  </footer>
 {%- endif -%}

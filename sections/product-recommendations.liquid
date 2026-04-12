@@ -9,37 +9,33 @@
 <div class="my-4 px-4">
   <h2 class="mb-4">You may also like</h2>
 
-  {%- unless recommendations.performed -%}
-    <div id="{{ unique_id }}" class="product-recommendation-results grid grid-cols-2 gap-4 lg:grid-cols-4">
-      {% comment %} results are appended here {% endcomment %}
-      {% for i in (1..amount) %}
-        {% render 'product-card-skeleton' %}
-      {% endfor %}
-    </div>
-
-    <form
-      {% comment %} automatically submit the form that requests recommendations {% endcomment %}
-      action="{{ routes.product_recommendations_url }}"
-      hx-get="{{ routes.product_recommendations_url }}"
-      hx-select="#{{ unique_id }}"
-      hx-target="#{{ unique_id }}"
-      hx-swap="outerHTML"
-      {% comment %} x-init="setTimeout(() => $el.requestSubmit(), 100)" {% endcomment %}
-    >
-      <input type="hidden" name="section_id" value="{{ section.id }}">
-      <input type="hidden" name="product_id" value="{{ product.id }}">
-      <input type="hidden" name="limit" value="{{ amount }}">
-      <input type="hidden" name="intent" value="{{ section.settings.intent | default: 'related' }}">
-    </form>
-  {%- else -%}
-    <ul id="{{ unique_id }}" class="product-recommendation-results grid grid-cols-2 gap-4 lg:grid-cols-4">
+  <div id="{{ unique_id }}" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    {%- if recommendations.performed -%}
       {%- for product in recommendations.products -%}
         <li>
           {% render 'product-card', product: product %}
         </li>
       {%- endfor -%}
-    </ul>
-  {%- endunless -%}
+    {%- else -%}
+      {% for i in (1..amount) %}
+        {% render 'product-card-skeleton' %}
+      {% endfor %}
+    {%- endif -%}
+  </div>
+
+  <form
+    action="{{ routes.product_recommendations_url }}"
+    hx-get="{{ routes.product_recommendations_url }}"
+    hx-trigger="load"
+    hx-select="#{{ unique_id }}"
+    hx-target="#{{ unique_id }}"
+    hx-swap="outerHTML"
+  >
+    <input type="hidden" name="section_id" value="{{ section.id }}">
+    <input type="hidden" name="product_id" value="{{ product.id }}">
+    <input type="hidden" name="limit" value="{{ amount }}">
+    <input type="hidden" name="intent" value="{{ section.settings.intent | default: 'related' }}">
+  </form>
 </div>
 
 {% schema %}

@@ -3,7 +3,6 @@
   Results are fetched as you type using the Shopify Predictive Search API and rendered inside
   the `predictive-search-results` section via AJAX. Submitting the form navigates to the full search page.
   Requires the section `predictive-search-results.liquid`.
-  The search logic is handled by the `predictiveSearch` [Alpine.js](https://alpinejs.dev/) component.
 
   @example
   {% content_for 'block', type: '_predictive-search', id: 'search' %}
@@ -11,7 +10,7 @@
 
 <a
   href="{{ routes.search_url }}"
-  class="button"
+  class="button ghost"
   onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('predictive_search')?.getAttribute('open') ? document.getElementById('predictive_search')?.close() : document.getElementById('predictive_search')?.showModal()"
 >
   Search
@@ -21,47 +20,50 @@
   scroll-lock
   id="predictive_search"
   closedby="any"
-  class="fixed top-0 right-0 left-0 max-h-(--vvh) w-screen max-w-none overflow-auto overscroll-contain bg-white"
+  class="top-0 right-0 bottom-auto left-0 max-h-(--vvh) w-screen max-w-none overflow-auto overscroll-contain rounded-t-none bg-white"
+  style="view-transition-name: predictive-search"
 >
-  <div class="relative z-2 w-full justify-center px-4">
+  <article class="relative z-2 w-full justify-center px-4">
     <div
-      x-data="predictiveSearch"
+      x-data="{ q: '' }"
       class="mx-auto grid w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40"
     >
-      <div class="sticky top-0 mb-6 flex items-center gap-2 border-b border-gray-400 bg-white pt-5 md:pt-30">
+      <div class="sticky top-0 mb-6 flex items-center gap-2 bg-white pt-5 md:pt-30">
         {% comment %} Used as input to the (hidden) predictive search below {% endcomment %}
         <form
           class="contents"
-          @submit.prevent="onSubmit"
+          @submit="document.getElementById('predictive_search')?.close()"
           action="{{ routes.search_url }}"
         >
-          <div class="w-4 opacity-50">
-            {% render 'icon-magnifier' %}
-          </div>
-
-          <input
-            class="w-full py-2 focus:outline-0"
-            type="text"
-            placeholder="Search products and pages"
-            autofocus
-            name="q"
-            x-model="q"
-            x-ref="input"
-            @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
-          >
-
           <input type="hidden" name="type" value="product,page">
           <input type="hidden" name="options[unavailable_products]" value="hide">
           <input type="hidden" name="options[prefix]" value="last">
+
+          <label class="w-full py-2">
+            <span data-prefix>
+              {% render 'icon-magnifier' %}
+            </span>
+
+            <input
+              type="text"
+              placeholder="Search products and pages"
+              autofocus
+              name="q"
+              x-model="q"
+              x-ref="input"
+              @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
+            >
+
+            <button type="submit" data-suffix class="button flex items-center gap-2">Search</button>
+          </label>
         </form>
 
-        <form method="dialog">
-          <button class="button flex items-center gap-2">
-            Close <span class="size-4">{% render 'icon-cross' %}</span>
-          </button>
+        <form data-suffix method="dialog">
+          <button class="button ghost">Close {% render 'icon-cross' %}</button>
         </form>
       </div>
 
+      {% comment %} TODO: abort pending request when new is fired. currently old results are shown when typing fast {% endcomment %}
       <form
         class="sr-only"
         x-ref="predictiveSearchForm"
@@ -79,10 +81,10 @@
       </form>
 
       <div x-show="q !== ''" x-ref="predictiveSearchResults">
-        <output id="predictive-search-results" x-merge="update" class="bg-white pb-4"> </output>
+        <output id="predictive-search-results" class="bg-white pb-4"> </output>
       </div>
     </div>
-  </div>
+  </article>
 </dialog>
 
 {% stylesheet %}

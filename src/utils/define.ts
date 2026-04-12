@@ -10,7 +10,6 @@ import { AlpineComponent } from "alpinejs"
  *   }
  * }))
  */
-export const defineComponent = <T>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  fn: (...args: any[]) => AlpineComponent<T>
+export const defineComponent = <T, A extends unknown[]>(
+  fn: (...args: A) => AlpineComponent<T>
 ) => fn

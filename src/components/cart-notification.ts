@@ -1,25 +1,15 @@
 import { defineComponent } from "~/utils/define"
 
-/**
- * cart-notification
- *
- * Listens for alpine-ajax updates to {% form 'product' %} and
- * shows /sections/cart-notification-content.liquid with added
- * product as content.
- *
- * The response of a {% form 'product' %} only returns /cart and
- * can't know about what product was added to the cart, that's why this is needed.
- */
 export default defineComponent(() => ({
   notificationContent: null as Promise<Element | null> | null,
 
   abortController: new AbortController(),
 
   /**
-   * Fetches the `sections/cart-notification-content.liquid` of a given Product Variant.
+   * Fetches the `sections/cart-notification-content.liquid` for a given variant.
    * Using the [Shopify Section Rendering API](https://shopify.dev/docs/api/ajax/section-rendering)
    */
-  async getNotificationSection(variantId: string | number) {
+  async getNotificationSection(variantId: string) {
     return fetch(
       `${window.Shopify.routes.root}variants/${variantId}?section_id=cart-notification-content`
     )
@@ -31,68 +21,45 @@ export default defineComponent(() => ({
       .catch(() => null)
   },
 
-  getNotificationContent(form: HTMLFormElement) {
-    const data = this.parseForm(form)
-    if (!data?.id) return
-    this.notificationContent = this.getNotificationSection(data.id?.toString())
-  },
-
-  async updateAndShowNotification(form: HTMLFormElement) {
-    const data = this.parseForm(form)
-    const notificationContent = await this.notificationContent
-
-    if (!data || !notificationContent) return
-
-    this.$root.innerHTML = notificationContent.innerHTML || ""
-
-    const dialog = this.$root as HTMLDialogElement
-
-    dialog.show()
-  },
-
   async init() {
-    window.addEventListener(
-      "ajax:send",
-      async (e: CustomEventInit) => {
-        // @ts-expect-error
-        this.getNotificationContent(e.target as HTMLFormElement)
+    const signal = this.abortController.signal
+
+    // Pre-fetch notification content while the cart request is in-flight
+    document.addEventListener(
+      "htmx:before-request",
+      (e: CustomEventInit) => {
+        const { elt, requestConfig } = e.detail
+
+        if (!requestConfig?.path?.includes("/cart/add")) return
+
+        const variantId = new FormData(elt).get("id")?.toString()
+        if (!variantId) return
+
+        this.notificationContent = this.getNotificationSection(variantId)
       },
-      { signal: this.abortController.signal }
+      { signal }
     )
 
-    window.addEventListener(
-      "ajax:after",
+    document.addEventListener(
+      "htmx:after-request",
       async (e: CustomEventInit) => {
-        if (!e.detail.response.ok) {
-          this.notificationContent = null
-          return
-        }
+        const { requestConfig, failed } = e.detail
 
-        // @ts-expect-error alpine-ajax adds a target that ts doesn't know about
-        this.updateAndShowNotification(e.target as HTMLFormElement)
+        if (failed || !requestConfig?.path?.includes("/cart/add")) return
+
+        const content = await this.notificationContent
+        this.notificationContent = null
+
+        if (!content) return
+
+        this.$root.innerHTML = content.innerHTML
+        ;(this.$root as HTMLDialogElement).show()
       },
-      { signal: this.abortController.signal }
+      { signal }
     )
-  },
-
-  parseForm(form: HTMLFormElement) {
-    try {
-      const formData = new FormData(form)
-      const data = Object.fromEntries(formData?.entries())
-
-      if (data?.form_type !== "product") return
-
-      return data
-    } catch (error) {
-      return {}
-    }
   },
 
   destroy() {
-    try {
-      this.abortController.abort()
-    } catch (error) {
-      console.log(error)
-    }
+    this.abortController.abort()
   },
 }))

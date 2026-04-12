@@ -1,4 +1,9 @@
 <section id="predictive-search-results">
+  <span>
+    Results for: "{{ predictive_search.terms }}"
+    <span class="text-neutral-500">({{ predictive_search.resources.products.size }})</span>
+  </span>
+
   {%- if predictive_search.resources.products.size > 0 -%}
     <ul class="grid gap-x-4 lg:grid-cols-2">
       {%- for product in predictive_search.resources.products -%}

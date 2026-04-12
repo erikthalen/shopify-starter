@@ -1,38 +1,77 @@
 import "vite/modulepreload-polyfill"
 
 import htmx from "htmx.org"
+import "idiomorph/dist/idiomorph-ext.esm.js"
 import "./alpine"
 import { swup } from "./swup"
+import { createHistoryRecord } from "swup"
 
 import "./utils/vvh"
 import { swupPreloadChildren } from "./utils/swup-preload-children"
+import { swupUpdateCache } from "./utils/swup-update-cache"
 
 htmx.config.globalViewTransitions = true
 
 swup.hooks.on("content:replace", () => {
-  const main = document.querySelector("main")
-  if (main) htmx.process(main)
+  htmx.process(document.querySelector("main")!)
 })
 
-document.addEventListener("htmx:afterSwap", (e: CustomEventInit) => {
-  if (e.detail.pathInfo.responsePath.includes("cart")) {
-    swup.cache.delete("/cart")
+swup.hooks.on("visit:start", () => {
+  for (const dialog of document.querySelectorAll("dialog")) {
+    dialog.close()
   }
 })
 
-swup.hooks.on("animation:out:start", () => {
-  document.querySelectorAll("dialog")?.forEach(dialog => dialog?.close())
+document.addEventListener("htmx:before-request", (e: CustomEventInit) => {
+  const target =
+    e.detail.requestConfig?.triggeringEvent?.submitter ||
+    e.detail.requestConfig.elt
+
+  target?.setAttribute("aria-busy", "true")
 })
 
-window.addEventListener("ajax:send", async (e: CustomEventInit) => {
-  const cartUpdated = e.detail.action.includes("/cart")
-  if (cartUpdated) swup.cache.delete("/cart")
+document.addEventListener("htmx:after-request", (e: CustomEventInit) => {
+  const target =
+    e.detail.requestConfig?.triggeringEvent?.submitter ||
+    e.detail.requestConfig.elt
+
+  target?.removeAttribute("aria-busy")
 })
 
-window.addEventListener("ajax:after", async (e: CustomEventInit) => {
-  swupPreloadChildren({ container: e.detail.render, exclude: "/cart/change" })
+document.addEventListener("htmx:after-swap", (e: CustomEventInit) => {
+  const { elt, pathInfo, target } = e.detail
+
+  swupPreloadChildren({ container: elt, exclude: "/cart/change" })
+
+  if (pathInfo?.responsePath?.includes("cart")) {
+    swup.cache.delete("/cart")
+  }
+
+  if (target?.id === "main_collection") {
+    // TODO: when navigating back after having used the filter, the page content isn't updated
+    createHistoryRecord(pathInfo.responsePath)
+  }
+
+  if (target?.id === "paginated_items" && e.detail.xhr?.responseText) {
+    // TODO: duplicated loaded items are on the page when navigating back to the plp
+    swupUpdateCache(swup, e.detail.xhr.responseText, [
+      { merge: "append", id: "paginated_items" },
+      { merge: "replace", id: "pagination" },
+    ])
+  }
 })
 
-window.addEventListener("app:loading", (e: CustomEventInit) => {
-  document.body.classList.toggle("is-loading", e.detail)
+// TODO: we don't want this, and it doesn't work
+swup.hooks.on("history:popstate", () => {
+  if (!document.querySelector("#main_collection")) return
+
+  htmx.ajax("get", window.location.href, {
+    target: "#main_collection",
+    select: "#main_collection",
+    swap: "outerHTML",
+  })
 })
+
+// window.addEventListener("app:loading", (e: CustomEventInit) => {
+//   document.body.classList.toggle("is-loading", e.detail)
+// })
