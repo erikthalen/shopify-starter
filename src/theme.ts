@@ -1,14 +1,15 @@
 import "vite/modulepreload-polyfill"
 
+import alpine from "./alpine"
 import htmx from "htmx.org"
+import swup from "./swup"
 import "idiomorph/dist/idiomorph-ext.esm.js"
-import "./alpine"
-import { swup } from "./swup"
-import { createHistoryRecord } from "swup"
-
 import "./utils/vvh"
+import { createHistoryRecord } from "swup"
 import { swupPreloadChildren } from "./utils/swup-preload-children"
 import { swupUpdateCache } from "./utils/swup-update-cache"
+
+window.Alpine = alpine
 
 htmx.config.globalViewTransitions = true
 
@@ -41,7 +42,7 @@ document.addEventListener("htmx:after-request", (e: CustomEventInit) => {
 document.addEventListener("htmx:after-swap", (e: CustomEventInit) => {
   const { elt, pathInfo, target } = e.detail
 
-  swupPreloadChildren({ container: elt, exclude: "/cart/change" })
+  swupPreloadChildren({ swup, container: elt, exclude: "/cart/change" })
 
   if (pathInfo?.responsePath?.includes("cart")) {
     swup.cache.delete("/cart")

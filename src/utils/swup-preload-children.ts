@@ -1,4 +1,4 @@
-import { swup } from "~/swup"
+import type Swup from "swup"
 
 /**
  * Mimic Swup's preload plugin by adding pointerover listeners to
@@ -7,9 +7,11 @@ import { swup } from "~/swup"
  */
 
 export const swupPreloadChildren = async ({
+  swup,
   container,
   exclude,
 }: {
+  swup: Swup
   container: HTMLElement | HTMLElement[]
   exclude?: string | string[]
 }) => {

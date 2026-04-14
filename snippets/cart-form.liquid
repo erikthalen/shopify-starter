@@ -9,21 +9,24 @@
     </a>
   </div>
 {%- else -%}
-  {% form 'cart',
-    cart,
-    id: 'cart_form',
-    class: 'flex h-full flex-col px-4',
-    hx-post: routes.cart_url,
-    hx-select: '#cart_drawer_content',
-    hx-target: '#cart_drawer_content',
-    hx-swap: 'outerHTML',
-    hx-headers: '{"accept": "text/html"}'
-  %}
+  {% comment %}
+    {% form 'cart',
+      cart,
+      id: 'cart_form',
+      class: 'flex h-full flex-col px-4',
+      hx-post: routes.cart_url,
+      hx-select: '#cart_drawer_content',
+      hx-target: '#cart_drawer_content',
+      hx-swap: 'outerHTML',
+      hx-headers: '{"accept": "text/html"}'
+    %}
+  {% endcomment %}
+  <div class="flex flex-col bg-white">
     <ul>
       {%- for item in cart.items -%}
         <li
-          style="view-transition-name: cart-item-{{ item.key | handleize }}"
-          class="mb-4 flex items-start gap-2 overflow-clip border-b border-gray-200 pb-4 last-of-type:border-0"
+          style="view-transition-name: cart-item-{{section.id | handleize}}-{{ item.key | handleize }}"
+          class="flex items-start gap-2 overflow-clip border-gray-200 pb-4 not-last-of-type:mb-4 not-last-of-type:border-b"
         >
           {%- if item.image -%}
             {% render 'image', image: item.image, class: 'w-30 rounded overflow-hidden', sizes: '100px, 100px' %}
@@ -103,18 +106,31 @@
 
             <div class="mt-auto">
               <div class="mt-3 flex items-end justify-between gap-4">
-                {% render 'quantity-selector',
-                  min: 0,
-                  name: 'updates[]',
-                  value: item.quantity,
-                  on-change: '$el.form.requestSubmit()'
-                %}
+                <form
+                  method="post"
+                  action="{{ routes.cart_change_url }}"
+                  class="contents"
+                  hx-post="{{ routes.cart_change_url }}"
+                  hx-select="#cart_drawer_content"
+                  hx-target="#cart_drawer_content"
+                  hx-swap="outerHTML"
+                  hx-select-oob="#cart_amount,#cart:outerHTML"
+                >
+                  <input type="hidden" name="id" value="{{ item.key }}">
+                  {% render 'quantity-selector',
+                    min: 0,
+                    name: 'quantity',
+                    value: item.quantity,
+                    on-change: '$el.form.requestSubmit()'
+                  %}
+                </form>
 
                 <a
                   hx-post="{{ item.url_to_remove }}"
                   hx-select="#cart_drawer_content"
                   hx-target="#cart_drawer_content"
                   hx-swap="outerHTML"
+                  hx-select-oob="#cart_amount,#cart:outerHTML"
                   data-no-swup
                   class="button link -mr-2"
                   href="{{ item.url_to_remove }}"
@@ -131,16 +147,12 @@
     <div class="mt-auto grid w-full border-t border-gray-200 bg-white pt-4">
       <p class="text-right">Total: {{ cart.total_price | money_with_currency }}</p>
 
-      <button
-        class="button-solid mt-4"
-        type="submit"
-        name="checkout"
-        formnoajax
-      >
-        Checkout
-      </button>
+      {% form 'cart', cart %}
+        <button class="mt-4 w-full" type="submit" name="checkout">Checkout</button>
+      {% endform %}
     </div>
-  {% endform %}
+    {% comment %} {% endform %} {% endcomment %}
+  </div>
 
   <footer class="justify-center">
     <a href="{{ routes.cart_url }}" class="button ghost"> Go to cart </a>

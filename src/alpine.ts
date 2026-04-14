@@ -1,25 +1,18 @@
 import Alpine from "alpinejs"
 
-Alpine.plugin((await import("@alpinejs/intersect")).default)
-// Alpine.plugin((await import("@alpinejs/morph")).default)
-// Alpine.plugin((await import("@imacrayon/alpine-ajax")).default)
-// Alpine.plugin((await import("./utils/alpine-swap")).default)
-// Alpine.plugin((await import("./utils/alpine-sync-params")).default)
+// plugins
+import intersect from "@alpinejs/intersect"
 
-Alpine.data(
-  "cartNotification",
-  (await import("./components/cart-notification")).default
-)
+// components
+import cartNotification from "./components/cart-notification"
+import emblaCarousel from "./components/embla-carousel"
+import quantitySelector from "./components/quantity-selector"
 
-Alpine.data(
-  "emblaCarousel",
-  (await import("./components/embla-carousel")).default
-)
+Alpine.plugin(intersect)
 
-Alpine.data(
-  "quantitySelector",
-  (await import("./components/quantity-selector")).default
-)
+Alpine.data("cartNotification", cartNotification)
+Alpine.data("emblaCarousel", emblaCarousel)
+Alpine.data("quantitySelector", quantitySelector)
 
 export const stores = {
   example: {
@@ -36,4 +29,4 @@ for (const [key, store] of Object.entries(stores)) {
 
 Alpine.start()
 
-export { Alpine }
+export default Alpine

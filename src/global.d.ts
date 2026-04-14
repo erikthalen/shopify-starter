@@ -1,5 +1,6 @@
 declare global {
   interface Window {
+    Alpine: typeof import("./alpine").default
     Shopify: {
       designMode: boolean
       routes: Record<string, string>
