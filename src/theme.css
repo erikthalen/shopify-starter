@@ -1,6 +1,9 @@
-@layer base, reset, jazz, utilities;
+@layer theme, base, jazz-reset, jazz, components, utilities;
 
-@import "https://esm.sh/gh/erikthalen/jazz@v0.1.0-beta.37/jazz.css";
+/* https://erikthalen.github.io/jazz/ */
+/* maybe remove this when getting started */
+@import "https://esm.sh/gh/erikthalen/jazz@v0.1.0-beta.40/jazz.css";
+
 @import "tailwindcss";
 @source "../";
 
@@ -41,6 +44,8 @@ button,
 
 @theme {
   --font-sans: "DMMono", sans-serif;
+  --background: var(--jazz-background-color);
+  --foreground: var(--jazz-text-color);
 }
 
 html {

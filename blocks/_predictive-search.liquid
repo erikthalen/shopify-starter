@@ -20,7 +20,7 @@
   scroll-lock
   id="predictive_search"
   closedby="any"
-  class="top-0 right-0 bottom-auto left-0 max-h-(--vvh) w-screen max-w-none overflow-auto overscroll-contain rounded-t-none bg-white"
+  class="top-4 right-4 left-4 bottom-auto max-h-(--vvh) w-[calc(100%-2rem)] max-w-none overflow-auto overscroll-contain"
   style="view-transition-name: predictive-search"
 >
   <article class="relative z-2 w-full justify-center px-4">
@@ -28,7 +28,7 @@
       x-data="{ q: '' }"
       class="mx-auto grid w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40"
     >
-      <div class="sticky top-0 mb-6 flex items-center gap-2 bg-white pt-5 md:pt-30">
+      <div class="sticky top-0 mb-6 flex items-center gap-2 pt-5 md:pt-30">
         {% comment %} Used as input to the (hidden) predictive search below {% endcomment %}
         <form
           class="contents"
@@ -88,44 +88,8 @@
 </dialog>
 
 {% stylesheet %}
-  dialog#predictive_search[open] {
-    transform: translateY(0);
-  }
-
-  dialog#predictive_search {
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-
-    transform: translateY(-100%);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-  }
-
   dialog#predictive_search:not(:has(output:first-child)) {
     touch-action: none;
-  }
-
-  @starting-style {
-    dialog#predictive_search[open] {
-      transform: translateY(-100%);
-    }
-  }
-
-  dialog#predictive_search::backdrop {
-    background-color: rgb(0 0 0 / 25%);
-    opacity: 0;
-    backdrop-filter: blur(2px);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-
-    touch-action: none;
-  }
-
-  dialog#predictive_search[open]::backdrop {
-    opacity: 1;
-  }
-
-  @starting-style {
-    dialog#predictive_search[open]::backdrop {
-      opacity: 0;
-    }
   }
 {% endstylesheet %}
 

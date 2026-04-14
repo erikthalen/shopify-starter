@@ -18,7 +18,7 @@
 <dialog id="localization_form" closedby="any">
   <article>
     <header class="justify-between">
-      <h1 class="text-gray-500">Shop in your local currency</h1>
+      <h1 class="text-(--jazz-neutral-500)">Shop in your local currency</h1>
 
       <form method="dialog" class="contents">
         <button aria-title="Close modal" class="button ghost square">
@@ -29,7 +29,7 @@
 
     {% form 'localization', hx-boost: 'true', hx-target: 'body', hx-swap: 'morph:innerHTML' %}
       <div class="mb-4 flex items-center gap-4">
-        <p class="text-gray-400">Language</p>
+        <p class="text-(--jazz-neutral-400)">Language</p>
 
         {% if localization.available_languages.size > 1 %}
           <select
@@ -50,12 +50,12 @@
             {% endfor %}
           </select>
         {% else %}
-          <p class="text-gray-500">{{ localization.language.name }}</p>
+          <p class="text-(--jazz-neutral-500)">{{ localization.language.name }}</p>
         {% endif %}
       </div>
 
-      <div class="flex items-center gap-4 border-t border-t-gray-200 pt-4">
-        <p class="text-gray-400">Currency</p>
+      <div class="flex items-center gap-4 border-t border-t-(--jazz-neutral-200) pt-4">
+        <p class="text-(--jazz-neutral-400)">Currency</p>
 
         {% if localization.available_countries.size > 1 %}
           {% assign printed_currencies = '' %}
@@ -83,7 +83,7 @@
             {% endfor %}
           </select>
         {% else %}
-          <p class="text-gray-500">
+          <p class="text-(--jazz-neutral-500)">
             {{ localization.country.currency.iso_code }}
             ({{ localization.country.currency.symbol }})
           </p>

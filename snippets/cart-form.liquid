@@ -9,24 +9,12 @@
     </a>
   </div>
 {%- else -%}
-  {% comment %}
-    {% form 'cart',
-      cart,
-      id: 'cart_form',
-      class: 'flex h-full flex-col px-4',
-      hx-post: routes.cart_url,
-      hx-select: '#cart_drawer_content',
-      hx-target: '#cart_drawer_content',
-      hx-swap: 'outerHTML',
-      hx-headers: '{"accept": "text/html"}'
-    %}
-  {% endcomment %}
-  <div class="flex flex-col bg-white">
+  <div class="flex flex-col">
     <ul>
       {%- for item in cart.items -%}
         <li
           style="view-transition-name: cart-item-{{section.id | handleize}}-{{ item.key | handleize }}"
-          class="flex items-start gap-2 overflow-clip border-gray-200 pb-4 not-last-of-type:mb-4 not-last-of-type:border-b"
+          class="flex items-start gap-2 overflow-clip border-(--jazz-neutral-200) pb-4 not-last-of-type:mb-4 not-last-of-type:border-b"
         >
           {%- if item.image -%}
             {% render 'image', image: item.image, class: 'w-30 rounded overflow-hidden', sizes: '100px, 100px' %}
@@ -144,14 +132,13 @@
       {%- endfor -%}
     </ul>
 
-    <div class="mt-auto grid w-full border-t border-gray-200 bg-white pt-4">
+    <div class="mt-auto grid w-full border-t border-(--jazz-neutral-200) bg-(--jazz-background-color) pt-4">
       <p class="text-right">Total: {{ cart.total_price | money_with_currency }}</p>
 
       {% form 'cart', cart %}
         <button class="mt-4 w-full" type="submit" name="checkout">Checkout</button>
       {% endform %}
     </div>
-    {% comment %} {% endform %} {% endcomment %}
   </div>
 
   <footer class="justify-center">

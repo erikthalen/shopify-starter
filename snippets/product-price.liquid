@@ -12,7 +12,7 @@
 
 <div class="flex gap-2">
   {% if variant.compare_at_price != blank and variant.compare_at_price != variant.price %}
-    <p class="text-gray-500">
+    <p class="text-(--jazz-neutral-500)">
       <s>{{ variant.compare_at_price | money }}</s>
     </p>
     <p>{{ variant.price | money }}</p>

@@ -30,6 +30,7 @@
   "dependencies": {
     "@alpinejs/intersect": "^3.14.9",
     "@swup/a11y-plugin": "^5.0.0",
+    "@swup/debug-plugin": "^4.1.0",
     "@swup/preload-plugin": "^3.2.11",
     "alpinejs": "3.15.11",
     "embla-carousel": "^8.6.0",

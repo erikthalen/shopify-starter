@@ -1,7 +1,6 @@
 {% doc %}
   Outputs a number input with increment and decrement buttons.
-  The value is stored in a hidden `<input>` and displayed in an `<output>` element.
-  Managed by the `quantitySelector` [Alpine.js](https://alpinejs.dev/) component in `quantity-selector.ts`.
+  The value is stored in a hidden `<input>` and displayed in a `<span>` element.
 
   @param {string} [name] - `name` attribute of the hidden input. Defaults to `quantity`.
   @param {number} [value] - Initial value. Defaults to `1`.
@@ -19,14 +18,17 @@
   %}
 {% enddoc %}
 
+{% assign qs_min = min | default: 0 %}
+{% assign qs_value = value | default: 1 %}
+
 <div
   id="quantity_selector"
-  x-data="quantitySelector({ min: {{ min | default: 0 }}, init: {{ value | default: 1 }} })"
+  x-data="{ value: {{ qs_value }} }"
   class="flex items-center gap-3"
 >
   <button
     type="button"
-    @click="decrease"
+    @click="value = Math.max({{ qs_min }}, value - 1)"
     @click.debounce="{{ on-change | default: '' }}"
     class="ghost square"
     aria-label="Decrease quantity"
@@ -46,14 +48,14 @@
     </svg>
   </button>
 
-  <input type="hidden" name="{{ name }}" value="{{ value | default: 1 }}">
+  <input type="hidden" name="{{ name }}" :value="value">
 
-  <span for="{{ name }}">{{ value | default: 1 }}</span>
+  <span x-text="value">{{ qs_value }}</span>
 
   <small>
     <button
       type="button"
-      @click="increase"
+      @click="value++"
       @click.debounce="{{ on-change | default: '' }}"
       class="ghost square"
       aria-label="Increase quantity"
