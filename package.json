@@ -36,7 +36,7 @@
     "embla-carousel": "^8.6.0",
     "htmx.org": "^2.0.8",
     "idiomorph": "^0.7.4",
-    "swup": "^4.8.2",
+    "swup": "4.8.3",
     "tailwindcss": "4.2.2"
   },
   "prettier": {

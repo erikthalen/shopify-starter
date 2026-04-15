@@ -1,5 +1,5 @@
-<section class="my-4 px-4" id="main_collection" x-merge.transition>
-  <div class="mb-4 flex justify-between">
+<section class="my-4 px-4" id="main_collection">
+  <div class="mb-4 flex items-center justify-between">
     <h1>
       {{ collection.title }}
       <span class="text-neutral-500">({{ collection.all_products_count }})</span>
@@ -13,17 +13,19 @@
       {% if collection.products.size == 0 %}
         <p class="col-span-4">No results</p>
       {% else %}
-        <ol id="paginated_items" x-merge="append" class="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-3">
-          {% for product in collection.products %}
-            <li>
-              {% render 'product-card', product: product %}
-            </li>
-          {% endfor %}
+        <div class="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-3">
+          <ul id="paginated_items" class="contents">
+            {% for product in collection.products %}
+              <li>
+                {% render 'product-card', product: product %}
+              </li>
+            {% endfor %}
+          </ul>
 
           {%- if section.settings.pagination_type == 'infinite_scroll' -%}
             {% render 'infinite-scroll', paginate: paginate %}
           {%- endif -%}
-        </ol>
+        </div>
       {% endif %}
 
       {%- if section.settings.pagination_type == 'pagination' -%}

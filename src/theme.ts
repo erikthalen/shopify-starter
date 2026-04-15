@@ -5,19 +5,28 @@ import htmx from "htmx.org"
 import swup from "./swup"
 import "idiomorph/htmx"
 import "./utils/vvh"
-import { createHistoryRecord } from "swup"
+import { createHistoryRecord, Location } from "swup"
 import { swupPreloadChildren } from "./utils/swup-preload-children"
 import { swupUpdateCache } from "./utils/swup-update-cache"
+import { loadingStates } from "./utils/htmx-ext-loading-states"
 
 window.Alpine = alpine
 window.Swup = swup
 
 htmx.config.globalViewTransitions = true
 
+loadingStates(htmx)
+
+/**
+ * Re-process htmx after page navigation, mimic window.onload behavior
+ */
 swup.hooks.on("content:replace", () => {
   htmx.process(document.querySelector("main")!)
 })
 
+/**
+ * Close all open dialogs on page navigation
+ */
 swup.hooks.on("visit:start", () => {
   for (const dialog of document.querySelectorAll("dialog")) {
     dialog.close()
@@ -40,25 +49,48 @@ swup.hooks.on("visit:start", () => {
 //   target?.removeAttribute("aria-busy")
 // })
 
+/**
+ * Trigger swup preload of links dynamically added by htmx
+ */
 document.addEventListener("htmx:after-swap", (e: CustomEventInit) => {
-  const { elt, pathInfo, target } = e.detail
+  swupPreloadChildren({
+    swup,
+    container: e.detail.elt,
+    exclude: "/cart/change",
+  })
+})
 
-  swupPreloadChildren({ swup, container: elt, exclude: "/cart/change" })
-
-  if (pathInfo?.responsePath?.includes("cart")) {
+/**
+ * Clear swup cache for cart page when the cart is updated
+ */
+document.addEventListener("htmx:after-swap", (e: CustomEventInit) => {
+  if (e.detail.pathInfo?.responsePath?.includes("cart")) {
     swup.cache.delete("/cart")
   }
+})
 
-  if (target?.id === "main_collection") {
-    // TODO: when navigating back after having used the filter, the page content isn't updated
-    createHistoryRecord(pathInfo.responsePath, { foo: "bar" })
-  }
-
-  if (target?.id === "paginated_items" && e.detail.xhr?.responseText) {
+/**
+ * Make navigating back to a PLP take you to the same state as you left it
+ */
+document.addEventListener("htmx:after-request", (e: CustomEventInit) => {
+  if (e.detail.target?.id === "paginated_items" && e.detail.xhr?.responseText) {
     // TODO: duplicated loaded items are on the page when navigating back to the plp
-    swupUpdateCache(swup, e.detail.xhr.responseText, [
-      { merge: "append", id: "paginated_items" },
-      { merge: "replace", id: "pagination" },
-    ])
+    setTimeout(() => {
+      swupUpdateCache(swup, e.detail.xhr.responseText, [
+        { merge: "append", id: "paginated_items" },
+        { merge: "replace", id: "pagination" },
+      ])
+    }, 100)
+  }
+})
+
+/**
+ * Using the filter on a PLP and using the back button takes you to the previous filter state
+ */
+document.addEventListener("htmx:after-request", (e: CustomEventInit) => {
+  if (e.detail.target?.id === "filter_result") {
+    const { responsePath } = e.detail.pathInfo
+    swup.location = Location.fromUrl(responsePath)
+    createHistoryRecord(responsePath)
   }
 })

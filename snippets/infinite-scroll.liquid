@@ -27,8 +27,8 @@
           hx-get="{{ paginate.next.url }}"
           hx-trigger="intersect once"
           hx-target="#paginated_items"
+          hx-select="#paginated_items > li"
           hx-swap="beforeend show:none"
-          hx-select="#paginated_items > :not(#pagination)"
           hx-select-oob="#pagination:outerHTML"
         >
           {% render 'product-card-skeleton' %}

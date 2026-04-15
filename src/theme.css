@@ -21,6 +21,15 @@ button,
   }
 }
 
+[aria-label] {
+  &:before {
+    border-radius: 3px;
+  }
+  &:after {
+    border-width: 3px;
+  }
+}
+
 * {
   font-size: 12px;
   letter-spacing: 0.04em;

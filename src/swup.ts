@@ -4,10 +4,7 @@ import SwupA11yPlugin from "@swup/a11y-plugin"
 import SwupPreloadPlugin from "@swup/preload-plugin"
 
 export default new Swup({
-  skipPopStateHandling: (e) => {
-    console.log('[skipPopStateHandling]', e)
-    return false
-  },
+  skipPopStateHandling: () => false,
   animationSelector: false,
   linkToSelf: "navigate",
   plugins: [

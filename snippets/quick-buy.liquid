@@ -26,7 +26,8 @@
   <input type="hidden" name="id" value="{{ variant.id }}">
 
   <button
-    class="button ghost disabled:text-gray-300"
+    data-loading-aria-busy
+    class="button ghost"
     type="submit"
     name="add"
     {%- unless variant.available -%}

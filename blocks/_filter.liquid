@@ -23,15 +23,17 @@
   scroll-lock
   id="filter_drawer"
   closedby="any"
-  class="fixed z-9 max-h-(--vvh) max-w-none w-full overflow-auto overscroll-contain"
+  class="fixed top-[calc(var(--header-height)+var(--announcement-bar-height)+1rem)] right-4 bottom-auto left-4 z-9 max-h-(--vvh) w-[calc(100vw-2rem)] max-w-none overflow-auto overscroll-contain"
+  style="view-transition-name: filter-drawer"
 >
   <form
     x-data
     id="filter_form"
     hx-get="{{ collection.url }}"
-    hx-select="#main_collection"
-    hx-target="#main_collection"
+    hx-select="#filter_result"
+    hx-target="#filter_result"
     hx-swap="outerHTML"
+    hx-select-oob="#filter_form:outerHTML,#filter_button:innerHTML"
     @change="$el.requestSubmit()"
   >
     <div class="grid gap-4 p-4 md:grid-cols-4 md:pb-14">
@@ -217,7 +219,7 @@
 
 {% comment %} backdrop {% endcomment %}
 <div
-  class="pointer-events-none fixed top-0 left-0 z-8 h-screen w-screen bg-black/25 opacity-0 backdrop-blur-[2px] transition-opacity duration-500"
+  class="pointer-events-none fixed top-0 left-0 z-8 h-screen w-screen bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity"
 ></div>
 
 {% stylesheet %}

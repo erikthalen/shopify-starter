@@ -5,6 +5,7 @@
   @param {string} [name] - `name` attribute of the hidden input. Defaults to `quantity`.
   @param {number} [value] - Initial value. Defaults to `1`.
   @param {number} [min] - Minimum allowed value. Defaults to `0`.
+  @param {string} [id] - Id for the root element, used by hx-preserve to match across swaps. Defaults to `quantity_selector`.
   @param {string} [on-change] - Alpine.js expression called after the value changes (debounced).
 
   @example
@@ -20,9 +21,11 @@
 
 {% assign qs_min = min | default: 0 %}
 {% assign qs_value = value | default: 1 %}
+{% assign qs_id = id | default: 'quantity_selector' %}
 
 <div
-  id="quantity_selector"
+  id="quantity_selector_{{ qs_id | handleize }}"
+  hx-preserve
   x-data="{ value: {{ qs_value }} }"
   class="flex items-center gap-3"
 >
