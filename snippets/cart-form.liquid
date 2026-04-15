@@ -103,6 +103,7 @@
                   hx-target="#cart_drawer_content"
                   hx-swap="outerHTML"
                   hx-select-oob="#cart_amount,#cart:outerHTML"
+                  data-loading-states
                 >
                   <input type="hidden" name="id" value="{{ item.key }}">
                   {% render 'quantity-selector',
@@ -121,6 +122,7 @@
                   hx-swap="outerHTML"
                   hx-select-oob="#cart_amount,#cart:outerHTML"
                   data-no-swup
+                  data-loading-states
                   class="button link -mr-2"
                   href="{{ item.url_to_remove }}"
                 >

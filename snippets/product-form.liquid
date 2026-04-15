@@ -5,26 +5,26 @@
 
 {% assign variant = product.selected_or_first_available_variant %}
 
-{% render 'variant-picker', swap_ids: 'variant_picker product_info variant_id add_to_cart_button' %}
+{% render 'variant-picker' %}
 
 {% form 'product',
   product,
-  id: 'product_form',
   class: 'w-full my-4',
   hx-post: routes.cart_add_url,
   hx-select: '#cart_drawer_content',
   hx-target: '#cart_drawer_content',
   hx-swap: 'outerHTML',
   hx-headers: '{"accept": "text/html"}',
-  hx-select-oob: '#cart_amount'
+  hx-select-oob: '#cart_amount',
+  data-loading-states: ''
 %}
   <input id="variant_id" type="hidden" name="id" value="{{ variant.id }}">
 
   <fieldset class="my-6 flex gap-4">
-    {% render 'quantity-selector', min: 1, name: 'quantity', value: 1, id: section.id %}
+    {% render 'quantity-selector', min: 1, name: 'quantity', value: 1, id: 'product' %}
 
     <button
-      id="add_to_cart_button"
+      data-loading-aria-busy
       class="w-full"
       type="submit"
       name="add"
@@ -44,33 +44,3 @@
     {{ form | payment_button }}
   </div>
 {% endform %}
-
-{% stylesheet %}
-  @keyframes product-form-button-loading {
-    from {
-      background-position: calc(25% + 23px) 0;
-    }
-
-    to {
-      background-position: calc(25% - 23px) 0;
-    }
-  }
-
-  #product_form {
-    button[type='submit'][aria-disabled='true'] {
-      animation: product-form-button-loading 1s linear infinite reverse;
-      background: repeating-linear-gradient(
-        120deg,
-        oklch(0.967 0.003 264.542),
-        oklch(0.967 0.003 264.542) 10px,
-        oklch(0.985 0.002 247.839) 10px,
-        oklch(0.985 0.002 247.839) 20px
-      );
-      background-size: 200% 100%;
-
-      span {
-        opacity: 0.7;
-      }
-    }
-  }
-{% endstylesheet %}

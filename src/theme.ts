@@ -33,22 +33,6 @@ swup.hooks.on("visit:start", () => {
   }
 })
 
-// document.addEventListener("htmx:before-request", (e: CustomEventInit) => {
-//   const target =
-//     e.detail.requestConfig?.triggeringEvent?.submitter ||
-//     e.detail.requestConfig.elt
-
-//   target?.setAttribute("aria-busy", "true")
-// })
-
-// document.addEventListener("htmx:after-request", (e: CustomEventInit) => {
-//   const target =
-//     e.detail.requestConfig?.triggeringEvent?.submitter ||
-//     e.detail.requestConfig.elt
-
-//   target?.removeAttribute("aria-busy")
-// })
-
 /**
  * Trigger swup preload of links dynamically added by htmx
  */
@@ -70,11 +54,10 @@ document.addEventListener("htmx:after-swap", (e: CustomEventInit) => {
 })
 
 /**
- * Make navigating back to a PLP take you to the same state as you left it
+ * Navigating back to a PLP take you to the same infinite-loaded state as you left it in
  */
 document.addEventListener("htmx:after-request", (e: CustomEventInit) => {
   if (e.detail.target?.id === "paginated_items" && e.detail.xhr?.responseText) {
-    // TODO: duplicated loaded items are on the page when navigating back to the plp
     setTimeout(() => {
       swupUpdateCache(swup, e.detail.xhr.responseText, [
         { merge: "append", id: "paginated_items" },
@@ -85,7 +68,22 @@ document.addEventListener("htmx:after-request", (e: CustomEventInit) => {
 })
 
 /**
- * Using the filter on a PLP and using the back button takes you to the previous filter state
+ * #shopify_payment_button can't be morphed — replace it with outerHTML after each variant swap
+ */
+document.addEventListener("htmx:after-swap", (e: CustomEventInit) => {
+  if (e.detail.target?.id !== "main_product" || !e.detail.xhr?.responseText) return
+
+  const newButton = new DOMParser()
+    .parseFromString(e.detail.xhr.responseText, "text/html")
+    .getElementById("shopify_payment_button")
+
+  const oldButton = document.getElementById("shopify_payment_button")
+
+  if (newButton && oldButton) oldButton.replaceWith(newButton)
+})
+
+/**
+ * Using the filter on a PLP adds to the browser history
  */
 document.addEventListener("htmx:after-request", (e: CustomEventInit) => {
   if (e.detail.target?.id === "filter_result") {

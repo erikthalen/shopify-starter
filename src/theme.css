@@ -7,37 +7,6 @@
 @import "tailwindcss";
 @source "../";
 
-:root {
-  --jazz-primary: light-dark(#222222, #fefefe);
-}
-
-button,
-.button {
-  border-radius: 4px;
-  padding: 0.33em;
-
-  &:not(.square) {
-    padding-inline: 0.5em;
-  }
-}
-
-[aria-label] {
-  &:before {
-    border-radius: 3px;
-  }
-  &:after {
-    border-width: 3px;
-  }
-}
-
-* {
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-family: var(--font-sans);
-  font-weight: normal;
-}
-
 @font-face {
   font-family: "DMMono";
   src: local("DMMono"), url("fonts/DMMono-Light.ttf");
@@ -55,6 +24,45 @@ button,
   --font-sans: "DMMono", sans-serif;
   --background: var(--jazz-background-color);
   --foreground: var(--jazz-text-color);
+}
+
+:root {
+  --jazz-primary: light-dark(#222222, #fefefe);
+}
+
+button,
+.button {
+  border-radius: 4px;
+
+  &:not([class*="p-"]) {
+    padding: 0.33em;
+
+    &:not(.square) {
+      padding-inline: 0.5em;
+    }
+  }
+}
+
+svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+[aria-label] {
+  &:before {
+    border-radius: 3px;
+  }
+  &:after {
+    border-width: 3px;
+  }
+}
+
+* {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-weight: normal;
 }
 
 html {

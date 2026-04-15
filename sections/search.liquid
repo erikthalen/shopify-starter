@@ -7,6 +7,7 @@
     hx-swap="outerHTML"
     hx-replace-url="true"
     class="m-4 mb-6 flex w-full max-w-md items-center gap-2"
+    data-loading-states
   >
     <label class="w-full py-2">
       <span data-prefix>
@@ -55,6 +56,7 @@
                 hx-replace-url="true"
                 class="mb-1 border-b border-dotted"
                 href="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
+                data-loading-states
               >
                 {{- option.name -}}
               </a>

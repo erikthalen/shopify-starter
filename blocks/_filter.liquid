@@ -35,6 +35,7 @@
     hx-swap="outerHTML"
     hx-select-oob="#filter_form:outerHTML,#filter_button:innerHTML"
     @change="$el.requestSubmit()"
+    data-loading-states
   >
     <div class="grid gap-4 p-4 md:grid-cols-4 md:pb-14">
       {%- for filter in collection.filters -%}
@@ -207,6 +208,7 @@
       hx-target="#main_collection"
       hx-swap="outerHTML"
       class="button link"
+      data-loading-states
     >
       Clear all
     </a>

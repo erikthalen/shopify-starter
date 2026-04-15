@@ -4,7 +4,7 @@
   Unavailable variants are shown with a strikethrough diagonal line.
 
   @example
-  {% render 'variant-picker', swap_ids: 'variant_picker product_info variant_id add_to_cart_button' %}
+  {% render 'variant-picker' %}
 
   {% form 'product' %}
     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
@@ -45,6 +45,7 @@
                 hx-replace-url="true"
                 class="button w-full {% if option_value.selected %}bg-neutral-300 text-black{% else %} outlined {% endif %}"
                 href="{{ product.url }}?variant={{ variants.first.id }}"
+                data-loading-states
                 {% if option_value.selected %}
                   aria-current="true"
                 {% endif %}
