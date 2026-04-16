@@ -8,6 +8,6 @@ export default new Swup({
   linkToSelf: "navigate",
   plugins: [
     new SwupA11yPlugin(),
-    new SwupPreloadPlugin(),
+    new SwupPreloadPlugin({ preloadVisibleLinks: { delay: 0, threshold: 0 } }),
   ],
 })

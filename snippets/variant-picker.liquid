@@ -38,6 +38,7 @@
               {% comment %} TODO: these links should be preloaded on hover {% endcomment %}
               <a
                 data-no-swup
+                preload="preload:init"
                 hx-get="{{ product.url }}?variant={{ variants.first.id }}"
                 hx-target="#main_product"
                 hx-select="#main_product"
@@ -46,7 +47,6 @@
                 class="button w-full {% if option_value.selected %}bg-neutral-300 text-black{% else %} outlined {% endif %}"
                 href="{{ product.url }}?variant={{ variants.first.id }}"
                 data-loading-states
-                data-loading-aria-busy
                 {% if option_value.selected %}
                   aria-current="true"
                 {% endif %}

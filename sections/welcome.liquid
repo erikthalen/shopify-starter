@@ -1,11 +1,13 @@
-<section class="flex flex-col items-center gap-2 px-4 py-[5vh]">
-  <h1 class="mb-4">Shopify Liquid starter</h1>
+<section class="empty">
+  {% assign image_url = 'shopify-logo.webp' | asset_url %}
 
-  <a
-    class="button link"
-    href="https://github.com/erikthalen/shopify-starter"
-    aria-label="GitHub repository"
-  >
+  <img class="size-8" src="{{ image_url }}" width="100" height="100">
+
+  <h1>Shopify starter</h1>
+
+  <p>Using Swup, Alpine and Htmx</p>
+
+  <a class="button ghost" href="https://github.com/erikthalen/shopify-starter">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"

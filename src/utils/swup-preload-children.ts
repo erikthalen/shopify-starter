@@ -10,10 +10,12 @@ export const swupPreloadChildren = async ({
   swup,
   container,
   exclude,
+  strategy = "mouseover",
 }: {
   swup: Swup
   container: HTMLElement | HTMLElement[]
   exclude?: string | string[]
+  strategy?: "mouseover" | "init"
 }) => {
   if (typeof swup.preload !== "function") return
 
@@ -34,12 +36,21 @@ export const swupPreloadChildren = async ({
 
       return !isExcluded
     })
+    .filter(link => {
+      return link.getAttribute("[data-no-swup]") !== null
+    })
 
   if (links.length) {
     links.forEach(link => {
-      link.addEventListener("pointerover", () => preloadLink(link), {
-        once: true,
-      })
+      if (strategy === "mouseover") {
+        link.addEventListener("pointerover", () => preloadLink(link), {
+          once: true,
+        })
+      }
+
+      if (strategy === "init") {
+        preloadLink(link)
+      }
     })
   }
 

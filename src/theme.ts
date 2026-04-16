@@ -4,11 +4,13 @@ import alpine from "./alpine"
 import htmx from "htmx.org"
 import swup from "./swup"
 import "idiomorph/htmx"
+import "htmx-ext-preload"
 import "./utils/vvh"
 import { createHistoryRecord, Location } from "swup"
 import { swupPreloadChildren } from "./utils/swup-preload-children"
 import { swupUpdateCache } from "./utils/swup-update-cache"
 import { loadingStates } from "./utils/htmx-ext-loading-states"
+import { initHtmxMemoryCache } from "./utils/htmx-memory-cache"
 
 window.Alpine = alpine
 window.Swup = swup
@@ -16,6 +18,7 @@ window.Swup = swup
 htmx.config.globalViewTransitions = true
 
 loadingStates(htmx)
+initHtmxMemoryCache()
 
 /**
  * Re-process htmx after page navigation, mimic window.onload behavior
@@ -41,6 +44,7 @@ document.addEventListener("htmx:after-swap", (e: CustomEventInit) => {
     swup,
     container: e.detail.elt,
     exclude: "/cart/change",
+    strategy: "init",
   })
 })
 

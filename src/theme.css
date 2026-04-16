@@ -30,6 +30,11 @@
   --jazz-primary: light-dark(#222222, #fefefe);
 }
 
+body {
+  background-color: var(--jazz-background-color);
+  color: var(--jazz-text-color);
+}
+
 button,
 .button {
   border-radius: 4px;
@@ -43,7 +48,7 @@ button,
   }
 }
 
-svg {
+svg:not([class*="size-"]) {
   width: 1rem;
   height: 1rem;
 }

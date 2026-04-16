@@ -34,6 +34,7 @@
     "@swup/preload-plugin": "^3.2.11",
     "alpinejs": "3.15.11",
     "embla-carousel": "^8.6.0",
+    "htmx-ext-preload": "^2.1.2",
     "htmx.org": "^2.0.8",
     "idiomorph": "^0.7.4",
     "swup": "4.8.3",
