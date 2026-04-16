@@ -5,15 +5,15 @@ import intersect from "@alpinejs/intersect"
 
 // components
 import cartNotification from "./components/cart-notification"
-import emblaCarousel from "./components/embla-carousel"
+import productImagesCarousel from "./components/product-images-carousel"
 
 Alpine.plugin(intersect)
 
 Alpine.data("cartNotification", cartNotification)
-Alpine.data("emblaCarousel", emblaCarousel)
+Alpine.data("productImagesCarousel", productImagesCarousel)
 
-export const stores = {
-  example: {
+export const alpineStores = {
+  exampleStore: {
     count: 0,
     increment() {
       this.count++
@@ -21,7 +21,7 @@ export const stores = {
   },
 }
 
-for (const [key, store] of Object.entries(stores)) {
+for (const [key, store] of Object.entries(alpineStores)) {
   Alpine.store(key, store)
 }
 

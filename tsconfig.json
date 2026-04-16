@@ -1,6 +1,6 @@
 {
   "include": ["."],
-  "exclude": ["dist", "build", "node_modules"],
+  "exclude": ["assets", "node_modules"],
   "compilerOptions": {
     "strict": true,
     "lib": ["esnext", "dom", "dom.iterable"],

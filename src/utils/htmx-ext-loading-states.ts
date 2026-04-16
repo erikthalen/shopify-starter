@@ -55,9 +55,12 @@ export function loadingStates(htmx: Htmx): void {
     attribute: string,
     path: string
   ): Element[] {
-    return Array.from(htmx.findAll(scope, `[${attribute}]`)).filter(elt =>
-      mayProcessLoadingStateByPath(elt, path)
-    )
+    const includeScopeElement =
+      scope.getAttribute(attribute) !== null ? [scope] : []
+
+    return Array.from(htmx.findAll(scope, `[${attribute}]`))
+      .filter(elt => mayProcessLoadingStateByPath(elt, path))
+      .concat(includeScopeElement)
   }
 
   function getLoadingTarget(elt: Element): Element[] {

@@ -13,6 +13,7 @@ export default defineConfig({
   ],
   publicDir: "public",
   build: {
+    sourcemap: false,
     manifest: "manifest.json",
   },
 })

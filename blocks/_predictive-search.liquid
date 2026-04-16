@@ -63,7 +63,6 @@
         </form>
       </div>
 
-      {% comment %} TODO: abort pending request when new is fired. currently old results are shown when typing fast {% endcomment %}
       <form
         class="sr-only"
         x-ref="predictiveSearchForm"
@@ -72,6 +71,7 @@
         hx-select="#predictive-search-results"
         hx-target="#predictive-search-results"
         hx-swap="outerHTML"
+        hx-sync="this:replace"
         data-loading-states
       >
         <input type="search" name="q" x-model="q">

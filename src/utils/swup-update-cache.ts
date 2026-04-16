@@ -14,6 +14,13 @@ export function swupUpdateCache(
   strategy: CacheUpdateStrategy
 ) {
   const url = swup.getCurrentUrl()
+  const existingCacheEntry = swup.cache.get(url)
+
+  // initial pageload doesn't have a cache entry, so we create one with the current document's html
+  if (!existingCacheEntry) {
+    swup.cache.set(url, { url, html: document.documentElement.outerHTML })
+  }
+
   const cachedPage = swup.cache.get(url)
 
   if (!cachedPage) return

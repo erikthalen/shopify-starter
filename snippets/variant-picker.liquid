@@ -46,6 +46,7 @@
                 class="button w-full {% if option_value.selected %}bg-neutral-300 text-black{% else %} outlined {% endif %}"
                 href="{{ product.url }}?variant={{ variants.first.id }}"
                 data-loading-states
+                data-loading-aria-busy
                 {% if option_value.selected %}
                   aria-current="true"
                 {% endif %}

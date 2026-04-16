@@ -71,7 +71,8 @@ document.addEventListener("htmx:after-request", (e: CustomEventInit) => {
  * #shopify_payment_button can't be morphed — replace it with outerHTML after each variant swap
  */
 document.addEventListener("htmx:after-swap", (e: CustomEventInit) => {
-  if (e.detail.target?.id !== "main_product" || !e.detail.xhr?.responseText) return
+  if (e.detail.target?.id !== "main_product" || !e.detail.xhr?.responseText)
+    return
 
   const newButton = new DOMParser()
     .parseFromString(e.detail.xhr.responseText, "text/html")

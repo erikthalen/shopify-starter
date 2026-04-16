@@ -24,7 +24,10 @@
             <div class="mb-1 flex justify-between">
               <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
 
-              <div class="text-right">
+              <div
+                class="flex items-center gap-2 text-right"
+                id="cart_item_price_{{ item.key | handleize }}"
+              >
                 {% comment %} per item price {% endcomment %}
                 {% comment %}
                   {%- if item.original_price != item.final_price -%}
@@ -104,8 +107,11 @@
                   hx-swap="outerHTML"
                   hx-select-oob="#cart_amount,#cart:outerHTML"
                   data-loading-states
+                  data-loading-target="#cart_item_price_{{ item.key | handleize }}"
+                  data-loading-aria-busy
                 >
                   <input type="hidden" name="id" value="{{ item.key }}">
+
                   {% render 'quantity-selector',
                     min: 0,
                     name: 'quantity',
@@ -123,6 +129,7 @@
                   hx-select-oob="#cart_amount,#cart:outerHTML"
                   data-no-swup
                   data-loading-states
+                  data-loading-aria-busy
                   class="button link -mr-2"
                   href="{{ item.url_to_remove }}"
                 >
