@@ -1,3 +1,8 @@
+import type htmx from "htmx.org"
+import type { HtmxRequestConfig, HtmxResponseInfo } from "htmx.org"
+
+type Htmx = typeof htmx
+
 /**
  * Client-side memory cache for htmx requests.
  *
@@ -14,13 +19,16 @@
  *     HTML. The XHR resolves instantly from memory with no network round-trip.
  *  3. Restores the original path in pathInfo before the swap so that
  *     hx-replace-url / hx-push-url push the correct URL to history.
+ *  4. After each swap, resets preloadState on any [preload] elements inside
+ *     the swapped target so the extension re-registers them. Morph reuses
+ *     DOM nodes, so preloadState would otherwise survive and block re-init.
  */
-export function initHtmxMemoryCache() {
+export function initHtmxMemoryCache(htmx: Htmx) {
   const cache = new Map<string, string>()
   const blobToOriginal = new Map<string, string>()
 
   // Step 1 — capture preload responses
-  document.addEventListener("htmx:beforeRequest", (e: CustomEventInit) => {
+  document.addEventListener("htmx:beforeRequest", ((e: CustomEvent<HtmxResponseInfo>) => {
     if (e.detail.requestConfig?.headers?.["HX-Preloaded"] !== "true") return
 
     const path: string = e.detail.requestConfig.path
@@ -31,10 +39,10 @@ export function initHtmxMemoryCache() {
     e.detail.xhr.addEventListener("load", () => {
       cache.set(path, e.detail.xhr.responseText)
     })
-  })
+  }) as EventListener)
 
   // Step 2 — serve from memory cache via blob URL
-  document.addEventListener("htmx:configRequest", (e: CustomEventInit) => {
+  document.addEventListener("htmx:configRequest", ((e: CustomEvent<HtmxRequestConfig>) => {
     const path: string = e.detail.path
     if (!path || !cache.has(path)) return
 
@@ -43,13 +51,13 @@ export function initHtmxMemoryCache() {
     )
     blobToOriginal.set(blobUrl, path)
     e.detail.path = blobUrl
-  })
+  }) as EventListener)
 
   // Step 3 — restore original path so hx-replace-url / hx-push-url work.
   // Must happen on htmx:beforeOnLoad, which fires just before
   // determineHistoryUpdates() reads pathInfo to compute the history URL.
   // htmx:beforeSwap fires after that computation, so it is too late.
-  document.addEventListener("htmx:beforeOnLoad", (e: CustomEventInit) => {
+  document.addEventListener("htmx:beforeOnLoad", ((e: CustomEvent<HtmxResponseInfo>) => {
     const info = e.detail.pathInfo
     if (!info) return
 
@@ -63,5 +71,17 @@ export function initHtmxMemoryCache() {
 
     URL.revokeObjectURL(blobUrl)
     blobToOriginal.delete(blobUrl)
-  })
+  }) as EventListener)
+
+  // Step 4 — re-initialize preload links inside swapped targets
+  document.addEventListener("htmx:after-swap", ((e: CustomEvent<HtmxResponseInfo>) => {
+    const target: Element = e.detail.target
+    if (!target) return
+
+    const preloadEls = target.querySelectorAll("[preload]")
+    if (!preloadEls.length) return
+
+    preloadEls.forEach(el => delete (el as any).preloadState)
+    htmx.trigger(target, "htmx:afterProcessNode")
+  }) as EventListener)
 }

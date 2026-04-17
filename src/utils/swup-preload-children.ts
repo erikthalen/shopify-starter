@@ -37,7 +37,7 @@ export const swupPreloadChildren = async ({
       return !isExcluded
     })
     .filter(link => {
-      return link.getAttribute("[data-no-swup]") !== null
+      return link.getAttribute("data-no-swup") === null
     })
 
   if (links.length) {
