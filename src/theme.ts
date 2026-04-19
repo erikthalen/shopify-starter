@@ -1,96 +1,116 @@
 import "vite/modulepreload-polyfill"
 
-import { swup } from "./swup"
-import Alpine, { type Stores } from "alpinejs"
-
+import alpine from "./alpine"
+import htmx from "htmx.org"
+import type { HtmxResponseInfo } from "htmx.org"
+import swup from "./swup"
+import "idiomorph/htmx"
+import "htmx-ext-preload"
 import "./utils/vvh"
+import { createHistoryRecord, Location } from "swup"
 import { swupPreloadChildren } from "./utils/swup-preload-children"
+import { swupUpdateCache } from "./utils/swup-update-cache"
+import { loadingStates } from "./utils/htmx-ext-loading-states"
+import { initHtmxMemoryCache } from "./utils/htmx-memory-cache"
 
-/**
- * Register Alpine plugins
- */
-Alpine.plugin((await import("@alpinejs/intersect")).default)
-Alpine.plugin((await import("@alpinejs/morph")).default)
-Alpine.plugin((await import("@imacrayon/alpine-ajax")).default)
-Alpine.plugin((await import("./utils/alpine-swap")).default)
-Alpine.plugin((await import("./utils/alpine-sync-params")).default)
-
-// makes alpine.d.ts able to create types of each store
-export const stores = {
-  /* ... add your stores here ... */
+if (window.location.origin.includes("127.0.0.1")) {
+  window.Alpine = alpine
+  window.Swup = swup
 }
 
-for (const [key, store] of Object.entries(stores)) {
-  Alpine.store(key, store)
-}
+htmx.config.globalViewTransitions = true
+
+loadingStates(htmx)
+initHtmxMemoryCache(htmx)
 
 /**
- * Register Alpine components
+ * Re-process htmx after page navigation, mimic window.onload behavior
  */
-Alpine.data(
-  "cartNotification",
-  (await import("./components/cart-notification")).default
-)
-
-Alpine.data(
-  "emblaCarousel",
-  (await import("./components/embla-carousel")).default
-)
-
-Alpine.data(
-  "infiniteScroll",
-  (await import("./components/infinite-scroll")).default
-)
-
-Alpine.data(
-  "predictiveSearch",
-  (await import("./components/predictive-search")).default
-)
-
-Alpine.data(
-  "quantitySelector",
-  (await import("./components/quantity-selector")).default
-)
-
-/**
- * Intro animation
- */
-document.body.removeAttribute("x-cloak")
-document
-  .getElementById("swup")
-  ?.animate([{ opacity: 0, translate: "0 20px" }, { opacity: 1 }], {
-    duration: 800,
-    easing: "cubic-bezier(0.5, 0, 0, 1)",
-  })
-
-/**
- * Init Alpine
- */
-Alpine.start()
-
-/**
- * Global hooks
- */
-swup.hooks.on("animation:out:start", () => {
-  document.querySelectorAll("dialog")?.forEach(dialog => dialog?.close())
-  window.dispatchEvent(new CustomEvent("window:navigation"))
+swup.hooks.on("content:replace", () => {
+  htmx.process(document.querySelector("main")!)
 })
 
-window.addEventListener("ajax:send", async (e: CustomEventInit) => {
-  const cartUpdated = e.detail.action.includes("/cart")
-
-  if (cartUpdated) {
-    swup.cache.delete("/cart")
+/**
+ * Close all open dialogs on page navigation
+ */
+swup.hooks.on("visit:start", () => {
+  for (const dialog of document.querySelectorAll("dialog")) {
+    dialog.close()
   }
 })
 
-window.addEventListener("ajax:after", async (e: CustomEventInit) => {
-  swupPreloadChildren({ container: e.detail.render, exclude: "/cart/change" })
-})
+/**
+ * Trigger swup preload of links dynamically added by htmx.
+ * This does NOT preload links handled by htmx (<a data-no-swup>)
+ */
+document.addEventListener("htmx:after-swap", ((
+  e: CustomEvent<HtmxResponseInfo>
+) => {
+  const { elt } = e.detail as HtmxResponseInfo & { elt: HTMLElement }
+
+  swupPreloadChildren({
+    swup,
+    container: elt,
+    exclude: "/cart",
+    strategy: "init",
+  })
+}) as EventListener)
 
 /**
- * Global events
+ * Clear swup cache for cart page when the cart is updated
  */
-window.addEventListener("app:loading", (e: CustomEventInit) => {
-  document.body.classList.toggle("is-loading", e.detail)
-})
+document.addEventListener("htmx:after-swap", ((
+  e: CustomEvent<HtmxResponseInfo>
+) => {
+  if (e.detail.pathInfo?.responsePath?.includes("cart")) {
+    swup.cache.delete("/cart")
+  }
+}) as EventListener)
+
+/**
+ * Navigating back to a PLP take you to the same infinite-loaded state as you left it in
+ */
+document.addEventListener("htmx:after-request", ((
+  e: CustomEvent<HtmxResponseInfo>
+) => {
+  if (e.detail.target?.id === "paginated_items" && e.detail.xhr?.responseText) {
+    setTimeout(() => {
+      swupUpdateCache(swup, e.detail.xhr.responseText, [
+        { merge: "append", id: "paginated_items" },
+        { merge: "replace", id: "pagination" },
+      ])
+    }, 100)
+  }
+}) as EventListener)
+
+/**
+ * #shopify_payment_button can't be morphed — replace it with outerHTML after each variant swap
+ */
+document.addEventListener("htmx:after-swap", ((
+  e: CustomEvent<HtmxResponseInfo>
+) => {
+  if (e.detail.target?.id !== "main_product" || !e.detail.xhr?.responseText)
+    return
+
+  const newButton = new DOMParser()
+    .parseFromString(e.detail.xhr.responseText, "text/html")
+    .getElementById("shopify_payment_button")
+
+  const oldButton = document.getElementById("shopify_payment_button")
+
+  if (newButton && oldButton) oldButton.replaceWith(newButton)
+}) as EventListener)
+
+/**
+ * Using the filter on a PLP adds to the browser history
+ */
+document.addEventListener("htmx:after-request", ((
+  e: CustomEvent<HtmxResponseInfo>
+) => {
+  if ((e.target as Element)?.getAttribute("swup-push-history") !== null) {
+    const { responsePath } = e.detail.pathInfo
+    if (!responsePath) return
+    swup.location = Location.fromUrl(responsePath)
+    createHistoryRecord(responsePath)
+  }
+}) as EventListener)

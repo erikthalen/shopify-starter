@@ -1,4 +1,11 @@
-@import "tailwindcss" source("../");
+@layer theme, base, jazz-reset, jazz, components, utilities;
+
+/* https://erikthalen.github.io/jazz/ */
+/* maybe remove this when getting started */
+@import "https://esm.sh/gh/erikthalen/jazz@v0.1.0-beta.41/jazz.css";
+
+@import "tailwindcss";
+@source "../";
 
 @font-face {
   font-family: "DMMono";
@@ -15,31 +22,70 @@
 
 @theme {
   --font-sans: "DMMono", sans-serif;
+  --background: var(--jazz-background-color);
+  --foreground: var(--jazz-text-color);
+}
+
+:root {
+  --jazz-primary: light-dark(#222222, #fefefe);
+}
+
+body {
+  background-color: var(--jazz-background-color);
+  color: var(--jazz-text-color);
+}
+
+button,
+.button {
+  border-radius: 4px;
+
+  &:not([class*="p-"]) {
+    padding: 0.33em;
+
+    &:not(.square) {
+      padding-inline: 0.5em;
+    }
+  }
+}
+
+svg:not([class*="size-"]) {
+  width: 1rem;
+  height: 1rem;
+}
+
+[aria-label] {
+  &:before {
+    border-radius: 3px;
+  }
+  &:after {
+    border-width: 3px;
+  }
+}
+
+* {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-weight: normal;
 }
 
 html {
   /* apply zooming of everything on screens > 1440px */
   --zoom-amount: 0.2;
   font-size: max(
-    16px,
-    calc(16px + 16 * var(--zoom-amount) * (100vw - 1440px) / 1440)
+    12px,
+    calc(12px + 12 * var(--zoom-amount) * (100vw - 1440px) / 1440)
   );
 
-  scroll-padding-top: var(--header-height); /* header height */
+  scroll-padding-top: var(--header-height);
 
-  &:not(.no-js) {
-    [x-cloak] {
-      display: none !important;
-    }
-  }
-}
-
-body {
-  * {
-    font-size: 12px;
-    line-height: 1.42;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+  &[aria-busy="true"]:before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: 10000;
   }
 }
 
@@ -52,15 +98,13 @@ body:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   touch-action: none;
 }
 
-html:has([aria-busy="true"]) *,
-body.is-loading * {
-  cursor: wait !important;
+dialog::backdrop {
+  view-transition-name: backdrop;
 }
 
-/* [aria-busy="true"] {
-  transition: opacity 200ms;
-  opacity: 0.4;
-} */
+html:has([aria-busy="true"]) * {
+  cursor: wait !important;
+}
 
 details > summary {
   list-style: none;
@@ -86,18 +130,6 @@ img:not([class*="w-"]):not([class*="size-"]) {
   }
 }
 
-.touchscreen-only {
-  @media (hover: hover) {
-    display: none !important;
-  }
-}
-
-.non-touchscreen-only {
-  @media (hover: none) {
-    display: none !important;
-  }
-}
-
 @keyframes prevent-scroll {
   from {
     opacity: 0;
@@ -106,16 +138,4 @@ img:not([class*="w-"]):not([class*="size-"]) {
 
 input:focus {
   animation: prevent-scroll 10ms forwards;
-}
-
-.checkbox {
-  @apply relative flex cursor-pointer items-center justify-center overflow-clip rounded-md border border-gray-400 p-1 hover:border-gray-600;
-}
-
-.button {
-  @apply relative cursor-pointer appearance-none after:absolute after:-inset-x-2 after:-inset-y-1 after:rounded after:bg-gray-100 after:opacity-0 after:mix-blend-darken after:transition-opacity hover:after:opacity-100;
-}
-
-.button-solid {
-  @apply flex w-full cursor-pointer appearance-none items-center justify-center gap-2 rounded border border-gray-400 bg-gray-100 p-2 hover:border-gray-600;
 }

@@ -2,8 +2,8 @@
   {% assign first_option = product.options_with_values[0] %}
   {% assign init_slide = first_option.values | find_index: 'name', first_option.selected_value %}
 
-  <div x-data="emblaCarousel({{ init_slide }})" class="embla" role="region" aria-label="Product images">
-    <div class="grid grid-cols-1 grid-rows-1">
+  <div x-data="productImagesCarousel({{ init_slide }})" class="embla" role="region">
+    <div class="grid grid-cols-1 grid-rows-1 overflow-clip rounded-br">
       <div x-ref="emblaViewport" class="embla__viewport col-start-1 row-start-1">
         <div class="embla__container">
           {% for media in product.media %}
@@ -25,25 +25,45 @@
       <div class="embla__controls pointer-events-none relative z-1 col-start-1 row-start-1 flex w-full justify-between self-center px-4 text-gray-600">
         <button
           x-ref="emblaButtonPrev"
-          class="pointer-events-auto flex cursor-pointer rounded-full border border-gray-200 bg-white disabled:opacity-30"
+          class="square ghost pointer-events-auto"
           type="button"
           aria-label="Previous slide"
+          data-placement="right"
         >
-          <svg class="size-7" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-            <!-- Icon from HeroIcons by Refactoring UI Inc - https://github.com/tailwindlabs/heroicons/blob/master/LICENSE -->
-            <path fill="currentColor" fill-rule="evenodd" d="M9.78 4.22a.75.75 0 0 1 0 1.06L7.06 8l2.72 2.72a.75.75 0 1 1-1.06 1.06L5.47 8.53a.75.75 0 0 1 0-1.06l3.25-3.25a.75.75 0 0 1 1.06 0" clip-rule="evenodd"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 6l-6 6l6 6" />
           </svg>
         </button>
 
         <button
           x-ref="emblaButtonNext"
-          class="pointer-events-auto flex cursor-pointer rounded-full border border-gray-200 bg-white disabled:opacity-30"
+          class="square ghost pointer-events-auto"
           type="button"
           aria-label="Next slide"
+          data-placement="left"
         >
-          <svg class="size-7" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-            <!-- Icon from HeroIcons by Refactoring UI Inc - https://github.com/tailwindlabs/heroicons/blob/master/LICENSE -->
-            <path fill="currentColor" fill-rule="evenodd" d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8L6.22 5.28a.75.75 0 0 1 0-1.06" clip-rule="evenodd"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 6l6 6l-6 6" />
           </svg>
         </button>
       </div>
@@ -53,7 +73,10 @@
       <div x-ref="emblaThumbsViewport" class="embla-thumbs__viewport">
         <div class="embla-thumbs__container">
           {% for media in product.media %}
-            <button class="embla-thumbs__slide cursor-pointer overflow-hidden rounded-lg" aria-label="Go to slide {{ forloop.index }}">
+            <button
+              class="ghost embla-thumbs__slide p-0"
+              aria-label="Go to slide {{ forloop.index }}"
+            >
               {% if media.media_type == 'image' %}
                 {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1' %}
               {% elsif media.media_type == 'video' %}
@@ -100,10 +123,6 @@
     margin-top: var(--thumbs-slide-spacing);
   }
 
-  .embla-thumbs__viewport {
-    overflow: hidden;
-  }
-
   .embla-thumbs__container {
     display: flex;
     flex-direction: row;
@@ -125,9 +144,10 @@
   .embla-thumbs__slide__button {
     cursor: pointer;
     touch-action: manipulation;
+    overflow: clip;
   }
 
   .embla-thumbs__slide--selected {
-    outline: 1px solid;
+    outline: 1px solid var(--jazz-neutral-700);
   }
 {% endstylesheet %}

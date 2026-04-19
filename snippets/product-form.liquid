@@ -1,0 +1,46 @@
+{% doc %}
+  Outputs a full product form including a variant picker, quantity selector, add-to-cart button,
+  and Shopify payment button. Shows a striped loading animation on the button while the cart request is pending.
+{% enddoc %}
+
+{% assign variant = product.selected_or_first_available_variant %}
+
+{% render 'variant-picker' %}
+
+{% form 'product',
+  product,
+  class: 'w-full my-4',
+  hx-post: routes.cart_add_url,
+  hx-select: '#cart_drawer_content',
+  hx-target: '#cart_drawer_content',
+  hx-swap: 'outerHTML',
+  hx-headers: '{"accept": "text/html"}',
+  hx-select-oob: '#cart_amount',
+  data-loading-states: ''
+%}
+  <input id="variant_id" type="hidden" name="id" value="{{ variant.id }}">
+
+  <fieldset class="my-6 flex gap-4">
+    {% render 'quantity-selector', min: 1, name: 'quantity', value: 1, id: 'product', attr: 'hx-preserve' %}
+
+    <button
+      data-loading-aria-busy
+      class="w-full"
+      type="submit"
+      name="add"
+      {% unless variant.available %}
+        disabled
+      {% endunless %}
+    >
+      {% if variant.available %}
+        Add to cart
+      {% else %}
+        Notify me
+      {% endif %}
+    </button>
+  </fieldset>
+
+  <div id="shopify_payment_button" class="text-gray-600">
+    {{ form | payment_button }}
+  </div>
+{% endform %}

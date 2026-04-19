@@ -3,7 +3,6 @@
   Results are fetched as you type using the Shopify Predictive Search API and rendered inside
   the `predictive-search-results` section via AJAX. Submitting the form navigates to the full search page.
   Requires the section `predictive-search-results.liquid`.
-  The search logic is handled by the `predictiveSearch` [Alpine.js](https://alpinejs.dev/) component.
 
   @example
   {% content_for 'block', type: '_predictive-search', id: 'search' %}
@@ -11,7 +10,7 @@
 
 <a
   href="{{ routes.search_url }}"
-  class="button"
+  class="button ghost"
   onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('predictive_search')?.getAttribute('open') ? document.getElementById('predictive_search')?.close() : document.getElementById('predictive_search')?.showModal()"
 >
   Search
@@ -21,44 +20,50 @@
   scroll-lock
   id="predictive_search"
   closedby="any"
-  class="fixed right-0 left-0 top-0 max-h-(--vvh) w-screen max-w-none bg-white overflow-auto overscroll-contain"
+  class="top-4 right-4 bottom-auto left-4 max-h-(--vvh) w-[calc(100%-2rem)] max-w-none overflow-auto overscroll-contain"
+  style="view-transition-name: predictive-search"
 >
-  <div class="relative z-2 w-full justify-center px-4">
+  <article class="relative z-2 w-full justify-center px-4">
     <div
-      x-data="predictiveSearch"
+      x-data="{ q: '' }"
+      data-loading-states
+      data-loading-target="#predictive_search_input"
+      data-loading-aria-busy
       class="mx-auto grid w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40"
     >
-      <div class="sticky top-0 mb-6 flex items-center gap-2 border-b border-gray-400 bg-white pt-5 md:pt-30">
+      <div class="sticky top-0 mb-6 flex items-center gap-2 pt-5 md:pt-30">
         {% comment %} Used as input to the (hidden) predictive search below {% endcomment %}
         <form
           class="contents"
-          @submit.prevent="onSubmit"
+          @submit="document.getElementById('predictive_search')?.close()"
           action="{{ routes.search_url }}"
         >
-          <div class="w-4 opacity-50">
-            {% render 'icon-magnifier' %}
-          </div>
-
-          <input
-            class="w-full py-2 focus:outline-0"
-            type="text"
-            placeholder="Search products and pages"
-            autofocus
-            name="q"
-            x-model="q"
-            x-ref="input"
-            @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
-          >
-
           <input type="hidden" name="type" value="product,page">
           <input type="hidden" name="options[unavailable_products]" value="hide">
           <input type="hidden" name="options[prefix]" value="last">
+
+          <label class="w-full">
+            <span data-prefix>
+              {% render 'icon-magnifier' %}
+            </span>
+
+            <input
+              id="predictive_search_input"
+              type="text"
+              placeholder="Search products and pages"
+              autofocus
+              name="q"
+              x-model="q"
+              x-ref="input"
+              @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
+            >
+
+            <button type="submit" data-suffix class="button">Search</button>
+          </label>
         </form>
 
-        <form method="dialog">
-          <button class="button flex items-center gap-2">
-            Close <span class="size-4">{% render 'icon-cross' %}</span>
-          </button>
+        <form data-suffix method="dialog">
+          <button class="button ghost">Close {% render 'icon-cross' %}</button>
         </form>
       </div>
 
@@ -66,19 +71,11 @@
         class="sr-only"
         x-ref="predictiveSearchForm"
         action="{{ routes.predictive_search_url }}"
-        x-target="predictive-search-results"
-        @ajax:before="
-          if(!q) {
-            $event.preventDefault()
-            $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
-          }
-        "
-        @ajax:after="
-          if(!q) {
-            $event.preventDefault()
-            $refs.predictiveSearchResults.firstElementChild?.firstElementChild?.remove()
-          }
-        "
+        hx-get="{{ routes.predictive_search_url }}"
+        hx-select="#predictive-search-results"
+        hx-target="#predictive-search-results"
+        hx-swap="outerHTML"
+        hx-sync="this:replace"
       >
         <input type="search" name="q" x-model="q">
         <input type="hidden" name="section_id" value="predictive-search-results">
@@ -88,51 +85,15 @@
       </form>
 
       <div x-show="q !== ''" x-ref="predictiveSearchResults">
-        <output id="predictive-search-results" x-merge="update" class="bg-white pb-4"> </output>
+        <output id="predictive-search-results" class="bg-white pb-4"> </output>
       </div>
     </div>
-  </div>
+  </article>
 </dialog>
 
 {% stylesheet %}
-  dialog#predictive_search[open] {
-    transform: translateY(0);
-  }
-
-  dialog#predictive_search {
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-
-    transform: translateY(-100%);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-  }
-
   dialog#predictive_search:not(:has(output:first-child)) {
     touch-action: none;
-  }
-
-  @starting-style {
-    dialog#predictive_search[open] {
-      transform: translateY(-100%);
-    }
-  }
-
-  dialog#predictive_search::backdrop {
-    background-color: rgb(0 0 0 / 25%);
-    opacity: 0;
-    backdrop-filter: blur(2px);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-
-    touch-action: none;
-  }
-
-  dialog#predictive_search[open]::backdrop {
-    opacity: 1;
-  }
-
-  @starting-style {
-    dialog#predictive_search[open]::backdrop {
-      opacity: 0;
-    }
   }
 {% endstylesheet %}
 

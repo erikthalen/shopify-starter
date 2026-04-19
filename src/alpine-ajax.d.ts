@@ -1,1 +1,0 @@
-declare module "@imacrayon/alpine-ajax"

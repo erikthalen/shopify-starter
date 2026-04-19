@@ -2,7 +2,7 @@
   Outputs a cart icon link and a slide-in `<dialog>` from the right showing the cart contents.
   Clicking the link opens the drawer instead of navigating to the cart page.
   Cart items are rendered by the `cart-form` snippet.
-  The cart item count (`#cart_amount`) is updated when products are added via `x-target`.
+  The cart item count (`#cart_amount`) is updated when products are added via htmx.
 
   @example
   {% content_for 'block', type: '_cart-drawer', id: 'cart_drawer' %}
@@ -14,24 +14,26 @@
   @window:navigation.window="active = location.pathname === '{{ routes.cart_url }}'"
   onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_drawer')?.showModal()"
   :class="active ? 'underline' : ''"
-  class="button"
-  {% comment %} uncomment this to show drawer when product is added to cart {% endcomment %}
-  {% comment %} @ajax:after.window="(e) => e.target.getAttribute('x-target')?.includes('cart_drawer_content') && location.pathname !== '{{ routes.cart_url }}' && document.getElementById('cart_drawer')?.showModal()" {% endcomment %}
+  class="button ghost"
 >
-  Cart (<span id="cart_amount">{{- cart.item_count -}}</span>)
+  Cart
+  <span
+    >(<span id="cart_amount">{{- cart.item_count -}}</span>)</span
+  >
 </a>
 
 <dialog
   scroll-lock
   id="cart_drawer"
   closedby="any"
-  class="right-0 left-auto h-(--vvh) max-h-none w-full max-w-md overflow-auto overscroll-contain"
+  class="top-4 right-4 bottom-4 left-auto h-(--vvh) w-full max-w-md overflow-auto overscroll-contain"
+  style="view-transition-name: cart-drawer"
 >
-  <div
+  <article
     id="cart_drawer_content"
-    class="top-0 grid grid-rows-[auto_1fr] bg-white pb-4 h-full"
+    class="grid h-full grid-rows-[auto_1fr]"
   >
-    <header class="sticky top-0 z-1 mx-4 flex h-10 items-center justify-between bg-white border-b border-gray-300">
+    <header class="sticky top-0 z-1 justify-between bg-(--jazz-background-color)">
       <p>
         Your cart (
         {{- cart.item_count -}}
@@ -39,57 +41,15 @@
       </p>
 
       <form method="dialog" class="contents">
-        <button aria-title="Close cart drawer" class="button size-5">
+        <button aria-title="Close cart drawer" class="button ghost square">
           {% render 'icon-cross' %}
         </button>
       </form>
     </header>
 
     {% render 'cart-form' %}
-
-    {% unless cart == empty %}
-      <footer class="pb-4 justify-self-center text-center">
-        <a href="{{ routes.cart_url }}" class="button inline-block"> Go to cart </a>
-      </footer>
-    {% endunless %}
-  </div>
+  </article>
 </dialog>
-
-{% stylesheet %}
-  dialog#cart_drawer[open] {
-    transform: translateX(0);
-  }
-
-  dialog#cart_drawer {
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-
-    transform: translateX(100%);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-  }
-
-  @starting-style {
-    dialog#cart_drawer[open] {
-      transform: translateX(100%);
-    }
-  }
-
-  dialog#cart_drawer::backdrop {
-    background-color: rgb(0 0 0 / 25%);
-    opacity: 0;
-    backdrop-filter: blur(2px);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-  }
-
-  dialog#cart_drawer[open]::backdrop {
-    opacity: 1;
-  }
-
-  @starting-style {
-    dialog#cart_drawer[open]::backdrop {
-      opacity: 0;
-    }
-  }
-{% endstylesheet %}
 
 {% schema %}
 {

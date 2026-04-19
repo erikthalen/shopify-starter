@@ -1,33 +1,62 @@
-import { swup } from "~/swup"
+import type Swup from "swup"
+
+/**
+ * Mimic Swup's preload plugin by adding pointerover listeners to
+ * any links in the given container(s).
+ * This is used to preload pages linked from any content added after pageload.
+ */
 
 export const swupPreloadChildren = async ({
+  swup,
   container,
   exclude,
+  strategy = "mouseover",
 }: {
+  swup: Swup
   container: HTMLElement | HTMLElement[]
   exclude?: string | string[]
+  strategy?: "mouseover" | "init"
 }) => {
-  // preload all links in any element appended by Alpine Ajax
-  if (typeof swup.preload === "function") {
-    const containers = Array.isArray(container) ? container : [container]
-    const excludes =
-      exclude === undefined || Array.isArray(exclude) ? exclude : [exclude]
+  if (typeof swup.preload !== "function") return
 
-    const allHrefsInAppendedElement: string[] = containers
-      .map((el: HTMLElement) => {
-        const elementsWithHref = [...el.querySelectorAll("*[href]")]
-        return elementsWithHref.map(
-          el => window.location.origin + el.getAttribute("href")
-        )
-      })
-      .flat()
-      .filter(
-        (href: string) =>
-          !excludes || !excludes.find(exclude => href.includes(exclude))
+  const containers = Array.isArray(container) ? container : [container]
+
+  const excludes =
+    exclude === undefined || Array.isArray(exclude) ? exclude : [exclude]
+
+  const links: Element[] = containers
+    .map(el => [...el.querySelectorAll("*[href]")])
+    .flat()
+    .filter(link => {
+      if (!excludes) return true
+
+      const isExcluded = excludes.find(rule =>
+        link.getAttribute("href")?.includes(rule)
       )
 
-    if (allHrefsInAppendedElement.length) {
-      await swup.preload(allHrefsInAppendedElement)
+      return !isExcluded
+    })
+    .filter(link => {
+      return link.getAttribute("data-no-swup") === null
+    })
+
+  if (links.length) {
+    links.forEach(link => {
+      if (strategy === "mouseover") {
+        link.addEventListener("pointerover", () => preloadLink(link), {
+          once: true,
+        })
+      }
+
+      if (strategy === "init") {
+        preloadLink(link)
+      }
+    })
+  }
+
+  function preloadLink(link: Element) {
+    if (typeof swup.preload === "function") {
+      swup.preload(window.location.origin + link.getAttribute("href"))
     }
   }
 }

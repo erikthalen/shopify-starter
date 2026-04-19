@@ -1,12 +1,13 @@
 {% doc %}
   Outputs a number input with increment and decrement buttons.
-  The value is stored in a hidden `<input>` and displayed in an `<output>` element.
-  Managed by the `quantitySelector` [Alpine.js](https://alpinejs.dev/) component in `quantity-selector.ts`.
+  The value is stored in a hidden `<input>` and displayed in a `<span>` element.
 
   @param {string} [name] - `name` attribute of the hidden input. Defaults to `quantity`.
   @param {number} [value] - Initial value. Defaults to `1`.
   @param {number} [min] - Minimum allowed value. Defaults to `0`.
+  @param {string} [id] - Id for the root element, used by hx-preserve to match across swaps. Defaults to `quantity_selector`.
   @param {string} [on-change] - Alpine.js expression called after the value changes (debounced).
+  @param {string} [attr] - Attributes to add to the element
 
   @example
   {% render 'quantity-selector', name: 'quantity', value: 1, min: 1 %}
@@ -19,31 +20,64 @@
   %}
 {% enddoc %}
 
+{% assign qs_min = min | default: 0 %}
+{% assign qs_value = value | default: 1 %}
+{% assign qs_id = id | default: 'quantity_selector' %}
+
 <div
-  id="quantity_selector"
-  x-data="quantitySelector({ min: {{ min | default: 0 }}, init: {{ value | default: 1 }} })"
+  id="quantity_selector_{{ qs_id | handleize }}"
+  x-data="{ value: {{ qs_value }} }"
   class="flex items-center gap-3"
+  {{ attr }}
 >
   <button
     type="button"
-    @click="decrease"
+    @click="value = Math.max({{ qs_min }}, value - 1)"
     @click.debounce="{{ on-change | default: '' }}"
-    class="checkbox w-8"
+    class="ghost square"
     aria-label="Decrease quantity"
   >
-    -
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path vector-effect="non-scaling-stroke" d="M5 12l14 0" />
+    </svg>
   </button>
 
-  <input type="hidden" name="{{ name }}" value="{{ value | default: 1 }}">
-  <output for="{{ name }}">{{ value | default: 1 }}</output>
+  <input type="hidden" name="{{ name }}" :value="value">
 
-  <button
-    type="button"
-    @click="increase"
-    @click.debounce="{{ on-change | default: '' }}"
-    class="checkbox w-8"
-    aria-label="Increase quantity"
-  >
-    +
-  </button>
+  <span x-text="value">{{ qs_value }}</span>
+
+  <small>
+    <button
+      type="button"
+      @click="value++"
+      @click.debounce="{{ on-change | default: '' }}"
+      class="ghost square"
+      aria-label="Increase quantity"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path vector-effect="non-scaling-stroke" d="M12 5l0 14" />
+        <path vector-effect="non-scaling-stroke" d="M5 12l14 0" />
+      </svg>
+    </button>
+  </small>
 </div>

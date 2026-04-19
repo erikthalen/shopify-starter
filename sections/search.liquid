@@ -1,24 +1,34 @@
 <div class="flex justify-center">
   <form
+    x-data
     action="{{ routes.search_url }}"
-    x-target="search_results"
-    class="m-4 mb-6 flex w-full max-w-md items-center gap-2 border-b border-gray-400 bg-white"
+    hx-get="{{ routes.search_url }}"
+    hx-select="#search_results"
+    hx-target="#search_results"
+    hx-swap="outerHTML"
+    hx-replace-url="true"
+    hx-sync="this:replace"
+    class="m-4 mb-6 flex w-full max-w-md items-center gap-2"
+    data-loading-states
+    data-loading-target="#search_input"
+    data-loading-aria-busy
   >
-    <div class="w-4 opacity-50">
-      {% render 'icon-magnifier' %}
-    </div>
+    <label class="w-full py-2">
+      <span data-prefix>
+        {% render 'icon-magnifier' %}
+      </span>
 
-    <label for="search_input" class="sr-only">Search products and pages</label>
-    <input
-      id="search_input"
-      class="w-full py-2 focus:outline-0"
-      type="text"
-      placeholder="Search products and pages"
-      autofocus
-      name="q"
-    >
+      <input
+        id="search_input"
+        type="text"
+        placeholder="Search products and pages"
+        autofocus
+        name="q"
+        @input.debounced="$root.requestSubmit()"
+      >
 
-    <button class="button">Search</button>
+      <button data-suffix class="button">Search</button>
+    </label>
 
     <input type="hidden" name="type" value="product,page">
     <input type="hidden" name="options[unavailable_products]" value="hide">
@@ -27,11 +37,50 @@
 </div>
 
 {% unless search.performed %}
-  <h2 id="search_results" class="m-4">Search isn't performed</h2>
+  <section id="search_results" class="empty">
+    <svg
+      class="size-10"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+      <path d="M21 21l-6 -6" />
+    </svg>
+
+    <h1>Search isn't performed</h1>
+    <p>Type something in the search field.</p>
+  </section>
+
 {% else %}
   <section id="search_results" class="p-4">
     {% if search.results_count == 0 %}
-      <h1>No results for "{{ search.terms }}"</h1>
+      <div class="empty">
+        <svg
+          class="size-10"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-forbid-2"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 15l6 -6" />
+        </svg>
+
+        <h1>No results for "{{ search.terms }}"</h1>
+        <p>Try searching for something else</p>
+      </div>
     {% else %}
       {% paginate search.results by 24 %}
         <div class="mb-2 flex justify-between">
@@ -41,37 +90,75 @@
           </h1>
 
           <div class="grid justify-items-end">
-            <p class="mb-2 text-neutral-500">Sort by:</p>
+            {%- assign current_sort_label = 'Sort by' -%}
             {%- for option in search.sort_options -%}
-              <a
-                x-swap="search_results"
-                @swap:update="e => window.history.replaceState(null, '', e.detail)"
-                data-no-swup
-                class="mb-1 border-b border-dotted"
-                href="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
-              >
-                {{- option.name -}}
-              </a>
+              {%- if search.sort_by == option.value -%}
+                {%- assign current_sort_label = option.name -%}
+              {%- endif -%}
             {%- endfor -%}
+
+            <label
+              class="field text-right"
+              data-loading-states
+              data-loading-aria-busy
+              data-loading-target="#search_sort_by_button"
+            >
+              <span>Sort by:</span>
+
+              <button id="search_sort_by_button" popovertarget="sort_by_select">
+                <span>{{ current_sort_label }}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M6 9l6 6l6 -6" />
+                </svg>
+              </button>
+
+              <div
+                id="sort_by_select"
+                popover
+                onchange="
+                  document.querySelector(`[popovertarget=${this.id}] span`).textContent =
+                    event.target.closest('label').textContent.trim();
+                  this.hidePopover();
+                "
+              >
+                <menu>
+                  {%- for option in search.sort_options -%}
+                    <li>
+                      <label>
+                        <input
+                          type="radio"
+                          name="sort_by"
+                          value="{{ option.value }}"
+                          hx-get="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
+                          hx-target="#search_results"
+                          hx-select="#search_results"
+                          hx-swap="outerHTML"
+                          hx-replace-url="true"
+                          {% if search.sort_by == option.value %}
+                            checked
+                          {% endif %}
+                        >
+                        {{- option.name -}}
+                      </label>
+                    </li>
+                  {%- endfor -%}
+                </menu>
+              </div>
+            </label>
           </div>
         </div>
 
-        {% comment %}
-          <p>Filters:</p>
-          <ol>
-            {% for filter in search.filters %}
-              {% comment %} https://shopify.dev/docs/api/liquid/objects/filter {% endcomment %}
-              <li>{{ filter.label }}</li>
-            {% endfor %}
-          </ol>
-        {% endcomment %}
-        {% comment %}
-          <p>Sort by: {{ search.sort_by }}</p>
-          <p>Default sort by: {{ search.default_sort_by }}</p>
-
-          <p>Product count: {{ search.products_count }}</p>
-          <p>All product count: {{ search.all_products_count }}</p>
-        {% endcomment %}
+        {% comment %} {% content_for 'block', type: '_search-filter', id: 'search-filter' %} {% endcomment %}
 
         <ol id="paginated_items" class="grid gap-4 md:grid-cols-4">
           {%- for item in search.results -%}

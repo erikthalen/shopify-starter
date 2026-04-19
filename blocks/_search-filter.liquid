@@ -1,41 +1,47 @@
 {% doc %}
   Outputs a filter button and a slide-down `<dialog>` with filter controls for the current collection.
   Supports boolean, list (with optional color swatches), and price range filter types,
-  as well as a sort-by selector. Filter changes are applied automatically on change via `x-sync-params`.
-  Active filter count is shown on the button.
+  as well as a sort-by selector. Active filter count is shown on the button.
 
   See https://help.shopify.com/en/manual/online-store/search-and-discovery for setting up filters.
 
   @example
-  {% content_for 'block', type: '_filter', id: 'filter' %}
+  {% content_for 'block', type: '_search-filter', id: 'search-filter' %}
 {% enddoc %}
 
-{% assign active_values = collection.filters | map: 'active_values' %}
+{% assign active_values = search.filters | map: 'active_values' %}
 {% assign active_values_amount = 0 %}
 {% for value in active_values %}
   {% assign active_values_amount = active_values_amount | plus: value.size %}
 {% endfor %}
 
-<button id="filter_button" class="button" onclick="document.getElementById('filter_drawer')?.show()">
-  Filter <span class="text-gray-500">({{ active_values_amount }})</span>
+<button id="search_filter_button" class="button ghost" onclick="document.getElementById('search_filter_drawer')?.show()">
+  Filter <span class="text-(--jazz-neutral-500)">({{ active_values_amount }})</span>
 </button>
 
 <dialog
   scroll-lock
-  id="filter_drawer"
+  id="search_filter_drawer"
   closedby="any"
-  class="fixed top-0 z-9 max-h-dvh w-full overflow-auto overscroll-contain"
+  class="fixed top-[calc(var(--header-height)+var(--announcement-bar-height)+1rem)] right-4 bottom-auto left-4 z-9 max-h-(--vvh) w-[calc(100vw-2rem)] max-w-none overflow-auto overscroll-contain"
+  style="view-transition-name: filter-drawer"
 >
   <form
-    id="filter_form"
-    x-sync-params
-    x-target="filter_result filter_button"
+    x-data
+    id="search_filter_form"
+    hx-get="{{ search.url }}"
+    hx-select="#paginated_items"
+    hx-target="#paginated_items"
+    hx-swap="outerHTML"
+    hx-select-oob="#search_filter_form:outerHTML,#search_filter_button:outerHTML"
+    swup-push-history
     @change="$el.requestSubmit()"
+    data-loading-states
   >
-    <div class="grid gap-4 bg-white px-4 pt-26 md:grid-cols-4 md:pb-14">
-      {%- for filter in collection.filters -%}
-        <div>
-          <p class="mb-2">{{ filter.label }}</p>
+    <div class="grid gap-4 p-4 md:grid-cols-4 md:pb-14">
+      {%- for filter in search.filters -%}
+        <div class="field">
+          <p>{{ filter.label }}</p>
 
           {%- case filter.type -%}
               {% comment %} BOOLEAN FILTER {% endcomment %}
@@ -66,7 +72,7 @@
               {% comment %} LIST FILTER {% endcomment %}
             {%- when 'list' -%}
               {%- for filter_value in filter.values -%}
-                <div class="mb-1" data-type="list">
+                <div>
                   <label
                     {% if filter_value.swatch != blank %}
                       style="
@@ -78,12 +84,10 @@
                         {%- endif -%}
                       "
                     {% endif %}
-                    class="ml-2 inline-flex items-center gap-2 text-gray-900"
                   >
                     {{ filter_value.swatch.image }}
                     <input
                       type="checkbox"
-                      class="size-4 rounded border-gray-300 bg-gray-100 text-neutral-900 focus:ring-neutral-900"
                       name="{{ filter_value.param_name }}"
                       value="{{ filter_value.value }}"
                       {% if filter_value.active -%}
@@ -113,7 +117,7 @@
                       {% endif %}
                     {% else %}
                       {{ filter_value.label }}
-                      <span class="text-gray-400">({{ filter_value.count }})</span>
+                      <span class="text-(--jazz-neutral-400)">({{ filter_value.count }})</span>
                     {% endif %}
                   </label>
                 </div>
@@ -180,29 +184,62 @@
       {%- endfor -%}
 
       <div class="flex gap-4 pt-2 pb-4">
-        <div>
-          <label for="sort-by" class="inline-block">Sort by:</label>
-          <select id="sort-by" name="sort_by" class="inline-block">
-            <option value="manual">Manual</option>
-            <option value="best-selling">Best selling</option>
-            <option value="title-ascending">Title ascending</option>
-            <option value="title-descending">Title descending</option>
-            <option value="price-ascending">Price ascending</option>
-            <option value="price-descending">Price descending</option>
-            <option value="created-ascending">Created ascending</option>
-            <option value="created-descending">Created descending</option>
-          </select>
-        </div>
+        {%- assign current_sort_label = 'Sort by' -%}
+        {%- for option in search.sort_options -%}
+          {%- if search.sort_by == option.value -%}
+            {%- assign current_sort_label = option.name -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        <label class="field" data-loading-aria-busy data-loading-target="#search_sort_by_button">
+          <span>Sort by:</span>
+
+          <button id="search_sort_by_button" popovertarget="search_sort_by_select" type="button">
+            <span>{{ current_sort_label }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6l6 -6" />
+            </svg>
+          </button>
+
+          <div
+            id="search_sort_by_select"
+            popover
+            onchange="
+              document.querySelector(`[popovertarget=${this.id}] span`).textContent =
+                event.target.closest('label').textContent.trim();
+              this.hidePopover();
+            "
+          >
+            <menu>
+              {%- for option in search.sort_options -%}
+                <li>
+                  <label>
+                    <input
+                      type="radio"
+                      name="sort_by"
+                      value="{{ option.value }}"
+                      {% if search.sort_by == option.value %}checked{% endif %}
+                    >
+                    {{- option.name -}}
+                  </label>
+                </li>
+              {%- endfor -%}
+            </menu>
+          </div>
+        </label>
       </div>
     </div>
   </form>
 
-  <div class="sticky bottom-0 flex justify-end gap-4 border-t border-gray-300 bg-white p-4">
+  <div class="sticky bottom-0 flex justify-end gap-4 border-t border-(--jazz-neutral-200) p-4">
     <a
-      x-swap="filter_form filter_result filter_button"
-      @swap:update="e => window.history.replaceState(null, '', e.detail)"
       href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
-      class="inline-block border-b border-dotted whitespace-nowrap text-gray-600 hover:text-black"
+      hx-get="{{ collection.url }}?sort_by={{ collection.sort_by }}"
+      hx-select="#main_collection"
+      hx-target="#main_collection"
+      hx-swap="outerHTML"
+      class="button link"
+      data-loading-states
     >
       Clear all
     </a>
@@ -215,49 +252,17 @@
 
 {% comment %} backdrop {% endcomment %}
 <div
-  class="pointer-events-none fixed top-0 left-0 z-8 h-screen w-screen bg-black/25 opacity-0 backdrop-blur-[2px] transition-opacity duration-500"
+  class="pointer-events-none fixed top-0 left-0 z-8 h-screen w-screen bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity"
 ></div>
 
 {% stylesheet %}
-  dialog#filter_drawer[open] {
-    transform: translateY(0);
-
-    /* show backdrop */
+  /* show backdrop */
+  dialog#search_filter_drawer[open] {
     + div {
       opacity: 1;
       pointer-events: all;
     }
   }
-
-  dialog#filter_drawer {
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-
-    transform: translateY(-100%);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-  }
-
-  @starting-style {
-    dialog#filter_drawer[open] {
-      transform: translateY(-100%);
-    }
-  }
-
-  /* dialog#filter_drawer::backdrop {
-    background-color: rgb(0 0 0 / 25%);
-    opacity: 0;
-    backdrop-filter: blur(2px);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-  }
-
-  dialog#filter_drawer[open]::backdrop {
-    opacity: 1;
-  }
-
-  @starting-style {
-    dialog#filter_drawer[open]::backdrop {
-      opacity: 0;
-    }
-  } */
 {% endstylesheet %}
 
 {% schema %}

@@ -1,15 +1,14 @@
 {
   "include": ["."],
-  "exclude": ["dist", "build", "node_modules"],
+  "exclude": ["assets", "node_modules"],
   "compilerOptions": {
     "strict": true,
     "lib": ["esnext", "dom", "dom.iterable"],
     "module": "es2022",
     "target": "es2022",
     "moduleResolution": "bundler",
-    "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["./src/*"]
     },
     "types": ["vite/client"],
     "allowSyntheticDefaultImports": true

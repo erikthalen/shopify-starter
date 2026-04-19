@@ -55,6 +55,23 @@
     property="og:image:height"
     content="{{ page_image.height }}"
   >
+{% elsif shop.brand.cover_image != blank %}
+  <meta
+    property="og:image"
+    content="http:{{ shop.brand.cover_image | image_url  }}"
+  >
+  <meta
+    property="og:image:secure_url"
+    content="https:{{ shop.brand.cover_image | image_url }}"
+  >
+  <meta
+    property="og:image:width"
+    content="{{ shop.brand.cover_image.width }}"
+  >
+  <meta
+    property="og:image:height"
+    content="{{ shop.brand.cover_image.height }}"
+  >
 {%- endif -%}
 
 {%- if request.page_type == 'product' -%}

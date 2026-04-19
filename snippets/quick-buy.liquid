@@ -11,15 +11,26 @@
 
 {% assign variant = product.selected_or_first_available_variant %}
 
-{% form 'product', product, x-target: 'cart cart_drawer_content cart_amount' %}
+{% capture aria_label %}Add {{ product.title }} - {{ variant.options | join: ' / ' }} to cart{% endcapture %}
+
+{% form 'product',
+  product,
+  hx-post: routes.cart_add_url,
+  hx-select: '#cart_drawer_content',
+  hx-target: '#cart_drawer_content',
+  hx-swap: 'outerHTML',
+  hx-select-oob: '#cart_amount',
+  aria-label: aria_label,
+  data-loading-states: ''
+%}
   <input type="hidden" name="quantity" value="1">
   <input type="hidden" name="id" value="{{ variant.id }}">
 
   <button
-    class="quick-buy relative border-b border-dotted button flex items-center disabled:text-gray-300"
+    data-loading-aria-busy
+    class="button outlined"
     type="submit"
     name="add"
-    aria-label="Add {{ product.title }} - {{ variant.options | join: ' / ' }} to cart"
     {%- unless variant.available -%}
       disabled
     {%- endunless -%}
@@ -29,17 +40,5 @@
     {%- else -%}
       Sold out
     {%- endif -%}
-
-    <span class="size-3 absolute -right-6 opacity-0 transition-opacity">
-      {% render 'icon-spinner' %}
-    </span>
   </button>
 {% endform %}
-
-{% stylesheet %}
-  .quick-buy[aria-disabled='true'] {
-    span {
-      opacity: 1;
-    }
-  }
-{% endstylesheet %}

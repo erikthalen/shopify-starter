@@ -5,7 +5,8 @@
     id="announcement_bar"
     role="region"
     aria-label="Announcement"
-    class="bg-gray-100 relative z-10 h-(--announcement-bar-height) flex items-center justify-center px-4"
+    class="relative z-10 flex h-(--announcement-bar-height) items-center justify-center bg-(--jazz-neutral-100) px-4"
+    style="view-transition-name: announcement-bar"
   >
     {{ section.settings.text }}
 
@@ -13,18 +14,11 @@
       <div
         x-intersect="shown = true"
         x-intersect:leave="shown = false"
-        class="opacity pointer-events-none absolute top-0 left-0 right-0 h-(--announcement-bar-height)"
+        class="opacity pointer-events-none absolute top-0 right-0 left-0 h-(--announcement-bar-height)"
       ></div>
     </template>
   </div>
 {% endif %}
-
-<!-- Append after target -->
-{% comment %}
-  <template x-teleport.append="#page">
-    <div>Appended content</div>
-  </template>
-{% endcomment %}
 
 {% stylesheet %}
   body {
