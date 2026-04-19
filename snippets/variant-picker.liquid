@@ -43,7 +43,7 @@
                 hx-select="#main_product"
                 hx-swap="morph:outerHTML"
                 hx-replace-url="true"
-                class="button w-full {% if option_value.selected %}bg-neutral-300 text-black{% else %} outlined {% endif %}"
+                class="button w-full {% if option_value.selected %}bg-(--jazz-neutral-200) text-black{% else %} outlined {% endif %}"
                 href="{{ product.url }}?variant={{ variants.first.id }}"
                 data-loading-states
                 {% if option_value.selected %}

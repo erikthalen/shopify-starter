@@ -6,42 +6,42 @@
   See https://help.shopify.com/en/manual/online-store/search-and-discovery for setting up filters.
 
   @example
-  {% content_for 'block', type: '_filter', id: 'filter' %}
+  {% content_for 'block', type: '_search-filter', id: 'search-filter' %}
 {% enddoc %}
 
-{% assign active_values = collection.filters | map: 'active_values' %}
+{% assign active_values = search.filters | map: 'active_values' %}
 {% assign active_values_amount = 0 %}
 {% for value in active_values %}
   {% assign active_values_amount = active_values_amount | plus: value.size %}
 {% endfor %}
 
-<button id="filter_button" class="button ghost" onclick="document.getElementById('filter_drawer')?.show()">
-  Filter <span class="text-gray-500">({{ active_values_amount }})</span>
+<button id="search_filter_button" class="button ghost" onclick="document.getElementById('search_filter_drawer')?.show()">
+  Filter <span class="text-(--jazz-neutral-500)">({{ active_values_amount }})</span>
 </button>
 
 <dialog
   scroll-lock
-  id="filter_drawer"
+  id="search_filter_drawer"
   closedby="any"
   class="fixed top-[calc(var(--header-height)+var(--announcement-bar-height)+1rem)] right-4 bottom-auto left-4 z-9 max-h-(--vvh) w-[calc(100vw-2rem)] max-w-none overflow-auto overscroll-contain"
   style="view-transition-name: filter-drawer"
 >
   <form
     x-data
-    id="filter_form"
-    hx-get="{{ collection.url }}"
-    hx-select="#filter_result"
-    hx-target="#filter_result"
+    id="search_filter_form"
+    hx-get="{{ search.url }}"
+    hx-select="#paginated_items"
+    hx-target="#paginated_items"
     hx-swap="outerHTML"
-    hx-select-oob="#filter_form:outerHTML,#filter_button:innerHTML"
+    hx-select-oob="#search_filter_form:outerHTML,#search_filter_button:outerHTML"
     swup-push-history
     @change="$el.requestSubmit()"
     data-loading-states
   >
     <div class="grid gap-4 p-4 md:grid-cols-4 md:pb-14">
-      {%- for filter in collection.filters -%}
-        <div>
-          <p class="mb-2">{{ filter.label }}</p>
+      {%- for filter in search.filters -%}
+        <div class="field">
+          <p>{{ filter.label }}</p>
 
           {%- case filter.type -%}
               {% comment %} BOOLEAN FILTER {% endcomment %}
@@ -72,7 +72,7 @@
               {% comment %} LIST FILTER {% endcomment %}
             {%- when 'list' -%}
               {%- for filter_value in filter.values -%}
-                <div class="mb-1" data-type="list">
+                <div>
                   <label
                     {% if filter_value.swatch != blank %}
                       style="
@@ -184,19 +184,49 @@
       {%- endfor -%}
 
       <div class="flex gap-4 pt-2 pb-4">
-        <div>
-          <label for="sort-by" class="inline-block">Sort by:</label>
-          <select id="sort-by" name="sort_by" class="inline-block">
-            <option value="manual">Manual</option>
-            <option value="best-selling">Best selling</option>
-            <option value="title-ascending">Title ascending</option>
-            <option value="title-descending">Title descending</option>
-            <option value="price-ascending">Price ascending</option>
-            <option value="price-descending">Price descending</option>
-            <option value="created-ascending">Created ascending</option>
-            <option value="created-descending">Created descending</option>
-          </select>
-        </div>
+        {%- assign current_sort_label = 'Sort by' -%}
+        {%- for option in search.sort_options -%}
+          {%- if search.sort_by == option.value -%}
+            {%- assign current_sort_label = option.name -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        <label class="field" data-loading-aria-busy data-loading-target="#search_sort_by_button">
+          <span>Sort by:</span>
+
+          <button id="search_sort_by_button" popovertarget="search_sort_by_select" type="button">
+            <span>{{ current_sort_label }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6l6 -6" />
+            </svg>
+          </button>
+
+          <div
+            id="search_sort_by_select"
+            popover
+            onchange="
+              document.querySelector(`[popovertarget=${this.id}] span`).textContent =
+                event.target.closest('label').textContent.trim();
+              this.hidePopover();
+            "
+          >
+            <menu>
+              {%- for option in search.sort_options -%}
+                <li>
+                  <label>
+                    <input
+                      type="radio"
+                      name="sort_by"
+                      value="{{ option.value }}"
+                      {% if search.sort_by == option.value %}checked{% endif %}
+                    >
+                    {{- option.name -}}
+                  </label>
+                </li>
+              {%- endfor -%}
+            </menu>
+          </div>
+        </label>
       </div>
     </div>
   </form>
@@ -227,7 +257,7 @@
 
 {% stylesheet %}
   /* show backdrop */
-  dialog#filter_drawer[open] {
+  dialog#search_filter_drawer[open] {
     + div {
       opacity: 1;
       pointer-events: all;

@@ -158,22 +158,7 @@
           </div>
         </div>
 
-        {% comment %}
-          <p>Filters:</p>
-          <ol>
-            {% for filter in search.filters %}
-              {% comment %} https://shopify.dev/docs/api/liquid/objects/filter {% endcomment %}
-              <li>{{ filter.label }}</li>
-            {% endfor %}
-          </ol>
-        {% endcomment %}
-        {% comment %}
-          <p>Sort by: {{ search.sort_by }}</p>
-          <p>Default sort by: {{ search.default_sort_by }}</p>
-
-          <p>Product count: {{ search.products_count }}</p>
-          <p>All product count: {{ search.all_products_count }}</p>
-        {% endcomment %}
+        {% comment %} {% content_for 'block', type: '_search-filter', id: 'search-filter' %} {% endcomment %}
 
         <ol id="paginated_items" class="grid gap-4 md:grid-cols-4">
           {%- for item in search.results -%}

@@ -116,6 +116,7 @@
                   hx-select="#cart_drawer_content"
                   hx-target="#cart_drawer_content"
                   hx-swap="outerHTML"
+                  hx-sync="this:replace"
                   hx-select-oob="#cart_amount,#cart:outerHTML"
                   data-loading-states
                   data-loading-target="#cart_item_price_{{ item.key | handleize }}"
