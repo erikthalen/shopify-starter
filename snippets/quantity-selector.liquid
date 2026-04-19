@@ -7,6 +7,7 @@
   @param {number} [min] - Minimum allowed value. Defaults to `0`.
   @param {string} [id] - Id for the root element, used by hx-preserve to match across swaps. Defaults to `quantity_selector`.
   @param {string} [on-change] - Alpine.js expression called after the value changes (debounced).
+  @param {string} [attr] - Attributes to add to the element
 
   @example
   {% render 'quantity-selector', name: 'quantity', value: 1, min: 1 %}
@@ -25,9 +26,9 @@
 
 <div
   id="quantity_selector_{{ qs_id | handleize }}"
-  hx-preserve
   x-data="{ value: {{ qs_value }} }"
   class="flex items-center gap-3"
+  {{ attr }}
 >
   <button
     type="button"

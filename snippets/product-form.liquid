@@ -21,7 +21,7 @@
   <input id="variant_id" type="hidden" name="id" value="{{ variant.id }}">
 
   <fieldset class="my-6 flex gap-4">
-    {% render 'quantity-selector', min: 1, name: 'quantity', value: 1, id: 'product' %}
+    {% render 'quantity-selector', min: 1, name: 'quantity', value: 1, id: 'product', attr: 'hx-preserve' %}
 
     <button
       data-loading-aria-busy

@@ -123,12 +123,14 @@
                 >
                   <input type="hidden" name="id" value="{{ item.key }}">
 
+                  {% assign id = item.key | append: section.id %}
+
                   {% render 'quantity-selector',
                     min: 0,
                     name: 'quantity',
                     value: item.quantity,
                     on-change: '$el.form.requestSubmit()',
-                    id: item.key
+                    id: id
                   %}
                 </form>
 

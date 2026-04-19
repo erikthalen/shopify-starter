@@ -1,13 +1,17 @@
 <div class="flex justify-center">
   <form
+    x-data
     action="{{ routes.search_url }}"
     hx-get="{{ routes.search_url }}"
     hx-select="#search_results"
     hx-target="#search_results"
     hx-swap="outerHTML"
     hx-replace-url="true"
+    hx-sync="this:replace"
     class="m-4 mb-6 flex w-full max-w-md items-center gap-2"
     data-loading-states
+    data-loading-target="#search_input"
+    data-loading-aria-busy
   >
     <label class="w-full py-2">
       <span data-prefix>
@@ -20,6 +24,7 @@
         placeholder="Search products and pages"
         autofocus
         name="q"
+        @input.debounced="$root.requestSubmit()"
       >
 
       <button data-suffix class="button">Search</button>
@@ -85,21 +90,71 @@
           </h1>
 
           <div class="grid justify-items-end">
-            <p class="mb-2 text-neutral-500">Sort by:</p>
+            {%- assign current_sort_label = 'Sort by' -%}
             {%- for option in search.sort_options -%}
-              <a
-                hx-get="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
-                hx-target="#search_results"
-                hx-select="#search_results"
-                hx-swap="outerHTML"
-                hx-replace-url="true"
-                class="mb-1 border-b border-dotted"
-                href="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
-                data-loading-states
-              >
-                {{- option.name -}}
-              </a>
+              {%- if search.sort_by == option.value -%}
+                {%- assign current_sort_label = option.name -%}
+              {%- endif -%}
             {%- endfor -%}
+
+            <label
+              class="field text-right"
+              data-loading-states
+              data-loading-aria-busy
+              data-loading-target="#search_sort_by_button"
+            >
+              <span>Sort by:</span>
+
+              <button id="search_sort_by_button" popovertarget="sort_by_select">
+                <span>{{ current_sort_label }}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M6 9l6 6l6 -6" />
+                </svg>
+              </button>
+
+              <div
+                id="sort_by_select"
+                popover
+                onchange="
+                  document.querySelector(`[popovertarget=${this.id}] span`).textContent =
+                    event.target.closest('label').textContent.trim();
+                  this.hidePopover();
+                "
+              >
+                <menu>
+                  {%- for option in search.sort_options -%}
+                    <li>
+                      <label>
+                        <input
+                          type="radio"
+                          name="sort_by"
+                          value="{{ option.value }}"
+                          hx-get="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
+                          hx-target="#search_results"
+                          hx-select="#search_results"
+                          hx-swap="outerHTML"
+                          hx-replace-url="true"
+                          {% if search.sort_by == option.value %}
+                            checked
+                          {% endif %}
+                        >
+                        {{- option.name -}}
+                      </label>
+                    </li>
+                  {%- endfor -%}
+                </menu>
+              </div>
+            </label>
           </div>
         </div>
 

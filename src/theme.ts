@@ -46,9 +46,11 @@ swup.hooks.on("visit:start", () => {
 document.addEventListener("htmx:after-swap", ((
   e: CustomEvent<HtmxResponseInfo>
 ) => {
+  console.log('e.detail.target', e.detail)
+
   swupPreloadChildren({
     swup,
-    container: e.detail.elt,
+    container: e.detail.elt as HTMLElement,
     exclude: "/cart",
     strategy: "init",
   })
