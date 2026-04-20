@@ -2,7 +2,7 @@
 
 /* https://erikthalen.github.io/jazz/ */
 /* maybe remove this when getting started */
-@import "https://esm.sh/gh/erikthalen/jazz@v0.1.0-beta.41/jazz.css";
+@import "./jazz.css";
 
 @import "tailwindcss";
 @source "../";
