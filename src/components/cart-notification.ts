@@ -1,4 +1,4 @@
-import { defineComponent } from "~/utils/define"
+import { defineComponent } from "../utils/define"
 
 export default defineComponent(() => ({
   notificationContent: null as Promise<Element | null> | null,

@@ -1,34 +1,17 @@
 <!doctype html>
+{% # theme-check-disable-next-line ValidScopedCSSClass %}
 <html lang="{{ shop.locale.iso_code }}" class="no-js">
   <head>
-    {% render 'meta-tags' %}
+    {% render 'head' %}
 
     {{ settings.custom_head }}
 
-    {% assign default_favicon = 'favicon.png' | asset_img_url %}
-    {% assign dark_favicon = settings.favicon_dark | image_url: width: 64, crop: false %}
-    {% assign light_favicon = settings.favicon_light | image_url: width: 64, crop: false %}
+    {% render 'favicon' %}
 
-    {% # theme-check-disable-next-line RemoteAsset %}
-    <link
-      rel="icon"
-      type="image/png"
-      media="(prefers-color-scheme: light)"
-      href="{{ dark_favicon | default: default_favicon }}"
-    >
+    {% render 'fonts' %}
 
-    {% # theme-check-disable-next-line RemoteAsset %}
-    <link
-      rel="icon"
-      type="image/png"
-      media="(prefers-color-scheme: dark)"
-      href="{{ light_favicon | default: default_favicon }}"
-    >
-
-    {%- liquid
-      render 'vite' with 'theme.css', preload_stylesheet: true
-      render 'vite' with 'theme.ts'
-    -%}
+    <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}">
+    <script src="{{ 'theme.js' | asset_url }}" type="module" crossorigin="anonymous"></script>
 
     <script>
       document.documentElement.classList.remove('no-js')

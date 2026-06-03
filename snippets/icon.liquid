@@ -1,0 +1,16 @@
+{% doc %}
+  @param {'magnifier' | 'cross'} name - The icon to render
+{% enddoc %}
+
+{% case name %}
+  {% when 'magnifier' %}
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+      <path vector-effect="non-scaling-stroke" d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+      <path vector-effect="non-scaling-stroke" d="M21 21l-6 -6" />
+    </svg>
+  {% when 'cross' %}
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+      <path vector-effect="non-scaling-stroke" d="M18 6l-12 12" />
+      <path vector-effect="non-scaling-stroke" d="M6 6l12 12" />
+    </svg>
+{% endcase %}

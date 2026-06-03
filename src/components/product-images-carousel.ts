@@ -1,4 +1,4 @@
-import { defineComponent } from "~/utils/define"
+import { defineComponent } from "../utils/define"
 import EmblaCarousel, { type EmblaCarouselType } from "embla-carousel"
 
 export default defineComponent(initSlide => ({

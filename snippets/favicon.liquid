@@ -1,0 +1,19 @@
+{% assign default_favicon = 'favicon.png' | asset_img_url %}
+{% assign dark_favicon = settings.favicon_dark | image_url: width: 64, crop: false %}
+{% assign light_favicon = settings.favicon_light | image_url: width: 64, crop: false %}
+
+{% # theme-check-disable-next-line RemoteAsset %}
+<link
+  rel="icon"
+  type="image/png"
+  media="(prefers-color-scheme: light)"
+  href="{{ dark_favicon | default: default_favicon }}"
+>
+
+{% # theme-check-disable-next-line RemoteAsset %}
+<link
+  rel="icon"
+  type="image/png"
+  media="(prefers-color-scheme: dark)"
+  href="{{ light_favicon | default: default_favicon }}"
+>

@@ -3,14 +3,10 @@
   "exclude": ["assets", "node_modules"],
   "compilerOptions": {
     "strict": true,
+    "noEmit": true,
     "lib": ["esnext", "dom", "dom.iterable"],
     "module": "es2022",
     "target": "es2022",
-    "moduleResolution": "bundler",
-    "paths": {
-      "~/*": ["./src/*"]
-    },
-    "types": ["vite/client"],
-    "allowSyntheticDefaultImports": true
+    "moduleResolution": "bundler"
   }
 }

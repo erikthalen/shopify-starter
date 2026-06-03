@@ -1,5 +1,3 @@
-import "vite/modulepreload-polyfill"
-
 import alpine from "./alpine"
 import htmx from "htmx.org"
 import type { HtmxResponseInfo } from "htmx.org"
