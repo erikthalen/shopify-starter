@@ -34,7 +34,7 @@ jobs:
         run: pnpm install
 
       - name: Build source directory
-        run: pnpm run vite:build
+        run: pnpm run build
 
       - name: Remove node_modules folder
         run: rm -r node_modules
