@@ -1,5 +1,5 @@
-<section class="empty mt-[15vh]">
-  <img class="size-8" src="{{ 'shopify-logo.webp' | asset_url }}" width="100" height="100">
+<section class="empty welcome">
+  <img class="welcome__logo" src="{{ 'shopify-logo.webp' | asset_url }}" width="100" height="100">
 
   <h1>Shopify starter</h1>
 
@@ -23,6 +23,17 @@
     GitHub
   </a>
 </section>
+
+{% stylesheet %}
+  .welcome {
+    margin-top: 15vh;
+  }
+
+  .welcome__logo {
+    width: 2rem;
+    height: 2rem;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

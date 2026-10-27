@@ -95,13 +95,12 @@
 
 {%- if image == blank -%}
   <div style="aspect-ratio: {{ aspect_ratio }}">
-    {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg size-full' }}
+    {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg image__placeholder' }}
   </div>
 {%- else -%}
-  <picture class="contents">
+  <picture class="image__picture">
     {%- if image_mobile != blank -%}
       <source
-        class="hidden"
         srcset="
           {%- for width in widths -%}
             {%- assign width_int = width | times: 1 -%}
@@ -157,7 +156,6 @@
     {%- endif -%}
 
     <source
-      class="hidden"
       srcset="
         {%- for width in widths -%}
           {%- assign width_int = width | times: 1 -%}
@@ -215,7 +213,7 @@
     >
 
     <img
-      class="image object-cover {{ class }}"
+      class="image {{ class }}"
       {% if style != blank %}
         style="{{ style }}"
       {% endif %}
@@ -237,13 +235,24 @@
 {%- comment -%} ── 6. STYLES ─────────────────────────────────────────────── {%- endcomment -%}
 
 {% stylesheet %}
-  html:not(.no-js) {
-    .image {
+  .image {
+    object-fit: cover;
+
+    html:not(.no-js) & {
       /* opacity: 0; */
 
       &.show {
         opacity: 1;
       }
     }
+  }
+
+  .image__picture {
+    display: contents;
+  }
+
+  .image__placeholder {
+    width: 100%;
+    height: 100%;
   }
 {% endstylesheet %}

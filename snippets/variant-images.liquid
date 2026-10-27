@@ -10,10 +10,10 @@
   {% render 'variant-images' %}
 {% enddoc %}
 
-<section id="variant_images">
-  <ul class="flex gap-4">
+<section id="variant_images" class="variant-images">
+  <ul>
     {%- for option_value in product.options_with_values[0].values -%}
-      <li class="w-full">
+      <li>
         {% assign variants = product.variants %}
 
         {% comment %} get url to each variant in option1, given what's selected of the other options {% endcomment %}
@@ -31,7 +31,6 @@
             x-data="swapLink"
             data-swap-ids="main_product"
             data-no-swup
-            class="{% if option_value.selected %}outline outline-gray-600{% endif %} flex"
             href="{{ product.url }}?variant={{ variants.first.id }}"
             aria-label="Go to {{ product.title }} {{ variants.first.title }}"
             {% if option_value.selected %}
@@ -45,3 +44,24 @@
     {%- endfor -%}
   </ul>
 </section>
+
+{% stylesheet %}
+  .variant-images {
+    & > ul {
+      display: flex;
+      gap: 1rem;
+    }
+
+    & li {
+      width: 100%;
+    }
+
+    & a {
+      display: flex;
+
+      &[aria-current] {
+        outline: 1px solid oklch(44.6% 0.03 256.802);
+      }
+    }
+  }
+{% endstylesheet %}

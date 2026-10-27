@@ -121,11 +121,11 @@ description: AlpineJS best practices and patterns. Use when writing HTML with Al
 
 ### ✅ GOOD: Reusable Component with Alpine.data()
 
-Components registered with `Alpine.data()` must be extracted to their own file in `src/components/` and use `defineComponent` from `~/utils/define`. This gives type-safe access to Alpine magic properties like `$root`, `$refs`, `$dispatch`, etc. without TypeScript errors.
+Components registered with `Alpine.data()` must be extracted to their own file in `src/components/` and use `defineComponent` from `../utils/define`. This gives type-safe access to Alpine magic properties like `$root`, `$refs`, `$dispatch`, etc. without TypeScript errors.
 
 ```ts
 // src/components/dropdown.ts
-import { defineComponent } from "~/utils/define"
+import { defineComponent } from "../utils/define"
 
 export default defineComponent(() => ({
   open: false,

@@ -1,4 +1,4 @@
-<div class="flex justify-center">
+<div class="main-search">
   <form
     x-data
     action="{{ routes.search_url }}"
@@ -8,12 +8,12 @@
     hx-swap="outerHTML"
     hx-replace-url="true"
     hx-sync="this:replace"
-    class="m-4 mb-6 flex w-full max-w-md items-center gap-2"
+    class="main-search__form"
     data-loading-states
     data-loading-target="#search_input"
     data-loading-aria-busy
   >
-    <label class="w-full py-2">
+    <label>
       <span data-prefix>
         {% render 'icon-magnifier' %}
       </span>
@@ -39,7 +39,6 @@
 {% unless search.performed %}
   <section id="search_results" class="empty">
     <svg
-      class="size-10"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -59,11 +58,10 @@
   </section>
 
 {% else %}
-  <section id="search_results" class="p-4">
+  <section id="search_results" class="main-search-results">
     {% if search.results_count == 0 %}
       <div class="empty">
         <svg
-          class="size-10"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -83,13 +81,13 @@
       </div>
     {% else %}
       {% paginate search.results by 24 %}
-        <div class="mb-2 flex justify-between">
+        <div class="main-search-results__header">
           <h1>
             Results for: "{{ search.terms }}"
-            <span class="text-neutral-500">({{ search.results_count }})</span>
+            <span class="main-search-results__count">({{ search.results_count }})</span>
           </h1>
 
-          <div class="grid justify-items-end">
+          <div class="main-search-results__sort">
             {%- assign current_sort_label = 'Sort by' -%}
             {%- for option in search.sort_options -%}
               {%- if search.sort_by == option.value -%}
@@ -98,7 +96,7 @@
             {%- endfor -%}
 
             <label
-              class="field text-right"
+              class="field"
               data-loading-states
               data-loading-aria-busy
               data-loading-target="#search_sort_by_button"
@@ -160,7 +158,7 @@
 
         {% comment %} {% content_for 'block', type: '_search-filter', id: 'search-filter' %} {% endcomment %}
 
-        <ol id="paginated_items" class="grid gap-4 md:grid-cols-4">
+        <ol id="paginated_items" class="main-search-results__grid">
           {%- for item in search.results -%}
             <li>
               {%- case item.object_type -%}
@@ -186,6 +184,59 @@
     {% endif %}
   </section>
 {% endunless %}
+
+{% stylesheet %}
+  .main-search {
+    display: flex;
+    justify-content: center;
+  }
+
+  .main-search__form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 28rem;
+    margin: 1rem 1rem 1.5rem;
+
+    & label {
+      width: 100%;
+      padding-block: 0.5rem;
+    }
+  }
+
+  .main-search-results {
+    padding: 1rem;
+  }
+
+  .main-search-results__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .main-search-results__count {
+    color: oklch(55.6% 0 0);
+  }
+
+  .main-search-results__sort {
+    display: grid;
+    justify-items: end;
+
+    & > .field {
+      text-align: right;
+    }
+  }
+
+  .main-search-results__grid {
+    display: grid;
+    gap: 1rem;
+
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

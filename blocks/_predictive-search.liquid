@@ -20,21 +20,21 @@
   scroll-lock
   id="predictive_search"
   closedby="any"
-  class="top-4 right-4 bottom-auto left-4 max-h-(--vvh) w-[calc(100%-2rem)] max-w-none overflow-auto overscroll-contain"
+  class="predictive-search"
   style="view-transition-name: predictive-search"
 >
-  <article class="relative z-2 w-full justify-center px-4">
+  <article>
     <div
       x-data="{ q: '' }"
       data-loading-states
       data-loading-target="#predictive_search_input"
       data-loading-aria-busy
-      class="mx-auto grid w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40"
+      class="predictive-search__content"
     >
-      <div class="sticky top-0 mb-6 flex items-center gap-2 pt-5 md:pt-30">
+      <div class="predictive-search__bar">
         {% comment %} Used as input to the (hidden) predictive search below {% endcomment %}
         <form
-          class="contents"
+          class="predictive-search__form"
           @submit="document.getElementById('predictive_search')?.close()"
           action="{{ routes.search_url }}"
         >
@@ -42,7 +42,7 @@
           <input type="hidden" name="options[unavailable_products]" value="hide">
           <input type="hidden" name="options[prefix]" value="last">
 
-          <label class="w-full">
+          <label>
             <span data-prefix>
               {% render 'icon-magnifier' %}
             </span>
@@ -85,15 +85,70 @@
       </form>
 
       <div x-show="q !== ''" x-ref="predictiveSearchResults">
-        <output id="predictive-search-results" class="bg-white pb-4"> </output>
+        <output id="predictive-search-results"> </output>
       </div>
     </div>
   </article>
 </dialog>
 
 {% stylesheet %}
-  dialog#predictive_search:not(:has(output:first-child)) {
-    touch-action: none;
+  .predictive-search {
+    inset: 1rem 1rem auto;
+    width: calc(100% - 2rem);
+    max-width: none;
+    max-height: var(--vvh);
+    overflow: auto;
+    overscroll-behavior: contain;
+
+    &:not(:has(output:first-child)) {
+      touch-action: none;
+    }
+
+    & > article {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding-inline: 1rem;
+    }
+
+    & output {
+      padding-bottom: 1rem;
+      background-color: white;
+    }
+  }
+
+  .predictive-search__content {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    max-width: 48rem;
+    margin-inline: auto;
+
+    @media (width >= 48rem) {
+      padding-bottom: 10rem;
+    }
+  }
+
+  .predictive-search__bar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding-top: 1.25rem;
+
+    @media (width >= 48rem) {
+      padding-top: 7.5rem;
+    }
+  }
+
+  .predictive-search__form {
+    display: contents;
+
+    & label {
+      width: 100%;
+    }
   }
 {% endstylesheet %}
 

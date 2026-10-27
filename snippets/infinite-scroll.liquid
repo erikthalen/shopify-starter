@@ -18,7 +18,7 @@
   {% endpaginate %}
 {% enddoc %}
 
-<div id="pagination" class="contents">
+<div id="pagination" class="infinite-scroll">
   {%- if paginate.next -%}
     {% comment %} Loading skeletons {% endcomment %}
     {% for i in (1..3) %}
@@ -42,3 +42,9 @@
     <a class="sr-only" href="{{ paginate.next.url }}">Next page</a>
   {%- endif -%}
 </div>
+
+{% stylesheet %}
+  .infinite-scroll {
+    display: contents;
+  }
+{% endstylesheet %}

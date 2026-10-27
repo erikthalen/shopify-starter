@@ -2,13 +2,13 @@
   {%- if predictive_search.resources.products.size > 0 -%}
     <span>
       Results for: "{{ predictive_search.terms }}"
-      <span class="text-neutral-500">({{ predictive_search.resources.products.size }})</span>
+      <span class="predictive-search-results__count">({{ predictive_search.resources.products.size }})</span>
     </span>
 
-    <ul class="grid gap-x-4 lg:grid-cols-2">
+    <ul class="predictive-search-results__list">
       {%- for product in predictive_search.resources.products -%}
         <li>
-          <a href="{{ product.url }}" class="flex gap-4 border-b border-gray-300 py-4">
+          <a href="{{ product.url }}" class="predictive-search-results__item">
             {%- if product.selected_or_first_available_variant.featured_image != blank -%}
               {%- assign image = product.selected_or_first_available_variant.featured_image -%}
             {%- else -%}
@@ -17,22 +17,22 @@
 
             {% render 'image',
               image: image,
-              class: 'w-20 rounded overflow-clip self-start',
+              class: 'predictive-search-results__image',
               loading: 'eager',
               sizes: '100px, 100px'
             %}
 
-            <div class="flex flex-col">
+            <div class="predictive-search-results__details">
               <span>{{ product.title }}</span>
 
-              <dl class="mt-1 grid grid-cols-[auto_1fr] gap-x-2">
+              <dl>
                 {%- for option in product.options_with_values -%}
                   <dt>{{ option.name }}:</dt>
                   <dd>{{ option.selected_value }}</dd>
                 {%- endfor -%}
               </dl>
 
-              <span class="mt-auto pt-2">{{ product.price | money }}</span>
+              <span class="predictive-search-results__price">{{ product.price | money }}</span>
             </div>
           </a>
         </li>
@@ -41,7 +41,6 @@
   {% else %}
     <div class="empty">
       <svg
-        class="size-10"
         xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"
@@ -61,3 +60,49 @@
     </div>
   {%- endif -%}
 </section>
+
+{% stylesheet %}
+  .predictive-search-results__count {
+    color: oklch(55.6% 0 0);
+  }
+
+  .predictive-search-results__list {
+    display: grid;
+    column-gap: 1rem;
+
+    @media (width >= 64rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .predictive-search-results__item {
+    display: flex;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid oklch(87.2% 0.01 258.338);
+  }
+
+  .predictive-search-results__image {
+    align-self: start;
+    width: 5rem;
+    border-radius: 0.25rem;
+    overflow: clip;
+  }
+
+  .predictive-search-results__details {
+    display: flex;
+    flex-direction: column;
+
+    & dl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+  }
+
+  .predictive-search-results__price {
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+{% endstylesheet %}

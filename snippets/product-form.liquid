@@ -9,7 +9,7 @@
 
 {% form 'product',
   product,
-  class: 'w-full my-4',
+  class: 'product-form',
   hx-post: routes.cart_add_url,
   hx-select: '#cart_drawer_content',
   hx-target: '#cart_drawer_content',
@@ -20,12 +20,11 @@
 %}
   <input id="variant_id" type="hidden" name="id" value="{{ variant.id }}">
 
-  <fieldset class="my-6 flex gap-4">
+  <fieldset>
     {% render 'quantity-selector', min: 1, name: 'quantity', value: 1, id: 'product', attr: 'hx-preserve' %}
 
     <button
       data-loading-aria-busy
-      class="w-full"
       type="submit"
       name="add"
       {% unless variant.available %}
@@ -40,7 +39,28 @@
     </button>
   </fieldset>
 
-  <div id="shopify_payment_button" class="text-gray-600">
+  <div id="shopify_payment_button">
     {{ form | payment_button }}
   </div>
 {% endform %}
+
+{% stylesheet %}
+  .product-form {
+    width: 100%;
+    margin-block: 1rem;
+
+    & > fieldset {
+      display: flex;
+      gap: 1rem;
+      margin-block: 1.5rem;
+
+      & > button {
+        width: 100%;
+      }
+    }
+
+    & #shopify_payment_button {
+      color: oklch(44.6% 0.03 256.802);
+    }
+  }
+{% endstylesheet %}

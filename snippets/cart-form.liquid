@@ -1,7 +1,6 @@
 {%- if cart == empty -%}
-  <div id="cart_form" class="empty mt-0">
+  <div id="cart_form" class="empty cart-form-empty">
     <svg
-      class="size-10"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -20,23 +19,23 @@
     <a href="{{ routes.collections_url }}" class="button"> Go to shop </a>
   </div>
 {%- else -%}
-  <div class="flex flex-col">
+  <div class="cart-form">
     <ul>
       {%- for item in cart.items -%}
         <li
           style="view-transition-name: cart-item-{{section.id | handleize}}-{{ item.key | handleize }}"
-          class="flex items-start gap-2 overflow-clip border-(--jazz-neutral-200) pb-4 not-last-of-type:mb-4 not-last-of-type:border-b"
+          class="cart-form__item"
         >
           {%- if item.image -%}
-            {% render 'image', image: item.image, class: 'w-30 rounded overflow-hidden', sizes: '100px, 100px' %}
+            {% render 'image', image: item.image, class: 'cart-form__image', sizes: '100px, 100px' %}
           {%- endif -%}
 
-          <div class="flex w-full flex-col">
-            <div class="mb-1 flex justify-between">
+          <div class="cart-form__details">
+            <div class="cart-form__heading">
               <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
 
               <div
-                class="flex items-center gap-2 text-right"
+                class="cart-form__price"
                 id="cart_item_price_{{ item.key | handleize }}"
               >
                 {% comment %} per item price {% endcomment %}
@@ -75,10 +74,10 @@
               </div>
             </div>
 
-            <dl class="inline-grid w-fit grid-cols-[auto_1fr] gap-x-2">
+            <dl class="cart-form__options">
               {%- if item.product.has_only_default_variant == false -%}
                 {%- for option in item.options_with_values -%}
-                  <dt class="text-gray-400">{{ option.name }}:</dt>
+                  <dt class="cart-form__option-name">{{ option.name }}:</dt>
                   <dd>{{ option.value }}</dd>
                 {%- endfor -%}
               {%- endif -%}
@@ -106,12 +105,11 @@
               {{ discount.discount_application.title }}
             {%- endfor -%}
 
-            <div class="mt-auto">
-              <div class="mt-3 flex items-end justify-between gap-4">
+            <div class="cart-form__actions">
+              <div>
                 <form
                   method="post"
                   action="{{ routes.cart_change_url }}"
-                  class="contents"
                   hx-post="{{ routes.cart_change_url }}"
                   hx-select="#cart_drawer_content"
                   hx-target="#cart_drawer_content"
@@ -144,7 +142,7 @@
                   data-no-swup
                   data-loading-states
                   data-loading-aria-busy
-                  class="button link -mr-2"
+                  class="button link"
                   href="{{ item.url_to_remove }}"
                 >
                   Remove
@@ -156,16 +154,118 @@
       {%- endfor -%}
     </ul>
 
-    <div class="mt-auto grid w-full border-t border-(--jazz-neutral-200) bg-(--jazz-background-color) pt-4">
-      <p class="text-right">Total: {{ cart.total_price | money_with_currency }}</p>
+    <div class="cart-form__summary">
+      <p>Total: {{ cart.total_price | money_with_currency }}</p>
 
       {% form 'cart', cart %}
-        <button class="mt-4 w-full" type="submit" name="checkout">Checkout</button>
+        <button type="submit" name="checkout">Checkout</button>
       {% endform %}
     </div>
   </div>
 
-  <footer class="justify-center">
+  <footer class="cart-form-footer">
     <a href="{{ routes.cart_url }}" class="button ghost"> Go to cart </a>
   </footer>
 {%- endif -%}
+
+{% stylesheet %}
+  .cart-form-empty {
+    margin-top: 0;
+  }
+
+  .cart-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cart-form__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+    overflow: clip;
+
+    &:not(:last-of-type) {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--jazz-neutral-200);
+    }
+  }
+
+  .cart-form__image {
+    width: 7.5rem;
+    border-radius: 0.25rem;
+    overflow: hidden;
+  }
+
+  .cart-form__details {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .cart-form__heading {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+
+  .cart-form__price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: right;
+  }
+
+  .cart-form__options {
+    display: inline-grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.5rem;
+    width: fit-content;
+  }
+
+  .cart-form__option-name {
+    color: oklch(70.7% 0.022 261.325);
+  }
+
+  .cart-form__actions {
+    margin-top: auto;
+
+    & > div {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+
+    & form {
+      display: contents;
+    }
+
+    & .link {
+      margin-right: -0.5rem;
+    }
+  }
+
+  .cart-form__summary {
+    display: grid;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--jazz-neutral-200);
+    background-color: var(--jazz-background-color);
+
+    & > p {
+      text-align: right;
+    }
+
+    & button {
+      width: 100%;
+      margin-top: 1rem;
+    }
+  }
+
+  .cart-form-footer {
+    justify-content: center;
+  }
+{% endstylesheet %}

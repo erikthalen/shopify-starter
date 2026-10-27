@@ -1,5 +1,5 @@
 ---
-name: Shopify Liquid Fundamentals
+name: shopify-liquid-fundamentals
 description: Core Shopify Liquid templating best practices for performance, maintainability, and clean code
 ---
 

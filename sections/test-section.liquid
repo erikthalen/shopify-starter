@@ -1,8 +1,8 @@
-<div class="mt-4 px-4" style="{% render 'color-scheme' %}">
+<div class="test-section" style="{% render 'color-scheme' %}">
   <p>{{ section.settings.text }}</p>
 
-  <div class="text-(--scheme-primary)">Primary color</div>
-  <div class="text-(--scheme-secondary)">Secondary color</div>
+  <div class="test-section__primary">Primary color</div>
+  <div class="test-section__secondary">Secondary color</div>
 
   {% render 'image',
     loading: 'eager',
@@ -15,6 +15,21 @@
 
   {% render 'video', video: section.settings.video, aspect_ratio_sm: '3/4', aspect_ratio_md: '16/9' %}
 </div>
+
+{% stylesheet %}
+  .test-section {
+    margin-top: 1rem;
+    padding-inline: 1rem;
+  }
+
+  .test-section__primary {
+    color: var(--scheme-primary);
+  }
+
+  .test-section__secondary {
+    color: var(--scheme-secondary);
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

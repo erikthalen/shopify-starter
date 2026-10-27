@@ -5,7 +5,7 @@
     id="announcement_bar"
     role="region"
     aria-label="Announcement"
-    class="relative z-10 flex h-(--announcement-bar-height) items-center justify-center bg-(--jazz-neutral-100) px-4"
+    class="announcement-bar"
     style="view-transition-name: announcement-bar"
   >
     {{ section.settings.text }}
@@ -14,7 +14,7 @@
       <div
         x-intersect="shown = true"
         x-intersect:leave="shown = false"
-        class="opacity pointer-events-none absolute top-0 right-0 left-0 h-(--announcement-bar-height)"
+        class="announcement-bar__sentinel"
       ></div>
     </template>
   </div>
@@ -23,10 +23,28 @@
 {% stylesheet %}
   body {
     --announcement-bar-height: 0rem;
+
+    &:has(#announcement_bar) {
+      --announcement-bar-height: 2.5rem;
+    }
   }
 
-  body:has(#announcement_bar) {
-    --announcement-bar-height: 2.5rem;
+  .announcement-bar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--announcement-bar-height);
+    padding-inline: 1rem;
+    background-color: var(--jazz-neutral-100);
+  }
+
+  .announcement-bar__sentinel {
+    position: absolute;
+    inset: 0 0 auto;
+    height: var(--announcement-bar-height);
+    pointer-events: none;
   }
 {% endstylesheet %}
 

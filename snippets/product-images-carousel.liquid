@@ -3,8 +3,8 @@
   {% assign init_slide = first_option.values | find_index: 'name', first_option.selected_value %}
 
   <div x-data="productImagesCarousel({{ init_slide }})" class="embla" role="region">
-    <div class="grid grid-cols-1 grid-rows-1 overflow-clip rounded-br">
-      <div x-ref="emblaViewport" class="embla__viewport col-start-1 row-start-1">
+    <div class="embla__stage">
+      <div x-ref="emblaViewport" class="embla__viewport">
         <div class="embla__container">
           {% for media in product.media %}
             <div class="embla__slide">
@@ -22,10 +22,10 @@
         </div>
       </div>
 
-      <div class="embla__controls pointer-events-none relative z-1 col-start-1 row-start-1 flex w-full justify-between self-center px-4 text-gray-600">
+      <div class="embla__controls">
         <button
           x-ref="emblaButtonPrev"
-          class="square ghost pointer-events-auto"
+          class="square ghost"
           type="button"
           aria-label="Previous slide"
           data-placement="right"
@@ -47,7 +47,7 @@
 
         <button
           x-ref="emblaButtonNext"
-          class="square ghost pointer-events-auto"
+          class="square ghost"
           type="button"
           aria-label="Next slide"
           data-placement="left"
@@ -74,7 +74,7 @@
         <div class="embla-thumbs__container">
           {% for media in product.media %}
             <button
-              class="ghost embla-thumbs__slide p-0"
+              class="ghost embla-thumbs__slide"
               aria-label="Go to slide {{ forloop.index }}"
             >
               {% if media.media_type == 'image' %}
@@ -99,7 +99,15 @@
     --thumb-size: 10%;
   }
 
+  .embla__stage {
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    border-bottom-right-radius: 0.25rem;
+    overflow: clip;
+  }
+
   .embla__viewport {
+    grid-area: 1 / 1;
     overflow: hidden;
   }
 
@@ -107,6 +115,23 @@
     display: flex;
     touch-action: pan-y pinch-zoom;
     margin-left: calc(var(--slide-spacing) * -1);
+  }
+
+  .embla__controls {
+    position: relative;
+    z-index: 1;
+    grid-area: 1 / 1;
+    align-self: center;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-inline: 1rem;
+    color: oklch(44.6% 0.03 256.802);
+    pointer-events: none;
+
+    & > button {
+      pointer-events: auto;
+    }
   }
 
   .embla__slide {
@@ -135,6 +160,7 @@
   .embla-thumbs__slide {
     flex: 0 0 var(--thumb-size);
     display: flex;
+    padding: 0;
 
     &:last-of-type {
       margin-right: var(--thumbs-slide-spacing);

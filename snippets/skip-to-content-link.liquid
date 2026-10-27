@@ -1,6 +1,27 @@
 <a
-  class="button pointer-events-none fixed! top-6 left-1/2 z-100 -translate-1/2 rounded-lg bg-white px-4 py-2 opacity-0 outline-2 outline-blue-500 focus:pointer-events-auto focus:opacity-100"
+  class="button skip-to-content-link"
   href="#main"
 >
   Skip to content
 </a>
+
+{% stylesheet %}
+  .skip-to-content-link {
+    position: fixed;
+    top: 1.5rem;
+    left: 50%;
+    z-index: 100;
+    translate: -50% -50%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: white;
+    outline: 2px solid oklch(62.3% 0.214 259.815);
+    opacity: 0;
+    pointer-events: none;
+
+    &:focus {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+{% endstylesheet %}

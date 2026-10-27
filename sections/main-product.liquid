@@ -1,20 +1,20 @@
-<section id="main_product" class="grid gap-4 md:grid-cols-2">
-  <div class="col-span-2 grid items-start justify-items-center gap-4 md:grid-cols-2">
-    <div class="w-full">
+<section id="main_product" class="main-product">
+  <div class="main-product__layout">
+    <div class="main-product__media">
       {% render 'product-images-carousel' %}
 
       {% comment %}
-        <div class="flex gap-4 pl-4 mt-4">
+        <div class="main-product__variant-images">
           {% render 'variant-images' %}
         </div>
       {% endcomment %}
     </div>
 
-    <div class="w-full p-5 max-md:px-4 md:w-sm lg:sticky lg:top-[20vh]">
+    <div class="main-product__info">
       <div id="product_info">
-        <h1 class="mb-1">{{ product.title }}</h1>
+        <h1>{{ product.title }}</h1>
 
-        <div class="mb-4" id="product_price">
+        <div id="product_price">
           {% render 'product-price', product: product %}
         </div>
       </div>
@@ -22,8 +22,8 @@
       {% render 'product-form', product: product %}
 
       {%- unless product.description == '<p></p>' -%}
-        <details id="product_description" class="mt-4">
-          <summary class="cursor-pointer py-4">Description</summary>
+        <details id="product_description">
+          <summary>Description</summary>
 
           <div>{{ product.description }}</div>
         </details>
@@ -31,6 +31,75 @@
     </div>
   </div>
 </section>
+
+{% stylesheet %}
+  .main-product {
+    display: grid;
+    gap: 1rem;
+
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .main-product__layout {
+    display: grid;
+    grid-column: span 2;
+    align-items: start;
+    justify-items: center;
+    gap: 1rem;
+
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .main-product__media {
+    width: 100%;
+  }
+
+  .main-product__variant-images {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-left: 1rem;
+  }
+
+  .main-product__info {
+    width: 100%;
+    padding: 1.25rem;
+
+    @media (width < 48rem) {
+      padding-inline: 1rem;
+    }
+
+    @media (width >= 48rem) {
+      width: 24rem;
+    }
+
+    @media (width >= 64rem) {
+      position: sticky;
+      top: 20vh;
+    }
+
+    & h1 {
+      margin-bottom: 0.25rem;
+    }
+
+    & #product_price {
+      margin-bottom: 1rem;
+    }
+
+    & details {
+      margin-top: 1rem;
+    }
+
+    & summary {
+      padding-block: 1rem;
+      cursor: pointer;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

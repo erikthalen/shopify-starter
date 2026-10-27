@@ -13,7 +13,7 @@
   x-data="{ active: {% if request.path == '{{ routes.cart_url }}' %}true{% else %}false{% endif %} }"
   @window:navigation.window="active = location.pathname === '{{ routes.cart_url }}'"
   onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_drawer')?.showModal()"
-  :class="active ? 'underline' : ''"
+  :aria-current="active ? 'page' : false"
   class="button ghost"
 >
   Cart
@@ -26,21 +26,18 @@
   scroll-lock
   id="cart_drawer"
   closedby="any"
-  class="top-4 right-4 bottom-4 left-auto h-(--vvh) w-full max-w-md overflow-auto overscroll-contain"
+  class="cart-drawer"
   style="view-transition-name: cart-drawer"
 >
-  <article
-    id="cart_drawer_content"
-    class="grid h-full grid-rows-[auto_1fr]"
-  >
-    <header class="sticky top-0 z-1 justify-between bg-(--jazz-background-color)">
+  <article id="cart_drawer_content">
+    <header>
       <p>
         Your cart (
         {{- cart.item_count -}}
         )
       </p>
 
-      <form method="dialog" class="contents">
+      <form method="dialog">
         <button aria-title="Close cart drawer" class="button ghost square">
           {% render 'icon-cross' %}
         </button>
@@ -50,6 +47,35 @@
     {% render 'cart-form' %}
   </article>
 </dialog>
+
+{% stylesheet %}
+  .cart-drawer {
+    inset: 1rem 1rem 1rem auto;
+    width: 100%;
+    max-width: 28rem;
+    height: var(--vvh);
+    overflow: auto;
+    overscroll-behavior: contain;
+
+    & > article {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100%;
+
+      & > header {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        justify-content: space-between;
+        background-color: var(--jazz-background-color);
+
+        & > form {
+          display: contents;
+        }
+      }
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

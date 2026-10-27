@@ -18,28 +18,26 @@
   scroll-lock
   id="mobile_menu"
   closedby="any"
-  class="fixed top-0 bottom-0 left-0 h-full max-h-(--vvh) w-screen max-w-none overflow-auto overscroll-contain bg-white"
+  class="mobile-menu"
 >
-  <div class="relative z-2 w-full justify-center">
-    <div
-      class="mx-auto grid w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40"
-    >
-      <header class="sticky top-0 z-1 mx-4 flex h-10 items-center justify-between border-b border-gray-300 bg-white">
+  <div class="mobile-menu__inner">
+    <div class="mobile-menu__content">
+      <header>
         <p>Menu</p>
 
-        <form method="dialog" class="contents">
-          <button aria-title="Close cart drawer" class="button size-5">
+        <form method="dialog">
+          <button aria-title="Close cart drawer" class="button">
             {% render 'icon-cross' %}
           </button>
         </form>
       </header>
 
-      <nav class="flex flex-col p-4">
+      <nav>
         <a
           href="{{ routes.collections_url }}"
           x-data="{ active: {% if request.path contains '{{ routes.collections_url }}' %}true{% else %}false{% endif %} }"
           @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
-          :class="active ? 'underline' : ''"
+          :aria-current="active ? 'page' : false"
           class="button"
         >
           Shop
@@ -50,51 +48,93 @@
 </dialog>
 
 {% stylesheet %}
-  dialog#mobile_menu[open] {
-    transform: translateX(0);
-  }
-
-  dialog#mobile_menu {
+  .mobile-menu {
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    max-height: var(--vvh);
+    overflow: auto;
+    overscroll-behavior: contain;
+    background-color: white;
     transform: translateX(-100%);
     transition: all 500ms var(--ease-in-out) allow-discrete;
 
-    @media (width >= 48rem) {
-      transform: translateX(-100%);
-    }
-  }
+    &[open] {
+      transform: translateX(0);
 
-  dialog#mobile_menu:not(:has(output:first-child)) {
-    touch-action: none;
-  }
-
-  @starting-style {
-    dialog#mobile_menu[open] {
-      transform: translateX(-100%);
-
-      @media (width >= 48rem) {
+      @starting-style {
         transform: translateX(-100%);
+      }
+    }
+
+    &:not(:has(output:first-child)) {
+      touch-action: none;
+    }
+
+    &::backdrop {
+      background-color: rgb(0 0 0 / 25%);
+      opacity: 0;
+      backdrop-filter: blur(2px);
+      transition: all 500ms var(--ease-in-out) allow-discrete;
+      touch-action: none;
+    }
+
+    &[open]::backdrop {
+      opacity: 1;
+
+      @starting-style {
+        opacity: 0;
       }
     }
   }
 
-  dialog#mobile_menu::backdrop {
-    background-color: rgb(0 0 0 / 25%);
-    opacity: 0;
-    backdrop-filter: blur(2px);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-
-    touch-action: none;
+  .mobile-menu__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
   }
 
-  dialog#mobile_menu[open]::backdrop {
-    opacity: 1;
-  }
+  .mobile-menu__content {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    max-width: 48rem;
+    margin-inline: auto;
 
-  @starting-style {
-    dialog#mobile_menu[open]::backdrop {
-      opacity: 0;
+    @media (width >= 48rem) {
+      padding-bottom: 10rem;
+    }
+
+    & > header {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 2.5rem;
+      margin-inline: 1rem;
+      border-bottom: 1px solid oklch(87.2% 0.01 258.338);
+      background-color: white;
+
+      & > form {
+        display: contents;
+      }
+
+      & button {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
+
+    & > nav {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
     }
   }
 {% endstylesheet %}

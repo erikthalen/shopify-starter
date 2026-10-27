@@ -1,6 +1,6 @@
 {
   "name": "shopify-starter",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "private": true,
   "author": {
     "name": "Erik Thalén",
@@ -19,11 +19,9 @@
   },
   "devDependencies": {
     "@shopify/prettier-plugin-liquid": "^1.5.2",
-    "@tailwindcss/vite": "4.2.2",
     "@types/alpinejs": "^3.13.11",
     "@types/alpinejs__intersect": "^3.13.4",
     "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.9",
     "vite": "^8.0.7",
     "vite-plugin-shopify": "4.1.2"
   },
@@ -37,8 +35,7 @@
     "htmx-ext-preload": "^2.1.2",
     "htmx.org": "^2.0.8",
     "idiomorph": "^0.7.4",
-    "swup": "4.8.3",
-    "tailwindcss": "4.2.2"
+    "swup": "4.8.3"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -47,8 +44,7 @@
     "singleQuote": false,
     "arrowParens": "avoid",
     "plugins": [
-      "@shopify/prettier-plugin-liquid",
-      "prettier-plugin-tailwindcss"
+      "@shopify/prettier-plugin-liquid"
     ]
   }
 }

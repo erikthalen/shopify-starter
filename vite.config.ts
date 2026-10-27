@@ -1,6 +1,5 @@
 import { defineConfig } from "vite"
 import shopify from "vite-plugin-shopify"
-import tailwindcss from "@tailwindcss/vite"
 
 export default defineConfig({
   plugins: [
@@ -9,7 +8,6 @@ export default defineConfig({
       entrypointsDir: "src",
       sourceCodeDir: "src",
     }),
-    tailwindcss(),
   ],
   publicDir: "public",
   build: {

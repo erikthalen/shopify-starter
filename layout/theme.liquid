@@ -37,14 +37,14 @@
     {{ content_for_header }}
   </head>
 
-  <body hx-ext="morph, loading-states, preload" class="grid min-h-screen grid-rows-[auto_1fr] overflow-x-clip">
+  <body hx-ext="morph, loading-states, preload">
     {% render 'skip-to-content-link' %}
 
     <section
       x-data="{ translated: false }"
       @announcement-bar:visible.window="value => translated = !value.detail"
-      class="sticky top-0 z-10 w-screen transition-transform"
-      :class="translated ? '-translate-y-(--announcement-bar-height)' : ''"
+      class="header-group"
+      :class="translated ? 'is-translated' : ''"
     >
       {% sections 'header-group' %}
     </section>
@@ -54,9 +54,9 @@
     <main
       id="swup"
       role="main"
-      class="grid min-h-[calc(100vh-var(--header-height)-var(--announcement-bar-height))] grid-rows-[1fr_auto]"
+      class="site-main"
     >
-      <div id="content" class="contents">
+      <div id="content" class="site-content">
         <div>
           {{ content_for_layout }}
         </div>

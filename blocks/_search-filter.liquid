@@ -16,14 +16,14 @@
 {% endfor %}
 
 <button id="search_filter_button" class="button ghost" onclick="document.getElementById('search_filter_drawer')?.show()">
-  Filter <span class="text-(--jazz-neutral-500)">({{ active_values_amount }})</span>
+  Filter <span class="search-filter__count">({{ active_values_amount }})</span>
 </button>
 
 <dialog
   scroll-lock
   id="search_filter_drawer"
   closedby="any"
-  class="fixed top-[calc(var(--header-height)+var(--announcement-bar-height)+1rem)] right-4 bottom-auto left-4 z-9 max-h-(--vvh) w-[calc(100vw-2rem)] max-w-none overflow-auto overscroll-contain"
+  class="search-filter"
   style="view-transition-name: filter-drawer"
 >
   <form
@@ -38,7 +38,7 @@
     @change="$el.requestSubmit()"
     data-loading-states
   >
-    <div class="grid gap-4 p-4 md:grid-cols-4 md:pb-14">
+    <div class="search-filter__fields">
       {%- for filter in search.filters -%}
         <div class="field">
           <p>{{ filter.label }}</p>
@@ -117,7 +117,7 @@
                       {% endif %}
                     {% else %}
                       {{ filter_value.label }}
-                      <span class="text-(--jazz-neutral-400)">({{ filter_value.count }})</span>
+                      <span class="search-filter__value-count">({{ filter_value.count }})</span>
                     {% endif %}
                   </label>
                 </div>
@@ -183,7 +183,7 @@
         </div>
       {%- endfor -%}
 
-      <div class="flex gap-4 pt-2 pb-4">
+      <div class="search-filter__sort">
         {%- assign current_sort_label = 'Sort by' -%}
         {%- for option in search.sort_options -%}
           {%- if search.sort_by == option.value -%}
@@ -231,7 +231,7 @@
     </div>
   </form>
 
-  <div class="sticky bottom-0 flex justify-end gap-4 border-t border-(--jazz-neutral-200) p-4">
+  <div class="search-filter__actions">
     <a
       href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
       hx-get="{{ collection.url }}?sort_by={{ collection.sort_by }}"
@@ -245,20 +245,79 @@
     </a>
 
     <form method="dialog">
-      <button class="button border-b">Apply</button>
+      <button class="button">Apply</button>
     </form>
   </div>
 </dialog>
 
 {% comment %} backdrop {% endcomment %}
-<div
-  class="pointer-events-none fixed top-0 left-0 z-8 h-screen w-screen bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity"
-></div>
+<div class="search-filter__backdrop"></div>
 
 {% stylesheet %}
-  /* show backdrop */
-  dialog#search_filter_drawer[open] {
-    + div {
+  .search-filter__count {
+    color: var(--jazz-neutral-500);
+  }
+
+  .search-filter {
+    position: fixed;
+    inset: calc(var(--header-height) + var(--announcement-bar-height) + 1rem) 1rem auto;
+    z-index: 9;
+    width: calc(100vw - 2rem);
+    max-width: none;
+    max-height: var(--vvh);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .search-filter__fields {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding-bottom: 3.5rem;
+    }
+  }
+
+  .search-filter__value-count {
+    color: var(--jazz-neutral-400);
+  }
+
+  .search-filter__sort {
+    display: flex;
+    gap: 1rem;
+    padding-block: 0.5rem 1rem;
+  }
+
+  .search-filter__actions {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1rem;
+    border-top: 1px solid var(--jazz-neutral-200);
+
+    & button {
+      border-bottom: 1px solid currentcolor;
+    }
+  }
+
+  .search-filter__backdrop {
+    position: fixed;
+    inset: 0 auto auto 0;
+    z-index: 8;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(0 0 0 / 40%);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* show backdrop */
+    .search-filter[open] + & {
       opacity: 1;
       pointer-events: all;
     }

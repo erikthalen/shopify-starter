@@ -15,12 +15,12 @@
   {{ localization.language.iso_code }} / {{ localization.country.currency.symbol }}
 </button>
 
-<dialog id="localization_form" closedby="any">
+<dialog id="localization_form" class="localization-form" closedby="any">
   <article>
-    <header class="justify-between">
-      <h1 class="text-(--jazz-neutral-500)">Shop in your local currency</h1>
+    <header>
+      <h1>Shop in your local currency</h1>
 
-      <form method="dialog" class="contents">
+      <form method="dialog">
         <button aria-title="Close modal" class="button ghost square">
           {% render 'icon-cross' %}
         </button>
@@ -28,8 +28,8 @@
     </header>
 
     {% form 'localization', hx-boost: 'true', hx-target: 'body', hx-swap: 'morph:innerHTML' %}
-      <div class="mb-4 flex items-center gap-4">
-        <p class="text-(--jazz-neutral-400)">Language</p>
+      <div class="localization-form__row">
+        <p class="localization-form__label">Language</p>
 
         {% if localization.available_languages.size > 1 %}
           <select
@@ -50,18 +50,17 @@
             {% endfor %}
           </select>
         {% else %}
-          <p class="text-(--jazz-neutral-500)">{{ localization.language.name }}</p>
+          <p class="localization-form__value">{{ localization.language.name }}</p>
         {% endif %}
       </div>
 
-      <div class="flex items-center gap-4 border-t border-t-(--jazz-neutral-200) pt-4">
-        <p class="text-(--jazz-neutral-400)">Currency</p>
+      <div class="localization-form__row">
+        <p class="localization-form__label">Currency</p>
 
         {% if localization.available_countries.size > 1 %}
           {% assign printed_currencies = '' %}
 
           <select
-            class=""
             name="country_code"
             onchange="this.closest('dialog')?.close(); this.closest('form').requestSubmit()"
           >
@@ -83,7 +82,7 @@
             {% endfor %}
           </select>
         {% else %}
-          <p class="text-(--jazz-neutral-500)">
+          <p class="localization-form__value">
             {{ localization.country.currency.iso_code }}
             ({{ localization.country.currency.symbol }})
           </p>
@@ -101,6 +100,40 @@
     {% endform %}
   </article>
 </dialog>
+
+{% stylesheet %}
+  .localization-form > article > header {
+    justify-content: space-between;
+
+    & > h1 {
+      color: var(--jazz-neutral-500);
+    }
+
+    & > form {
+      display: contents;
+    }
+  }
+
+  .localization-form__row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    & + & {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--jazz-neutral-200);
+    }
+  }
+
+  .localization-form__label {
+    color: var(--jazz-neutral-400);
+  }
+
+  .localization-form__value {
+    color: var(--jazz-neutral-500);
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

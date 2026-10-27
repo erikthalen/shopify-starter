@@ -14,14 +14,14 @@
 {% enddoc %}
 
 {% unless product.has_only_default_variant %}
-  <section id="variant_picker" class="variant-picker grid gap-4">
+  <section id="variant_picker" class="variant-picker">
     {%- for option in product.options_with_values -%}
       <fieldset>
-        <legend class="mb-2">{{ option.name }}</legend>
+        <legend>{{ option.name }}</legend>
 
-        <ul class="flex gap-4">
+        <ul>
           {%- for option_value in option.values -%}
-            <li class="w-full">
+            <li>
               {% assign variants = product.variants %}
 
               {% comment %} get url to this option's variant, given what's selected of the other options {% endcomment %}
@@ -43,7 +43,7 @@
                 hx-select="#main_product"
                 hx-swap="morph:outerHTML"
                 hx-replace-url="true"
-                class="button w-full {% if option_value.selected %}bg-(--jazz-neutral-200) text-black{% else %} outlined {% endif %}"
+                class="button{% unless option_value.selected %} outlined{% endunless %}"
                 href="{{ product.url }}?variant={{ variants.first.id }}"
                 data-loading-states
                 {% if option_value.selected %}
@@ -62,3 +62,29 @@
     {%- endfor -%}
   </section>
 {% endunless %}
+
+{% stylesheet %}
+  .variant-picker {
+    display: grid;
+    gap: 1rem;
+
+    & legend {
+      margin-bottom: 0.5rem;
+    }
+
+    & ul {
+      display: flex;
+      gap: 1rem;
+    }
+
+    & li,
+    & a {
+      width: 100%;
+    }
+
+    & a[aria-current] {
+      background-color: var(--jazz-neutral-200);
+      color: black;
+    }
+  }
+{% endstylesheet %}
