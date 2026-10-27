@@ -1,0 +1,168 @@
+{% doc %}
+  @param {object} item - A cart item from {{ cart.items }}
+{% enddoc %}
+
+{% assign id = section.id | append: item.key | handleize %}
+
+<li
+  class="cart-item"
+  id="cart_item_{{ id }}"
+  style="--view-transition-name: cart-item-{{ id }}"
+>
+  {%- if item.image -%}
+    {% render 'image', image: item.image, sizes: '100px, 100px' %}
+  {%- endif -%}
+
+  <div class="cart-item-content">
+    <div class="cart-item-top">
+      <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
+
+      {% comment %} per item price {% endcomment %}
+      {% comment %}
+        {%- if item.original_price != item.final_price -%}
+          <p>
+            <s>{{ item.original_price | money -}}</s>
+          </p>
+          <p>{{ item.final_price | money -}}</p>
+        {%- else -%}
+          <p>{{ item.original_price | money }}</p>
+        {%- endif -%}
+      {% endcomment %}
+
+      {% comment %} multiple items price {% endcomment %}
+      <span>
+        {%- if item.original_line_price != item.final_line_price -%}
+          <p>
+            <s>{{ item.original_line_price | money }}</s>
+          </p>
+          <p>{{ item.final_line_price | money }}</p>
+        {%- else -%}
+          <p>{{ item.original_line_price | money }}</p>
+        {%- endif -%}
+
+        {%- if item.variant.available and item.unit_price_measurement -%}
+          {{ item.unit_price | money }}
+
+          {%- if item.unit_price_measurement.reference_value != 1 -%}
+            {{- item.unit_price_measurement.reference_value -}}
+          {%- endif -%}
+
+          {{ item.unit_price_measurement.reference_unit }}
+        {%- endif -%}
+      </span>
+    </div>
+
+    <dl>
+      {%- if item.product.has_only_default_variant == false -%}
+        {%- for option in item.options_with_values -%}
+          <dt class="cart-form__option-name">{{ option.name }}:</dt>
+          <dd>{{ option.value }}</dd>
+        {%- endfor -%}
+      {%- endif -%}
+    </dl>
+
+    {{ item.selling_plan_allocation.selling_plan.name }}
+
+    {%- for discount in item.line_level_discount_allocations -%}
+      {{ discount.discount_application.title }}
+    {%- endfor -%}
+
+    <div class="cart-item-actions">
+      <form
+        method="post"
+        action="{{ routes.cart_change_url }}"
+        hx-post="{{ routes.cart_change_url }}"
+        hx-select="#cart_drawer"
+        hx-target="#cart_drawer"
+        hx-swap="outerMorph transition:true"
+        hx-sync="this:replace"
+        hx-select-oob="#cart_section:outerHTML"
+        data-loading-states
+        data-loading-target="#cart_item_{{ id }}"
+        data-loading-aria-busy
+      >
+        <input type="hidden" name="id" value="{{ item.key }}">
+
+        {% render 'quantity-selector',
+          min: 0,
+          name: 'quantity',
+          value: item.quantity,
+          on-change: '$el.form.requestSubmit()',
+          id: id
+        %}
+      </form>
+
+      <a
+        hx-post="{{ item.url_to_remove }}"
+        hx-select="#cart_drawer"
+        hx-target="#cart_drawer"
+        hx-swap="outerMorph transition:true"
+        hx-select-oob="#cart_section:outerHTML"
+        data-loading-states
+        data-loading-aria-busy
+        class="button link"
+        href="{{ item.url_to_remove }}"
+      >
+        Remove
+      </a>
+    </div>
+  </div>
+</li>
+
+{% stylesheet %}
+  .cart-item {
+    isolation: isolate;
+    position: relative;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+
+    view-transition-name: var(--view-transition-name);
+
+    &:not(:last-of-type) {
+      border-bottom: 1px solid var(--ui-neutral-300);
+      padding-bottom: 0.5rem;
+    }
+
+    /* loading-spinner */
+    &:before {
+      position: absolute;
+      inset: calc(50% - 0.5lh);
+    }
+
+    img {
+      width: 7.5rem;
+      border-radius: 0.25rem;
+    }
+
+    .cart-item-content {
+      display: grid;
+      align-content: baseline;
+      gap: 0.5rem;
+    }
+
+    .cart-item-top {
+      display: flex;
+      justify-content: space-between;
+
+      a {
+        &:after {
+          content: '';
+          position: absolute;
+          inset: 0;
+        }
+      }
+    }
+
+    .cart-item-actions {
+      display: flex;
+      justify-content: space-between;
+
+      > * {
+        position: relative;
+        z-index: 1;
+      }
+    }
+  }
+{% endstylesheet %}

@@ -14,13 +14,12 @@ import "@videojs/html/background/skin"
 // the hx-alpine-compat extension reads Alpine from window
 window.Alpine = alpine
 
-htmx.config.transitions = true
+htmx.config.noSwap = [204, 304, "4xx", "5xx"] as unknown as number[]
 
 /**
- * Don't swap error responses (htmx 4 swaps everything except 204 and 304 by default).
- * The htmx types only allow numbers, but status patterns like "4xx" are supported.
+ * Keep the client-side [open] state of <dialog> and <details> when morphing
  */
-htmx.config.noSwap = [204, 304, "4xx", "5xx"] as unknown as number[]
+htmx.config.morphIgnore.push("open")
 
 loadingStates(htmx)
 

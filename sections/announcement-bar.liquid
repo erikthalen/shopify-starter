@@ -1,22 +1,10 @@
 {% if section.settings.text != blank %}
   <div
-    x-data="{ shown: false }"
-    x-init="$watch('shown', (value) => $dispatch('announcement-bar:visible', value))"
     id="announcement_bar"
     role="region"
-    aria-label="Announcement"
-    class="announcement-bar"
     style="view-transition-name: announcement-bar"
   >
     {{ section.settings.text }}
-
-    <template x-teleport="body">
-      <div
-        x-intersect="shown = true"
-        x-intersect:leave="shown = false"
-        class="announcement-bar__sentinel"
-      ></div>
-    </template>
   </div>
 {% endif %}
 
@@ -30,27 +18,21 @@
   }
 
   .announcement-bar {
-    position: relative;
-    z-index: 10;
+    position: sticky;
+    top: calc(var(--announcement-bar-height) * -1);
     display: flex;
     align-items: center;
     justify-content: center;
     height: var(--announcement-bar-height);
     padding-inline: 1rem;
-    background-color: var(--jazz-neutral-100);
-  }
-
-  .announcement-bar__sentinel {
-    position: absolute;
-    inset: 0 0 auto;
-    height: var(--announcement-bar-height);
-    pointer-events: none;
+    background-color: var(--ui-neutral-100);
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "Announcement bar",
+  "class": "announcement-bar",
   "enabled_on": {
     "groups": ["header"]
   },

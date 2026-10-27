@@ -1,17 +1,14 @@
-<div
-  class="site-header"
-  style="view-transition-name: site-header"
->
+<div>
   <nav>
     <a
       href="{{ routes.root_url }}"
-      x-data="{ active: {% if request.path == '{{ routes.root_url }}' %}true{% else %}false{% endif %} }"
-      @window:navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
-      :aria-current="active ? 'page' : false"
-      class="button ghost"
+      class="home-link button ghost square"
+      {% if request.path == routes.root_url %}
+        aria-current="page"
+      {% endif %}
     >
       {% if shop.brand.logo != blank %}
-        {% render 'image', image: shop.brand.logo, class: 'site-header__logo', alt: 'The logo' %}
+        {% render 'image', image: shop.brand.logo, alt: 'The logo', sizes: '40px, 40px' %}
       {% else %}
         Home
       {% endif %}
@@ -19,10 +16,10 @@
 
     <a
       href="{{ routes.collections_url }}"
-      x-data="{ active: {% if request.path contains '{{ routes.collections_url }}' %}true{% else %}false{% endif %} }"
-      @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
-      :aria-current="active ? 'page' : false"
       class="desktop-only button ghost"
+      {% if request.path contains routes.collections_url %}
+        aria-current="page"
+      {% endif %}
     >
       Shop
     </a>
@@ -43,45 +40,61 @@
   }
 
   .site-header {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
     width: 100%;
     height: var(--header-height);
-    padding-inline: 1rem;
-    border-bottom: 1px solid var(--jazz-neutral-300);
-    background-color: var(--jazz-background-color);
+    background-color: var(--ui-background-color);
 
-    & > nav {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    view-transition-name: site-header;
+
+    > div {
+      position: relative;
+      z-index: 2;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 0.75rem;
+      padding-inline: 1rem;
+      border-bottom: 1px solid var(--ui-neutral-300);
 
-      &:last-child {
-        margin-inline-start: auto;
-      }
-    }
-
-    @media (width >= 48rem) {
-      &,
       & > nav {
-        gap: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        &:last-child {
+          margin-inline-start: auto;
+        }
+      }
+
+      @media (width >= 48rem) {
+        &,
+        & > nav {
+          gap: 1rem;
+        }
       }
     }
-  }
 
-  .site-header__logo {
-    width: auto;
-    height: 1.5rem;
+    .home-link {
+      display: flex;
+      height: var(--header-height);
+
+      img {
+        aspect-ratio: 1;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "Header",
+  "class": "site-header",
   "tag": "header",
   "enabled_on": {
     "groups": ["header"]

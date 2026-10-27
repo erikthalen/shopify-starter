@@ -196,9 +196,7 @@
 
           <button id="search_sort_by_button" popovertarget="search_sort_by_select" type="button">
             <span>{{ current_sort_label }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 9l6 6l6 -6" />
-            </svg>
+            {% render 'icon', name: 'chevron-down' %}
           </button>
 
           <div
@@ -255,7 +253,7 @@
 
 {% stylesheet %}
   .search-filter__count {
-    color: var(--jazz-neutral-500);
+    color: var(--ui-neutral-500);
   }
 
   .search-filter {
@@ -281,7 +279,7 @@
   }
 
   .search-filter__value-count {
-    color: var(--jazz-neutral-400);
+    color: var(--ui-neutral-400);
   }
 
   .search-filter__sort {
@@ -297,7 +295,7 @@
     justify-content: flex-end;
     gap: 1rem;
     padding: 1rem;
-    border-top: 1px solid var(--jazz-neutral-200);
+    border-top: 1px solid var(--ui-neutral-200);
 
     & button {
       border-bottom: 1px solid currentcolor;

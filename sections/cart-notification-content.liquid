@@ -11,7 +11,7 @@
       data-placement="left"
       class="button ghost square"
     >
-      {% render 'icon-cross' %}
+      {% render 'icon', name: 'cross' %}
     </button>
   </header>
 
@@ -30,7 +30,7 @@
   <footer>
     <a
       href="{{ routes.cart_url }}"
-      onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_notification')?.close(); document.getElementById('cart_drawer')?.showModal()"
+      onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_notification')?.close(); document.getElementById('cart_drawer_dialog')?.showModal()"
       class="button link"
     >
       See cart
@@ -49,7 +49,7 @@
     }
 
     & > header > span {
-      color: var(--jazz-neutral-400);
+      color: var(--ui-neutral-400);
     }
   }
 

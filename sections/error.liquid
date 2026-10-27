@@ -1,7 +1,24 @@
-<h1 class="page-not-found">Page not found</h1>
+<section class="empty">
+  {% render 'icon', name: 'forbid' %}
+
+  <h1>Page not found</h1>
+  <p>The page you are looking for does not exist. It may have been moved or deleted.</p>
+
+  <footer>
+    <a href="{{ routes.root_url }}" class="button">Home page</a>
+    <a href="{{ routes.collections_url }}" class="button outlined">Browse products</a>
+  </footer>
+</section>
 
 {% stylesheet %}
-  .page-not-found {
-    padding: 1rem;
+  .error-section {
+    margin-block: 15vh;
   }
 {% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Error",
+  "class": "error-section"
+}
+{% endschema %}

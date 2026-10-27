@@ -101,6 +101,7 @@
   <picture class="image__picture">
     {%- if image_mobile != blank -%}
       <source
+        style="display: contents;"
         srcset="
           {%- for width in widths -%}
             {%- assign width_int = width | times: 1 -%}
@@ -156,6 +157,7 @@
     {%- endif -%}
 
     <source
+      style="display: contents;"
       srcset="
         {%- for width in widths -%}
           {%- assign width_int = width | times: 1 -%}

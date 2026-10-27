@@ -1,15 +1,15 @@
 @import "@erikt/ui";
 @import "@blossom-carousel/web/style.css";
 
-:root {
-  --font-sans: "DMMono", sans-serif;
+@view-transition {
+  navigation: auto;
 }
 
 * {
   font-size: 12px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  font-family: var(--font-sans);
+  font-family: "DMMono", sans-serif;
   font-weight: normal;
 }
 
@@ -21,6 +21,8 @@ html {
     calc(12px + 12 * var(--zoom-amount) * (100vw - 1440px) / 1440)
   );
 
+  overscroll-behavior: none;
+
   scroll-padding-top: var(--header-height);
 
   &:has([aria-busy="true"]) * {
@@ -29,6 +31,9 @@ html {
 }
 
 body {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+
   min-height: 100vh;
   overflow-x: clip;
   background-color: var(--ui-background-color);
@@ -38,6 +43,11 @@ body {
     overflow: hidden;
     touch-action: none;
   }
+}
+
+#main {
+  display: grid;
+  grid-template-rows: 1fr auto;
 }
 
 img {

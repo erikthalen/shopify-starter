@@ -37,19 +37,7 @@
     class="ghost square"
     aria-label="Decrease quantity"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path vector-effect="non-scaling-stroke" d="M5 12l14 0" />
-    </svg>
+    {% render 'icon', name: 'minus' %}
   </button>
 
   <input type="hidden" name="{{ name }}" :value="value">
@@ -64,20 +52,7 @@
       class="ghost square"
       aria-label="Increase quantity"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path vector-effect="non-scaling-stroke" d="M12 5l0 14" />
-        <path vector-effect="non-scaling-stroke" d="M5 12l14 0" />
-      </svg>
+      {% render 'icon', name: 'plus' %}
     </button>
   </small>
 </div>

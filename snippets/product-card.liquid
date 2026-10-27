@@ -10,7 +10,7 @@
 
 <div
   class="product-card"
-  style="view-transition-name: product-card-{{ product.selected_or_first_available_variant.id }}"
+  style="--view-transition-name: product-card-{{ product.selected_or_first_available_variant.id }}"
 >
   {% if product.selected_or_first_available_variant.featured_image != blank %}
     {% render 'image',
@@ -33,21 +33,26 @@
 
 {% stylesheet %}
   .product-card {
+    isolation: isolate;
+
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    display: grid;
+    justify-items: baseline;
     gap: 0.75rem;
-  }
 
-  .product-card__image {
-    border-radius: 0.25rem;
-  }
+    /* make the whole card clickable */
+    a:before {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
 
-  /* make the whole card clickable */
-  .product-card__link::after {
-    content: '';
-    position: absolute;
-    inset: 0;
+    img {
+      border-radius: 0.25rem;
+    }
+
+    .quick-buy {
+      z-index: 1;
+    }
   }
 {% endstylesheet %}

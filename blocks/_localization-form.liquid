@@ -22,7 +22,7 @@
 
       <form method="dialog">
         <button aria-title="Close modal" class="button ghost square">
-          {% render 'icon-cross' %}
+          {% render 'icon', name: 'cross' %}
         </button>
       </form>
     </header>
@@ -105,7 +105,7 @@
     justify-content: space-between;
 
     & > h1 {
-      color: var(--jazz-neutral-500);
+      color: var(--ui-neutral-500);
     }
 
     & > form {
@@ -121,16 +121,16 @@
     & + & {
       margin-top: 1rem;
       padding-top: 1rem;
-      border-top: 1px solid var(--jazz-neutral-200);
+      border-top: 1px solid var(--ui-neutral-200);
     }
   }
 
   .localization-form__label {
-    color: var(--jazz-neutral-400);
+    color: var(--ui-neutral-400);
   }
 
   .localization-form__value {
-    color: var(--jazz-neutral-500);
+    color: var(--ui-neutral-500);
   }
 {% endstylesheet %}
 

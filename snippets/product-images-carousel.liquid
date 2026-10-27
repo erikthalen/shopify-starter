@@ -58,19 +58,7 @@
           :disabled="activeSlide === 0"
           @click="goTo(activeSlide - 1)"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M15 6l-6 6l6 6" />
-          </svg>
+          {% render 'icon', name: 'chevron-left' %}
         </button>
 
         <button
@@ -82,19 +70,7 @@
           :disabled="activeSlide === {{ product.media.size | minus: 1 }}"
           @click="goTo(activeSlide + 1)"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M9 6l6 6l-6 6" />
-          </svg>
+          {% render 'icon', name: 'chevron-right' %}
         </button>
       </div>
     </div>
@@ -179,7 +155,7 @@
     padding: 0;
 
     &[aria-current='true'] {
-      outline: 1px solid var(--jazz-neutral-700);
+      outline: 1px solid var(--ui-neutral-700);
     }
   }
 {% endstylesheet %}

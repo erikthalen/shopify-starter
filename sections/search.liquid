@@ -15,7 +15,7 @@
   >
     <label>
       <span data-prefix>
-        {% render 'icon-magnifier' %}
+        {% render 'icon', name: 'magnifier' %}
       </span>
 
       <input
@@ -38,20 +38,7 @@
 
 {% unless search.performed %}
   <section id="search_results" class="empty">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-      <path d="M21 21l-6 -6" />
-    </svg>
+    {% render 'icon', name: 'magnifier' %}
 
     <h1>Search isn't performed</h1>
     <p>Type something in the search field.</p>
@@ -61,20 +48,7 @@
   <section id="search_results" class="main-search-results">
     {% if search.results_count == 0 %}
       <div class="empty">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="icon icon-tabler icons-tabler-outline icon-tabler-forbid-2"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 15l6 -6" />
-        </svg>
+        {% render 'icon', name: 'forbid' %}
 
         <h1>No results for "{{ search.terms }}"</h1>
         <p>Try searching for something else</p>
@@ -105,19 +79,7 @@
 
               <button id="search_sort_by_button" popovertarget="sort_by_select">
                 <span>{{ current_sort_label }}</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M6 9l6 6l6 -6" />
-                </svg>
+                {% render 'icon', name: 'chevron-down' %}
               </button>
 
               <div

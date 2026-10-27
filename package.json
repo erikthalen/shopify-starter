@@ -9,12 +9,9 @@
   "repository": "github:erikthalen/shopify-starter",
   "type": "module",
   "scripts": {
-    "dev": "pnpm run watch & pnpm run shopify:dev",
-    "deploy": "pnpm run build && pnpm run shopify:deploy",
-    "build": "node esbuild.config.js",
-    "watch": "node esbuild.config.js --watch",
-    "shopify:dev": "shopify theme dev -e development --open",
-    "shopify:deploy": "shopify theme push -e development && shopify theme push -e production",
+    "dev": "node esbuild.config.js --watch & shopify theme dev -e development --open",
+    "deploy": "node esbuild.config.js && shopify theme push -e production",
+    "docs": "pnpm erikt-ui docs",
     "prettier": "prettier . --write"
   },
   "devDependencies": {

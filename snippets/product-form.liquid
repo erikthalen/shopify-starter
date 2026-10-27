@@ -11,15 +11,17 @@
   product,
   class: 'product-form',
   hx-post: routes.cart_add_url,
-  hx-select: '#cart_drawer_content',
-  hx-target: '#cart_drawer_content',
+  hx-select: '#cart_drawer',
+  hx-target: '#cart_drawer',
   hx-swap: 'outerHTML',
-  hx-select-oob: '#cart_amount',
+  hx-select-oob: '#cart_section',
   data-loading-states: ''
 %}
   <input id="variant_id" type="hidden" name="id" value="{{ variant.id }}">
 
   <fieldset>
+    {% comment %} {% assign amount_in_cart = cart.items | where: 'id', product.selected_or_first_available_variant.id | map: 'quantity' | sum %} {% endcomment %}
+
     {% render 'quantity-selector', min: 1, name: 'quantity', value: 1, id: 'product', attr: 'hx-preserve' %}
 
     <button

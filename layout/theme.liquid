@@ -38,25 +38,16 @@
   <body>
     {% render 'skip-to-content-link' %}
 
-    <section
-      x-data="{ translated: false }"
-      @announcement-bar:visible.window="value => translated = !value.detail"
-      class="header-group"
-      :class="translated ? 'is-translated' : ''"
-    >
-      {% sections 'header-group' %}
-    </section>
+    {% sections 'header-group' %}
 
     {% render 'cart-notification' %}
 
-    <main id="main" role="main" class="site-main">
-      <div id="content" class="site-content">
-        <div>
-          {{ content_for_layout }}
-        </div>
-
-        {% sections 'footer-group' %}
+    <main id="main" role="main">
+      <div>
+        {{ content_for_layout }}
       </div>
+
+      {% sections 'footer-group' %}
     </main>
   </body>
 </html>

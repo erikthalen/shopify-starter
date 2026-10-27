@@ -1,20 +1,56 @@
-<article id="cart" class="main-cart">
-  <header>
-    <h1>Cart</h1>
-  </header>
+<section id="cart_section">
+  <h1>Cart</h1>
 
-  {% render 'cart-form' %}
-</article>
+  {%- if cart == empty -%}
+    <div class="empty">
+      {% render 'icon', name: 'cart' %}
+
+      <h2>Your cart is empty</h2>
+      <a href="{{ routes.collections_url }}" class="button"> Go to shop </a>
+    </div>
+  {%- else -%}
+    <ul>
+      {%- for item in cart.items -%}
+        {% render 'cart-item', item: item %}
+      {%- endfor -%}
+    </ul>
+
+    <footer>
+      <p>Total: {{ cart.total_price | money_with_currency }}</p>
+
+      {% form 'cart', cart %}
+        <button type="submit" name="checkout">Checkout</button>
+      {% endform %}
+    </footer>
+  {%- endif -%}
+</section>
 
 {% stylesheet %}
-  .main-cart {
-    max-width: 36rem;
+  .cart-section {
+    max-width: 48rem;
     margin: 1rem auto;
+
+    h1 {
+      margin-block: 2rem;
+    }
+
+    ul {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Main cart"
+  "name": "Main cart",
+  "class": "cart-section"
 }
 {% endschema %}

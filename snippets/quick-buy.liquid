@@ -16,12 +16,13 @@
 {% form 'product',
   product,
   hx-post: routes.cart_add_url,
-  hx-select: '#cart_drawer_content',
-  hx-target: '#cart_drawer_content',
+  hx-select: '#cart_drawer',
+  hx-target: '#cart_drawer',
   hx-swap: 'outerHTML',
-  hx-select-oob: '#cart_amount',
+  hx-select-oob: '#cart_section',
   aria-label: aria_label,
-  data-loading-states: ''
+  data-loading-states: '',
+  class: 'quick-buy'
 %}
   <input type="hidden" name="quantity" value="1">
   <input type="hidden" name="id" value="{{ variant.id }}">
