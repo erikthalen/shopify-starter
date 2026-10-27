@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ shop.locale.iso_code }}" class="no-js">
+<html lang="{{ shop.locale.iso_code | default: 'en' }}" class="no-js">
   <head>
     {% render '_meta' %}
 

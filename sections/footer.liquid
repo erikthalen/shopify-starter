@@ -1,12 +1,70 @@
-<footer class="site-footer">
-  <p>© 2026</p>
+<footer class="site-footer prose">
+  <hgroup>
+    <h2 class="site-footer__name">{{ shop.name }}</h2>
+    {%- if shop.description != blank -%}
+      <p>{{ shop.description }}</p>
+    {%- endif -%}
+  </hgroup>
+
+  <nav aria-label="Shop">
+    <p>Shop</p>
+    <ul>
+      <li><a href="{{ routes.collections_url }}">All collections</a></li>
+      <li><a href="{{ routes.all_products_collection_url }}">All products</a></li>
+      <li><a href="{{ routes.search_url }}">Search</a></li>
+      <li><a href="{{ routes.cart_url }}">Cart</a></li>
+    </ul>
+  </nav>
+
+  {%- if shop.policies.size > 0 -%}
+    <nav aria-label="Policies">
+      <p>Policies</p>
+      <ul>
+        {%- for policy in shop.policies -%}
+          <li>
+            <a href="{{ policy.url }}">{{ policy.title }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+
+  <p class="site-footer__copyright">
+    © {{ 'now' | date: '%Y' }}
+    {{ shop.name }}
+  </p>
 </footer>
 
 {% stylesheet %}
   .site-footer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 2rem;
     margin: 2rem 1rem 0;
     padding-block: 4rem 1rem;
     border-top: 1px solid var(--ui-neutral-200);
+
+    ul {
+      a {
+        color: var(--ui-neutral-500);
+
+        @media (hover: hover) {
+          &:not(:hover) {
+            text-decoration-color: transparent;
+          }
+        }
+      }
+    }
+
+    nav {
+      margin-top: 0;
+    }
+
+    .site-footer__copyright {
+      grid-column: 1 / -1;
+      margin-top: 2rem;
+      color: var(--ui-neutral-500);
+    }
   }
 {% endstylesheet %}
 
