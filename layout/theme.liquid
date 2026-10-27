@@ -25,10 +25,8 @@
       href="{{ light_favicon | default: default_favicon }}"
     >
 
-    {%- liquid
-      render 'vite' with 'theme.css', preload_stylesheet: true
-      render 'vite' with 'theme.ts'
-    -%}
+    {{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}
+    <script src="{{ 'theme.js' | asset_url }}" type="module"></script>
 
     <script>
       document.documentElement.classList.remove('no-js')

@@ -9,10 +9,10 @@
   "repository": "github:erikthalen/shopify-starter",
   "type": "module",
   "scripts": {
-    "dev": "pnpm run shopify:dev & pnpm run vite:dev",
-    "deploy": "pnpm run vite:build && pnpm run shopify:deploy",
-    "vite:dev": "vite",
-    "vite:build": "vite build",
+    "dev": "pnpm run watch & pnpm run shopify:dev",
+    "deploy": "pnpm run build && pnpm run shopify:deploy",
+    "build": "node esbuild.config.js",
+    "watch": "node esbuild.config.js --watch",
     "shopify:dev": "shopify theme dev -e development --open",
     "shopify:deploy": "shopify theme push -e development && shopify theme push -e production",
     "prettier": "prettier . --write"
@@ -21,9 +21,8 @@
     "@shopify/prettier-plugin-liquid": "^1.5.2",
     "@types/alpinejs": "^3.13.11",
     "@types/alpinejs__intersect": "^3.13.4",
-    "prettier": "^3.3.3",
-    "vite": "^8.0.7",
-    "vite-plugin-shopify": "4.1.2"
+    "esbuild": "^0.28.2",
+    "prettier": "^3.3.3"
   },
   "dependencies": {
     "@alpinejs/intersect": "^3.14.9",
@@ -36,6 +35,11 @@
     "htmx.org": "^2.0.8",
     "idiomorph": "^0.7.4",
     "swup": "4.8.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   },
   "prettier": {
     "trailingComma": "es5",

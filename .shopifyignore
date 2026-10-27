@@ -4,6 +4,6 @@ docs/*
 package.json
 pnpm-lock.yaml
 .pnpm-debug.log
-vite.config.ts
+esbuild.config.js
 jsconfig.json
 tsconfig.json

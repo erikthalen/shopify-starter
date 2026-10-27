@@ -1,4 +1,4 @@
-/assets
+/assets/theme.js
+/assets/theme.css
 /node_modules
 .DS_Store
-/snippets/vite.liquid
