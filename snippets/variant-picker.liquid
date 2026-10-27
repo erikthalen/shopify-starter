@@ -37,11 +37,11 @@
 
               <a
                 data-no-swup
-                preload="preload:init"
+                hx-preload="htmx:after:init timeout:60s"
                 hx-get="{{ product.url }}?variant={{ variants.first.id }}"
                 hx-target="#main_product"
                 hx-select="#main_product"
-                hx-swap="morph:outerHTML"
+                hx-swap="outerMorph"
                 hx-replace-url="true"
                 class="button{% unless option_value.selected %} outlined{% endunless %}"
                 href="{{ product.url }}?variant={{ variants.first.id }}"

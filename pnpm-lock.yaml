@@ -26,15 +26,9 @@ importers:
       embla-carousel:
         specifier: ^8.6.0
         version: 8.6.0
-      htmx-ext-preload:
-        specifier: ^2.1.2
-        version: 2.1.2
       htmx.org:
-        specifier: ^2.0.8
-        version: 2.0.8
-      idiomorph:
-        specifier: ^0.7.4
-        version: 0.7.4
+        specifier: ^4.0.0
+        version: 4.0.0
       swup:
         specifier: 4.8.3
         version: 4.8.3
@@ -274,14 +268,9 @@ packages:
   html-styles@1.0.0:
     resolution: {integrity: sha512-cDl5dcj73oI4Hy0DSUNh54CAwslNLJRCCoO+RNkVo+sBrjA/0+7E/xzvj3zH/GxbbBLGJhE0hBe1eg+0FINC6w==}
 
-  htmx-ext-preload@2.1.2:
-    resolution: {integrity: sha512-foD06XAITUUQApCUQnPexyJ6B7+4vFGMQ+t42unTVTGRu/CYHdAAt6oHg7eekPHT7NRnbM5hjnGVKtClryPabg==}
-
-  htmx.org@2.0.8:
-    resolution: {integrity: sha512-fm297iru0iWsNJlBrjvtN7V9zjaxd+69Oqjh4F/Vq9Wwi2kFisLcrLCiv5oBX0KLfOX/zG8AUo9ROMU5XUB44Q==}
-
-  idiomorph@0.7.4:
-    resolution: {integrity: sha512-uCdSpLo3uMfqOmrwXTpR1k/sq4sSmKC7l4o/LdJOEU+MMMq+wkevRqOQYn3lP7vfz9Mv+USBEqPvi0XhdL9ENw==}
+  htmx.org@4.0.0:
+    resolution: {integrity: sha512-T/171FUY93Kdfp8t+DnHdk45QvKRiBhVhhrwSzrXgUi4pHKvhp77dUA/qg8FAjsFWPIHNbmUuIdCrcVHuiZWng==}
+    hasBin: true
 
   isarray@1.0.0:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
@@ -483,13 +472,7 @@ snapshots:
 
   html-styles@1.0.0: {}
 
-  htmx-ext-preload@2.1.2:
-    dependencies:
-      htmx.org: 2.0.8
-
-  htmx.org@2.0.8: {}
-
-  idiomorph@0.7.4: {}
+  htmx.org@4.0.0: {}
 
   isarray@1.0.0: {}
 

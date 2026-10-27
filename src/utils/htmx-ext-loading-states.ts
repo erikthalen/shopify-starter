@@ -1,6 +1,7 @@
 import type htmx from "htmx.org"
+import type { HtmxRequestCtx } from "htmx.org"
 
-// https://github.com/bigskysoftware/htmx-extensions/blob/main/src/loading-states/README.md
+// htmx 4 port of https://github.com/bigskysoftware/htmx-extensions/blob/main/src/loading-states/README.md
 
 type Htmx = typeof htmx
 
@@ -8,7 +9,7 @@ export function loadingStates(htmx: Htmx): void {
   const undoQueue: Array<() => void> = []
 
   function loadingStateContainer(target: Element): Element {
-    return htmx.closest(target, "[data-loading-states]") ?? document.body
+    return target.closest("[data-loading-states]") ?? document.body
   }
 
   function mayProcessUndoCallback(target: Element, callback: () => void): void {
@@ -21,7 +22,7 @@ export function loadingStates(htmx: Htmx): void {
     elt: Element,
     requestPath: string
   ): boolean {
-    const pathElt = htmx.closest(elt, "[data-loading-path]")
+    const pathElt = elt.closest("[data-loading-path]")
     if (!pathElt) return true
     return pathElt.getAttribute("data-loading-path") === requestPath
   }
@@ -32,7 +33,7 @@ export function loadingStates(htmx: Htmx): void {
     doCallback: () => void,
     undoCallback: () => void
   ): void {
-    const delayElt = htmx.closest(sourceElt, "[data-loading-delay]")
+    const delayElt = sourceElt.closest("[data-loading-delay]")
 
     if (delayElt) {
       const delay = Number(delayElt.getAttribute("data-loading-delay")) || 200
@@ -58,130 +59,134 @@ export function loadingStates(htmx: Htmx): void {
     const includeScopeElement =
       scope.getAttribute(attribute) !== null ? [scope] : []
 
-    return Array.from(htmx.findAll(scope, `[${attribute}]`))
+    return Array.from(scope.querySelectorAll(`[${attribute}]`))
       .filter(elt => mayProcessLoadingStateByPath(elt, path))
       .concat(includeScopeElement)
   }
 
   function getLoadingTarget(elt: Element): Element[] {
     const selector = elt.getAttribute("data-loading-target")
-    if (selector) return Array.from(htmx.findAll(selector))
+    if (selector) return Array.from(document.querySelectorAll(selector))
     return [elt]
   }
 
-  htmx.defineExtension("loading-states", {
-    onEvent(name, evt): boolean {
-      if (name === "htmx:beforeRequest") {
-        const requestPath: string = (evt as CustomEvent).detail.pathInfo
-          .requestPath
-        const container = loadingStateContainer((evt as CustomEvent).detail.elt)
+  function undoLoadingStates(): void {
+    while (undoQueue.length > 0) undoQueue.shift()!()
+  }
 
-        const byType: Record<string, Element[]> = {
-          "data-loading": getLoadingStateElts(
-            container,
-            "data-loading",
-            requestPath
-          ),
-          "data-loading-class": getLoadingStateElts(
-            container,
-            "data-loading-class",
-            requestPath
-          ),
-          "data-loading-class-remove": getLoadingStateElts(
-            container,
-            "data-loading-class-remove",
-            requestPath
-          ),
-          "data-loading-disable": getLoadingStateElts(
-            container,
-            "data-loading-disable",
-            requestPath
-          ),
-          "data-loading-aria-busy": getLoadingStateElts(
-            container,
-            "data-loading-aria-busy",
-            requestPath
-          ),
-        }
+  htmx.registerExtension("loading-states", {
+    htmx_before_request(elt: Element, { ctx }: { ctx: HtmxRequestCtx }) {
+      const requestPath = ctx.request.action
+      const container = loadingStateContainer(elt)
 
-        byType["data-loading"].forEach(sourceElt => {
-          getLoadingTarget(sourceElt).forEach(targetElt => {
-            queueLoadingState(
-              sourceElt,
-              targetElt,
-              () => {
-                targetElt.setAttribute(
-                  "style",
-                  `display:${sourceElt.getAttribute("data-loading") ?? "inline-block"}`
-                )
-              },
-              () => {
-                targetElt.setAttribute("style", "display:none")
-              }
-            )
-          })
-        })
-
-        byType["data-loading-class"].forEach(sourceElt => {
-          const classes = (
-            sourceElt.getAttribute("data-loading-class") ?? ""
-          ).split(" ")
-          getLoadingTarget(sourceElt).forEach(targetElt => {
-            queueLoadingState(
-              sourceElt,
-              targetElt,
-              () => classes.forEach(c => targetElt.classList.add(c)),
-              () => classes.forEach(c => targetElt.classList.remove(c))
-            )
-          })
-        })
-
-        byType["data-loading-class-remove"].forEach(sourceElt => {
-          const classes = (
-            sourceElt.getAttribute("data-loading-class-remove") ?? ""
-          ).split(" ")
-          getLoadingTarget(sourceElt).forEach(targetElt => {
-            queueLoadingState(
-              sourceElt,
-              targetElt,
-              () => classes.forEach(c => targetElt.classList.remove(c)),
-              () => classes.forEach(c => targetElt.classList.add(c))
-            )
-          })
-        })
-
-        byType["data-loading-disable"].forEach(sourceElt => {
-          getLoadingTarget(sourceElt).forEach(targetElt => {
-            queueLoadingState(
-              sourceElt,
-              targetElt,
-              () => {
-                ;(targetElt as HTMLButtonElement).disabled = true
-              },
-              () => {
-                ;(targetElt as HTMLButtonElement).disabled = false
-              }
-            )
-          })
-        })
-
-        byType["data-loading-aria-busy"].forEach(sourceElt => {
-          getLoadingTarget(sourceElt).forEach(targetElt => {
-            queueLoadingState(
-              sourceElt,
-              targetElt,
-              () => targetElt.setAttribute("aria-busy", "true"),
-              () => targetElt.removeAttribute("aria-busy")
-            )
-          })
-        })
+      const byType: Record<string, Element[]> = {
+        "data-loading": getLoadingStateElts(
+          container,
+          "data-loading",
+          requestPath
+        ),
+        "data-loading-class": getLoadingStateElts(
+          container,
+          "data-loading-class",
+          requestPath
+        ),
+        "data-loading-class-remove": getLoadingStateElts(
+          container,
+          "data-loading-class-remove",
+          requestPath
+        ),
+        "data-loading-disable": getLoadingStateElts(
+          container,
+          "data-loading-disable",
+          requestPath
+        ),
+        "data-loading-aria-busy": getLoadingStateElts(
+          container,
+          "data-loading-aria-busy",
+          requestPath
+        ),
       }
 
-      if (name === "htmx:beforeOnLoad") {
-        while (undoQueue.length > 0) undoQueue.shift()!()
-      }
+      byType["data-loading"].forEach(sourceElt => {
+        getLoadingTarget(sourceElt).forEach(targetElt => {
+          queueLoadingState(
+            sourceElt,
+            targetElt,
+            () => {
+              targetElt.setAttribute(
+                "style",
+                `display:${sourceElt.getAttribute("data-loading") ?? "inline-block"}`
+              )
+            },
+            () => {
+              targetElt.setAttribute("style", "display:none")
+            }
+          )
+        })
+      })
 
-      return true
+      byType["data-loading-class"].forEach(sourceElt => {
+        const classes = (
+          sourceElt.getAttribute("data-loading-class") ?? ""
+        ).split(" ")
+        getLoadingTarget(sourceElt).forEach(targetElt => {
+          queueLoadingState(
+            sourceElt,
+            targetElt,
+            () => classes.forEach(c => targetElt.classList.add(c)),
+            () => classes.forEach(c => targetElt.classList.remove(c))
+          )
+        })
+      })
+
+      byType["data-loading-class-remove"].forEach(sourceElt => {
+        const classes = (
+          sourceElt.getAttribute("data-loading-class-remove") ?? ""
+        ).split(" ")
+        getLoadingTarget(sourceElt).forEach(targetElt => {
+          queueLoadingState(
+            sourceElt,
+            targetElt,
+            () => classes.forEach(c => targetElt.classList.remove(c)),
+            () => classes.forEach(c => targetElt.classList.add(c))
+          )
+        })
+      })
+
+      byType["data-loading-disable"].forEach(sourceElt => {
+        getLoadingTarget(sourceElt).forEach(targetElt => {
+          queueLoadingState(
+            sourceElt,
+            targetElt,
+            () => {
+              ;(targetElt as HTMLButtonElement).disabled = true
+            },
+            () => {
+              ;(targetElt as HTMLButtonElement).disabled = false
+            }
+          )
+        })
+      })
+
+      byType["data-loading-aria-busy"].forEach(sourceElt => {
+        getLoadingTarget(sourceElt).forEach(targetElt => {
+          queueLoadingState(
+            sourceElt,
+            targetElt,
+            () => targetElt.setAttribute("aria-busy", "true"),
+            () => targetElt.removeAttribute("aria-busy")
+          )
+        })
+      })
+    },
+
+    // the response has arrived, but isn't swapped yet
+    htmx_after_request: undoLoadingStates,
+
+    // network errors and timeouts. A request aborted by hx-sync is left alone,
+    // the request replacing it undoes the loading states when it finishes
+    htmx_error(_elt: Element, { error }: { error: unknown }) {
+      if ((error as Error)?.name !== "AbortError") undoLoadingStates()
     },
   })
 }

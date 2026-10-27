@@ -27,7 +27,7 @@
       </form>
     </header>
 
-    {% form 'localization', hx-boost: 'true', hx-target: 'body', hx-swap: 'morph:innerHTML' %}
+    {% form 'localization', hx-boost: 'true', hx-target: 'body', hx-swap: 'innerMorph' %}
       <div class="localization-form__row">
         <p class="localization-form__label">Language</p>
 
@@ -92,7 +92,7 @@
       <input
         x-data="{ currentPath: window.location.href }"
         @swup:page:view.document="currentPath = window.location.href"
-        @htmx:after-swap.window="currentPath = window.location.href"
+        @htmx:after:swap.window="currentPath = window.location.href"
         type="hidden"
         name="return_to"
         :value="currentPath"

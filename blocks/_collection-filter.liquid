@@ -34,7 +34,7 @@
     hx-target="#filter_result"
     hx-swap="outerHTML"
     hx-select-oob="#filter_form:outerHTML,#filter_button:outerHTML"
-    swup-push-history
+    hx-push-url="true"
     @change="$el.requestSubmit()"
     data-loading-states
   >

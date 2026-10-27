@@ -34,7 +34,7 @@
     hx-target="#paginated_items"
     hx-swap="outerHTML"
     hx-select-oob="#search_filter_form:outerHTML,#search_filter_button:outerHTML"
-    swup-push-history
+    hx-push-url="true"
     @change="$el.requestSubmit()"
     data-loading-states
   >
