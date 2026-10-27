@@ -11,27 +11,21 @@ importers:
       '@alpinejs/intersect':
         specifier: ^3.14.9
         version: 3.15.11
-      '@swup/a11y-plugin':
-        specifier: ^5.0.0
-        version: 5.0.0(swup@4.8.3)
-      '@swup/debug-plugin':
-        specifier: ^4.1.0
-        version: 4.1.0(swup@4.8.3)
-      '@swup/preload-plugin':
-        specifier: ^3.2.11
-        version: 3.2.11(swup@4.8.3)
+      '@blossom-carousel/web':
+        specifier: ^1.6.0
+        version: 1.6.0
+      '@erikt/ui':
+        specifier: ^0.0.43
+        version: 0.0.43
+      '@videojs/html':
+        specifier: ^10.2.0
+        version: 10.2.0(react@19.3.1)
       alpinejs:
         specifier: 3.15.11
         version: 3.15.11
-      embla-carousel:
-        specifier: ^8.6.0
-        version: 8.6.0
       htmx.org:
         specifier: ^4.0.0
         version: 4.0.0
-      swup:
-        specifier: 4.8.3
-        version: 4.8.3
     devDependencies:
       '@shopify/prettier-plugin-liquid':
         specifier: ^1.5.2
@@ -53,6 +47,13 @@ packages:
 
   '@alpinejs/intersect@3.15.11':
     resolution: {integrity: sha512-oGbp6vvn19vN8xoph32Wpo6DrGLXcMR/hLr8hh+gGhgrDpseDOG72h+lsjUivZYI58Uzs1oAxl7XPiQdRyRbtw==}
+
+  '@blossom-carousel/web@1.6.0':
+    resolution: {integrity: sha512-34Tf0LOgmHpIpaju1bxxbyo8y1Jsg+4AQoQyuzZTQ8iuBMr37tJfVIeTgeLq7krXiP1AKtmgN1WV/yoUttR3bQ==}
+
+  '@erikt/ui@0.0.43':
+    resolution: {integrity: sha512-Xpm+svWVfKNDa21Q5GsB/AeJkrnhXC5QFG3nUE1ff0mQ+Svx44LHyhqpVd+YTE8TvpRlHa0l8JX/AbmXkUsI6A==}
+    hasBin: true
 
   '@esbuild/aix-ppc64@0.28.2':
     resolution: {integrity: sha512-XExcO+dvLKvVtNTibSTBej1NCAbaGhWn9Ww1ZPx80qsahhPFe/8jgWP0IchNe0F3HwkU7n8ejhH8bjonqht8mQ==}
@@ -210,6 +211,15 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@lit-labs/ssr-dom-shim@1.6.0':
+    resolution: {integrity: sha512-VHb0ALPMTlgKjM6yIxxoQNnpKyUKLD04VzeQdsiXkMqkvYlAHxq9glGLmgbb889/1GsohSOAjvQYoiBppXFqrQ==}
+
+  '@lit/context@1.1.6':
+    resolution: {integrity: sha512-M26qDE6UkQbZA2mQ3RjJ3Gzd8TxP+/0obMgE5HfkfLhEEyYE3Bui4A5XHiGPjy0MUGAyxB3QgVuw2ciS0kHn6A==}
+
+  '@lit/reactive-element@2.1.2':
+    resolution: {integrity: sha512-pbCDiVMnne1lYUIaYNN5wrwQXDtHaYtg7YEFPeW+hws6U47WeFvISGUWekPGKWOP1ygrs0ef0o1VJMk1exos5A==}
+
   '@shopify/liquid-html-parser@2.9.2':
     resolution: {integrity: sha512-2XJYqHaZxEBwuufGhzIZ0M6m9YA4HS7YlVOiZtYanFgkmoQeJm1c0JhKcuCXU5C1pc2M0rt1XzBX8SgWv7l8Ww==}
 
@@ -218,29 +228,90 @@ packages:
     peerDependencies:
       prettier: ^2.0.0 || ^3.0.0
 
-  '@swup/a11y-plugin@5.0.0':
-    resolution: {integrity: sha512-t0pVWAVea+Imjj05n9QMPfqZhw9i5rx7BV/l3Ejeic+X3Qs0VZwVvEJIcdqireCVJgAJGZAPlmgbiuaj5UHJaQ==}
-    peerDependencies:
-      swup: ^4.0.0
-
-  '@swup/debug-plugin@4.1.0':
-    resolution: {integrity: sha512-R+RP4hjoeXrO+wowSswaTM4P05lu6iDg6UwdbQn0wfJ082KiUpH+DDwHYNOatxusKVExFuhLec+X9IbyAyiv8w==}
-    peerDependencies:
-      swup: ^4.0.0
-
-  '@swup/plugin@4.0.0':
-    resolution: {integrity: sha512-3Kq31BJxnzoPg643YxGoWQggoU6VPKZpdE5CqqmP7wwkpCYTzkRmrfcQ29mGhsSS7xfS7D33iZoBiwY+wPoo2A==}
-
-  '@swup/preload-plugin@3.2.11':
-    resolution: {integrity: sha512-dq50u+d8L+63/pU6dUDnypuBoF49ubjRzRJqitGem2K7wRn7xccxRSvdyeGKdA2vNvzGDAmLfwVTZdSotvvDrw==}
-    peerDependencies:
-      swup: ^4.0.0
-
   '@types/alpinejs@3.13.11':
     resolution: {integrity: sha512-3KhGkDixCPiLdL3Z/ok1GxHwLxEWqQOKJccgaQL01wc0EVM2tCTaqlC3NIedmxAXkVzt/V6VTM8qPgnOHKJ1MA==}
 
   '@types/alpinejs__intersect@3.13.4':
     resolution: {integrity: sha512-yoX6WO7AleeULOQvPz7rrx7FJmu6l033bM7QiGcWyvZjqF2KIut99ByUZO6OWUQuYmbRjxsKthGiUYNaAywHiA==}
+
+  '@videojs/core@10.2.0':
+    resolution: {integrity: sha512-xYF4aWKq4Us0SzxwAZmpbeONgTSogH3gF0yfDlZEusaPrpx1rsXwAELas1PjcwzUC+jwMAQ54C6q3RAZ/xbHwA==}
+
+  '@videojs/element@10.2.0':
+    resolution: {integrity: sha512-eGsRhK7nxUkPbjrXGHZDlNJsVTovJCzg6w1+B3aOOWOpfxvLSEUwR8KJ+VPtzqAcbS3lZ5LQjxFyomv1dirh+Q==}
+
+  '@videojs/html@10.2.0':
+    resolution: {integrity: sha512-Bas9JqHlbiLx9oLhLvCWJr+UoUQ9Xb/Z156O7d/DQ8ujxuV8I7f6vWgkcLOjUjp78rBZjPIy/O+wMPBNbIJpSw==}
+    peerDependencies:
+      '@videojs/cloudflare-video': 10.2.0
+      '@videojs/dash-video': 10.2.0
+      '@videojs/google-cast': 10.2.0
+      '@videojs/hlsjs-video': 10.2.0
+      '@videojs/mux-audio': 10.2.0
+      '@videojs/mux-data': 10.2.0
+      '@videojs/mux-video': 10.2.0
+      '@videojs/playerjs-video': 10.2.0
+      '@videojs/shaka-video': 10.2.0
+      '@videojs/spotify-audio': 10.2.0
+      '@videojs/tiktok-video': 10.2.0
+      '@videojs/twitch-video': 10.2.0
+      '@videojs/vimeo-video': 10.2.0
+      '@videojs/wistia-video': 10.2.0
+      '@videojs/youtube-video': 10.2.0
+    peerDependenciesMeta:
+      '@videojs/cloudflare-video':
+        optional: true
+      '@videojs/dash-video':
+        optional: true
+      '@videojs/google-cast':
+        optional: true
+      '@videojs/hlsjs-video':
+        optional: true
+      '@videojs/mux-audio':
+        optional: true
+      '@videojs/mux-data':
+        optional: true
+      '@videojs/mux-video':
+        optional: true
+      '@videojs/playerjs-video':
+        optional: true
+      '@videojs/shaka-video':
+        optional: true
+      '@videojs/spotify-audio':
+        optional: true
+      '@videojs/tiktok-video':
+        optional: true
+      '@videojs/twitch-video':
+        optional: true
+      '@videojs/vimeo-video':
+        optional: true
+      '@videojs/wistia-video':
+        optional: true
+      '@videojs/youtube-video':
+        optional: true
+
+  '@videojs/media@10.2.0':
+    resolution: {integrity: sha512-bdlq1nav3xeuWsmxN1eWEdJcbS1QxHoMZq2+4DJ19yWAGSheXDt52xDNTgNhoKY0FoJFTdNEsv/4qxR/eW+IjA==}
+
+  '@videojs/native-hls-video@10.2.0':
+    resolution: {integrity: sha512-+0ISYTxbPtXc530CvTqCkoKrOPzxpAqvdgw79cRTOAG/7sR4xgQqt341O+P0HesH5kYeMwkLfWcSM964FAcMTw==}
+
+  '@videojs/spf@10.2.0':
+    resolution: {integrity: sha512-ovoHDqR5td0nfeZeCu2GWbdb3SVqP9udEAZr/4/VNUKYKstOg21rlGYS/We/our17kkxcp6Dvg7H98xLzn83pQ==}
+
+  '@videojs/store@10.2.0':
+    resolution: {integrity: sha512-rKV2tCigF1ifVFk1n+svGMpWLdEsBl3LHYbD9hrHQZtSI2SAwgwvD5W5vA0hcc0W3f9cblsrS0zgT/JxQlKfrw==}
+    peerDependencies:
+      '@videojs/element': 10.2.0
+      react: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@videojs/element':
+        optional: true
+      react:
+        optional: true
+
+  '@videojs/utils@10.2.0':
+    resolution: {integrity: sha512-+uV+rg5Dtq0OpPT3OQsybA+grWyDaluFIQ6f5X8Jqb98gy0momQBo7yPA92TlVL7eiUrPpYb4eX0xeTXLKL73Q==}
 
   '@vue/reactivity@3.1.5':
     resolution: {integrity: sha512-1tdfLmNjWG6t/CsPldh+foumYFo3cpyCHgBYQ34ylaMsJ+SNHQ1kApMIa8jN+i593zQuaw3AdWH0nJTARzCFhg==}
@@ -251,19 +322,10 @@ packages:
   alpinejs@3.15.11:
     resolution: {integrity: sha512-m26gkTg/MId8O+F4jHKK3vB3SjbFxxk/JHP+qzmw1H6aQrZuPAg4CUoAefnASzzp/eNroBjrRQe7950bNeaBJw==}
 
-  delegate-it@6.3.0:
-    resolution: {integrity: sha512-WAa6cA61M5mfDR31PBgMNQQ3LY1q++TxnZzcm7E9XV8ODBPxDutxH0toTR/BXqIkLaVuU7ntFe1uOqDllhA22A==}
-
-  embla-carousel@8.6.0:
-    resolution: {integrity: sha512-SjWyZBHJPbqxHOzckOfo8lHisEaJWmwd23XppYFYVh10bU66/Pn5tkVkbkCMZVdbUE5eTCI2nD8OyIP4Z+uwkA==}
-
   esbuild@0.28.2:
     resolution: {integrity: sha512-HKVLS8dvII+xoKW9kmqxbRKrnWEXfJJr/FZhhJmiqIB0e053QNYFqOBouTMO/k5sID4MvCiUCvv8b9M4h32wIA==}
     engines: {node: '>=18'}
     hasBin: true
-
-  focus-options-polyfill@1.6.0:
-    resolution: {integrity: sha512-uyrAmLZrPnUItQY5wTdg31TO9GGZRGsh/jmohUg9oLmLi/sw5y7LlTV/mwyd6rvbxIOGwmRiv6LcTS8w7Bk9NQ==}
 
   html-styles@1.0.0:
     resolution: {integrity: sha512-cDl5dcj73oI4Hy0DSUNh54CAwslNLJRCCoO+RNkVo+sBrjA/0+7E/xzvj3zH/GxbbBLGJhE0hBe1eg+0FINC6w==}
@@ -286,27 +348,33 @@ packages:
     resolution: {integrity: sha512-l4Sa7026+6jsvYbt0PXKmL+f+ML32fD++IznLgxDhx2t9Cx6NC7zwRqblCujPHGGmkQerHoeBzRutdxaw/S72g==}
     engines: {node: '>=0.12.1'}
 
-  opencollective-postinstall@2.0.3:
-    resolution: {integrity: sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==}
-    hasBin: true
-
-  path-to-regexp@6.3.0:
-    resolution: {integrity: sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ==}
-
   prettier@3.8.3:
     resolution: {integrity: sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw==}
     engines: {node: '>=14'}
     hasBin: true
 
-  swup@4.8.3:
-    resolution: {integrity: sha512-2U+mE7SnU4Jm+H82C2FChML04v5kb+fnf+2aYP2e0MX7vWOnmd6SHvjSBF8MH3HOrwalaXnynQVImgCaxGZxtA==}
+  react-compiler-runtime@1.0.0:
+    resolution: {integrity: sha512-rRfjYv66HlG8896yPUDONgKzG5BxZD1nV9U6rkm+7VCuvQc903C4MjcoZR4zPw53IKSOX9wMQVpA1IAbRtzQ7w==}
+    peerDependencies:
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0 || ^0.0.0-experimental
 
-  typed-query-selector@2.12.1:
-    resolution: {integrity: sha512-uzR+FzI8qrUEIu96oaeBJmd9E7CFEiQ3goA5qCVgc4s5llSubcfGHq9yUstZx/k4s9dXHVKsE35YWoFyvEqEHA==}
+  react@19.3.1:
+    resolution: {integrity: sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw==}
+    engines: {node: '>=0.10.0'}
+
+  signal-polyfill@0.2.2:
+    resolution: {integrity: sha512-p63Y4Er5/eMQ9RHg0M0Y64NlsQKpiu6MDdhBXpyywRuWiPywhJTpKJ1iB5K2hJEbFZ0BnDS7ZkJ+0AfTuL37Rg==}
+
+  video.js@10.2.0:
+    resolution: {integrity: sha512-YoezDYXY6iDkuhLGnyOz96XBKjwB0cQbPNq5ck1FAf2JcqfLnnwkNQ4ofbwhlpAM55RFp6VDhSvKe5wVcFV11Q==}
 
 snapshots:
 
   '@alpinejs/intersect@3.15.11': {}
+
+  '@blossom-carousel/web@1.6.0': {}
+
+  '@erikt/ui@0.0.43': {}
 
   '@esbuild/aix-ppc64@0.28.2':
     optional: true
@@ -386,6 +454,16 @@ snapshots:
   '@esbuild/win32-x64@0.28.2':
     optional: true
 
+  '@lit-labs/ssr-dom-shim@1.6.0': {}
+
+  '@lit/context@1.1.6':
+    dependencies:
+      '@lit/reactive-element': 2.1.2
+
+  '@lit/reactive-element@2.1.2':
+    dependencies:
+      '@lit-labs/ssr-dom-shim': 1.6.0
+
   '@shopify/liquid-html-parser@2.9.2':
     dependencies:
       line-column: 1.0.2
@@ -397,31 +475,63 @@ snapshots:
       html-styles: 1.0.0
       prettier: 3.8.3
 
-  '@swup/a11y-plugin@5.0.0(swup@4.8.3)':
-    dependencies:
-      '@swup/plugin': 4.0.0
-      focus-options-polyfill: 1.6.0
-      swup: 4.8.3
-
-  '@swup/debug-plugin@4.1.0(swup@4.8.3)':
-    dependencies:
-      '@swup/plugin': 4.0.0
-      swup: 4.8.3
-
-  '@swup/plugin@4.0.0':
-    dependencies:
-      swup: 4.8.3
-
-  '@swup/preload-plugin@3.2.11(swup@4.8.3)':
-    dependencies:
-      '@swup/plugin': 4.0.0
-      swup: 4.8.3
-
   '@types/alpinejs@3.13.11': {}
 
   '@types/alpinejs__intersect@3.13.4':
     dependencies:
       '@types/alpinejs': 3.13.11
+
+  '@videojs/core@10.2.0(@videojs/element@10.2.0)(react@19.3.1)':
+    dependencies:
+      '@videojs/media': 10.2.0
+      '@videojs/store': 10.2.0(@videojs/element@10.2.0)(react@19.3.1)
+      '@videojs/utils': 10.2.0
+      video.js: 10.2.0
+    transitivePeerDependencies:
+      - '@videojs/element'
+      - react
+
+  '@videojs/element@10.2.0':
+    dependencies:
+      '@lit/context': 1.1.6
+
+  '@videojs/html@10.2.0(react@19.3.1)':
+    dependencies:
+      '@videojs/core': 10.2.0(@videojs/element@10.2.0)(react@19.3.1)
+      '@videojs/element': 10.2.0
+      '@videojs/media': 10.2.0
+      '@videojs/native-hls-video': 10.2.0
+      '@videojs/spf': 10.2.0
+      '@videojs/store': 10.2.0(@videojs/element@10.2.0)(react@19.3.1)
+      '@videojs/utils': 10.2.0
+    transitivePeerDependencies:
+      - react
+
+  '@videojs/media@10.2.0':
+    dependencies:
+      '@videojs/utils': 10.2.0
+
+  '@videojs/native-hls-video@10.2.0':
+    dependencies:
+      '@videojs/media': 10.2.0
+      '@videojs/spf': 10.2.0
+      '@videojs/utils': 10.2.0
+
+  '@videojs/spf@10.2.0':
+    dependencies:
+      '@videojs/media': 10.2.0
+      '@videojs/utils': 10.2.0
+      signal-polyfill: 0.2.2
+
+  '@videojs/store@10.2.0(@videojs/element@10.2.0)(react@19.3.1)':
+    dependencies:
+      '@videojs/utils': 10.2.0
+      react-compiler-runtime: 1.0.0(react@19.3.1)
+    optionalDependencies:
+      '@videojs/element': 10.2.0
+      react: 19.3.1
+
+  '@videojs/utils@10.2.0': {}
 
   '@vue/reactivity@3.1.5':
     dependencies:
@@ -432,12 +542,6 @@ snapshots:
   alpinejs@3.15.11:
     dependencies:
       '@vue/reactivity': 3.1.5
-
-  delegate-it@6.3.0:
-    dependencies:
-      typed-query-selector: 2.12.1
-
-  embla-carousel@8.6.0: {}
 
   esbuild@0.28.2:
     optionalDependencies:
@@ -468,8 +572,6 @@ snapshots:
       '@esbuild/win32-ia32': 0.28.2
       '@esbuild/win32-x64': 0.28.2
 
-  focus-options-polyfill@1.6.0: {}
-
   html-styles@1.0.0: {}
 
   htmx.org@4.0.0: {}
@@ -487,16 +589,14 @@ snapshots:
 
   ohm-js@17.5.0: {}
 
-  opencollective-postinstall@2.0.3: {}
-
-  path-to-regexp@6.3.0: {}
-
   prettier@3.8.3: {}
 
-  swup@4.8.3:
+  react-compiler-runtime@1.0.0(react@19.3.1):
     dependencies:
-      delegate-it: 6.3.0
-      opencollective-postinstall: 2.0.3
-      path-to-regexp: 6.3.0
+      react: 19.3.1
 
-  typed-query-selector@2.12.1: {}
+  react@19.3.1: {}
+
+  signal-polyfill@0.2.2: {}
+
+  video.js@10.2.0: {}

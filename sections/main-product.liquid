@@ -1,22 +1,26 @@
 <section id="main_product" class="main-product">
   <div class="main-product__layout">
     <div class="main-product__media">
-      {% render 'product-images-carousel' %}
+      <blossom-carousel id="product-media-carousel" class="main-product__carousel">
+        {% for media in product.media %}
+          <div class="main-product__slide" data-blossom-slide>
+            {% render 'media', media: media %}
+          </div>
+        {% endfor %}
+      </blossom-carousel>
 
-      {% comment %}
-        <div class="main-product__variant-images">
-          {% render 'variant-images' %}
-        </div>
-      {% endcomment %}
+      <div class="main-product-carousel-nav">
+        <blossom-prev for="product-media-carousel"></blossom-prev>
+        <blossom-dots for="product-media-carousel"></blossom-dots>
+        <blossom-next for="product-media-carousel"></blossom-next>
+      </div>
     </div>
 
-    <div class="main-product__info">
+    <div id="product_content" class="main-product__info">
       <div id="product_info">
         <h1>{{ product.title }}</h1>
 
-        <div id="product_price">
-          {% render 'product-price', product: product %}
-        </div>
+        {% render 'product-price', product: product %}
       </div>
 
       {% render 'product-form', product: product %}
@@ -40,6 +44,21 @@
     @media (width >= 48rem) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+  }
+
+  /* snap points make prev/next move one slide, without them Blossom scrolls 85% of the width */
+  .main-product__carousel {
+    scroll-snap-type: x mandatory;
+  }
+
+  .main-product__slide {
+    width: 100%;
+    scroll-snap-align: start;
+  }
+
+  .main-product-carousel-nav {
+    display: flex;
+    justify-content: space-between;
   }
 
   .main-product__layout {

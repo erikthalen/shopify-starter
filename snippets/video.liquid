@@ -1,11 +1,12 @@
 {% doc %}
-  Outputs a `<video>` tag that autoplays, loops, and is muted by default.
-  The aspect ratio is applied via CSS custom properties and can differ between screen sizes.
+  Outputs a video with controls.
 
-  @param {object} video - Shopify `video` object.
+  @param {video} video - Shopify `video` object.
+  @param {image} [poster] - Poster image, defaults to the video's poster.
   @param {string} [aspect_ratio] - CSS `aspect-ratio` value, e.g. `16/9`.
   @param {string} [aspect_ratio_sm] - Aspect ratio on small screens. Overrides `aspect_ratio`.
   @param {string} [aspect_ratio_md] - Aspect ratio on large screens. Overrides `aspect_ratio`.
+  @param {string} [class] - Additional css classes.
 
   @example
   {% render 'video', video: section.settings.video, aspect_ratio: '16/9' %}
@@ -17,33 +18,145 @@
   %}
 {% enddoc %}
 
-{% if video %}
-  <div
-    class="video"
-    style="--aspect-ratio-sm: {{ aspect_ratio_sm | default: aspect_ratio }}; --aspect-ratio-md: {{ aspect_ratio_md | default: aspect_ratio }}"
+{% liquid
+  assign poster = poster | default: video.preview_image
+
+  assign default_aspect_ratio = video.aspect_ratio | append: '/1'
+  assign ar_sm = aspect_ratio_sm | default: aspect_ratio | default: default_aspect_ratio
+  assign ar_md = aspect_ratio_md | default: aspect_ratio | default: default_aspect_ratio
+
+  assign aspect_ratio_css = '--aspect-ratio-sm:' | append: ar_sm | append: '; --aspect-ratio-md:' | append: ar_md | append: ';'
+%}
+
+{% if video != blank %}
+  <script defer src="{{ 'video.js' | asset_url }}"></script>
+
+  <video-player
+    {% if class %}
+      class="{{ class }}"
+    {% endif %}
+    style="{{ aspect_ratio_css }}"
   >
-    {{ video | video_tag: image_size: '1200x', autoplay: true, loop: true, muted: true }}
-  </div>
+    <video-skin>
+      <video playsinline>
+        {% for source in video.sources %}
+          <source src="{{ source.url }}" type="{{ source.mime_type }}">
+        {% endfor %}
+      </video>
+
+      {% render 'image',
+        image: poster,
+        aspect_ratio: aspect_ratio,
+        sizes: '100vw, 100vw',
+        loading: 'eager',
+        alt: video.alt,
+        slot: 'poster'
+      %}
+
+      <media-play-button class="media-play-button play-btn type-base-display">
+        <span class="paused"> Play </span>
+
+        {% comment %}
+          <span class="playing">Pause</span>
+          <span class="ended">Replay</span>
+        {% endcomment %}
+      </media-play-button>
+    </video-skin>
+  </video-player>
 {% endif %}
 
 {% stylesheet %}
-  .video video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  video-player {
+    --media-border-radius: 0px;
 
-    aspect-ratio: var(--aspect-ratio-sm);
-  }
+    user-select: none;
+    font-weight: 700;
 
-  @media (width >= 48rem) {
-    .video video {
-      aspect-ratio: var(--aspect-ratio-md);
+    video-skin {
+      width: 100%;
+      position: relative;
+
+      video {
+        aspect-ratio: var(--aspect-ratio-sm);
+
+        @media (width >= 768px) {
+          aspect-ratio: var(--aspect-ratio-md);
+        }
+      }
+
+      /* The skin's own poster positions and fades the slot; size the image within it */
+      > picture[slot="poster"] > img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      media-play-button {
+        position: absolute;
+        inset: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--scheme-text, var(--color-white));
+        z-index: 12;
+      }
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    .video video {
-      animation-play-state: paused;
+    media-play-button {
+      pointer-events: none;
+
+      /* Default state */
+      span {
+        opacity: 0;
+        scale: 1.05;
+        filter: blur(4px);
+        pointer-events: none;
+
+        will-change: transform;
+
+        transition: all 200ms var(--ease-glide);
+
+        display: flex;
+        padding: 0.5rem 1.5rem;
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+      }
+
+      /* Paused (but not ended) */
+      &[data-paused]:not([data-ended]) {
+        pointer-events: auto;
+
+        .paused {
+          opacity: 1;
+          scale: 1;
+          filter: blur(0);
+          pointer-events: auto;
+          transition-delay: 1000ms;
+        }
+      }
+
+      /* Playing */
+      &:not([data-paused]) {
+        .playing {
+          opacity: 1;
+          scale: 1;
+          filter: blur(0);
+          pointer-events: auto;
+        }
+      }
+
+      /* Ended */
+      &[data-ended] {
+        .ended {
+          opacity: 1;
+          scale: 1;
+          filter: blur(0);
+          pointer-events: auto;
+        }
+      }
     }
   }
 {% endstylesheet %}

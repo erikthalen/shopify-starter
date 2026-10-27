@@ -1,0 +1,88 @@
+{% doc %}
+  Outputs an autoplaying, muted and looping video suitable as background video.
+
+  @param {video} video - Desktop video source.
+  @param {video} [video_mobile] - Mobile video source. Falls back to desktop if not set.
+  @param {string} [aspect_ratio] - CSS `aspect-ratio` value, e.g. `16/9`.
+  @param {string} [aspect_ratio_sm] - Aspect ratio on small screens. Overrides `aspect_ratio`.
+  @param {string} [aspect_ratio_md] - Aspect ratio on large screens. Overrides `aspect_ratio`.
+  @param {string} [class] - Additional css classes.
+  @param {string} [loading] - loading attr of the poster image.
+{% enddoc %}
+
+{% liquid
+  assign video_mobile = video_mobile | default: video
+%}
+
+{% liquid
+  assign default_aspect_ratio_sm = video_mobile.aspect_ratio | append: '/1'
+  assign default_aspect_ratio_md = video.aspect_ratio | append: '/1'
+  assign ar_sm = aspect_ratio_sm | default: aspect_ratio | default: default_aspect_ratio_sm
+  assign ar_md = aspect_ratio_md | default: aspect_ratio | default: default_aspect_ratio_md
+
+  assign aspect_ratio_css = '--aspect-ratio-sm:' | append: ar_sm | append: '; --aspect-ratio-md:' | append: ar_md | append: ';'
+%}
+
+{% if video %}
+  <background-video-player style="{{ aspect_ratio_css }}">
+    <background-video-skin
+      {% if class %}
+        class="{{ class }}"
+      {% endif %}
+    >
+      <background-video
+        data-src-desktop="{{ video.sources.first.url }}"
+        data-src-mobile="{{ video_mobile.sources.first.url }}"
+      >
+        {% render 'image',
+          image: video.preview_image,
+          image_mobile: video_mobile.preview_image,
+          alt: video.alt,
+          aspect_ratio_sm: ar_sm,
+          aspect_ratio_md: ar_md,
+          loading: loading,
+          sizes: '50vw, 25vw'
+        %}
+      </background-video>
+    </background-video-skin>
+  </background-video-player>
+
+  <script>
+    ;(function () {
+      const el = document.currentScript.previousElementSibling.querySelector('background-video')
+      const mq = window.matchMedia('(width < 768px)')
+
+      function swap(e) {
+        el.setAttribute('src', e.matches ? el.dataset.srcMobile : el.dataset.srcDesktop)
+      }
+      mq.addEventListener('change', swap)
+      swap(mq)
+    })()
+  </script>
+{% endif %}
+
+{% stylesheet %}
+  background-video-player {
+    background-video-skin {
+      min-width: auto;
+      max-width: 100vw;
+
+      aspect-ratio: var(--aspect-ratio-sm);
+
+      @media (width >= 768px) {
+        aspect-ratio: var(--aspect-ratio-md);
+      }
+    }
+
+    background-video-skin.h-auto {
+      height: auto;
+    }
+  }
+
+  background-video {
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+{% endstylesheet %}

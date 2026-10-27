@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ shop.locale.iso_code }}" class="no-js">
   <head>
-    {% render 'meta-tags' %}
+    {% render '_meta' %}
 
     {{ settings.custom_head }}
 
@@ -9,7 +9,6 @@
     {% assign dark_favicon = settings.favicon_dark | image_url: width: 64, crop: false %}
     {% assign light_favicon = settings.favicon_light | image_url: width: 64, crop: false %}
 
-    {% # theme-check-disable-next-line RemoteAsset %}
     <link
       rel="icon"
       type="image/png"
@@ -17,13 +16,14 @@
       href="{{ dark_favicon | default: default_favicon }}"
     >
 
-    {% # theme-check-disable-next-line RemoteAsset %}
     <link
       rel="icon"
       type="image/png"
       media="(prefers-color-scheme: dark)"
       href="{{ light_favicon | default: default_favicon }}"
     >
+
+    {% render '_font' %}
 
     {{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}
     <script src="{{ 'theme.js' | asset_url }}" type="module"></script>
@@ -49,11 +49,7 @@
 
     {% render 'cart-notification' %}
 
-    <main
-      id="swup"
-      role="main"
-      class="site-main"
-    >
+    <main id="main" role="main" class="site-main">
       <div id="content" class="site-content">
         <div>
           {{ content_for_layout }}

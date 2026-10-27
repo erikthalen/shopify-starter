@@ -1,6 +1,6 @@
 {% doc %}
   Renders all product options as links. Clicking a value fetches the corresponding variant URL
-  and swaps `#main_product` in place via htmx, updating the URL without a history entry.
+  and swaps `#product_content` in place via htmx, updating the URL without a history entry.
   Unavailable variants are shown with a strikethrough diagonal line.
 
   @example
@@ -36,14 +36,13 @@
               {% endfor %}
 
               <a
-                data-no-swup
                 hx-preload="htmx:after:init timeout:60s"
                 hx-get="{{ product.url }}?variant={{ variants.first.id }}"
-                hx-target="#main_product"
-                hx-select="#main_product"
+                hx-target="#product_content"
+                hx-select="#product_content"
                 hx-swap="outerMorph"
                 hx-replace-url="true"
-                class="button{% unless option_value.selected %} outlined{% endunless %}"
+                class="button {% if option_value.selected %}secondary{% else %}outlined{% endif %}"
                 href="{{ product.url }}?variant={{ variants.first.id }}"
                 data-loading-states
                 {% if option_value.selected %}
@@ -80,11 +79,6 @@
     & li,
     & a {
       width: 100%;
-    }
-
-    & a[aria-current] {
-      background-color: var(--jazz-neutral-200);
-      color: black;
     }
   }
 {% endstylesheet %}

@@ -2,7 +2,7 @@ import * as esbuild from "esbuild"
 
 /** @type {esbuild.BuildOptions} */
 const options = {
-  entryPoints: ["src/theme.ts", "src/theme.css"],
+  entryPoints: ["src/theme.ts", "src/video.ts", "src/theme.css"],
   outdir: "assets",
   bundle: true,
   minify: true,

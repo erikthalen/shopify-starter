@@ -1,0 +1,51 @@
+{% doc %}
+  Renders an image, video or external video based on `media_type`.
+  Delegates to image.liquid or video-background.liquid, external videos (YouTube/Vimeo) are rendered in an iframe.
+
+  @param {object} [media] - Shopify image or video object.
+  @param {string} [sizes] - `sizes` attribute passed through to image.liquid.
+  @param {string} [class] - Additional css classes.
+  @param {string} [aspect_ratio] - CSS `aspect-ratio` value, e.g. `3/4`.
+  @param {string} [aspect_ratio_sm] - Aspect ratio on small screens. Overrides `aspect_ratio`.
+  @param {string} [aspect_ratio_md] - Aspect ratio on large screens. Overrides `aspect_ratio`.
+  @param {string} [loading] - Loading attr of the media, defaults to `lazy`.
+
+  @example
+  {% render 'media', media: section.settings.image %}
+
+  {% render 'media',
+    media: section.settings.video,
+    aspect_ratio_sm: '3/4',
+    aspect_ratio_md: '16/9'
+  %}
+{% enddoc %}
+
+{% if media.media_type == 'external_video' %}
+  {%- render 'external-video',
+    video: media,
+    aspect_ratio: aspect_ratio,
+    aspect_ratio_sm: aspect_ratio_sm,
+    aspect_ratio_md: aspect_ratio_md,
+    class: class,
+    loading: loading
+  -%}
+{% elsif media.media_type == 'video' %}
+  {%- render 'video-background',
+    video: media,
+    aspect_ratio: aspect_ratio,
+    aspect_ratio_sm: aspect_ratio_sm,
+    aspect_ratio_md: aspect_ratio_md,
+    class: class,
+    loading: loading
+  -%}
+{% else %}
+  {%- render 'image',
+    image: media,
+    sizes: sizes,
+    aspect_ratio: aspect_ratio,
+    aspect_ratio_sm: aspect_ratio_sm,
+    aspect_ratio_md: aspect_ratio_md,
+    class: class,
+    loading: loading
+  -%}
+{% endif %}

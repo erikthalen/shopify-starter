@@ -1,0 +1,39 @@
+{% doc %}
+  Outputs an external video (YouTube or Vimeo) in an iframe.
+
+  @param {object} video - External video to render.
+  @param {string} [aspect_ratio] - CSS `aspect-ratio` value, e.g. `16/9`. Defaults to the video's own aspect ratio.
+  @param {string} [aspect_ratio_sm] - Aspect ratio on small screens. Overrides `aspect_ratio`.
+  @param {string} [aspect_ratio_md] - Aspect ratio on large screens. Overrides `aspect_ratio`.
+  @param {string} [class] - Additional css classes.
+  @param {string} [loading] - loading attr of the iframe, defaults to `lazy`.
+
+  @example
+  {% render 'external-video', video: section.settings.video, aspect_ratio_sm: '3/4', aspect_ratio_md: '16/9' %}
+{% enddoc %}
+
+{% liquid
+  assign ar = aspect_ratio | default: video.aspect_ratio
+  assign ar_sm = aspect_ratio_sm | default: ar
+  assign ar_md = aspect_ratio_md | default: ar
+%}
+
+<iframe
+  src="{{ video | external_video_url }}"
+  title="{{ video.alt | default: 'Video' | escape }}"
+  class="external-video {{ class }}"
+  style="--aspect-ratio-sm: {{ ar_sm }}; --aspect-ratio-md: {{ ar_md }};"
+  loading="{{ loading | default: 'lazy' }}"
+  allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+  allowfullscreen
+></iframe>
+
+{% stylesheet %}
+  .external-video {
+    aspect-ratio: var(--aspect-ratio-sm);
+
+    @media (width >= 768px) {
+      aspect-ratio: var(--aspect-ratio-md);
+    }
+  }
+{% endstylesheet %}

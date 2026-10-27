@@ -1,309 +1,93 @@
-/*
- * Cascade layers, lowest priority first.
- * Component styles live unlayered in each file's {% stylesheet %} tag,
- * so they always win over everything declared here.
- */
-@layer reset, jazz-reset, jazz, theme;
+@import "@erikt/ui";
+@import "@blossom-carousel/web/style.css";
 
-/* https://erikthalen.github.io/jazz/ */
-/* maybe remove this when getting started */
-@import "./jazz.css";
-
-@font-face {
-  font-family: "DMMono";
-  src: local("DMMono"), url("DMMono-Light.ttf");
-  font-display: block;
+:root {
+  --font-sans: "DMMono", sans-serif;
 }
 
-@font-face {
-  font-family: "DMMono";
-  src: local("DMMono"), url("DMMono-Regular.ttf");
-  font-weight: 700;
-  font-display: block;
+* {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-weight: normal;
 }
 
-/* ── Reset ─────────────────────────────────────────────────────────────── */
+html {
+  /* apply zooming of everything on screens > 1440px */
+  --zoom-amount: 0.2;
+  font-size: max(
+    12px,
+    calc(12px + 12 * var(--zoom-amount) * (100vw - 1440px) / 1440)
+  );
 
-@layer reset {
-  *,
-  ::before,
-  ::after,
-  ::backdrop,
-  ::file-selector-button {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: 0 solid;
+  scroll-padding-top: var(--header-height);
+
+  &:has([aria-busy="true"]) * {
+    cursor: wait !important;
   }
+}
 
-  :where(html) {
-    line-height: 1.5;
-    tab-size: 4;
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent;
+body {
+  min-height: 100vh;
+  overflow-x: clip;
+  background-color: var(--ui-background-color);
+  color: var(--ui-text-color);
+
+  &:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
+    overflow: hidden;
+    touch-action: none;
   }
+}
 
-  hr {
-    height: 0;
-    color: inherit;
-    border-block-start-width: 1px;
-  }
+img {
+  width: 100%;
+  height: auto;
+}
 
-  :is(h1, h2, h3, h4, h5, h6) {
-    font-size: inherit;
-    font-weight: inherit;
-  }
+shopify-editor {
+  background-color: white;
+}
 
-  a {
-    color: inherit;
-    text-decoration: inherit;
-  }
+/* active nav links and the current pagination page */
+[aria-current="page"] {
+  text-decoration: underline;
+}
 
-  :is(b, strong) {
-    font-weight: bolder;
-  }
-
-  small {
-    font-size: 80%;
-  }
-
-  table {
-    text-indent: 0;
-    border-color: inherit;
-    border-collapse: collapse;
-  }
-
-  summary {
-    display: list-item;
-  }
-
-  :is(ol, ul, menu) {
-    list-style: none;
-  }
-
-  :is(img, svg, video, canvas, audio, iframe, embed, object) {
-    display: block;
-  }
-
-  :is(img, video) {
-    max-width: 100%;
-    height: auto;
-  }
-
-  :is(button, input, select, optgroup, textarea),
-  ::file-selector-button {
-    font: inherit;
-    font-feature-settings: inherit;
-    font-variation-settings: inherit;
-    letter-spacing: inherit;
-    color: inherit;
-    border-radius: 0;
-    background-color: transparent;
-    opacity: 1;
-  }
-
-  ::placeholder {
-    opacity: 1;
-    color: color-mix(in oklab, currentcolor 50%, transparent);
-  }
-
-  textarea {
-    resize: vertical;
-  }
-
-  :is(button, input:where([type="button"], [type="reset"], [type="submit"])),
-  ::file-selector-button {
-    appearance: button;
-  }
-
-  [hidden]:where(:not([hidden="until-found"])) {
+.desktop-only {
+  @media (width < 48rem) {
     display: none !important;
   }
 }
 
-/* ── Theme ─────────────────────────────────────────────────────────────── */
-
-@layer theme {
-  :root {
-    --font-sans: "DMMono", sans-serif;
-    --jazz-primary: light-dark(#222222, #fefefe);
-  }
-
-  * {
-    font-size: 12px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    font-family: var(--font-sans);
-    font-weight: normal;
-  }
-
-  html {
-    /* apply zooming of everything on screens > 1440px */
-    --zoom-amount: 0.2;
-    font-size: max(
-      12px,
-      calc(12px + 12 * var(--zoom-amount) * (100vw - 1440px) / 1440)
-    );
-
-    scroll-padding-top: var(--header-height);
-
-    &[aria-busy="true"]::before {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      translate: -50% -50%;
-      z-index: 10000;
-    }
-
-    &:has([aria-busy="true"]) * {
-      cursor: wait !important;
-    }
-  }
-
-  body {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    min-height: 100vh;
-    overflow-x: clip;
-    background-color: var(--jazz-background-color);
-    color: var(--jazz-text-color);
-
-    &:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
-      overflow: hidden;
-      touch-action: none;
-    }
-  }
-
-  button,
-  .button {
-    border-radius: 4px;
-    padding: 0.33em 0.5em;
-
-    &.square {
-      padding: 0.33em;
-    }
-  }
-
-  svg:not(.empty > svg) {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-  }
-
-  [aria-label] {
-    &::before {
-      border-radius: 3px;
-    }
-
-    &::after {
-      border-width: 3px;
-    }
-  }
-
-  shopify-editor {
-    background-color: white;
-  }
-
-  dialog::backdrop {
-    view-transition-name: backdrop;
-  }
-
-  details > summary {
-    list-style: none;
-  }
-
-  /* active nav links and the current pagination page */
-  [aria-current="page"] {
-    text-decoration: underline;
-  }
-
-  input:focus {
-    animation: prevent-scroll 10ms forwards;
-  }
-
-  .desktop-only {
-    @media (width < 48rem) {
-      display: none !important;
-    }
-  }
-
-  .mobile-only {
-    @media (width >= 48rem) {
-      display: none !important;
-    }
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-    border-width: 0;
-  }
-
-  /* layout/theme.liquid */
-
-  .header-group {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    width: 100vw;
-    transition: translate 150ms cubic-bezier(0.4, 0, 0.2, 1);
-
-    &.is-translated {
-      translate: 0 calc(var(--announcement-bar-height) * -1);
-    }
-  }
-
-  .site-main {
-    display: grid;
-    grid-template-rows: 1fr auto;
-    min-height: calc(
-      100vh - var(--header-height) - var(--announcement-bar-height)
-    );
-  }
-
-  .site-content {
-    display: contents;
-  }
-
-  /* templates/gift_card.liquid */
-
-  .gift-card {
-    padding: 1rem;
-  }
-
-  /* templates/password.liquid */
-
-  .password-login {
-    margin-block: 5rem;
-    padding-inline: 1rem;
-
-    & form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    & input[type="password"] {
-      margin-top: 0.5rem;
-      padding: 0.25rem 0.5rem;
-      border: 1px solid oklch(87.2% 0.01 258.338);
-      border-radius: 0.25rem;
-    }
+.mobile-only {
+  @media (width >= 48rem) {
+    display: none !important;
   }
 }
 
-@keyframes prevent-scroll {
-  from {
-    opacity: 0;
+/* templates/gift_card.liquid */
+
+.gift-card {
+  padding: 1rem;
+}
+
+/* templates/password.liquid */
+
+.password-login {
+  margin-block: 5rem;
+  padding-inline: 1rem;
+
+  & form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  & input[type="password"] {
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid oklch(87.2% 0.01 258.338);
+    border-radius: 0.25rem;
   }
 }

@@ -11,15 +11,17 @@
 
   <div id="{{ unique_id }}" class="product-recommendations__grid">
     {%- if recommendations.performed -%}
-      {%- for product in recommendations.products -%}
-        <li>
-          {% render 'product-card', product: product %}
-        </li>
-      {%- endfor -%}
+      <ul>
+        {%- for product in recommendations.products -%}
+          <li>
+            {% render 'product-card', product: product %}
+          </li>
+        {%- endfor -%}
     {%- else -%}
       {% for i in (1..amount) %}
         {% render 'product-card-skeleton' %}
       {% endfor %}
+      </ul>
     {%- endif -%}
   </div>
 
@@ -49,7 +51,7 @@
     }
   }
 
-  .product-recommendations__grid {
+  .product-recommendations__grid ul {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;

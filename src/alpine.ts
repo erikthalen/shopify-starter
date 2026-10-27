@@ -5,12 +5,10 @@ import intersect from "@alpinejs/intersect"
 
 // components
 import cartNotification from "./components/cart-notification"
-import productImagesCarousel from "./components/product-images-carousel"
 
 Alpine.plugin(intersect)
 
 Alpine.data("cartNotification", cartNotification)
-Alpine.data("productImagesCarousel", productImagesCarousel)
 
 export const alpineStores = {
   exampleStore: {

@@ -1,34 +1,62 @@
+{% doc %}
+  Outputs the product's media in a carousel with prev/next buttons and a strip of thumbnails,
+  built with [Blossom Carousel](https://www.blossom-carousel.com).
+  Starts on the image of the selected first option value.
+  Renders a single image when the product has less than two media.
+
+  Uses the global `product` object — place this on product pages.
+
+  @example
+  {% render 'product-images-carousel' %}
+{% enddoc %}
+
 {% unless product.media.size < 2 %}
   {% assign first_option = product.options_with_values[0] %}
   {% assign init_slide = first_option.values | find_index: 'name', first_option.selected_value %}
+  {% assign carousel_id = 'product_images_' | append: product.id %}
 
-  <div x-data="productImagesCarousel({{ init_slide }})" class="embla" role="region">
-    <div class="embla__stage">
-      <div x-ref="emblaViewport" class="embla__viewport">
-        <div class="embla__container">
-          {% for media in product.media %}
-            <div class="embla__slide">
-              {% assign loading = 'lazy' %}
-              {% if forloop.first %}
-                {% assign loading = 'eager' %}
-              {% endif %}
-              {% if media.media_type == 'image' %}
-                {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1', loading: loading %}
-              {% elsif media.media_type == 'video' %}
-                {% render 'video', video: media, aspect_ratio: '1/1' %}
-              {% endif %}
-            </div>
-          {% endfor %}
-        </div>
-      </div>
+  {% comment %}
+    hx-morph-skip: variant changes morph #main_product, which would strip the attributes
+    Blossom and Alpine add at runtime. The media are the same for every variant, so leave the carousel as is.
+  {% endcomment %}
+  <div
+    hx-morph-skip
+    x-data="productImagesCarousel({{ init_slide }})"
+    class="product-images"
+    role="region"
+    aria-label="Product images"
+  >
+    <div class="product-images__stage">
+      <blossom-carousel
+        id="{{ carousel_id }}"
+        x-ref="slides"
+        class="product-images__slides"
+        @scroll.passive="onScroll"
+      >
+        {% for media in product.media %}
+          <div data-blossom-slide>
+            {% assign loading = 'lazy' %}
+            {% if forloop.first %}
+              {% assign loading = 'eager' %}
+            {% endif %}
+            {% if media.media_type == 'image' %}
+              {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1', loading: loading %}
+            {% elsif media.media_type == 'video' %}
+              {% render 'video', video: media, aspect_ratio: '1/1' %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </blossom-carousel>
 
-      <div class="embla__controls">
+      <div class="product-images__controls">
         <button
-          x-ref="emblaButtonPrev"
           class="square ghost"
           type="button"
           aria-label="Previous slide"
+          aria-controls="{{ carousel_id }}"
           data-placement="right"
+          :disabled="activeSlide === 0"
+          @click="goTo(activeSlide - 1)"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -46,11 +74,13 @@
         </button>
 
         <button
-          x-ref="emblaButtonNext"
           class="square ghost"
           type="button"
           aria-label="Next slide"
+          aria-controls="{{ carousel_id }}"
           data-placement="left"
+          :disabled="activeSlide === {{ product.media.size | minus: 1 }}"
+          @click="goTo(activeSlide + 1)"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -69,55 +99,56 @@
       </div>
     </div>
 
-    <div class="embla-thumbs">
-      <div x-ref="emblaThumbsViewport" class="embla-thumbs__viewport">
-        <div class="embla-thumbs__container">
-          {% for media in product.media %}
-            <button
-              class="ghost embla-thumbs__slide"
-              aria-label="Go to slide {{ forloop.index }}"
-            >
-              {% if media.media_type == 'image' %}
-                {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1' %}
-              {% elsif media.media_type == 'video' %}
-                {% render 'video', video: media, aspect_ratio: '1/1' %}
-              {% endif %}
-            </button>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
+    <blossom-carousel x-ref="thumbs" class="product-images__thumbs">
+      {% for media in product.media %}
+        <button
+          type="button"
+          class="ghost product-images__thumb"
+          aria-label="Go to slide {{ forloop.index }}"
+          aria-controls="{{ carousel_id }}"
+          :aria-current="activeSlide === {{ forloop.index0 }}"
+          @click="goTo({{ forloop.index0 }})"
+        >
+          {% if media.media_type == 'image' %}
+            {% render 'image', image: media, sizes: '100vw, 50vw', aspect_ratio: '1/1' %}
+          {% elsif media.media_type == 'video' %}
+            {% render 'video', video: media, aspect_ratio: '1/1' %}
+          {% endif %}
+        </button>
+      {% endfor %}
+    </blossom-carousel>
   </div>
 {% else %}
   {% render 'image', image: product.featured_image, sizes: '100vw, 50vw', aspect_ratio: '1/1' %}
 {% endunless %}
 
 {% stylesheet %}
-  .embla {
-    --slide-spacing: 0rem;
-    --slide-size: 100%;
+  .product-images {
     --thumb-size: 10%;
+    --thumbs-gap: 1rem;
   }
 
-  .embla__stage {
+  .product-images__stage {
     display: grid;
     grid-template: minmax(0, 1fr) / minmax(0, 1fr);
     border-bottom-right-radius: 0.25rem;
     overflow: clip;
   }
 
-  .embla__viewport {
+  .product-images__slides {
+    position: relative;
     grid-area: 1 / 1;
-    overflow: hidden;
-  }
-
-  .embla__container {
     display: flex;
-    touch-action: pan-y pinch-zoom;
-    margin-left: calc(var(--slide-spacing) * -1);
+    scroll-snap-type: x mandatory;
+
+    & > * {
+      flex: 0 0 100%;
+      min-width: 0;
+      scroll-snap-align: start;
+    }
   }
 
-  .embla__controls {
+  .product-images__controls {
     position: relative;
     z-index: 1;
     grid-area: 1 / 1;
@@ -129,51 +160,26 @@
     color: oklch(44.6% 0.03 256.802);
     pointer-events: none;
 
-    & > button {
+    & button {
       pointer-events: auto;
     }
   }
 
-  .embla__slide {
-    transform: translate3d(0, 0, 0);
-    flex: 0 0 var(--slide-size);
-    min-width: 0;
-    padding-left: var(--slide-spacing);
-
-    user-select: none;
-  }
-
-  .embla-thumbs {
-    --thumbs-slide-spacing: 1rem;
-    margin-top: var(--thumbs-slide-spacing);
-  }
-
-  .embla-thumbs__container {
+  .product-images__thumbs {
+    position: relative;
     display: flex;
-    flex-direction: row;
-    gap: var(--thumbs-slide-spacing);
-    padding-inline: var(--thumbs-slide-spacing);
-    padding-block: 1px;
-    margin-right: 1px;
+    gap: var(--thumbs-gap);
+    margin-top: var(--thumbs-gap);
+    padding: 1px var(--thumbs-gap);
   }
 
-  .embla-thumbs__slide {
+  .product-images__thumb {
     flex: 0 0 var(--thumb-size);
     display: flex;
     padding: 0;
 
-    &:last-of-type {
-      margin-right: var(--thumbs-slide-spacing);
+    &[aria-current='true'] {
+      outline: 1px solid var(--jazz-neutral-700);
     }
-  }
-
-  .embla-thumbs__slide__button {
-    cursor: pointer;
-    touch-action: manipulation;
-    overflow: clip;
-  }
-
-  .embla-thumbs__slide--selected {
-    outline: 1px solid var(--jazz-neutral-700);
   }
 {% endstylesheet %}

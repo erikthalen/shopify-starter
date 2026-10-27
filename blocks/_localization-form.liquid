@@ -91,7 +91,6 @@
 
       <input
         x-data="{ currentPath: window.location.href }"
-        @swup:page:view.document="currentPath = window.location.href"
         @htmx:after:swap.window="currentPath = window.location.href"
         type="hidden"
         name="return_to"
