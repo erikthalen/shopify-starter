@@ -36,7 +36,7 @@
     hx-get="{{ search.url }}"
     hx-select="#paginated_items"
     hx-target="#paginated_items"
-    hx-swap="outerHTML"
+    hx-swap="outerHTML transition:true"
     hx-select-oob="#search_filter_form:outerHTML,#search_filter_button:outerHTML"
     hx-push-url="true"
     @change="$el.requestSubmit()"
@@ -246,7 +246,7 @@
       hx-get="{{ collection.url }}?sort_by={{ collection.sort_by }}"
       hx-select="#main_collection"
       hx-target="#main_collection"
-      hx-swap="outerHTML"
+      hx-swap="outerHTML transition:true"
       class="button link"
       data-loading-states
     >

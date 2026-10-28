@@ -1,23 +1,29 @@
+{% assign variant = product.selected_or_first_available_variant %}
+
 <div class="product-gallery">
-  <blossom-carousel id="product-media-carousel">
-    {% for media in product.media %}
-      <div class="gallery-slide" data-blossom-slide>
-        {% render 'media', media: media %}
-      </div>
-    {% endfor %}
-  </blossom-carousel>
+  {% if product.media.size > 1 %}
+    <blossom-carousel id="product-media-carousel">
+      {% for media in product.media %}
+        <div class="gallery-slide" data-blossom-slide>
+          {% render 'media', media: media, sizes: '100vw, 50vw' %}
+        </div>
+      {% endfor %}
+    </blossom-carousel>
 
-  <div class="carousel-nav">
-    <blossom-prev for="product-media-carousel">
-      {% render 'icon', name: 'chevron-left' %}
-    </blossom-prev>
+    <div class="carousel-nav">
+      <blossom-prev for="product-media-carousel">
+        {% render 'icon', name: 'chevron-left' %}
+      </blossom-prev>
 
-    <blossom-next for="product-media-carousel">
-      {% render 'icon', name: 'chevron-right' %}
-    </blossom-next>
-  </div>
+      <blossom-next for="product-media-carousel">
+        {% render 'icon', name: 'chevron-right' %}
+      </blossom-next>
+    </div>
 
-  <blossom-dots for="product-media-carousel"></blossom-dots>
+    <blossom-dots for="product-media-carousel"></blossom-dots>
+  {% else %}
+    {% render 'media', media: product.featured_media, sizes: '100vw, 50vw' %}
+  {% endif %}
 </div>
 
 <div id="product_content" class="product-info">
@@ -31,9 +37,91 @@
     <div class="prose">{{ product.description }}</div>
   {%- endunless -%}
 
-  {% render 'variant-picker' %}
+  {% unless product.has_only_default_variant %}
+    <section id="variant_picker" class="variant-picker">
+      {%- for option in product.options_with_values -%}
+        <fieldset>
+          <legend>{{ option.name }}</legend>
 
-  {% render 'product-form', product: product %}
+          <div class="tab-links morph">
+            {%- for option_value in option.values -%}
+              {% assign variants = product.variants %}
+
+              {% comment %} get url to this option's variant, given what's selected of the other options {% endcomment %}
+              {%- for other_option in product.options_with_values -%}
+                {% if other_option.name == option.name %}
+                  {% assign option_key = 'option' | append: option.position %}
+                  {% assign variants = variants | where: option_key, option_value.name %}
+                {% else %}
+                  {% assign option_key = 'option' | append: other_option.position %}
+                  {% assign variants = variants | where: option_key, other_option.selected_value %}
+                {% endif %}
+              {% endfor %}
+
+              {% comment %} class="{% if option_value.selected %}secondary{% else %}outlined{% endif %}" {% endcomment %}
+              <a
+                hx-preload="htmx:after:init timeout:60s"
+                hx-get="{{ product.url }}?variant={{ variants.first.id }}"
+                hx-target="#product_content"
+                hx-select="#product_content"
+                hx-swap="outerMorph"
+                hx-replace-url="true"
+                href="{{ product.url }}?variant={{ variants.first.id }}"
+                data-loading-states
+                {% if option_value.selected %}
+                  aria-current="page"
+                {% endif %}
+                {% unless option_value.available %}
+                  disabled="true"
+                {% endunless %}
+              >
+                {{ option_value -}}
+              </a>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      {%- endfor -%}
+    </section>
+  {% endunless %}
+
+  {% form 'product',
+    product,
+    class: 'product-form',
+    hx-post: routes.cart_add_url,
+    hx-swap: 'none',
+    hx-select-oob: '#cart_drawer:outerMorph transition:true,#cart_section:outerHTML transition:true',
+    data-loading-states: ''
+  %}
+    <input id="variant_id" type="hidden" name="id" value="{{ variant.id }}">
+
+    <fieldset>
+      {% comment %} {% assign amount_in_cart = cart.items | where: 'id', product.selected_or_first_available_variant.id | map: 'quantity' | sum %} {% endcomment %}
+
+      {% render 'quantity-selector', min: 1, name: 'quantity', value: 1, id: 'product', attr: 'hx-preserve' %}
+
+      <button
+        class="add-to-cart"
+        data-loading-aria-busy
+        type="submit"
+        name="add"
+        {% unless variant.available %}
+          disabled
+        {% endunless %}
+      >
+        {% if variant.available %}
+          Add to cart
+        {% else %}
+          Notify me
+        {% endif %}
+      </button>
+    </fieldset>
+
+    <div id="shopify_payment_button">
+      {{ form | payment_button }}
+    </div>
+  {% endform %}
+
+  {% comment %} {% render 'product-form', product: product %} {% endcomment %}
 </div>
 
 {% stylesheet %}
@@ -48,6 +136,8 @@
     }
 
     .product-gallery {
+      isolation: isolate;
+
       width: 100%;
       display: grid;
       gap: 0.5rem;
@@ -109,8 +199,29 @@
         }
       }
 
+      .variant-picker {
+        display: grid;
+        gap: 1rem;
+        margin-block: 1rem;
+
+        ul {
+          display: flex;
+          gap: 1rem;
+        }
+
+        li,
+        a {
+          width: 100%;
+        }
+      }
+
       .product-form {
-        margin-top: 2rem;
+        fieldset {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+          margin-block: 1.5rem;
+        }
       }
     }
   }

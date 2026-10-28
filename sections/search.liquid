@@ -5,7 +5,7 @@
     hx-get="{{ routes.search_url }}"
     hx-select="#search_results"
     hx-target="#search_results"
-    hx-swap="outerHTML"
+    hx-swap="outerHTML transition:true"
     hx-replace-url="true"
     hx-sync="this:replace"
     data-loading-states
@@ -101,7 +101,7 @@
                           hx-get="{{ request.path }}?q={{ search.terms }}&sort_by={{ option.value }}"
                           hx-target="#search_results"
                           hx-select="#search_results"
-                          hx-swap="outerHTML"
+                          hx-swap="outerHTML transition:true"
                           hx-replace-url="true"
                           {% if search.sort_by == option.value %}
                             checked

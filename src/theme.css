@@ -69,11 +69,6 @@ shopify-editor {
   background-color: white;
 }
 
-/* active nav links and the current pagination page */
-[aria-current="page"] {
-  text-decoration: underline;
-}
-
 .desktop-only {
   @media (width < 48rem) {
     display: none !important;

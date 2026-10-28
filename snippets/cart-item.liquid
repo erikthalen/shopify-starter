@@ -72,11 +72,9 @@
         method="post"
         action="{{ routes.cart_change_url }}"
         hx-post="{{ routes.cart_change_url }}"
-        hx-select="#cart_drawer"
-        hx-target="#cart_drawer"
-        hx-swap="outerMorph transition:true"
+        hx-swap="none"
         hx-sync="this:replace"
-        hx-select-oob="#cart_section"
+        hx-select-oob="#cart_drawer:outerMorph transition:true,#cart_section:outerHTML transition:true"
         data-loading-states
         data-loading-target="#cart_item_{{ id }}"
         data-loading-aria-busy
@@ -94,10 +92,8 @@
 
       <a
         hx-post="{{ item.url_to_remove }}"
-        hx-select="#cart_drawer"
-        hx-target="#cart_drawer"
-        hx-swap="outerMorph transition:true"
-        hx-select-oob="#cart_section"
+        hx-swap="none"
+        hx-select-oob="#cart_drawer:outerMorph transition:true,#cart_section:outerHTML transition:true"
         data-loading-states
         data-loading-aria-busy
         class="button secondary"

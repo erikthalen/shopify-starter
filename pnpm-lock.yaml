@@ -15,8 +15,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       '@erikt/ui':
-        specifier: ^0.0.43
-        version: 0.0.43
+        specifier: ^0.0.44
+        version: 0.0.44
       '@videojs/html':
         specifier: ^10.2.0
         version: 10.2.0(react@19.3.1)
@@ -54,8 +54,8 @@ packages:
   '@blossom-carousel/web@1.6.0':
     resolution: {integrity: sha512-34Tf0LOgmHpIpaju1bxxbyo8y1Jsg+4AQoQyuzZTQ8iuBMr37tJfVIeTgeLq7krXiP1AKtmgN1WV/yoUttR3bQ==}
 
-  '@erikt/ui@0.0.43':
-    resolution: {integrity: sha512-Xpm+svWVfKNDa21Q5GsB/AeJkrnhXC5QFG3nUE1ff0mQ+Svx44LHyhqpVd+YTE8TvpRlHa0l8JX/AbmXkUsI6A==}
+  '@erikt/ui@0.0.44':
+    resolution: {integrity: sha512-8ONUwS6fCPFktYBeMPbhWgTxZyp44x7Oqw9NSoVXLCPYBYLLLuXz632Y7zOU8ybUZpZng87x4ShnpHZ3neQU8Q==}
     hasBin: true
 
   '@esbuild/aix-ppc64@0.28.2':
@@ -380,7 +380,7 @@ snapshots:
 
   '@blossom-carousel/web@1.6.0': {}
 
-  '@erikt/ui@0.0.43': {}
+  '@erikt/ui@0.0.44': {}
 
   '@esbuild/aix-ppc64@0.28.2':
     optional: true

@@ -1,3 +1,5 @@
+// must run before Alpine and htmx initialize the DOM
+import "./utils/infinite-scroll-cache"
 import alpine from "./alpine"
 import htmx from "htmx.org"
 import "htmx.org/dist/ext/hx-preload.js"
