@@ -8,52 +8,124 @@
   {% content_for 'block', type: '_cart-drawer', id: 'cart_drawer' %}
 {% enddoc %}
 
-<a
-  href="{{ routes.cart_url }}"
-  x-data="{ active: {% if request.path == '{{ routes.cart_url }}' %}true{% else %}false{% endif %} }"
-  @window:navigation.window="active = location.pathname === '{{ routes.cart_url }}'"
-  onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_drawer')?.showModal()"
-  :class="active ? 'underline' : ''"
-  class="button ghost"
->
-  Cart
-  <span
-    >(<span id="cart_amount">{{- cart.item_count -}}</span>)</span
+<div id="cart_drawer">
+  <a
+    href="{{ routes.cart_url }}"
+    onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_drawer_dialog')?.showModal()"
+    class="button ghost"
+    {% if request.path == routes.cart_url %}
+      aria-current="page"
+    {% endif %}
   >
-</a>
+    <span class="desktop-only">Cart</span>
+    <span class="mobile-only">{% render 'icon', name: 'basket' %}</span>
 
-<dialog
-  scroll-lock
-  id="cart_drawer"
-  closedby="any"
-  class="top-4 right-4 bottom-4 left-auto h-(--vvh) w-full max-w-md overflow-auto overscroll-contain"
-  style="view-transition-name: cart-drawer"
->
-  <article
-    id="cart_drawer_content"
-    class="grid h-full grid-rows-[auto_1fr]"
+    (
+    {{- cart.item_count -}}
+    )
+  </a>
+
+  <dialog
+    id="cart_drawer_dialog"
+    scroll-lock
+    closedby="any"
+    class="drawer"
   >
-    <header class="sticky top-0 z-1 justify-between bg-(--jazz-background-color)">
-      <p>
-        Your cart (
-        {{- cart.item_count -}}
-        )
-      </p>
+    <article class="drawer-content">
+      <header>
+        <span>
+          Your cart (
+          {{- cart.item_count -}}
+          )
+        </span>
 
-      <form method="dialog" class="contents">
-        <button aria-title="Close cart drawer" class="button ghost square">
-          {% render 'icon-cross' %}
-        </button>
-      </form>
-    </header>
+        <form method="dialog" class="contents">
+          <button aria-title="Close cart drawer" class="button ghost square">
+            {% render 'icon', name: 'cross' %}
+          </button>
+        </form>
+      </header>
 
-    {% render 'cart-form' %}
-  </article>
-</dialog>
+      {%- if cart == empty -%}
+        <div class="empty cart-empty">
+          {% render 'icon', name: 'basket' %}
+
+          <h2>Your cart is empty</h2>
+          <a href="{{ routes.collections_url }}" class="button"> Go to shop </a>
+        </div>
+      {%- else -%}
+        <ul class="cart-items">
+          {%- for item in cart.items -%}
+            {% render 'cart-item', item: item %}
+          {%- endfor -%}
+        </ul>
+
+        <footer>
+          <div class="cart-total">
+            <p>Total: {{ cart.total_price | money_with_currency }}</p>
+
+            {% form 'cart', cart %}
+              <button type="submit" name="checkout">Checkout</button>
+            {% endform %}
+          </div>
+
+          <a href="{{ routes.cart_url }}" class="button ghost"> Go to cart </a>
+        </footer>
+      {%- endif -%}
+    </article>
+  </dialog>
+</div>
+
+{% stylesheet %}
+  .cart-drawer {
+    .drawer-content {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      height: 100%;
+
+      > header {
+        z-index: 1;
+
+        position: sticky;
+        top: 0;
+
+        justify-content: space-between;
+      }
+
+      > footer {
+        z-index: 1;
+
+        position: sticky;
+        bottom: 0;
+
+        display: grid;
+      }
+    }
+
+    .cart-empty {
+      margin: auto;
+    }
+
+    .cart-items {
+      display: grid;
+      align-content: baseline;
+      gap: 0.5rem;
+
+      overflow: auto;
+      overscroll-behavior: contain;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "Cart drawer",
+  "class": "cart-drawer",
   "presets": [
     {
       "name": "Cart drawer"

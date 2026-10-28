@@ -1,10 +1,39 @@
-<div class="flex flex-col gap-3" aria-hidden="true">
+<div class="product-card-skeleton" aria-hidden="true">
   {% comment %} image {% endcomment %}
-  <div class="aspect-square animate-pulse rounded bg-(--jazz-neutral-100)"></div>
+  <div class="skeleton-media"></div>
 
-  <div class="h-lh w-[25ch] animate-pulse rounded bg-(--jazz-neutral-100)"></div>
-  <div class="h-lh w-[10ch] animate-pulse rounded bg-(--jazz-neutral-100)"></div>
+  <div class="skeleton-line" style="--width: 25ch"></div>
+  <div class="skeleton-line" style="--width: 10ch"></div>
 
   {% comment %} add-to-cart button {% endcomment %}
-  <div class="h-lh w-[15ch] animate-pulse rounded bg-(--jazz-neutral-100)"></div>
+  <div class="skeleton-line" style="--width: 15ch"></div>
 </div>
+
+{% stylesheet %}
+  .product-card-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    > * {
+      border-radius: 0.25rem;
+      background-color: var(--ui-neutral-100);
+      animation: product-card-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    .skeleton-media {
+      aspect-ratio: 1;
+    }
+
+    .skeleton-line {
+      width: var(--width);
+      height: 1lh;
+    }
+  }
+
+  @keyframes product-card-skeleton-pulse {
+    50% {
+      opacity: 0.5;
+    }
+  }
+{% endstylesheet %}

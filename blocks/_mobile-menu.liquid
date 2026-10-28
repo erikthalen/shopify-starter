@@ -7,94 +7,57 @@
   {% content_for 'block', type: '_mobile-menu', id: 'mobile_menu' %}
 {% enddoc %}
 
-<button
-  class="button"
-  onclick="document.getElementById('mobile_menu')?.getAttribute('open') ? document.getElementById('mobile_menu')?.close() : document.getElementById('mobile_menu')?.showModal()"
->
-  Menu
-</button>
+<button class="button ghost" onclick="document.getElementById('mobile_menu')?.showModal()">Menu</button>
 
 <dialog
   scroll-lock
   id="mobile_menu"
   closedby="any"
-  class="fixed top-0 bottom-0 left-0 h-full max-h-(--vvh) w-screen max-w-none overflow-auto overscroll-contain bg-white"
+  class="drawer menu-dialog"
+  data-position="left"
 >
-  <div class="relative z-2 w-full justify-center">
-    <div
-      class="mx-auto grid w-full max-w-3xl grid-rows-[auto_1fr] md:pb-40"
-    >
-      <header class="sticky top-0 z-1 mx-4 flex h-10 items-center justify-between border-b border-gray-300 bg-white">
-        <p>Menu</p>
+  <article>
+    <header>
+      <p>Menu</p>
 
-        <form method="dialog" class="contents">
-          <button aria-title="Close cart drawer" class="button size-5">
-            {% render 'icon-cross' %}
-          </button>
-        </form>
-      </header>
+      <form method="dialog">
+        <button aria-title="Close mobile menu" class="button ghost square">
+          {% render 'icon', name: 'cross' %}
+        </button>
+      </form>
+    </header>
 
-      <nav class="flex flex-col p-4">
-        <a
-          href="{{ routes.collections_url }}"
-          x-data="{ active: {% if request.path contains '{{ routes.collections_url }}' %}true{% else %}false{% endif %} }"
-          @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
-          :class="active ? 'underline' : ''"
-          class="button"
-        >
-          Shop
-        </a>
-      </nav>
-    </div>
-  </div>
+    <nav>
+      <a
+        class="button ghost"
+        href="{{ routes.collections_url }}"
+        {% if request.path contains routes.collections_url %}
+          aria-current="page"
+        {% endif %}
+      >
+        Shop
+      </a>
+
+      {% render 'account-link' %}
+    </nav>
+  </article>
 </dialog>
 
 {% stylesheet %}
-  dialog#mobile_menu[open] {
-    transform: translateX(0);
-  }
-
-  dialog#mobile_menu {
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-
-    transform: translateX(-100%);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-
-    @media (width >= 48rem) {
-      transform: translateX(-100%);
+  .mobile-menu {
+    dialog {
     }
-  }
 
-  dialog#mobile_menu:not(:has(output:first-child)) {
-    touch-action: none;
-  }
-
-  @starting-style {
-    dialog#mobile_menu[open] {
-      transform: translateX(-100%);
-
-      @media (width >= 48rem) {
-        transform: translateX(-100%);
+    article {
+      header {
+        justify-content: space-between;
       }
-    }
-  }
 
-  dialog#mobile_menu::backdrop {
-    background-color: rgb(0 0 0 / 25%);
-    opacity: 0;
-    backdrop-filter: blur(2px);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-
-    touch-action: none;
-  }
-
-  dialog#mobile_menu[open]::backdrop {
-    opacity: 1;
-  }
-
-  @starting-style {
-    dialog#mobile_menu[open]::backdrop {
-      opacity: 0;
+      nav {
+        display: grid;
+        gap: 1rem;
+        justify-items: baseline;
+      }
     }
   }
 {% endstylesheet %}
@@ -102,6 +65,7 @@
 {% schema %}
 {
   "name": "Mobile menu",
+  "class": "mobile-menu",
   "presets": [
     {
       "name": "Mobile menu"

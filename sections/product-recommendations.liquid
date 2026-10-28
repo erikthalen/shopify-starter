@@ -6,42 +6,69 @@
 
 {%- assign amount = section.settings.limit | times: 1 | default: 4 -%}
 
-<div class="my-4 px-4">
-  <h2 class="mb-4">You may also like</h2>
+<h2>You may also like</h2>
 
-  <div id="{{ unique_id }}" class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-    {%- if recommendations.performed -%}
+<div id="{{ unique_id }}">
+  {%- if recommendations.performed -%}
+    <ul class="recommendation-grid">
       {%- for product in recommendations.products -%}
         <li>
           {% render 'product-card', product: product %}
         </li>
       {%- endfor -%}
-    {%- else -%}
+    </ul>
+  {%- else -%}
+    <ul class="recommendation-grid">
       {% for i in (1..amount) %}
-        {% render 'product-card-skeleton' %}
+        <li>
+          {% render 'product-card-skeleton' %}
+        </li>
       {% endfor %}
-    {%- endif -%}
-  </div>
-
-  <form
-    action="{{ routes.product_recommendations_url }}"
-    hx-get="{{ routes.product_recommendations_url }}"
-    hx-trigger="load"
-    hx-select="#{{ unique_id }}"
-    hx-target="#{{ unique_id }}"
-    hx-swap="outerHTML"
-    data-loading-states
-  >
-    <input type="hidden" name="section_id" value="{{ section.id }}">
-    <input type="hidden" name="product_id" value="{{ product.id }}">
-    <input type="hidden" name="limit" value="{{ amount }}">
-    <input type="hidden" name="intent" value="{{ section.settings.intent | default: 'related' }}">
-  </form>
+    </ul>
+  {%- endif -%}
 </div>
+
+<form
+  action="{{ routes.product_recommendations_url }}"
+  hx-get="{{ routes.product_recommendations_url }}"
+  hx-trigger="load"
+  hx-select="#{{ unique_id }}"
+  hx-target="#{{ unique_id }}"
+  hx-swap="outerHTML"
+  data-loading-states
+>
+  <input type="hidden" name="section_id" value="{{ section.id }}">
+  <input type="hidden" name="product_id" value="{{ product.id }}">
+  <input type="hidden" name="limit" value="{{ amount }}">
+  <input type="hidden" name="intent" value="{{ section.settings.intent | default: 'related' }}">
+</form>
+
+{% stylesheet %}
+  .product-recommendations {
+    margin-block: 1rem;
+    padding-inline: 1rem;
+
+    > h2 {
+      margin-bottom: 1rem;
+    }
+
+    .recommendation-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+
+      @media (width >= 64rem) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "Product recommendations",
+  "tag": "section",
+  "class": "product-recommendations",
   "enabled_on": {
     "templates": ["product"]
   },

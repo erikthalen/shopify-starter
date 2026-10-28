@@ -1,6 +1,6 @@
 {
   "name": "shopify-starter",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "private": true,
   "author": {
     "name": "Erik Thalén",
@@ -9,36 +9,31 @@
   "repository": "github:erikthalen/shopify-starter",
   "type": "module",
   "scripts": {
-    "dev": "pnpm run shopify:dev & pnpm run vite:dev",
-    "deploy": "pnpm run vite:build && pnpm run shopify:deploy",
-    "vite:dev": "vite",
-    "vite:build": "vite build",
-    "shopify:dev": "shopify theme dev -e development --open",
-    "shopify:deploy": "shopify theme push -e development && shopify theme push -e production",
+    "dev": "node esbuild.config.js --watch & shopify theme dev -e development --open",
+    "deploy": "node esbuild.config.js && shopify theme push -e production",
+    "docs": "pnpm erikt-ui docs",
     "prettier": "prettier . --write"
   },
   "devDependencies": {
     "@shopify/prettier-plugin-liquid": "^1.5.2",
-    "@tailwindcss/vite": "4.2.2",
     "@types/alpinejs": "^3.13.11",
     "@types/alpinejs__intersect": "^3.13.4",
-    "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.9",
-    "vite": "^8.0.7",
-    "vite-plugin-shopify": "4.1.2"
+    "esbuild": "^0.28.2",
+    "prettier": "^3.3.3"
   },
   "dependencies": {
     "@alpinejs/intersect": "^3.14.9",
-    "@swup/a11y-plugin": "^5.0.0",
-    "@swup/debug-plugin": "^4.1.0",
-    "@swup/preload-plugin": "^3.2.11",
+    "@blossom-carousel/web": "^1.6.0",
+    "@erikt/ui": "^0.0.43",
+    "@videojs/html": "^10.2.0",
     "alpinejs": "3.15.11",
-    "embla-carousel": "^8.6.0",
-    "htmx-ext-preload": "^2.1.2",
-    "htmx.org": "^2.0.8",
-    "idiomorph": "^0.7.4",
-    "swup": "4.8.3",
-    "tailwindcss": "4.2.2"
+    "dialog-closedby-polyfill": "^1.3.0",
+    "htmx.org": "^4.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   },
   "prettier": {
     "trailingComma": "es5",
@@ -47,8 +42,7 @@
     "singleQuote": false,
     "arrowParens": "avoid",
     "plugins": [
-      "@shopify/prettier-plugin-liquid",
-      "prettier-plugin-tailwindcss"
+      "@shopify/prettier-plugin-liquid"
     ]
   }
 }

@@ -1,0 +1,211 @@
+{%- doc -%}
+  Renders an inline SVG icon.
+
+  @param {string} name - cross, magnifier, chevron-down, chevron-left, chevron-right, minus, plus, cart, forbid, github
+  @param {string} [class] - Extra classes on the svg
+  @param {string} [attr] - Extra HTML attributes on the svg
+
+  @example
+  {% render 'icon', name: 'cross' %}
+
+  {% render 'icon', name: 'chevron-down', attr: 'x-show="open"' %}
+{%- enddoc -%}
+
+{%- case name -%}
+  {%- when 'cross' -%}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif %}
+      {{ attr }}
+    >
+      <path vector-effect="non-scaling-stroke" d="M18 6l-12 12" />
+      <path vector-effect="non-scaling-stroke" d="M6 6l12 12" />
+    </svg>
+  {%- when 'magnifier' -%}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif %}
+      {{ attr }}
+    >
+      <path vector-effect="non-scaling-stroke" d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+      <path vector-effect="non-scaling-stroke" d="M21 21l-6 -6" />
+    </svg>
+  {%- when 'chevron-down' -%}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif %}
+      {{ attr }}
+    >
+      <path vector-effect="non-scaling-stroke" d="M6 9l6 6l6 -6" />
+    </svg>
+  {%- when 'chevron-left' -%}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif %}
+      {{ attr }}
+    >
+      <path vector-effect="non-scaling-stroke" d="M15 6l-6 6l6 6" />
+    </svg>
+  {%- when 'chevron-right' -%}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif %}
+      {{ attr }}
+    >
+      <path vector-effect="non-scaling-stroke" d="M9 6l6 6l-6 6" />
+    </svg>
+  {%- when 'minus' -%}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif %}
+      {{ attr }}
+    >
+      <path vector-effect="non-scaling-stroke" d="M5 12l14 0" />
+    </svg>
+  {%- when 'plus' -%}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif %}
+      {{ attr }}
+    >
+      <path vector-effect="non-scaling-stroke" d="M12 5l0 14" />
+      <path vector-effect="non-scaling-stroke" d="M5 12l14 0" />
+    </svg>
+  {%- when 'basket' -%}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif %}
+      {{ attr }}
+    >
+      <path d="M10 14a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path d="M5.001 8h13.999a2 2 0 0 1 1.977 2.304l-1.255 7.152a3 3 0 0 1 -2.966 2.544h-9.512a3 3 0 0 1 -2.965 -2.544l-1.255 -7.152a2 2 0 0 1 1.977 -2.304" />
+      <path d="M17 10l-2 -6" />
+      <path d="M7 10l2 -6" />
+    </svg>
+  {%- when 'forbid' -%}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif %}
+      {{ attr }}
+    >
+      <path vector-effect="non-scaling-stroke" d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+      <path vector-effect="non-scaling-stroke" d="M9 15l6 -6" />
+    </svg>
+  {%- when 'github' -%}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      {% if class != blank %}
+        class="{{ class }}"
+      {% endif %}
+      {{ attr }}
+    >
+      <path vector-effect="non-scaling-stroke" d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+    </svg>
+{%- endcase -%}

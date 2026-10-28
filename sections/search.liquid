@@ -1,4 +1,4 @@
-<div class="flex justify-center">
+<div class="search-box">
   <form
     x-data
     action="{{ routes.search_url }}"
@@ -8,14 +8,13 @@
     hx-swap="outerHTML"
     hx-replace-url="true"
     hx-sync="this:replace"
-    class="m-4 mb-6 flex w-full max-w-md items-center gap-2"
     data-loading-states
     data-loading-target="#search_input"
     data-loading-aria-busy
   >
-    <label class="w-full py-2">
+    <label>
       <span data-prefix>
-        {% render 'icon-magnifier' %}
+        {% render 'icon', name: 'magnifier' %}
       </span>
 
       <input
@@ -38,58 +37,30 @@
 
 {% unless search.performed %}
   <section id="search_results" class="empty">
-    <svg
-      class="size-10"
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-      <path d="M21 21l-6 -6" />
-    </svg>
+    {% render 'icon', name: 'magnifier' %}
 
     <h1>Search isn't performed</h1>
     <p>Type something in the search field.</p>
   </section>
 
 {% else %}
-  <section id="search_results" class="p-4">
+  <section id="search_results" class="search-results">
     {% if search.results_count == 0 %}
       <div class="empty">
-        <svg
-          class="size-10"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="icon icon-tabler icons-tabler-outline icon-tabler-forbid-2"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 15l6 -6" />
-        </svg>
+        {% render 'icon', name: 'forbid' %}
 
         <h1>No results for "{{ search.terms }}"</h1>
         <p>Try searching for something else</p>
       </div>
     {% else %}
       {% paginate search.results by 24 %}
-        <div class="mb-2 flex justify-between">
+        <div class="results-heading">
           <h1>
             Results for: "{{ search.terms }}"
-            <span class="text-neutral-500">({{ search.results_count }})</span>
+            <span class="result-count">({{ search.results_count }})</span>
           </h1>
 
-          <div class="grid justify-items-end">
+          <div class="result-sort">
             {%- assign current_sort_label = 'Sort by' -%}
             {%- for option in search.sort_options -%}
               {%- if search.sort_by == option.value -%}
@@ -98,7 +69,7 @@
             {%- endfor -%}
 
             <label
-              class="field text-right"
+              class="field"
               data-loading-states
               data-loading-aria-busy
               data-loading-target="#search_sort_by_button"
@@ -107,19 +78,7 @@
 
               <button id="search_sort_by_button" popovertarget="sort_by_select">
                 <span>{{ current_sort_label }}</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M6 9l6 6l6 -6" />
-                </svg>
+                {% render 'icon', name: 'chevron-down' %}
               </button>
 
               <div
@@ -160,7 +119,7 @@
 
         {% comment %} {% content_for 'block', type: '_search-filter', id: 'search-filter' %} {% endcomment %}
 
-        <ol id="paginated_items" class="grid gap-4 md:grid-cols-4">
+        <ol id="paginated_items" class="result-list">
           {%- for item in search.results -%}
             <li>
               {%- case item.object_type -%}
@@ -187,9 +146,66 @@
   </section>
 {% endunless %}
 
+{% stylesheet %}
+  .main-search {
+    .search-box {
+      display: flex;
+      justify-content: center;
+
+      form {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        width: 100%;
+        max-width: 28rem;
+        margin: 1rem 1rem 1.5rem;
+
+        label {
+          width: 100%;
+          padding-block: 0.5rem;
+        }
+      }
+    }
+
+    .search-results {
+      padding: 1rem;
+
+      .results-heading {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+
+        .result-count {
+          color: var(--ui-neutral-500);
+        }
+
+        .result-sort {
+          display: grid;
+          justify-items: end;
+
+          > .field {
+            text-align: right;
+          }
+        }
+      }
+
+      .result-list {
+        display: grid;
+        gap: 1rem;
+
+        @media (width >= 48rem) {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+    }
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Main search",
+  "class": "main-search",
   "settings": [
     {
       "type": "select",

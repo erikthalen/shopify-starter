@@ -1,40 +1,126 @@
-<section id="main_product" class="grid gap-4 md:grid-cols-2">
-  <div class="col-span-2 grid items-start justify-items-center gap-4 md:grid-cols-2">
-    <div class="w-full">
-      {% render 'product-images-carousel' %}
-
-      {% comment %}
-        <div class="flex gap-4 pl-4 mt-4">
-          {% render 'variant-images' %}
-        </div>
-      {% endcomment %}
-    </div>
-
-    <div class="w-full p-5 max-md:px-4 md:w-sm lg:sticky lg:top-[20vh]">
-      <div id="product_info">
-        <h1 class="mb-1">{{ product.title }}</h1>
-
-        <div class="mb-4" id="product_price">
-          {% render 'product-price', product: product %}
-        </div>
+<div class="product-gallery">
+  <blossom-carousel id="product-media-carousel">
+    {% for media in product.media %}
+      <div class="gallery-slide" data-blossom-slide>
+        {% render 'media', media: media %}
       </div>
+    {% endfor %}
+  </blossom-carousel>
 
-      {% render 'product-form', product: product %}
+  <div class="carousel-nav">
+    <blossom-prev for="product-media-carousel">
+      {% render 'icon', name: 'chevron-left' %}
+    </blossom-prev>
 
-      {%- unless product.description == '<p></p>' -%}
-        <details id="product_description" class="mt-4">
-          <summary class="cursor-pointer py-4">Description</summary>
-
-          <div>{{ product.description }}</div>
-        </details>
-      {%- endunless -%}
-    </div>
+    <blossom-next for="product-media-carousel">
+      {% render 'icon', name: 'chevron-right' %}
+    </blossom-next>
   </div>
-</section>
+
+  <blossom-dots for="product-media-carousel"></blossom-dots>
+</div>
+
+<div id="product_content" class="product-info">
+  <hgroup>
+    <h1>{{ product.title }}</h1>
+
+    {% render 'product-price', product: product %}
+  </hgroup>
+
+  {%- unless product.description == '<p></p>' -%}
+    <div class="prose">{{ product.description }}</div>
+  {%- endunless -%}
+
+  {% render 'variant-picker' %}
+
+  {% render 'product-form', product: product %}
+</div>
+
+{% stylesheet %}
+  .main-product {
+    display: grid;
+    align-items: start;
+    justify-items: center;
+    gap: 1rem;
+
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .product-gallery {
+      width: 100%;
+      display: grid;
+      gap: 0.5rem;
+      align-items: center;
+
+      /* snap points make prev/next move one slide, without them Blossom scrolls 85% of the width */
+      blossom-carousel {
+        scroll-snap-type: x mandatory;
+        grid-area: 1 / 1 / 1;
+      }
+
+      blossom-dots {
+        button {
+          min-width: auto;
+        }
+      }
+
+      .gallery-slide {
+        width: 100%;
+        scroll-snap-align: start;
+      }
+
+      .carousel-nav {
+        grid-area: 1 / 1 / 1;
+
+        display: flex;
+        justify-content: space-between;
+        z-index: 1;
+
+        padding-inline: 1rem;
+
+        button {
+          padding: 0.5rem;
+          color: var(--ui-neutral-950);
+          background-color: var(--ui-neutral-100);
+        }
+      }
+    }
+
+    .product-info {
+      width: 100%;
+      padding: 1.25rem 1rem;
+
+      @media (width >= 48rem) {
+        width: 24rem;
+        padding-inline: 1.25rem;
+      }
+
+      @media (width >= 64rem) {
+        position: sticky;
+        top: 20vh;
+      }
+
+      hgroup {
+        margin-bottom: 1rem;
+
+        h1 {
+          margin-bottom: 0.25rem;
+        }
+      }
+
+      .product-form {
+        margin-top: 2rem;
+      }
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "Main product",
+  "tag": "section",
+  "class": "main-product",
   "enabled_on": {
     "templates": ["product"]
   },

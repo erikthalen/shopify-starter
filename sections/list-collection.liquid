@@ -1,23 +1,58 @@
-<section class="my-4 px-4">
-  <h1 class="mb-4">
-    All collections
-    <span class="text-neutral-500">({{ collections.size }})</span>
-  </h1>
+<h1>
+  All collections
+  <span class="collection-count">({{ collections.size }})</span>
+</h1>
 
-  <ol class="grid grid-cols-2 gap-4 md:grid-cols-4">
-    {% paginate collections by 250 %}
-      {% for collection in collections %}
-        <li>
-          <a href="{{ collection.url }}">
-            {% render 'image', image: collection.featured_image, sizes: '100vw, 20vw', aspect_ratio: '1/1' %}
+<ol>
+  {% paginate collections by 250 %}
+    {% for collection in collections %}
+      <li>
+        <a href="{{ collection.url }}">
+          {% render 'image', image: collection.featured_image, sizes: '100vw, 20vw', aspect_ratio: '1/1' %}
 
-            <div class="mt-2">
-              {{ collection.title }}
-              <span class="text-neutral-500">({{ collection.all_products_count }})</span>
-            </div>
-          </a>
-        </li>
-      {% endfor %}
-    {% endpaginate %}
-  </ol>
-</section>
+          <div class="collection-title">
+            {{ collection.title }}
+            <span class="collection-count">({{ collection.all_products_count }})</span>
+          </div>
+        </a>
+      </li>
+    {% endfor %}
+  {% endpaginate %}
+</ol>
+
+{% stylesheet %}
+  .list-collections {
+    margin-block: 1rem;
+    padding-inline: 1rem;
+
+    h1 {
+      margin-bottom: 1rem;
+    }
+
+    .collection-count {
+      color: var(--ui-neutral-500);
+    }
+
+    ol {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+
+      @media (width >= 48rem) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .collection-title {
+      margin-top: 0.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "List collections",
+  "tag": "section",
+  "class": "list-collections"
+}
+{% endschema %}

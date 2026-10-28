@@ -10,9 +10,9 @@
 
 {% assign variant = product.selected_or_first_available_variant %}
 
-<div class="flex gap-2">
+<div class="product-price">
   {% if variant.compare_at_price != blank and variant.compare_at_price != variant.price %}
-    <p class="text-(--jazz-neutral-500)">
+    <p class="compare-price">
       <s>{{ variant.compare_at_price | money }}</s>
     </p>
     <p>{{ variant.price | money }}</p>
@@ -20,3 +20,14 @@
     <p>{{ variant.price | money }}</p>
   {% endif %}
 </div>
+
+{% stylesheet %}
+  .product-price {
+    display: flex;
+    gap: 0.5rem;
+
+    .compare-price {
+      color: var(--ui-neutral-500);
+    }
+  }
+{% endstylesheet %}

@@ -1,51 +1,95 @@
-<div
-  class="relative z-2 flex h-10 w-full items-center justify-between gap-3 border-b border-(--jazz-neutral-300) bg-(--jazz-background-color) px-4 md:gap-4"
-  style="view-transition-name: site-header"
->
-  <nav class="flex items-center gap-3 md:gap-4">
-    <a
-      href="{{ routes.root_url }}"
-      x-data="{ active: {% if request.path == '{{ routes.root_url }}' %}true{% else %}false{% endif %} }"
-      @window:navigation.window="active = $el.href.replace(location.origin, '') === location.pathname"
-      :class="active ? 'underline' : ''"
-      class="button ghost"
-    >
-      {% if shop.brand.logo != blank %}
-        {% render 'image', image: shop.brand.logo, class: 'h-6 w-auto', alt: 'The logo' %}
-      {% else %}
-        Home
-      {% endif %}
-    </a>
+<nav>
+  <a
+    href="{{ routes.root_url }}"
+    class="home-link button ghost square"
+    {% if request.path == routes.root_url %}
+      aria-current="page"
+    {% endif %}
+  >
+    {% if shop.brand.logo != blank %}
+      {% render 'image', image: shop.brand.logo, alt: 'The logo', sizes: '40px, 40px' %}
+    {% else %}
+      Home
+    {% endif %}
+  </a>
 
-    <a
-      href="{{ routes.collections_url }}"
-      x-data="{ active: {% if request.path contains '{{ routes.collections_url }}' %}true{% else %}false{% endif %} }"
-      @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
-      :class="active ? 'underline' : ''"
-      class="desktop-only button ghost"
-    >
-      Shop
-    </a>
-  </nav>
+  <a
+    href="{{ routes.collections_url }}"
+    class="desktop-only button ghost"
+    {% if request.path contains routes.collections_url %}
+      aria-current="page"
+    {% endif %}
+  >
+    Shop
+  </a>
+</nav>
 
-  <div class="mobile-only">
-    {% content_for 'block', type: '_mobile-menu', id: 'mobile_menu' %}
-  </div>
-
-  <nav class="ml-auto flex items-center gap-3 md:gap-4">
-    {% content_for 'blocks' %}
-  </nav>
+<div class="mobile-only">
+  {% content_for 'block', type: '_mobile-menu', id: 'mobile_menu' %}
 </div>
 
+<nav>
+  <span class="desktop-only">{% render 'account-link' %}</span>
+
+  {% content_for 'blocks' %}
+</nav>
+
 {% stylesheet %}
-  :root {
-    --header-height: 2.5rem;
+  .site-header {
+    z-index: 1;
+
+    position: sticky;
+    top: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+
+    width: 100%;
+    height: var(--header-height);
+    padding-inline: 1rem;
+
+    background-color: var(--ui-background-color);
+    /* a shadow, not a border, so the line sits below the header height instead of inside it */
+    box-shadow: 0 1px var(--ui-neutral-300);
+
+    view-transition-name: site-header;
+
+    @media (width >= 48rem) {
+      gap: 1rem;
+    }
+
+    > nav {
+      display: flex;
+      align-items: center;
+
+      @media (width >= 48rem) {
+        gap: 1rem;
+      }
+
+      &:last-child {
+        margin-inline-start: auto;
+      }
+    }
+
+    .home-link {
+      display: flex;
+      height: var(--header-height);
+
+      img {
+        height: 100%;
+        aspect-ratio: 1;
+        object-fit: contain;
+      }
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "Header",
+  "class": "site-header",
   "tag": "header",
   "enabled_on": {
     "groups": ["header"]
@@ -60,9 +104,6 @@
     },
     {
       "type": "_predictive-search"
-    },
-    {
-      "type": "_account-link"
     }
   ],
   "presets": [
@@ -74,9 +115,6 @@
         },
         {
           "type": "_predictive-search"
-        },
-        {
-          "type": "_account-link"
         },
         {
           "type": "_cart-drawer"

@@ -1,25 +1,42 @@
-<div class="mt-4 px-4" style="{% render 'color-scheme' %}">
+{% comment %} the color scheme is inline Liquid, which the section wrapper can't take {% endcomment %}
+<div style="{% render 'color-scheme' %}">
   <p>{{ section.settings.text }}</p>
 
-  <div class="text-(--scheme-primary)">Primary color</div>
-  <div class="text-(--scheme-secondary)">Secondary color</div>
+  <div class="primary-color">Primary color</div>
+  <div class="secondary-color">Secondary color</div>
 
-  {% render 'image',
+  {% render 'media-responsive',
     loading: 'eager',
     image: section.settings.image,
+    video: section.settings.video,
     image_mobile: section.settings.image_mobile,
+    video_mobile: section.settings.video_mobile,
     aspect_ratio_sm: '1/1',
     aspect_ratio_md: '2/1',
     sizes: '100vw, 100vw'
   %}
-
-  {% render 'video', video: section.settings.video, aspect_ratio_sm: '3/4', aspect_ratio_md: '16/9' %}
 </div>
+
+{% stylesheet %}
+  .test-section {
+    margin-top: 1rem;
+    padding-inline: 1rem;
+
+    .primary-color {
+      color: var(--scheme-primary);
+    }
+
+    .secondary-color {
+      color: var(--scheme-secondary);
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "Test section",
   "tag": "section",
+  "class": "test-section",
   "disabled_on": {
     "groups": ["header", "footer"]
   },
@@ -37,19 +54,48 @@
       "default": "scheme_1"
     },
     {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image"
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Type",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "image"
     },
     {
       "type": "image_picker",
-      "id": "image_mobile",
-      "label": "Image - mobile"
+      "id": "image",
+      "label": "Image",
+      "visible_if": "{{ section.settings.media_type == 'image' }}"
     },
     {
       "type": "video",
       "id": "video",
-      "label": "Video"
+      "label": "Video",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_mobile_media",
+      "label": "Custom mobile media",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image",
+      "visible_if": "{{ section.settings.custom_mobile_media and section.settings.media_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "video_mobile",
+      "label": "Video",
+      "visible_if": "{{ section.settings.custom_mobile_media and section.settings.media_type == 'video' }}"
     }
   ],
   "presets": [

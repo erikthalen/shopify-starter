@@ -1,121 +1,77 @@
-@layer theme, base, jazz-reset, jazz, components, utilities;
+@import "@erikt/ui";
+@import "@blossom-carousel/web/style.css";
 
-/* https://erikthalen.github.io/jazz/ */
-/* maybe remove this when getting started */
-@import "./jazz.css";
-
-@import "tailwindcss";
-@source "../";
-
-@font-face {
-  font-family: "DMMono";
-  src: local("DMMono"), url("fonts/DMMono-Light.ttf");
-  font-display: block;
-}
-
-@font-face {
-  font-family: "DMMono";
-  src: local("DMMono"), url("fonts/DMMono-Regular.ttf");
-  font-weight: 700;
-  font-display: block;
-}
-
-@theme {
-  --font-sans: "DMMono", sans-serif;
-  --background: var(--jazz-background-color);
-  --foreground: var(--jazz-text-color);
+@view-transition {
+  navigation: auto;
 }
 
 :root {
-  --jazz-primary: light-dark(#222222, #fefefe);
-}
-
-body {
-  background-color: var(--jazz-background-color);
-  color: var(--jazz-text-color);
-}
-
-button,
-.button {
-  border-radius: 4px;
-
-  &:not([class*="p-"]) {
-    padding: 0.33em;
-
-    &:not(.square) {
-      padding-inline: 0.5em;
-    }
-  }
-}
-
-svg:not([class*="size-"]) {
-  width: 1rem;
-  height: 1rem;
-}
-
-[aria-label] {
-  &:before {
-    border-radius: 3px;
-  }
-  &:after {
-    border-width: 3px;
-  }
+  --ui-primary: light-dark(#111, #fefefe);
 }
 
 * {
   font-size: 12px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  font-family: var(--font-sans);
+  font-family: "DMMono", sans-serif;
   font-weight: normal;
 }
 
 html {
   /* apply zooming of everything on screens > 1440px */
   --zoom-amount: 0.2;
+  --header-height: 2.5rem;
   font-size: max(
     12px,
     calc(12px + 12 * var(--zoom-amount) * (100vw - 1440px) / 1440)
   );
 
+  overscroll-behavior: none;
   scroll-padding-top: var(--header-height);
 
-  &[aria-busy="true"]:before {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-    z-index: 10000;
+  &:has([aria-busy="true"]) * {
+    cursor: wait !important;
   }
+}
+
+body {
+  --announcement-bar-height: 0rem;
+
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+
+  min-height: 100vh;
+  overflow-x: clip;
+  background-color: var(--ui-background-color);
+  color: var(--ui-text-color);
+
+  &:has(#announcement_bar) {
+    --announcement-bar-height: 2.5rem;
+  }
+
+  &:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
+    overflow: hidden;
+    touch-action: none;
+  }
+}
+
+#main {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+img {
+  width: 100%;
+  height: auto;
 }
 
 shopify-editor {
   background-color: white;
 }
 
-body:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
-  overflow: hidden;
-  touch-action: none;
-}
-
-dialog::backdrop {
-  view-transition-name: backdrop;
-}
-
-html:has([aria-busy="true"]) * {
-  cursor: wait !important;
-}
-
-details > summary {
-  list-style: none;
-}
-
-img:not([class*="h-"]):not([class*="size-"]) {
-  height: auto;
-}
-
-img:not([class*="w-"]):not([class*="size-"]) {
-  width: 100%;
+/* active nav links and the current pagination page */
+[aria-current="page"] {
+  text-decoration: underline;
 }
 
 .desktop-only {
@@ -130,12 +86,45 @@ img:not([class*="w-"]):not([class*="size-"]) {
   }
 }
 
-@keyframes prevent-scroll {
-  from {
-    opacity: 0;
-  }
+.contents {
+  display: contents;
 }
 
-input:focus {
-  animation: prevent-scroll 10ms forwards;
+/* hidden visually, still read by screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+/* templates/gift_card.liquid */
+
+.gift-card {
+  padding: 1rem;
+}
+
+/* templates/password.liquid */
+
+.password-login {
+  margin-block: 5rem;
+  padding-inline: 1rem;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  input[type="password"] {
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid oklch(87.2% 0.01 258.338);
+    border-radius: 0.25rem;
+  }
 }

@@ -26,13 +26,15 @@ export default defineComponent(() => ({
 
     // Pre-fetch notification content while the cart request is in-flight
     document.addEventListener(
-      "htmx:before-request",
-      (e: CustomEventInit) => {
-        const { elt, requestConfig } = e.detail
+      "htmx:before:request",
+      e => {
+        const { sourceElement, request } = e.detail.ctx
 
-        if (!requestConfig?.path?.includes("/cart/add")) return
+        if (!request.action.includes("/cart/add")) return
 
-        const variantId = new FormData(elt).get("id")?.toString()
+        const variantId = new FormData(sourceElement as HTMLFormElement)
+          .get("id")
+          ?.toString()
         if (!variantId) return
 
         this.notificationContent = this.getNotificationSection(variantId)
@@ -41,18 +43,19 @@ export default defineComponent(() => ({
     )
 
     document.addEventListener(
-      "htmx:after-request",
-      async (e: CustomEventInit) => {
-        const { requestConfig, failed } = e.detail
+      "htmx:after:request",
+      async e => {
+        const { request, response } = e.detail.ctx
 
-        if (failed || !requestConfig?.path?.includes("/cart/add")) return
+        if (!request.action.includes("/cart/add")) return
+        if (!response || response.status >= 400) return
 
         const content = await this.notificationContent
         this.notificationContent = null
 
         if (!content) return
 
-        this.$root.innerHTML = content.innerHTML
+        this.$root.replaceChildren(content)
         ;(this.$root as HTMLDialogElement).show()
       },
       { signal }

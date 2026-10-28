@@ -1,8 +1,8 @@
-<section class="my-4 px-4" id="main_collection">
-  <div class="mb-4 flex items-center justify-between">
+<div id="main_collection">
+  <div class="collection-heading">
     <h1>
       {{ collection.title }}
-      <span class="text-neutral-500">({{ collection.all_products_count }})</span>
+      <span class="product-count">({{ collection.all_products_count }})</span>
     </h1>
 
     {% content_for 'block', type: '_collection-filter', id: 'collection_filter' %}
@@ -11,10 +11,10 @@
   <div id="filter_result">
     {% paginate collection.products by 12 %}
       {% if collection.products.size == 0 %}
-        <p class="col-span-4">No results</p>
+        <p>No results</p>
       {% else %}
-        <div class="grid grid-cols-1 gap-x-4 gap-y-8 md:grid-cols-3">
-          <ul id="paginated_items" class="contents">
+        <div class="product-grid">
+          <ul id="paginated_items">
             {% for product in collection.products %}
               <li>
                 {% render 'product-card', product: product %}
@@ -33,11 +33,45 @@
       {%- endif -%}
     {% endpaginate %}
   </div>
-</section>
+</div>
+
+{% stylesheet %}
+  .main-collection {
+    margin-block: 1rem;
+    padding-inline: 1rem;
+
+    .collection-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+
+      .product-count {
+        color: var(--ui-neutral-500);
+      }
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem 1rem;
+
+      @media (width >= 48rem) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      > ul {
+        display: contents;
+      }
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "Main collection",
+  "tag": "section",
+  "class": "main-collection",
   "settings": [
     {
       "type": "select",

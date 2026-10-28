@@ -1,1 +1,23 @@
-<h1 class="p-4">Page not found</h1>
+{% render 'icon', name: 'forbid' %}
+
+<h1>Page not found</h1>
+<p>The page you are looking for does not exist. It may have been moved or deleted.</p>
+
+<footer>
+  <a href="{{ routes.root_url }}" class="button">Home page</a>
+  <a href="{{ routes.collections_url }}" class="button outlined">Browse products</a>
+</footer>
+
+{% stylesheet %}
+  .error-section {
+    margin-block: 15vh;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Error",
+  "tag": "section",
+  "class": "error-section empty"
+}
+{% endschema %}

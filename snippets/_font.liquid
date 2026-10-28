@@ -1,0 +1,27 @@
+{% doc %}
+  Outputs the font-face rules for the font files in the assets folder,
+  and preloads the font used for regular text. Render it in the `<head>`, before the theme stylesheet.
+
+  Font urls need the `asset_url` filter, which can't be used inside the stylesheet tag,
+  so the rules are output in a `<style>` tag instead.
+
+  @example
+  {% render 'font' %}
+{% enddoc %}
+
+{{ 'DMMono-Light.ttf' | asset_url | preload_tag: as: 'font', type: 'font/ttf', crossorigin: 'anonymous' }}
+
+<style>
+  @font-face {
+    font-family: "DMMono";
+    src: url("{{ 'DMMono-Light.ttf' | asset_url }}") format("truetype");
+    font-display: block;
+  }
+
+  @font-face {
+    font-family: "DMMono";
+    src: url("{{ 'DMMono-Regular.ttf' | asset_url }}") format("truetype");
+    font-weight: 700;
+    font-display: block;
+  }
+</style>

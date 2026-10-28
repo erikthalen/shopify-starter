@@ -15,250 +15,338 @@
   {% assign active_values_amount = active_values_amount | plus: value.size %}
 {% endfor %}
 
-<button id="filter_button" class="button ghost" onclick="document.getElementById('filter_drawer')?.show()">
-  Filter <span class="text-gray-500">({{ active_values_amount }})</span>
+<button
+  id="filter_button"
+  class="button ghost filter-button"
+  onclick="document.getElementById('filter_drawer')?.show()"
+>
+  Filter <span class="filter-count">({{ active_values_amount }})</span>
 </button>
 
 <dialog
   scroll-lock
   id="filter_drawer"
   closedby="any"
-  class="fixed top-[calc(var(--header-height)+var(--announcement-bar-height)+1rem)] right-4 bottom-auto left-4 z-9 max-h-(--vvh) w-[calc(100vw-2rem)] max-w-none overflow-auto overscroll-contain"
+  class="filter-dialog"
   style="view-transition-name: filter-drawer"
 >
-  <form
-    x-data
-    id="filter_form"
-    hx-get="{{ collection.url }}"
-    hx-select="#filter_result"
-    hx-target="#filter_result"
-    hx-swap="outerHTML"
-    hx-select-oob="#filter_form:outerHTML,#filter_button:outerHTML"
-    swup-push-history
-    @change="$el.requestSubmit()"
-    data-loading-states
-  >
-    <div class="grid gap-4 p-4 md:grid-cols-4 md:pb-14">
-      {%- for filter in collection.filters -%}
-        <div class="field">
-          <p>{{ filter.label }}</p>
-
-          {%- case filter.type -%}
-              {% comment %} BOOLEAN FILTER {% endcomment %}
-            {%- when 'boolean' -%}
-              <input
-                type="checkbox"
-                name="{{ filter.param_name }}"
-                value="{{ filter.true_value.value }}"
-                id="Filter-{{ filter.param_name }}"
-                {% if filter.true_value.active -%}
-                  checked
-                {%- endif %}
-              >
-              {{- filter.true_value.label -}}
-              ({{ filter.true_value.count }})
-              <input
-                type="checkbox"
-                name="{{ filter.param_name }}"
-                value="{{ filter.false_value.value }}"
-                id="Filter-{{ filter.param_name }}"
-                {% if filter.false_value.active -%}
-                  checked
-                {%- endif %}
-              >
-              {{- filter.false_value.label -}}
-              ({{ filter.false_value.count }})
-
-              {% comment %} LIST FILTER {% endcomment %}
-            {%- when 'list' -%}
-              {%- for filter_value in filter.values -%}
-                <div>
-                  <label
-                    {% if filter_value.swatch != blank %}
-                      style="
-                        {%- if filter_value.swatch.color != blank -%}
-                        background-color: {{ filter_value.swatch.color }};
-                        {%- endif -%}
-                        {%- if filter_value.swatch.image != blank -%}
-                        background-image: url({{ filter_value.swatch.image | image_url }});
-                        {%- endif -%}
-                      "
-                    {% endif %}
-                  >
-                    {{ filter_value.swatch.image }}
-                    <input
-                      type="checkbox"
-                      name="{{ filter_value.param_name }}"
-                      value="{{ filter_value.value }}"
-                      {% if filter_value.active -%}
-                        checked
-                      {%- endif %}
-                    >
-                    {{ filter_value.swatch.color }}
-
-                    {% comment %}
-                      To use color swatches:
-                      Create a Metaobject with 3 fields:
-                       1. "Label" - Single line text
-                       2. "Color" - Color
-                       3. "Image" - File (image)
-
-                      Create a Metafield on Variants and add this Metaobject as field value.
-                      Create a new Search & Discovery Filter and choose the Metafield as Source.
-                      Change Display options of the filter to "Swatch color: Color" and "Swatch pattern: Image"
-                    {% endcomment %}
-                    {% if filter.presentation == 'swatch' %}
-                      {% if filter_value.swatch.color != blank %}
-                        <span
-                          style="background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;"
-                        ></span>
-                      {% elsif filter_value.swatch.image != blank %}
-                        {{ filter_value.swatch.image | image_url: width: 30, height: 30 | image_tag }}
-                      {% endif %}
-                    {% else %}
-                      {{ filter_value.label }}
-                      <span class="text-(--jazz-neutral-400)">({{ filter_value.count }})</span>
-                    {% endif %}
-                  </label>
-                </div>
-              {%- endfor -%}
-
-              {% comment %} PRICE FILTER {% endcomment %}
-            {%- when 'price_range' -%}
-              {% assign low_value = filter.min_value.value
-                | money_without_currency
-                | replace: ',', ''
-                | replace: '.', ''
-                | round
-              %}
-              {% assign high_value = filter.max_value.value
-                | money_without_currency
-                | replace: ',', ''
-                | replace: '.', ''
-                | round
-              %}
-              {% assign max_value = filter.range_max
-                | money_without_currency
-                | replace: ',', ''
-                | replace: '.', ''
-                | round
-              %}
-
-              <label x-data="{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }">
-                <p>
-                  From:
-                  <span x-text="value">
-                    {%- if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif -%}
-                  </span>
-                  {{ cart.currency.symbol }}
-                </p>
-
-                <input
-                  name="filter.v.price.gte"
-                  type="range"
-                  min="0"
-                  @change="value = $el.value"
-                  x-model="value"
-                  max="{{ max_value }}"
-                >
-              </label>
-
-              <label x-data="{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }">
-                <p>
-                  To:
-                  <span x-text="value">
-                    {%- if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif -%}
-                  </span>
-                  {{ cart.currency.symbol }}
-                </p>
-                <input
-                  name="filter.v.price.lte"
-                  type="range"
-                  min="0"
-                  x-model="value"
-                  max="{{ max_value }}"
-                >
-              </label>
-          {%- endcase -%}
-        </div>
-      {%- endfor -%}
-
-      <div class="flex gap-4 pt-2 pb-4">
-        {%- assign current_sort_label = 'Sort by' -%}
-        {%- for option in collection.sort_options -%}
-          {%- if collection.sort_by == option.value -%}
-            {%- assign current_sort_label = option.name -%}
-          {%- endif -%}
-        {%- endfor -%}
-
-        <label class="field" data-loading-aria-busy data-loading-target="#collection_sort_by_button">
-          <span>Sort by:</span>
-
-          <button id="collection_sort_by_button" popovertarget="collection_sort_by_select" type="button">
-            <span>{{ current_sort_label }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 9l6 6l6 -6" />
-            </svg>
-          </button>
-
-          <div
-            id="collection_sort_by_select"
-            popover
-            onchange="
-              document.querySelector(`[popovertarget=${this.id}] span`).textContent =
-                event.target.closest('label').textContent.trim();
-              this.hidePopover();
-            "
-          >
-            <menu>
-              {%- for option in collection.sort_options -%}
-                <li>
-                  <label>
-                    <input
-                      type="radio"
-                      name="sort_by"
-                      value="{{ option.value }}"
-                      {% if collection.sort_by == option.value %}checked{% endif %}
-                    >
-                    {{- option.name -}}
-                  </label>
-                </li>
-              {%- endfor -%}
-            </menu>
-          </div>
-        </label>
-      </div>
-    </div>
-  </form>
-
-  <div class="sticky bottom-0 flex justify-end gap-4 border-t border-(--jazz-neutral-200) p-4">
-    <a
-      href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
-      hx-get="{{ collection.url }}?sort_by={{ collection.sort_by }}"
-      hx-select="#main_collection"
-      hx-target="#main_collection"
+  <article>
+    <form
+      x-data
+      id="filter_form"
+      hx-get="{{ collection.url }}"
+      hx-select="#filter_result"
+      hx-target="#filter_result"
       hx-swap="outerHTML"
-      class="button link"
+      hx-select-oob="#filter_form:outerHTML,#filter_button:outerHTML"
+      hx-push-url="true"
+      @change="$el.requestSubmit()"
       data-loading-states
     >
-      Clear all
-    </a>
+      <div class="filter-fields">
+        {%- for filter in collection.filters -%}
+          <div class="field">
+            <p>{{ filter.label }}</p>
 
-    <form method="dialog">
-      <button class="button border-b">Apply</button>
+            {%- case filter.type -%}
+                {% comment %} BOOLEAN FILTER {% endcomment %}
+              {%- when 'boolean' -%}
+                <input
+                  type="checkbox"
+                  name="{{ filter.param_name }}"
+                  value="{{ filter.true_value.value }}"
+                  id="Filter-{{ filter.param_name }}"
+                  {% if filter.true_value.active -%}
+                    checked
+                  {%- endif %}
+                >
+                {{- filter.true_value.label -}}
+                ({{ filter.true_value.count }})
+                <input
+                  type="checkbox"
+                  name="{{ filter.param_name }}"
+                  value="{{ filter.false_value.value }}"
+                  id="Filter-{{ filter.param_name }}"
+                  {% if filter.false_value.active -%}
+                    checked
+                  {%- endif %}
+                >
+                {{- filter.false_value.label -}}
+                ({{ filter.false_value.count }})
+
+                {% comment %} LIST FILTER {% endcomment %}
+              {%- when 'list' -%}
+                {%- for filter_value in filter.values -%}
+                  <div>
+                    <label
+                      {% if filter_value.swatch != blank %}
+                        style="
+                          {%- if filter_value.swatch.color != blank -%}
+                          background-color: {{ filter_value.swatch.color }};
+                          {%- endif -%}
+                          {%- if filter_value.swatch.image != blank -%}
+                          background-image: url({{ filter_value.swatch.image | image_url }});
+                          {%- endif -%}
+                        "
+                      {% endif %}
+                    >
+                      {{ filter_value.swatch.image }}
+                      <input
+                        type="checkbox"
+                        name="{{ filter_value.param_name }}"
+                        value="{{ filter_value.value }}"
+                        {% if filter_value.active -%}
+                          checked
+                        {%- endif %}
+                      >
+                      {{ filter_value.swatch.color }}
+
+                      {% comment %}
+                        To use color swatches:
+                        Create a Metaobject with 3 fields:
+                         1. "Label" - Single line text
+                         2. "Color" - Color
+                         3. "Image" - File (image)
+
+                        Create a Metafield on Variants and add this Metaobject as field value.
+                        Create a new Search & Discovery Filter and choose the Metafield as Source.
+                        Change Display options of the filter to "Swatch color: Color" and "Swatch pattern: Image"
+                      {% endcomment %}
+                      {% if filter.presentation == 'swatch' %}
+                        {% if filter_value.swatch.color != blank %}
+                          <span
+                            style="background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;"
+                          ></span>
+                        {% elsif filter_value.swatch.image != blank %}
+                          {% render 'image',
+                            image: filter_value.swatch.image,
+                            sizes: '30px, 30px',
+                            aspect_ratio: '1/1',
+                            class: 'swatch-image'
+                          %}
+                        {% endif %}
+                      {% else %}
+                        {{ filter_value.label }}
+                        <span class="option-count">({{ filter_value.count }})</span>
+                      {% endif %}
+                    </label>
+                  </div>
+                {%- endfor -%}
+
+                {% comment %} PRICE FILTER {% endcomment %}
+              {%- when 'price_range' -%}
+                {% assign low_value = filter.min_value.value
+                  | money_without_currency
+                  | replace: ',', ''
+                  | replace: '.', ''
+                  | round
+                %}
+                {% assign high_value = filter.max_value.value
+                  | money_without_currency
+                  | replace: ',', ''
+                  | replace: '.', ''
+                  | round
+                %}
+                {% assign max_value = filter.range_max
+                  | money_without_currency
+                  | replace: ',', ''
+                  | replace: '.', ''
+                  | round
+                %}
+
+                <label x-data="{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }">
+                  <p>
+                    From:
+                    <span x-text="value">
+                      {%- if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif -%}
+                    </span>
+                    {{ cart.currency.symbol }}
+                  </p>
+
+                  <input
+                    name="filter.v.price.gte"
+                    type="range"
+                    min="0"
+                    @change="value = $el.value"
+                    x-model="value"
+                    max="{{ max_value }}"
+                  >
+                </label>
+
+                <label x-data="{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }">
+                  <p>
+                    To:
+                    <span x-text="value">
+                      {%- if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif -%}
+                    </span>
+                    {{ cart.currency.symbol }}
+                  </p>
+                  <input
+                    name="filter.v.price.lte"
+                    type="range"
+                    min="0"
+                    x-model="value"
+                    max="{{ max_value }}"
+                  >
+                </label>
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+
+        <div class="filter-sort">
+          {%- assign current_sort_label = 'Sort by' -%}
+          {%- for option in collection.sort_options -%}
+            {%- if collection.sort_by == option.value -%}
+              {%- assign current_sort_label = option.name -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          <label class="field" data-loading-aria-busy data-loading-target="#collection_sort_by_button">
+            <span>Sort by:</span>
+
+            <button id="collection_sort_by_button" popovertarget="collection_sort_by_select" type="button">
+              <span>{{ current_sort_label }}</span>
+              {% render 'icon', name: 'chevron-down' %}
+            </button>
+
+            <div
+              id="collection_sort_by_select"
+              popover
+              onchange="
+                document.querySelector(`[popovertarget=${this.id}] span`).textContent =
+                  event.target.closest('label').textContent.trim();
+                this.hidePopover();
+              "
+            >
+              <menu>
+                {%- for option in collection.sort_options -%}
+                  <li>
+                    <label>
+                      <input
+                        type="radio"
+                        name="sort_by"
+                        value="{{ option.value }}"
+                        {% if collection.sort_by == option.value %}
+                          checked
+                        {% endif %}
+                      >
+                      {{- option.name -}}
+                    </label>
+                  </li>
+                {%- endfor -%}
+              </menu>
+            </div>
+          </label>
+        </div>
+      </div>
     </form>
-  </div>
+
+    <div class="filter-actions">
+      <a
+        href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
+        hx-get="{{ collection.url }}?sort_by={{ collection.sort_by }}"
+        hx-select="#main_collection"
+        hx-target="#main_collection"
+        hx-swap="outerHTML"
+        class="button link"
+        data-loading-states
+      >
+        Clear all
+      </a>
+
+      <form method="dialog">
+        <button class="button">Apply</button>
+      </form>
+    </div>
+  </article>
 </dialog>
 
 {% comment %} backdrop {% endcomment %}
-<div
-  class="pointer-events-none fixed top-0 left-0 z-8 h-screen w-screen bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity"
-></div>
+<div class="filter-backdrop"></div>
 
 {% stylesheet %}
-  /* show backdrop */
-  dialog#filter_drawer[open] {
-    + div {
+  .collection-filter {
+    .filter-button {
+      .filter-count {
+        color: var(--ui-neutral-500);
+      }
+    }
+
+    .filter-dialog {
+      z-index: 9;
+
+      position: fixed;
+      inset: calc(var(--header-height) + var(--announcement-bar-height) + 1rem) 1rem auto;
+
+      width: calc(100vw - 2rem);
+      max-width: none;
+      max-height: var(--vvh);
+      overflow: auto;
+      overscroll-behavior: contain;
+    }
+
+    .filter-fields {
+      display: grid;
+      gap: 1rem;
+      padding: 1rem;
+
+      @media (width >= 48rem) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        padding-bottom: 3.5rem;
+      }
+    }
+
+    .swatch-image {
+      width: 1.875rem;
+      height: 1.875rem;
+    }
+
+    .option-count {
+      color: var(--ui-neutral-400);
+    }
+
+    .filter-sort {
+      display: flex;
+      gap: 1rem;
+      padding-block: 0.5rem 1rem;
+    }
+
+    .filter-actions {
+      position: sticky;
+      bottom: 0;
+
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+
+      padding: 1rem;
+      border-top: 1px solid var(--ui-neutral-200);
+
+      button {
+        border-bottom: 1px solid currentcolor;
+      }
+    }
+
+    .filter-backdrop {
+      z-index: 8;
+
+      position: fixed;
+      inset: 0 auto auto 0;
+
+      width: 100vw;
+      height: 100vh;
+
+      background-color: rgb(0 0 0 / 40%);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+
+      transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      pointer-events: none;
+    }
+
+    /* show backdrop */
+    .filter-dialog[open] + .filter-backdrop {
       opacity: 1;
       pointer-events: all;
     }
@@ -268,6 +356,7 @@
 {% schema %}
 {
   "name": "Filter",
+  "class": "collection-filter",
   "presets": [{ "name": "Filter" }]
 }
 {% endschema %}

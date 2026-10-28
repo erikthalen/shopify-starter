@@ -18,12 +18,12 @@
 {% enddoc %}
 
 {%- if paginate.pages > 1 -%}
-  <nav role="navigation" aria-label="Pagination" class="mt-20 flex justify-center" x-data>
-    <ol class="flex gap-4">
+  <nav role="navigation" aria-label="Pagination" class="pagination" x-data>
+    <ol>
       {%- if paginate.previous -%}
         <li>
           <a
-            class="border-b border-dotted"
+            class="pagination-step"
             @mousedown="window.forcePageRefresh = true"
             href="{{ paginate.previous.url }}"
           >
@@ -31,7 +31,7 @@
           </a>
         </li>
       {%- else -%}
-        <li class="text-neutral-500">Previous <span class="sr-only">page</span></li>
+        <li class="disabled-step">Previous <span class="sr-only">page</span></li>
       {%- endif -%}
 
       {%- for part in paginate.parts -%}
@@ -43,7 +43,7 @@
           </li>
         {%- else -%}
           {%- if part.title == paginate.current_page -%}
-            <li class="underline" aria-current="page"><span class="sr-only">page</span> {{ part.title }}</li>
+            <li aria-current="page"><span class="sr-only">page</span> {{ part.title }}</li>
           {%- else -%}
             <li><span class="sr-only">page</span> {{ part.title }}</li>
           {%- endif -%}
@@ -53,7 +53,7 @@
       {%- if paginate.next -%}
         <li>
           <a
-            class="border-b border-dotted"
+            class="pagination-step"
             @mousedown="window.forcePageRefresh = true"
             href="{{ paginate.next.url }}"
           >
@@ -61,8 +61,29 @@
           </a>
         </li>
       {%- else -%}
-        <li class="text-neutral-500">Next <span class="sr-only">page</span></li>
+        <li class="disabled-step">Next <span class="sr-only">page</span></li>
       {%- endif -%}
     </ol>
   </nav>
 {%- endif -%}
+
+{% stylesheet %}
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+
+    ol {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .pagination-step {
+      border-bottom: 1px dotted;
+    }
+
+    .disabled-step {
+      color: var(--ui-neutral-500);
+    }
+  }
+{% endstylesheet %}

@@ -1,0 +1,70 @@
+{% doc %}
+  Renders an image, video or external video based on `media_type`.
+  Delegates to image.liquid or video-background.liquid, external videos (YouTube/Vimeo) are rendered in an iframe.
+
+  @param {string} [media_type] - 'image', 'video' or 'external_video'. Defaults to 'image'.
+  @param {object} [image] - Shopify image object.
+  @param {object} [video] - Shopify video object, or external video media for 'external_video'.
+  @param {object} [image_mobile] - Mobile image override (image type only).
+  @param {object} [video_mobile] - Mobile video override (video type only).
+  @param {string} [sizes] - `sizes` attribute passed through to image.liquid.
+  @param {string} [class] - Additional css classes.
+  @param {string} [aspect_ratio] - CSS `aspect-ratio` value, e.g. `3/4`.
+  @param {string} [aspect_ratio_sm] - Aspect ratio on small screens. Overrides `aspect_ratio`.
+  @param {string} [aspect_ratio_md] - Aspect ratio on large screens. Overrides `aspect_ratio`.
+  @param {string} [loading] - Loading attr of the media, defaults to `lazy`.
+
+  @example
+  {% render 'media',
+    media_type: section.settings.media_type,
+    image: section.settings.image,
+    video: section.settings.video,
+    aspect_ratio: '3/4'
+  %}
+
+  {% render 'media',
+    media_type: section.settings.media_type,
+    image: section.settings.image,
+    video: section.settings.video,
+    image_mobile: section.settings.image_mobile,
+    video_mobile: section.settings.video_mobile,
+    aspect_ratio_sm: '3/4',
+    aspect_ratio_md: '16/9'
+  %}
+{% enddoc %}
+
+{% liquid
+  assign resolved_type = media_type | default: 'image'
+%}
+
+{% if resolved_type == 'external_video' %}
+  {%- render 'external-video',
+    video: video,
+    aspect_ratio: aspect_ratio,
+    aspect_ratio_sm: aspect_ratio_sm,
+    aspect_ratio_md: aspect_ratio_md,
+    class: class,
+    loading: loading
+  -%}
+{% elsif resolved_type == 'video' %}
+  {%- render 'video-background',
+    video: video,
+    video_mobile: video_mobile,
+    aspect_ratio: aspect_ratio,
+    aspect_ratio_sm: aspect_ratio_sm,
+    aspect_ratio_md: aspect_ratio_md,
+    class: class,
+    loading: loading
+  -%}
+{% else %}
+  {%- render 'image',
+    image: image,
+    image_mobile: image_mobile,
+    sizes: sizes,
+    aspect_ratio: aspect_ratio,
+    aspect_ratio_sm: aspect_ratio_sm,
+    aspect_ratio_md: aspect_ratio_md,
+    class: class,
+    loading: loading
+  -%}
+{% endif %}

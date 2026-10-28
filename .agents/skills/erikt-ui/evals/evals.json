@@ -1,0 +1,77 @@
+{
+  "skill_name": "erikt-ui",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "My site loads @erikt/ui from esm.sh. Build a settings form in plain HTML with fields for full name, email address, and notification preferences (email, SMS, push). Name and email are required and should show error messages when left empty or invalid.",
+      "expected_output": "Plain HTML using label.field, a fieldset or div.field for the notification group, switches or checkboxes, and data-error messages.",
+      "files": [],
+      "expectations": [
+        "Wraps each text control in label.field with a <span> label",
+        "Groups the notification options in a <fieldset> with <legend>, or a div.field with a <span> title",
+        "Uses <small data-error=\"required\"> and <small data-error=\"invalid\"> for validation messages",
+        "Required inputs have a placeholder so the required message can show",
+        "No JavaScript validation code",
+        "No hex colors or inline styles other than layout (display, gap, grid-template-columns)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Using @erikt/ui, create a dialog for editing a user profile. Put the user's avatar at the top, inputs for name and bio, and Save and Cancel buttons.",
+      "expected_output": "A <dialog> with an <article>, header title, img.avatar, label.field inputs, and a form method=dialog footer.",
+      "files": [],
+      "expectations": [
+        "Uses a native <dialog> element opened with showModal()",
+        "Puts an <article> inside the dialog with a <header> title",
+        "Uses class=\"avatar\" for the user picture",
+        "Uses a <textarea> for the bio inside label.field",
+        "Close and cancel buttons sit in <form method=\"dialog\">",
+        "Cancel uses a variant such as class=\"outlined\"",
+        "No z-index, custom backdrop, or modal wrapper div"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I have a React app with @erikt/ui imported in my global CSS. Make a TeamTable component that lists members with name, role and status. Each row needs an actions menu with Edit and Remove. Status should look like a colored label.",
+      "expected_output": "A JSX component with a native <table>, badge status, and a per-row popover menu with unique ids.",
+      "files": [],
+      "expectations": [
+        "Uses a native <table> with <thead> and <tbody>",
+        "Status uses <span className=\"badge ...\"> with a color class such as constructive",
+        "Row action trigger is a <button className=\"ghost square\"> with an aria-label",
+        "Menu uses popoverTarget and a popover element containing <menu> with <li><button className=\"ghost\">",
+        "Remove uses className=\"ghost destructive\"",
+        "Popover ids are unique per row (row id or useId)",
+        "No useState for menu open state and no z-index"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Using @erikt/ui, build a dashboard page with a tabbed area (Overview, Activity, Invite). Overview shows three stat cards. Activity is empty for now. Invite has an email field and a Send button.",
+      "expected_output": "section.tabs with radio tabs, article stat cards in a grid, .empty for Activity, and label.field in Invite.",
+      "files": [],
+      "expectations": [
+        "Uses section.tabs with header[role=tablist] and radio inputs inside labels",
+        "Panels use role=\"tabpanel\" and appear in the same order as the tabs",
+        "Stat cards are <article> elements laid out with CSS grid or flex",
+        "Activity uses <section class=\"empty\"> with a heading and a paragraph",
+        "Invite uses label.field with an email input",
+        "No JavaScript for switching tabs"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Restyle this @erikt/ui page so it matches our brand: purple primary color, rounder corners, and a warmer gray. Right now the buttons look default blue.",
+      "expected_output": "A single :root override of seed variables, not per-element styles.",
+      "files": [],
+      "expectations": [
+        "Sets --ui-primary on :root",
+        "Sets --ui-rounded-scale (or --ui-rounded) on :root",
+        "Sets --ui-neutral on :root to a warmer gray",
+        "Does not add inline styles or classes to individual buttons",
+        "Does not use !important",
+        "Does not write separate dark mode color overrides"
+      ]
+    }
+  ]
+}
