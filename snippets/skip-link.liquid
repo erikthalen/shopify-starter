@@ -1,22 +1,22 @@
-<a
-  class="button skip-to-content-link"
-  href="#main"
->
-  Skip to content
-</a>
+<a class="button skip-link" href="#main"> Skip to content </a>
 
 {% stylesheet %}
-  .skip-to-content-link {
+  .skip-link {
+    z-index: 100;
+
     position: fixed;
     top: 1.5rem;
     left: 50%;
-    z-index: 100;
-    translate: -50% -50%;
+
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    background-color: white;
+
     outline: 2px solid oklch(62.3% 0.214 259.815);
+    border-radius: 0.5rem;
+    background-color: var(--ui-background-color);
     opacity: 0;
+
+    translate: -50% -50%;
+
     pointer-events: none;
 
     &:focus {

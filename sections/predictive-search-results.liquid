@@ -1,95 +1,102 @@
-<section id="predictive-search-results">
-  {%- if predictive_search.resources.products.size > 0 -%}
-    <span>
-      Results for: "{{ predictive_search.terms }}"
-      <span class="predictive-search-results__count">({{ predictive_search.resources.products.size }})</span>
-    </span>
+{%- if predictive_search.resources.products.size > 0 -%}
+  <span>
+    Results for: "{{ predictive_search.terms }}"
+    <span class="result-count">({{ predictive_search.resources.products.size }})</span>
+  </span>
 
-    <ul class="predictive-search-results__list">
-      {%- for product in predictive_search.resources.products -%}
-        <li>
-          <a href="{{ product.url }}" class="predictive-search-results__item">
-            {%- if product.selected_or_first_available_variant.featured_image != blank -%}
-              {%- assign image = product.selected_or_first_available_variant.featured_image -%}
-            {%- else -%}
-              {%- assign image = product.featured_image -%}
-            {%- endif -%}
+  <ul>
+    {%- for product in predictive_search.resources.products -%}
+      <li>
+        <a href="{{ product.url }}">
+          {%- assign image = product.selected_or_first_available_variant.featured_image
+            | default: product.featured_image
+          -%}
 
-            {% render 'image',
-              image: image,
-              class: 'predictive-search-results__image',
-              loading: 'eager',
-              sizes: '100px, 100px'
-            %}
+          {% render 'image', image: image, class: 'result-thumbnail', loading: 'eager', sizes: '100px, 100px' %}
 
-            <div class="predictive-search-results__details">
-              <span>{{ product.title }}</span>
+          <div class="result-info">
+            <span>{{ product.title }}</span>
 
-              <dl>
-                {%- for option in product.options_with_values -%}
-                  <dt>{{ option.name }}:</dt>
-                  <dd>{{ option.selected_value }}</dd>
-                {%- endfor -%}
-              </dl>
+            <dl>
+              {%- for option in product.options_with_values -%}
+                <dt>{{ option.name }}:</dt>
+                <dd>{{ option.selected_value }}</dd>
+              {%- endfor -%}
+            </dl>
 
-              <span class="predictive-search-results__price">{{ product.price | money }}</span>
-            </div>
-          </a>
-        </li>
-      {%- endfor -%}
-    </ul>
-  {% else %}
-    <div class="empty">
-      {% render 'icon', name: 'forbid' %}
+            <span class="result-price">{{ product.price | money }}</span>
+          </div>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+{% else %}
+  <div class="empty">
+    {% render 'icon', name: 'forbid' %}
 
-      <h2>No results for "{{ predictive_search.terms }}"</h2>
-      <p>Try searching for something else</p>
-    </div>
-  {%- endif -%}
-</section>
+    <h2>No results for "{{ predictive_search.terms }}"</h2>
+    <p>Try searching for something else</p>
+  </div>
+{%- endif -%}
 
 {% stylesheet %}
-  .predictive-search-results__count {
-    color: oklch(55.6% 0 0);
-  }
-
-  .predictive-search-results__list {
-    display: grid;
-    column-gap: 1rem;
-
-    @media (width >= 64rem) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+  .predictive-search-results {
+    .result-count {
+      color: var(--ui-neutral-500);
     }
-  }
 
-  .predictive-search-results__item {
-    display: flex;
-    gap: 1rem;
-    padding-block: 1rem;
-    border-bottom: 1px solid oklch(87.2% 0.01 258.338);
-  }
-
-  .predictive-search-results__image {
-    align-self: start;
-    width: 5rem;
-    border-radius: 0.25rem;
-    overflow: clip;
-  }
-
-  .predictive-search-results__details {
-    display: flex;
-    flex-direction: column;
-
-    & dl {
+    ul {
       display: grid;
-      grid-template-columns: auto 1fr;
-      column-gap: 0.5rem;
-      margin-top: 0.25rem;
-    }
-  }
+      column-gap: 1rem;
 
-  .predictive-search-results__price {
-    margin-top: auto;
-    padding-top: 0.5rem;
+      @media (width >= 64rem) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    a {
+      display: flex;
+      gap: 1rem;
+      padding-block: 1rem;
+      border-bottom: 1px solid var(--ui-neutral-300);
+
+      transition: background-color 200ms var(--ease-glide);
+      text-decoration: none;
+
+      &:hover {
+        background-color: var(--ui-neutral-100);
+      }
+    }
+
+    .result-thumbnail {
+      align-self: start;
+      border-radius: 0.25rem;
+      width: 5rem;
+    }
+
+    .result-info {
+      display: flex;
+      flex-direction: column;
+
+      dl {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0 0.5rem;
+        margin-top: 0.25rem;
+      }
+
+      .result-price {
+        margin-top: auto;
+        padding-top: 0.5rem;
+      }
+    }
   }
 {% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Predictive search results",
+  "tag": "section",
+  "class": "predictive-search-results"
+}
+{% endschema %}

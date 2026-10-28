@@ -11,143 +11,207 @@
 <a
   href="{{ routes.search_url }}"
   class="button ghost"
-  onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('predictive_search')?.getAttribute('open') ? document.getElementById('predictive_search')?.close() : document.getElementById('predictive_search')?.showModal()"
+  onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('predictive_search')?.showModal()"
 >
-  Search
+  <span class="desktop-only">Search</span>
+  <span class="mobile-only">{% render 'icon', name: 'magnifier' %}</span>
 </a>
 
-<dialog
-  scroll-lock
-  id="predictive_search"
-  closedby="any"
-  class="predictive-search"
-  style="view-transition-name: predictive-search"
->
+<dialog scroll-lock id="predictive_search" closedby="any" class="search-dialog">
+  <form method="dialog" class="contents">
+    <button class="close-button button ghost square" aria-label="Close search dialog">
+      {% render 'icon', name: 'cross' %}
+    </button>
+  </form>
+
   <article>
     <div
-      x-data="{ q: '' }"
+      x-data="predictiveSearch"
       data-loading-states
       data-loading-target="#predictive_search_input"
       data-loading-aria-busy
-      class="predictive-search__content"
+      class="search-content"
+      :class="q !== '' && 'has-input'"
     >
-      <div class="predictive-search__bar">
-        {% comment %} Used as input to the (hidden) predictive search below {% endcomment %}
-        <form
-          class="predictive-search__form"
-          @submit="document.getElementById('predictive_search')?.close()"
-          action="{{ routes.search_url }}"
-        >
-          <input type="hidden" name="type" value="product,page">
-          <input type="hidden" name="options[unavailable_products]" value="hide">
-          <input type="hidden" name="options[prefix]" value="last">
+      {% comment %} Used as input to the (hidden) predictive search below {% endcomment %}
+      <form class="search-form" action="{{ routes.search_url }}">
+        <label>
+          {% render 'icon', name: 'magnifier', attr: 'data-prefix' %}
 
-          <label>
-            <span data-prefix>
-              {% render 'icon', name: 'magnifier' %}
-            </span>
+          <input
+            id="predictive_search_input"
+            type="text"
+            placeholder="Search products and pages"
+            autofocus
+            name="q"
+            x-model="q"
+            x-ref="input"
+            @input.debounce="search()"
+          >
 
-            <input
-              id="predictive_search_input"
-              type="text"
-              placeholder="Search products and pages"
-              autofocus
-              name="q"
-              x-model="q"
-              x-ref="input"
-              @input.debounced="$refs.predictiveSearchForm.requestSubmit()"
-            >
-
-            <button type="submit" data-suffix class="button">Search</button>
-          </label>
-        </form>
-
-        <form data-suffix method="dialog">
-          <button class="button ghost">Close {% render 'icon', name: 'cross' %}</button>
-        </form>
-      </div>
+          <button type="submit" data-suffix class="button">Search</button>
+        </label>
+      </form>
 
       <form
         class="sr-only"
         x-ref="predictiveSearchForm"
         action="{{ routes.predictive_search_url }}"
         hx-get="{{ routes.predictive_search_url }}"
-        hx-select="#predictive-search-results"
+        hx-select=".predictive-search-results > *"
         hx-target="#predictive-search-results"
-        hx-swap="outerHTML"
+        hx-swap="innerHTML"
         hx-sync="this:replace"
       >
         <input type="search" name="q" x-model="q">
         <input type="hidden" name="section_id" value="predictive-search-results">
-        <input type="hidden" name="type" value="product,page">
-        <input type="hidden" name="options[unavailable_products]" value="hide">
-        <input type="hidden" name="options[prefix]" value="last">
       </form>
 
-      <div x-show="q !== ''" x-ref="predictiveSearchResults">
-        <output id="predictive-search-results"> </output>
-      </div>
+      <section
+        id="predictive-search-results"
+        x-ref="predictiveSearchResults"
+        class="predictive-search-results results-output"
+      ></section>
+
+      {%- liquid
+        assign popular_searches = block.settings.popular_searches | split: ','
+        assign suggested_collections = block.settings.collections | default: collections
+      -%}
+
+      {% comment %} shown while the input is empty {% endcomment %}
+      <section class="predictive-search-suggestions" aria-label="Search suggestions">
+        {%- if popular_searches.size > 0 -%}
+          <div>
+            <h2>Popular searches</h2>
+
+            <ul class="suggestion-terms">
+              {%- for term in popular_searches -%}
+                {%- assign term = term | strip -%}
+                {%- if term != blank -%}
+                  <li>
+                    <a
+                      href="{{ routes.search_url }}?q={{ term | url_encode }}"
+                      class="button outlined"
+                      data-term="{{ term | escape }}"
+                      @click.prevent="suggest($el.dataset.term)"
+                    >
+                      {{- term -}}
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- if suggested_collections.size > 0 -%}
+          <nav aria-label="Collections">
+            <h2>Collections</h2>
+
+            <ul class="suggestion-collections">
+              {%- for collection in suggested_collections limit: 4 -%}
+                <li>
+                  <a href="{{ collection.url }}">{{ collection.title }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+      </section>
     </div>
   </article>
 </dialog>
 
 {% stylesheet %}
   .predictive-search {
-    inset: 1rem 1rem auto;
-    width: calc(100% - 2rem);
-    max-width: none;
-    max-height: var(--vvh);
-    overflow: auto;
-    overscroll-behavior: contain;
+    .search-dialog {
+      isolation: isolate;
 
-    &:not(:has(output:first-child)) {
-      touch-action: none;
+      inset: 1rem 1rem auto;
+
+      width: calc(100% - 2rem);
+      max-width: none;
+      max-height: calc(var(--vvh) - 2rem);
+
+      &:not(:has(.predictive-search-results > *)) {
+        touch-action: none;
+      }
+
+      .close-button {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        z-index: 1;
+
+        @media (width >= 48rem) {
+          top: 1rem;
+          right: 1rem;
+        }
+      }
+
+      > article {
+        max-height: inherit;
+        overflow: auto;
+        overscroll-behavior: contain;
+      }
     }
 
-    & > article {
-      position: relative;
-      z-index: 2;
+    .search-content {
+      display: grid;
+      grid-template-rows: auto 1fr;
       width: 100%;
-      padding-inline: 1rem;
+      max-width: 48rem;
+      margin-inline: auto;
+
+      @media (width >= 48rem) {
+        padding-bottom: 10rem;
+      }
+
+      &:not(.has-input) {
+        .predictive-search-results {
+          display: none;
+        }
+      }
+
+      &.has-input {
+        .predictive-search-suggestions {
+          display: none;
+        }
+      }
     }
 
-    & output {
-      padding-bottom: 1rem;
-      background-color: white;
+    .predictive-search-suggestions {
+      display: grid;
+      gap: 2rem;
+
+      h2 {
+        margin-bottom: 0.75rem;
+        color: var(--ui-neutral-500);
+      }
+
+      .suggestion-terms {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .suggestion-collections {
+        a {
+          display: block;
+        }
+      }
     }
-  }
 
-  .predictive-search__content {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    width: 100%;
-    max-width: 48rem;
-    margin-inline: auto;
+    .search-form {
+      position: sticky;
+      top: -1.5rem;
+      background-color: var(--ui-neutral-0);
 
-    @media (width >= 48rem) {
-      padding-bottom: 10rem;
-    }
-  }
+      padding-block: 1.5rem;
 
-  .predictive-search__bar {
-    position: sticky;
-    top: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    padding-top: 1.25rem;
-
-    @media (width >= 48rem) {
-      padding-top: 7.5rem;
-    }
-  }
-
-  .predictive-search__form {
-    display: contents;
-
-    & label {
-      width: 100%;
+      @media (width >= 48rem) {
+        padding-top: 7.5rem;
+      }
     }
   }
 {% endstylesheet %}
@@ -155,6 +219,23 @@
 {% schema %}
 {
   "name": "Predictive search",
+  "class": "predictive-search",
+  "settings": [
+    {
+      "type": "text",
+      "id": "popular_searches",
+      "label": "Popular searches",
+      "info": "Comma-separated search terms, shown before the customer types",
+      "default": "T-shirt, Hoodie, Sneakers"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Suggested collections",
+      "info": "Defaults to the first four collections",
+      "limit": 4
+    }
+  ],
   "presets": [
     {
       "name": "Predictive search"

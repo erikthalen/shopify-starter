@@ -1,4 +1,4 @@
-<div class="main-search">
+<div class="search-box">
   <form
     x-data
     action="{{ routes.search_url }}"
@@ -8,7 +8,6 @@
     hx-swap="outerHTML"
     hx-replace-url="true"
     hx-sync="this:replace"
-    class="main-search__form"
     data-loading-states
     data-loading-target="#search_input"
     data-loading-aria-busy
@@ -45,7 +44,7 @@
   </section>
 
 {% else %}
-  <section id="search_results" class="main-search-results">
+  <section id="search_results" class="search-results">
     {% if search.results_count == 0 %}
       <div class="empty">
         {% render 'icon', name: 'forbid' %}
@@ -55,13 +54,13 @@
       </div>
     {% else %}
       {% paginate search.results by 24 %}
-        <div class="main-search-results__header">
+        <div class="results-heading">
           <h1>
             Results for: "{{ search.terms }}"
-            <span class="main-search-results__count">({{ search.results_count }})</span>
+            <span class="result-count">({{ search.results_count }})</span>
           </h1>
 
-          <div class="main-search-results__sort">
+          <div class="result-sort">
             {%- assign current_sort_label = 'Sort by' -%}
             {%- for option in search.sort_options -%}
               {%- if search.sort_by == option.value -%}
@@ -120,7 +119,7 @@
 
         {% comment %} {% content_for 'block', type: '_search-filter', id: 'search-filter' %} {% endcomment %}
 
-        <ol id="paginated_items" class="main-search-results__grid">
+        <ol id="paginated_items" class="result-list">
           {%- for item in search.results -%}
             <li>
               {%- case item.object_type -%}
@@ -149,53 +148,56 @@
 
 {% stylesheet %}
   .main-search {
-    display: flex;
-    justify-content: center;
-  }
+    .search-box {
+      display: flex;
+      justify-content: center;
 
-  .main-search__form {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    width: 100%;
-    max-width: 28rem;
-    margin: 1rem 1rem 1.5rem;
+      form {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
 
-    & label {
-      width: 100%;
-      padding-block: 0.5rem;
+        width: 100%;
+        max-width: 28rem;
+        margin: 1rem 1rem 1.5rem;
+
+        label {
+          width: 100%;
+          padding-block: 0.5rem;
+        }
+      }
     }
-  }
 
-  .main-search-results {
-    padding: 1rem;
-  }
+    .search-results {
+      padding: 1rem;
 
-  .main-search-results__header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-  }
+      .results-heading {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
 
-  .main-search-results__count {
-    color: oklch(55.6% 0 0);
-  }
+        .result-count {
+          color: var(--ui-neutral-500);
+        }
 
-  .main-search-results__sort {
-    display: grid;
-    justify-items: end;
+        .result-sort {
+          display: grid;
+          justify-items: end;
 
-    & > .field {
-      text-align: right;
-    }
-  }
+          > .field {
+            text-align: right;
+          }
+        }
+      }
 
-  .main-search-results__grid {
-    display: grid;
-    gap: 1rem;
+      .result-list {
+        display: grid;
+        gap: 1rem;
 
-    @media (width >= 48rem) {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+        @media (width >= 48rem) {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
     }
   }
 {% endstylesheet %}
@@ -203,6 +205,7 @@
 {% schema %}
 {
   "name": "Main search",
+  "class": "main-search",
   "settings": [
     {
       "type": "select",

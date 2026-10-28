@@ -7,134 +7,57 @@
   {% content_for 'block', type: '_mobile-menu', id: 'mobile_menu' %}
 {% enddoc %}
 
-<button
-  class="button"
-  onclick="document.getElementById('mobile_menu')?.getAttribute('open') ? document.getElementById('mobile_menu')?.close() : document.getElementById('mobile_menu')?.showModal()"
->
-  Menu
-</button>
+<button class="button ghost" onclick="document.getElementById('mobile_menu')?.showModal()">Menu</button>
 
 <dialog
   scroll-lock
   id="mobile_menu"
   closedby="any"
-  class="mobile-menu"
+  class="drawer menu-dialog"
+  data-position="left"
 >
-  <div class="mobile-menu__inner">
-    <div class="mobile-menu__content">
-      <header>
-        <p>Menu</p>
+  <article>
+    <header>
+      <p>Menu</p>
 
-        <form method="dialog">
-          <button aria-title="Close cart drawer" class="button">
-            {% render 'icon', name: 'cross' %}
-          </button>
-        </form>
-      </header>
+      <form method="dialog">
+        <button aria-title="Close mobile menu" class="button ghost square">
+          {% render 'icon', name: 'cross' %}
+        </button>
+      </form>
+    </header>
 
-      <nav>
-        <a
-          href="{{ routes.collections_url }}"
-          x-data="{ active: {% if request.path contains '{{ routes.collections_url }}' %}true{% else %}false{% endif %} }"
-          @window:navigation.window="active = location.pathname.includes($el.href.replace(location.origin, ''))"
-          :aria-current="active ? 'page' : false"
-          class="button"
-        >
-          Shop
-        </a>
-      </nav>
-    </div>
-  </div>
+    <nav>
+      <a
+        class="button ghost"
+        href="{{ routes.collections_url }}"
+        {% if request.path contains routes.collections_url %}
+          aria-current="page"
+        {% endif %}
+      >
+        Shop
+      </a>
+
+      {% render 'account-link' %}
+    </nav>
+  </article>
 </dialog>
 
 {% stylesheet %}
   .mobile-menu {
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    max-width: none;
-    height: 100%;
-    max-height: var(--vvh);
-    overflow: auto;
-    overscroll-behavior: contain;
-    background-color: white;
-    transform: translateX(-100%);
-    transition: all 500ms var(--ease-in-out) allow-discrete;
-
-    &[open] {
-      transform: translateX(0);
-
-      @starting-style {
-        transform: translateX(-100%);
-      }
+    dialog {
     }
 
-    &:not(:has(output:first-child)) {
-      touch-action: none;
-    }
-
-    &::backdrop {
-      background-color: rgb(0 0 0 / 25%);
-      opacity: 0;
-      backdrop-filter: blur(2px);
-      transition: all 500ms var(--ease-in-out) allow-discrete;
-      touch-action: none;
-    }
-
-    &[open]::backdrop {
-      opacity: 1;
-
-      @starting-style {
-        opacity: 0;
-      }
-    }
-  }
-
-  .mobile-menu__inner {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-  }
-
-  .mobile-menu__content {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    width: 100%;
-    max-width: 48rem;
-    margin-inline: auto;
-
-    @media (width >= 48rem) {
-      padding-bottom: 10rem;
-    }
-
-    & > header {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 2.5rem;
-      margin-inline: 1rem;
-      border-bottom: 1px solid oklch(87.2% 0.01 258.338);
-      background-color: white;
-
-      & > form {
-        display: contents;
+    article {
+      header {
+        justify-content: space-between;
       }
 
-      & button {
-        width: 1.25rem;
-        height: 1.25rem;
+      nav {
+        display: grid;
+        gap: 1rem;
+        justify-items: baseline;
       }
-    }
-
-    & > nav {
-      display: flex;
-      flex-direction: column;
-      padding: 1rem;
     }
   }
 {% endstylesheet %}
@@ -142,6 +65,7 @@
 {% schema %}
 {
   "name": "Mobile menu",
+  "class": "mobile-menu",
   "presets": [
     {
       "name": "Mobile menu"

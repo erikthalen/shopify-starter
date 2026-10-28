@@ -1,80 +1,75 @@
-<div>
-  <nav>
-    <a
-      href="{{ routes.root_url }}"
-      class="home-link button ghost square"
-      {% if request.path == routes.root_url %}
-        aria-current="page"
-      {% endif %}
-    >
-      {% if shop.brand.logo != blank %}
-        {% render 'image', image: shop.brand.logo, alt: 'The logo', sizes: '40px, 40px' %}
-      {% else %}
-        Home
-      {% endif %}
-    </a>
+<nav>
+  <a
+    href="{{ routes.root_url }}"
+    class="home-link button ghost square"
+    {% if request.path == routes.root_url %}
+      aria-current="page"
+    {% endif %}
+  >
+    {% if shop.brand.logo != blank %}
+      {% render 'image', image: shop.brand.logo, alt: 'The logo', sizes: '40px, 40px' %}
+    {% else %}
+      Home
+    {% endif %}
+  </a>
 
-    <a
-      href="{{ routes.collections_url }}"
-      class="desktop-only button ghost"
-      {% if request.path contains routes.collections_url %}
-        aria-current="page"
-      {% endif %}
-    >
-      Shop
-    </a>
-  </nav>
+  <a
+    href="{{ routes.collections_url }}"
+    class="desktop-only button ghost"
+    {% if request.path contains routes.collections_url %}
+      aria-current="page"
+    {% endif %}
+  >
+    Shop
+  </a>
+</nav>
 
-  <div class="mobile-only">
-    {% content_for 'block', type: '_mobile-menu', id: 'mobile_menu' %}
-  </div>
-
-  <nav>
-    {% content_for 'blocks' %}
-  </nav>
+<div class="mobile-only">
+  {% content_for 'block', type: '_mobile-menu', id: 'mobile_menu' %}
 </div>
 
-{% stylesheet %}
-  :root {
-    --header-height: 2.5rem;
-  }
+<nav>
+  <span class="desktop-only">{% render 'account-link' %}</span>
 
+  {% content_for 'blocks' %}
+</nav>
+
+{% stylesheet %}
   .site-header {
-    width: 100%;
-    height: var(--header-height);
-    background-color: var(--ui-background-color);
+    z-index: 1;
 
     position: sticky;
     top: 0;
-    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+
+    width: 100%;
+    height: var(--header-height);
+    padding-inline: 1rem;
+
+    background-color: var(--ui-background-color);
+    /* a shadow, not a border, so the line sits below the header height instead of inside it */
+    box-shadow: 0 1px var(--ui-neutral-300);
 
     view-transition-name: site-header;
 
-    > div {
-      position: relative;
-      z-index: 2;
+    @media (width >= 48rem) {
+      gap: 1rem;
+    }
+
+    > nav {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      padding-inline: 1rem;
-      border-bottom: 1px solid var(--ui-neutral-300);
-
-      & > nav {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-
-        &:last-child {
-          margin-inline-start: auto;
-        }
-      }
 
       @media (width >= 48rem) {
-        &,
-        & > nav {
-          gap: 1rem;
-        }
+        gap: 1rem;
+      }
+
+      &:last-child {
+        margin-inline-start: auto;
       }
     }
 
@@ -83,8 +78,8 @@
       height: var(--header-height);
 
       img {
-        aspect-ratio: 1;
         height: 100%;
+        aspect-ratio: 1;
         object-fit: contain;
       }
     }
@@ -109,9 +104,6 @@
     },
     {
       "type": "_predictive-search"
-    },
-    {
-      "type": "_account-link"
     }
   ],
   "presets": [
@@ -123,9 +115,6 @@
         },
         {
           "type": "_predictive-search"
-        },
-        {
-          "type": "_account-link"
         },
         {
           "type": "_cart-drawer"

@@ -15,7 +15,7 @@
   {{ localization.language.iso_code }} / {{ localization.country.currency.symbol }}
 </button>
 
-<dialog id="localization_form" class="localization-form" closedby="any">
+<dialog id="localization_form" closedby="any">
   <article>
     <header>
       <h1>Shop in your local currency</h1>
@@ -28,8 +28,8 @@
     </header>
 
     {% form 'localization', hx-boost: 'true', hx-target: 'body', hx-swap: 'innerMorph' %}
-      <div class="localization-form__row">
-        <p class="localization-form__label">Language</p>
+      <div class="locale-setting">
+        <p class="setting-label">Language</p>
 
         {% if localization.available_languages.size > 1 %}
           <select
@@ -50,12 +50,12 @@
             {% endfor %}
           </select>
         {% else %}
-          <p class="localization-form__value">{{ localization.language.name }}</p>
+          <p class="setting-value">{{ localization.language.name }}</p>
         {% endif %}
       </div>
 
-      <div class="localization-form__row">
-        <p class="localization-form__label">Currency</p>
+      <div class="locale-setting">
+        <p class="setting-label">Currency</p>
 
         {% if localization.available_countries.size > 1 %}
           {% assign printed_currencies = '' %}
@@ -82,7 +82,7 @@
             {% endfor %}
           </select>
         {% else %}
-          <p class="localization-form__value">
+          <p class="setting-value">
             {{ localization.country.currency.iso_code }}
             ({{ localization.country.currency.symbol }})
           </p>
@@ -101,42 +101,45 @@
 </dialog>
 
 {% stylesheet %}
-  .localization-form > article > header {
-    justify-content: space-between;
+  .localization-form {
+    header {
+      justify-content: space-between;
 
-    & > h1 {
+      h1 {
+        color: var(--ui-neutral-500);
+      }
+
+      form {
+        display: contents;
+      }
+    }
+
+    .locale-setting {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      & + & {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--ui-neutral-200);
+      }
+    }
+
+    .setting-label {
+      color: var(--ui-neutral-400);
+    }
+
+    .setting-value {
       color: var(--ui-neutral-500);
     }
-
-    & > form {
-      display: contents;
-    }
-  }
-
-  .localization-form__row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    & + & {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--ui-neutral-200);
-    }
-  }
-
-  .localization-form__label {
-    color: var(--ui-neutral-400);
-  }
-
-  .localization-form__value {
-    color: var(--ui-neutral-500);
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "Localization form",
+  "class": "localization-form",
   "presets": [
     {
       "name": "Localization form"

@@ -15,15 +15,19 @@
   {% assign active_values_amount = active_values_amount | plus: value.size %}
 {% endfor %}
 
-<button id="search_filter_button" class="button ghost" onclick="document.getElementById('search_filter_drawer')?.show()">
-  Filter <span class="search-filter__count">({{ active_values_amount }})</span>
+<button
+  id="search_filter_button"
+  class="button ghost filter-button"
+  onclick="document.getElementById('search_filter_drawer')?.show()"
+>
+  Filter <span class="filter-count">({{ active_values_amount }})</span>
 </button>
 
 <dialog
   scroll-lock
   id="search_filter_drawer"
   closedby="any"
-  class="search-filter"
+  class="filter-dialog"
   style="view-transition-name: filter-drawer"
 >
   <form
@@ -38,7 +42,7 @@
     @change="$el.requestSubmit()"
     data-loading-states
   >
-    <div class="search-filter__fields">
+    <div class="filter-fields">
       {%- for filter in search.filters -%}
         <div class="field">
           <p>{{ filter.label }}</p>
@@ -113,11 +117,16 @@
                           style="background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;"
                         ></span>
                       {% elsif filter_value.swatch.image != blank %}
-                        {{ filter_value.swatch.image | image_url: width: 30, height: 30 | image_tag }}
+                        {% render 'image',
+                          image: filter_value.swatch.image,
+                          sizes: '30px, 30px',
+                          aspect_ratio: '1/1',
+                          class: 'swatch-image'
+                        %}
                       {% endif %}
                     {% else %}
                       {{ filter_value.label }}
-                      <span class="search-filter__value-count">({{ filter_value.count }})</span>
+                      <span class="option-count">({{ filter_value.count }})</span>
                     {% endif %}
                   </label>
                 </div>
@@ -183,7 +192,7 @@
         </div>
       {%- endfor -%}
 
-      <div class="search-filter__sort">
+      <div class="filter-sort">
         {%- assign current_sort_label = 'Sort by' -%}
         {%- for option in search.sort_options -%}
           {%- if search.sort_by == option.value -%}
@@ -216,7 +225,9 @@
                       type="radio"
                       name="sort_by"
                       value="{{ option.value }}"
-                      {% if search.sort_by == option.value %}checked{% endif %}
+                      {% if search.sort_by == option.value %}
+                        checked
+                      {% endif %}
                     >
                     {{- option.name -}}
                   </label>
@@ -229,7 +240,7 @@
     </div>
   </form>
 
-  <div class="search-filter__actions">
+  <div class="filter-actions">
     <a
       href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
       hx-get="{{ collection.url }}?sort_by={{ collection.sort_by }}"
@@ -249,73 +260,91 @@
 </dialog>
 
 {% comment %} backdrop {% endcomment %}
-<div class="search-filter__backdrop"></div>
+<div class="filter-backdrop"></div>
 
 {% stylesheet %}
-  .search-filter__count {
-    color: var(--ui-neutral-500);
-  }
-
   .search-filter {
-    position: fixed;
-    inset: calc(var(--header-height) + var(--announcement-bar-height) + 1rem) 1rem auto;
-    z-index: 9;
-    width: calc(100vw - 2rem);
-    max-width: none;
-    max-height: var(--vvh);
-    overflow: auto;
-    overscroll-behavior: contain;
-  }
-
-  .search-filter__fields {
-    display: grid;
-    gap: 1rem;
-    padding: 1rem;
-
-    @media (width >= 48rem) {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      padding-bottom: 3.5rem;
+    .filter-button {
+      .filter-count {
+        color: var(--ui-neutral-500);
+      }
     }
-  }
 
-  .search-filter__value-count {
-    color: var(--ui-neutral-400);
-  }
+    .filter-dialog {
+      z-index: 9;
 
-  .search-filter__sort {
-    display: flex;
-    gap: 1rem;
-    padding-block: 0.5rem 1rem;
-  }
+      position: fixed;
+      inset: calc(var(--header-height) + var(--announcement-bar-height) + 1rem) 1rem auto;
 
-  .search-filter__actions {
-    position: sticky;
-    bottom: 0;
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    padding: 1rem;
-    border-top: 1px solid var(--ui-neutral-200);
-
-    & button {
-      border-bottom: 1px solid currentcolor;
+      width: calc(100vw - 2rem);
+      max-width: none;
+      max-height: var(--vvh);
+      overflow: auto;
+      overscroll-behavior: contain;
     }
-  }
 
-  .search-filter__backdrop {
-    position: fixed;
-    inset: 0 auto auto 0;
-    z-index: 8;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgb(0 0 0 / 40%);
-    backdrop-filter: blur(2px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    .filter-fields {
+      display: grid;
+      gap: 1rem;
+      padding: 1rem;
+
+      @media (width >= 48rem) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        padding-bottom: 3.5rem;
+      }
+    }
+
+    .swatch-image {
+      width: 1.875rem;
+      height: 1.875rem;
+    }
+
+    .option-count {
+      color: var(--ui-neutral-400);
+    }
+
+    .filter-sort {
+      display: flex;
+      gap: 1rem;
+      padding-block: 0.5rem 1rem;
+    }
+
+    .filter-actions {
+      position: sticky;
+      bottom: 0;
+
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+
+      padding: 1rem;
+      border-top: 1px solid var(--ui-neutral-200);
+
+      button {
+        border-bottom: 1px solid currentcolor;
+      }
+    }
+
+    .filter-backdrop {
+      z-index: 8;
+
+      position: fixed;
+      inset: 0 auto auto 0;
+
+      width: 100vw;
+      height: 100vh;
+
+      background-color: rgb(0 0 0 / 40%);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+
+      transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      pointer-events: none;
+    }
 
     /* show backdrop */
-    .search-filter[open] + & {
+    .filter-dialog[open] + .filter-backdrop {
       opacity: 1;
       pointer-events: all;
     }
@@ -325,6 +354,7 @@
 {% schema %}
 {
   "name": "Filter",
+  "class": "search-filter",
   "presets": [{ "name": "Filter" }]
 }
 {% endschema %}

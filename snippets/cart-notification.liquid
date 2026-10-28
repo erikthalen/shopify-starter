@@ -8,56 +8,74 @@
   {% render 'cart-notification' %}
 {% enddoc %}
 
-<dialog
-  id="cart_notification"
-  x-data="cartNotification"
-  class="cart-notification"
-  closedby="any"
-  style="view-transition-name: cart-notification"
-></dialog>
+{% comment %}
+  x-data stays on the dialog: cart-notification.ts writes the fetched content into `$root` and calls `show()` on it.
+{% endcomment %}
+<div class="cart-notification">
+  <dialog
+    id="cart_notification"
+    x-data="cartNotification"
+    class="notification-dialog"
+    closedby="any"
+    style="view-transition-name: cart-notification"
+  ></dialog>
 
-{% comment %} backdrop {% endcomment %}
-<div
-  class="cart-notification-backdrop"
-  style="view-transition-name: cart-notification-backdrop"
-></div>
+  {% comment %} backdrop {% endcomment %}
+  <div
+    class="notification-backdrop"
+    style="view-transition-name: cart-notification-backdrop"
+  ></div>
+</div>
 
 {% stylesheet %}
   .cart-notification {
-    position: fixed;
-    inset: 3.5rem 1rem auto auto;
-    z-index: 11;
-    width: 100%;
-    max-width: calc(100vw - 2rem);
+    /* only groups the dialog and backdrop, so it doesn't take a row in the body grid */
+    display: contents;
 
-    @media (width >= 48rem) {
-      max-width: 28rem;
-    }
-  }
+    &:has(.notification-dialog[open]) {
+      .notification-backdrop {
+        display: block;
+        opacity: 1;
 
-  .cart-notification-backdrop {
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-
-    position: fixed;
-    inset: 0 auto auto 0;
-    z-index: 8;
-    display: none;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgb(0 0 0 / 25%);
-    backdrop-filter: blur(2px);
-    opacity: 0;
-    transition:
-      opacity 500ms var(--ease-in-out),
-      display 500ms var(--ease-in-out) allow-discrete;
-
-    .cart-notification[open] + & {
-      display: block;
-      opacity: 1;
-
-      @starting-style {
-        opacity: 0;
+        @starting-style {
+          opacity: 0;
+        }
       }
+    }
+
+    .notification-dialog {
+      z-index: 11;
+
+      position: fixed;
+      inset: 3.5rem 1rem auto auto;
+
+      width: 100%;
+      max-width: calc(100vw - 2rem);
+
+      @media (width >= 48rem) {
+        max-width: 28rem;
+      }
+    }
+
+    .notification-backdrop {
+      --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+      z-index: 8;
+
+      position: fixed;
+      inset: 0 auto auto 0;
+
+      display: none;
+
+      width: 100vw;
+      height: 100vh;
+
+      background-color: rgb(0 0 0 / 25%);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      transition:
+        opacity 500ms var(--ease-in-out),
+        display 500ms var(--ease-in-out) allow-discrete;
     }
   }
 {% endstylesheet %}

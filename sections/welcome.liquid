@@ -1,16 +1,14 @@
-<section class="empty welcome">
-  <img src="{{ 'shopify-logo.webp' | asset_url }}" width="100" height="100" alt="Shopify logo">
+<img src="{{ 'shopify-logo.webp' | asset_url }}" width="100" height="100" alt="Shopify logo">
 
-  <h1>Shopify starter</h1>
+<h1>Shopify starter</h1>
 
-  <p>Using Alpine and Htmx</p>
+<p>Using Alpine and Htmx</p>
 
-  <a class="button ghost" href="https://github.com/erikthalen/shopify-starter" target="_blank">
-    {% render 'icon', name: 'github' %}
+<a class="button ghost" href="https://github.com/erikthalen/shopify-starter" target="_blank">
+  {% render 'icon', name: 'github' %}
 
-    GitHub
-  </a>
-</section>
+  GitHub
+</a>
 
 {% stylesheet %}
   .welcome {
@@ -27,6 +25,8 @@
 {% schema %}
 {
   "name": "Welcome",
+  "tag": "section",
+  "class": "welcome empty",
   "disabled_on": {
     "groups": ["header", "footer"]
   },

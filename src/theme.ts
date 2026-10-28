@@ -4,6 +4,7 @@ import "htmx.org/dist/ext/hx-preload.js"
 import "htmx.org/dist/ext/hx-alpine-compat.js"
 import "./utils/vvh"
 import { loadingStates } from "./utils/htmx-ext-loading-states"
+import "dialog-closedby-polyfill"
 
 import "@blossom-carousel/web"
 
@@ -28,7 +29,7 @@ loadingStates(htmx)
  */
 document.addEventListener("htmx:after:swap", e => {
   const { target, text } = e.detail.ctx
-  if (target?.id !== "main_product" || !text) return
+  if (target?.id !== "product_content" || !text) return
 
   const newButton = new DOMParser()
     .parseFromString(text, "text/html")

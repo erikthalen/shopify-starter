@@ -1,14 +1,12 @@
-<section class="empty">
-  {% render 'icon', name: 'forbid' %}
+{% render 'icon', name: 'forbid' %}
 
-  <h1>Page not found</h1>
-  <p>The page you are looking for does not exist. It may have been moved or deleted.</p>
+<h1>Page not found</h1>
+<p>The page you are looking for does not exist. It may have been moved or deleted.</p>
 
-  <footer>
-    <a href="{{ routes.root_url }}" class="button">Home page</a>
-    <a href="{{ routes.collections_url }}" class="button outlined">Browse products</a>
-  </footer>
-</section>
+<footer>
+  <a href="{{ routes.root_url }}" class="button">Home page</a>
+  <a href="{{ routes.collections_url }}" class="button outlined">Browse products</a>
+</footer>
 
 {% stylesheet %}
   .error-section {
@@ -19,6 +17,7 @@
 {% schema %}
 {
   "name": "Error",
-  "class": "error-section"
+  "tag": "section",
+  "class": "error-section empty"
 }
 {% endschema %}

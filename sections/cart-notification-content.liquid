@@ -1,70 +1,80 @@
 {% assign product = product_variant.product %}
 {% assign image = product_variant.featured_image | default: product.featured_image %}
 
-<article class="cart-notification-content">
-  <header>
-    <span>Added to your cart</span>
+<header>
+  <span class="notification-status">Added to your cart</span>
 
-    <button
-      onclick="this.closest('dialog')?.close()"
-      aria-label="Close cart notification"
-      data-placement="left"
-      class="button ghost square"
-    >
-      {% render 'icon', name: 'cross' %}
-    </button>
-  </header>
+  <button
+    onclick="this.closest('dialog')?.close()"
+    aria-label="Close cart notification"
+    data-placement="left"
+    class="button ghost square"
+  >
+    {% render 'icon', name: 'cross' %}
+  </button>
+</header>
 
-  <div class="cart-notification-content__product">
-    {% render 'image', image: image, class: 'cart-notification-content__image', sizes: '100px, 100px' %}
+<div class="notification-product">
+  {% render 'image', image: image, class: 'notification-thumbnail', sizes: '100px, 100px' %}
 
-    <div>
-      <h2>{{ product.title }}</h2>
+  <div>
+    <h2>{{ product.title }}</h2>
 
-      <span>
-        {% render 'product-price', product: product %}
-      </span>
-    </div>
+    <span>
+      {% render 'product-price', product: product %}
+    </span>
   </div>
+</div>
 
-  <footer>
-    <a
-      href="{{ routes.cart_url }}"
-      onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_notification')?.close(); document.getElementById('cart_drawer_dialog')?.showModal()"
-      class="button link"
-    >
-      See cart
-    </a>
+<footer>
+  <a
+    href="{{ routes.cart_url }}"
+    onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_notification')?.close(); document.getElementById('cart_drawer_dialog')?.showModal()"
+    class="button link"
+  >
+    See cart
+  </a>
 
-    {% form 'cart', cart %}
-      <button class="button" type="submit" name="checkout">Checkout</button>
-    {% endform %}
-  </footer>
-</article>
+  {% form 'cart', cart %}
+    <button class="button" type="submit" name="checkout">Checkout</button>
+  {% endform %}
+</footer>
 
 {% stylesheet %}
   .cart-notification-content {
-    & > :is(header, footer) {
+    > header {
+      justify-content: space-between;
+
+      .notification-status {
+        color: var(--ui-neutral-400);
+      }
+    }
+
+    .notification-product {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 1rem;
+
+      .notification-thumbnail {
+        overflow: hidden;
+        border-radius: 0.25rem;
+      }
+
+      h2 {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    > footer {
       justify-content: space-between;
     }
-
-    & > header > span {
-      color: var(--ui-neutral-400);
-    }
-  }
-
-  .cart-notification-content__product {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 1rem;
-
-    & h2 {
-      margin-bottom: 0.5rem;
-    }
-  }
-
-  .cart-notification-content__image {
-    border-radius: 0.25rem;
-    overflow: hidden;
   }
 {% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Cart notification content",
+  "tag": "article",
+  "class": "cart-notification-content"
+}
+{% endschema %}

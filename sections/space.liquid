@@ -4,20 +4,23 @@
 
 {% if request.visual_preview_mode %}
   {% comment %} show a little arrow in the preview popup {% endcomment %}
-  <p aria-hidden="true" class="space__preview" style="text-align: center; opacity: 0.4; font-size: 5vw; margin: 0.15;">
+  <p aria-hidden="true" class="space-preview" style="text-align: center; opacity: 0.4; font-size: 5vw; margin: 0.15;">
     ↕
   </p>
 {% endif %}
 
 {% stylesheet %}
-  .space__preview {
-    background-color: white;
+  .space-section {
+    .space-preview {
+      background-color: var(--ui-background-color);
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "Space",
+  "class": "space-section",
   "disabled_on": {
     "groups": ["header", "footer"]
   },

@@ -17,7 +17,10 @@
       aria-current="page"
     {% endif %}
   >
-    Cart (
+    <span class="desktop-only">Cart</span>
+    <span class="mobile-only">{% render 'icon', name: 'basket' %}</span>
+
+    (
     {{- cart.item_count -}}
     )
   </a>
@@ -28,7 +31,7 @@
     closedby="any"
     class="drawer"
   >
-    <article>
+    <article class="drawer-content">
       <header>
         <span>
           Your cart (
@@ -36,7 +39,7 @@
           )
         </span>
 
-        <form method="dialog">
+        <form method="dialog" class="contents">
           <button aria-title="Close cart drawer" class="button ghost square">
             {% render 'icon', name: 'cross' %}
           </button>
@@ -44,21 +47,21 @@
       </header>
 
       {%- if cart == empty -%}
-        <div class="empty">
-          {% render 'icon', name: 'cart' %}
+        <div class="empty cart-empty">
+          {% render 'icon', name: 'basket' %}
 
           <h2>Your cart is empty</h2>
           <a href="{{ routes.collections_url }}" class="button"> Go to shop </a>
         </div>
       {%- else -%}
-        <ul>
+        <ul class="cart-items">
           {%- for item in cart.items -%}
             {% render 'cart-item', item: item %}
           {%- endfor -%}
         </ul>
 
         <footer>
-          <div>
+          <div class="cart-total">
             <p>Total: {{ cart.total_price | money_with_currency }}</p>
 
             {% form 'cart', cart %}
@@ -74,48 +77,47 @@
 </div>
 
 {% stylesheet %}
-  #cart_drawer {
-    article {
+  .cart-drawer {
+    .drawer-content {
       display: grid;
       grid-template-rows: auto 1fr auto;
       height: 100%;
 
       > header {
+        z-index: 1;
+
         position: sticky;
         top: 0;
-        z-index: 1;
+
         justify-content: space-between;
-
-        > form {
-          display: contents;
-        }
-      }
-
-      .empty {
-        margin: auto;
-      }
-
-      > ul {
-        overflow: auto;
-        overscroll-behavior: contain;
-
-        display: grid;
-        align-content: baseline;
-        gap: 0.5rem;
       }
 
       > footer {
-        position: sticky;
-        bottom: 0;
         z-index: 1;
 
-        display: grid;
+        position: sticky;
+        bottom: 0;
 
-        div {
-          display: flex;
-          justify-content: space-between;
-        }
+        display: grid;
       }
+    }
+
+    .cart-empty {
+      margin: auto;
+    }
+
+    .cart-items {
+      display: grid;
+      align-content: baseline;
+      gap: 0.5rem;
+
+      overflow: auto;
+      overscroll-behavior: contain;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
     }
   }
 {% endstylesheet %}
@@ -123,6 +125,7 @@
 {% schema %}
 {
   "name": "Cart drawer",
+  "class": "cart-drawer",
   "presets": [
     {
       "name": "Cart drawer"

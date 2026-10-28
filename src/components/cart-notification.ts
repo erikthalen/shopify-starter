@@ -55,7 +55,7 @@ export default defineComponent(() => ({
 
         if (!content) return
 
-        this.$root.innerHTML = content.innerHTML
+        this.$root.replaceChildren(content)
         ;(this.$root as HTMLDialogElement).show()
       },
       { signal }

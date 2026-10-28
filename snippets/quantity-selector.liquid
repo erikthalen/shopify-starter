@@ -34,7 +34,7 @@
     type="button"
     @click="value = Math.max({{ qs_min }}, value - 1)"
     @click.debounce="{{ on-change | default: '' }}"
-    class="ghost square"
+    class="outlined square"
     aria-label="Decrease quantity"
   >
     {% render 'icon', name: 'minus' %}
@@ -44,17 +44,15 @@
 
   <span x-text="value">{{ qs_value }}</span>
 
-  <small>
-    <button
-      type="button"
-      @click="value++"
-      @click.debounce="{{ on-change | default: '' }}"
-      class="ghost square"
-      aria-label="Increase quantity"
-    >
-      {% render 'icon', name: 'plus' %}
-    </button>
-  </small>
+  <button
+    type="button"
+    @click="value++"
+    @click.debounce="{{ on-change | default: '' }}"
+    class="outlined square"
+    aria-label="Increase quantity"
+  >
+    {% render 'icon', name: 'plus' %}
+  </button>
 </div>
 
 {% stylesheet %}

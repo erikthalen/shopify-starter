@@ -5,10 +5,12 @@ import intersect from "@alpinejs/intersect"
 
 // components
 import cartNotification from "./components/cart-notification"
+import predictiveSearch from "./components/predictive-search"
 
 Alpine.plugin(intersect)
 
 Alpine.data("cartNotification", cartNotification)
+Alpine.data("predictiveSearch", predictiveSearch)
 
 export const alpineStores = {
   exampleStore: {

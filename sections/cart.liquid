@@ -1,21 +1,21 @@
-<section id="cart_section">
+<div id="cart_section">
   <h1>Cart</h1>
 
   {%- if cart == empty -%}
     <div class="empty">
-      {% render 'icon', name: 'cart' %}
+      {% render 'icon', name: 'basket' %}
 
       <h2>Your cart is empty</h2>
       <a href="{{ routes.collections_url }}" class="button"> Go to shop </a>
     </div>
   {%- else -%}
-    <ul>
+    <ul class="cart-items">
       {%- for item in cart.items -%}
         {% render 'cart-item', item: item %}
       {%- endfor -%}
     </ul>
 
-    <footer>
+    <footer class="cart-summary">
       <p>Total: {{ cart.total_price | money_with_currency }}</p>
 
       {% form 'cart', cart %}
@@ -23,7 +23,7 @@
       {% endform %}
     </footer>
   {%- endif -%}
-</section>
+</div>
 
 {% stylesheet %}
   .cart-section {
@@ -34,15 +34,15 @@
       margin-block: 2rem;
     }
 
-    ul {
+    .cart-items {
       display: grid;
       gap: 0.5rem;
     }
 
-    footer {
+    .cart-summary {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       margin-top: 2rem;
     }
   }
@@ -51,6 +51,7 @@
 {% schema %}
 {
   "name": "Main cart",
+  "tag": "section",
   "class": "cart-section"
 }
 {% endschema %}

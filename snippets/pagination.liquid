@@ -23,7 +23,7 @@
       {%- if paginate.previous -%}
         <li>
           <a
-            class="pagination__step"
+            class="pagination-step"
             @mousedown="window.forcePageRefresh = true"
             href="{{ paginate.previous.url }}"
           >
@@ -31,7 +31,7 @@
           </a>
         </li>
       {%- else -%}
-        <li class="pagination__disabled">Previous <span class="sr-only">page</span></li>
+        <li class="disabled-step">Previous <span class="sr-only">page</span></li>
       {%- endif -%}
 
       {%- for part in paginate.parts -%}
@@ -53,7 +53,7 @@
       {%- if paginate.next -%}
         <li>
           <a
-            class="pagination__step"
+            class="pagination-step"
             @mousedown="window.forcePageRefresh = true"
             href="{{ paginate.next.url }}"
           >
@@ -61,7 +61,7 @@
           </a>
         </li>
       {%- else -%}
-        <li class="pagination__disabled">Next <span class="sr-only">page</span></li>
+        <li class="disabled-step">Next <span class="sr-only">page</span></li>
       {%- endif -%}
     </ol>
   </nav>
@@ -73,17 +73,17 @@
     justify-content: center;
     margin-top: 5rem;
 
-    & > ol {
+    ol {
       display: flex;
       gap: 1rem;
     }
-  }
 
-  .pagination__step {
-    border-bottom: 1px dotted;
-  }
+    .pagination-step {
+      border-bottom: 1px dotted;
+    }
 
-  .pagination__disabled {
-    color: oklch(55.6% 0 0);
+    .disabled-step {
+      color: var(--ui-neutral-500);
+    }
   }
 {% endstylesheet %}

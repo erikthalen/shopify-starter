@@ -74,6 +74,11 @@ export function loadingStates(htmx: Htmx): void {
     while (undoQueue.length > 0) undoQueue.shift()!()
   }
 
+  // a request cancelled with the htmx:abort event has no request replacing it,
+  // so nothing else would undo its loading states. Captured, since the event
+  // is often dispatched without bubbling
+  document.addEventListener("htmx:abort", undoLoadingStates, true)
+
   htmx.registerExtension("loading-states", {
     htmx_before_request(elt: Element, { ctx }: { ctx: HtmxRequestCtx }) {
       const requestPath = ctx.request.action

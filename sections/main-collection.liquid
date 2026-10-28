@@ -1,8 +1,8 @@
-<section class="main-collection" id="main_collection">
-  <div class="main-collection__header">
+<div id="main_collection">
+  <div class="collection-heading">
     <h1>
       {{ collection.title }}
-      <span class="main-collection__count">({{ collection.all_products_count }})</span>
+      <span class="product-count">({{ collection.all_products_count }})</span>
     </h1>
 
     {% content_for 'block', type: '_collection-filter', id: 'collection_filter' %}
@@ -13,7 +13,7 @@
       {% if collection.products.size == 0 %}
         <p>No results</p>
       {% else %}
-        <div class="main-collection__grid">
+        <div class="product-grid">
           <ul id="paginated_items">
             {% for product in collection.products %}
               <li>
@@ -33,36 +33,36 @@
       {%- endif -%}
     {% endpaginate %}
   </div>
-</section>
+</div>
 
 {% stylesheet %}
   .main-collection {
     margin-block: 1rem;
     padding-inline: 1rem;
-  }
 
-  .main-collection__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
+    .collection-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
 
-  .main-collection__count {
-    color: oklch(55.6% 0 0);
-  }
-
-  .main-collection__grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 2rem 1rem;
-
-    @media (width >= 48rem) {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      .product-count {
+        color: var(--ui-neutral-500);
+      }
     }
 
-    & > ul {
-      display: contents;
+    .product-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem 1rem;
+
+      @media (width >= 48rem) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      > ul {
+        display: contents;
+      }
     }
   }
 {% endstylesheet %}
@@ -70,6 +70,8 @@
 {% schema %}
 {
   "name": "Main collection",
+  "tag": "section",
+  "class": "main-collection",
   "settings": [
     {
       "type": "select",

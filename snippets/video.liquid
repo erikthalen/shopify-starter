@@ -32,9 +32,7 @@
   <script defer src="{{ 'video.js' | asset_url }}"></script>
 
   <video-player
-    {% if class %}
-      class="{{ class }}"
-    {% endif %}
+    class="video-player{% if class %} {{ class }}{% endif %}"
     style="{{ aspect_ratio_css }}"
   >
     <video-skin>
@@ -50,15 +48,16 @@
         sizes: '100vw, 100vw',
         loading: 'eager',
         alt: video.alt,
-        slot: 'poster'
+        slot: 'poster',
+        class: 'video-poster'
       %}
 
-      <media-play-button class="media-play-button play-btn type-base-display">
-        <span class="paused"> Play </span>
+      <media-play-button>
+        <span class="play-label"> Play </span>
 
         {% comment %}
-          <span class="playing">Pause</span>
-          <span class="ended">Replay</span>
+          <span class="pause-label">Pause</span>
+          <span class="replay-label">Replay</span>
         {% endcomment %}
       </media-play-button>
     </video-skin>
@@ -66,70 +65,53 @@
 {% endif %}
 
 {% stylesheet %}
-  video-player {
+  .video-player {
     --media-border-radius: 0px;
 
-    user-select: none;
     font-weight: 700;
+    user-select: none;
 
     video-skin {
-      width: 100%;
       position: relative;
+      width: 100%;
+    }
 
-      video {
-        aspect-ratio: var(--aspect-ratio-sm);
+    video {
+      aspect-ratio: var(--aspect-ratio-sm);
 
-        @media (width >= 768px) {
-          aspect-ratio: var(--aspect-ratio-md);
-        }
-      }
-
-      /* The skin's own poster positions and fades the slot; size the image within it */
-      > picture[slot="poster"] > img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-      }
-
-      media-play-button {
-        position: absolute;
-        inset: 0;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--scheme-text, var(--color-white));
-        z-index: 12;
+      @media (width >= 48rem) {
+        aspect-ratio: var(--aspect-ratio-md);
       }
     }
 
+    /* The skin's own poster positions and fades the slot; size the image within it */
+    .video-poster {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
     media-play-button {
+      z-index: 12;
+
+      position: absolute;
+      inset: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      color: var(--scheme-text, var(--color-white));
+
+      cursor: pointer;
       pointer-events: none;
-
-      /* Default state */
-      span {
-        opacity: 0;
-        scale: 1.05;
-        filter: blur(4px);
-        pointer-events: none;
-
-        will-change: transform;
-
-        transition: all 200ms var(--ease-glide);
-
-        display: flex;
-        padding: 0.5rem 1.5rem;
-        backdrop-filter: blur(10px);
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 100px;
-      }
 
       /* Paused (but not ended) */
       &[data-paused]:not([data-ended]) {
         pointer-events: auto;
 
-        .paused {
+        .play-label {
           opacity: 1;
           scale: 1;
           filter: blur(0);
@@ -140,7 +122,7 @@
 
       /* Playing */
       &:not([data-paused]) {
-        .playing {
+        .pause-label {
           opacity: 1;
           scale: 1;
           filter: blur(0);
@@ -150,12 +132,32 @@
 
       /* Ended */
       &[data-ended] {
-        .ended {
+        .replay-label {
           opacity: 1;
           scale: 1;
           filter: blur(0);
           pointer-events: auto;
         }
+      }
+
+      /* Default state */
+      span {
+        display: flex;
+
+        padding: 0.5rem 1.5rem;
+
+        border-radius: 100px;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        filter: blur(4px);
+
+        scale: 1.05;
+
+        will-change: transform;
+        transition: all 200ms var(--ease-glide);
+
+        pointer-events: none;
       }
     }
   }

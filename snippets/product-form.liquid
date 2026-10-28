@@ -5,15 +5,13 @@
 
 {% assign variant = product.selected_or_first_available_variant %}
 
-{% render 'variant-picker' %}
-
 {% form 'product',
   product,
   class: 'product-form',
   hx-post: routes.cart_add_url,
   hx-select: '#cart_drawer',
   hx-target: '#cart_drawer',
-  hx-swap: 'outerHTML',
+  hx-swap: 'outerMorph',
   hx-select-oob: '#cart_section',
   data-loading-states: ''
 %}
@@ -25,6 +23,7 @@
     {% render 'quantity-selector', min: 1, name: 'quantity', value: 1, id: 'product', attr: 'hx-preserve' %}
 
     <button
+      class="add-to-cart"
       data-loading-aria-busy
       type="submit"
       name="add"
@@ -47,21 +46,11 @@
 
 {% stylesheet %}
   .product-form {
-    width: 100%;
-    margin-block: 1rem;
-
-    & > fieldset {
-      display: flex;
+    fieldset {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 1rem;
       margin-block: 1.5rem;
-
-      & > button {
-        width: 100%;
-      }
-    }
-
-    & #shopify_payment_button {
-      color: oklch(44.6% 0.03 256.802);
     }
   }
 {% endstylesheet %}

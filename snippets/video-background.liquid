@@ -6,7 +6,7 @@
   @param {string} [aspect_ratio] - CSS `aspect-ratio` value, e.g. `16/9`.
   @param {string} [aspect_ratio_sm] - Aspect ratio on small screens. Overrides `aspect_ratio`.
   @param {string} [aspect_ratio_md] - Aspect ratio on large screens. Overrides `aspect_ratio`.
-  @param {string} [class] - Additional css classes.
+  @param {string} [class] - Additional css classes on the video skin. `auto-height` sets `height: auto`.
   @param {string} [loading] - loading attr of the poster image.
 {% enddoc %}
 
@@ -24,7 +24,7 @@
 %}
 
 {% if video %}
-  <background-video-player style="{{ aspect_ratio_css }}">
+  <background-video-player class="video-background" style="{{ aspect_ratio_css }}">
     <background-video-skin
       {% if class %}
         class="{{ class }}"
@@ -41,7 +41,8 @@
           aspect_ratio_sm: ar_sm,
           aspect_ratio_md: ar_md,
           loading: loading,
-          sizes: '50vw, 25vw'
+          sizes: '50vw, 25vw',
+          class: 'background-video-poster'
         %}
       </background-video>
     </background-video-skin>
@@ -50,7 +51,7 @@
   <script>
     ;(function () {
       const el = document.currentScript.previousElementSibling.querySelector('background-video')
-      const mq = window.matchMedia('(width < 768px)')
+      const mq = window.matchMedia('(width < 48rem)')
 
       function swap(e) {
         el.setAttribute('src', e.matches ? el.dataset.srcMobile : el.dataset.srcDesktop)
@@ -62,25 +63,22 @@
 {% endif %}
 
 {% stylesheet %}
-  background-video-player {
+  .video-background {
     background-video-skin {
       min-width: auto;
       max-width: 100vw;
-
       aspect-ratio: var(--aspect-ratio-sm);
 
-      @media (width >= 768px) {
+      @media (width >= 48rem) {
         aspect-ratio: var(--aspect-ratio-md);
+      }
+
+      &.auto-height {
+        height: auto;
       }
     }
 
-    background-video-skin.h-auto {
-      height: auto;
-    }
-  }
-
-  background-video {
-    img {
+    .background-video-poster {
       width: 100%;
       height: 100%;
     }

@@ -1,31 +1,27 @@
 {% if section.settings.text != blank %}
-  <div
-    id="announcement_bar"
-    role="region"
-    style="view-transition-name: announcement-bar"
-  >
+  <div id="announcement_bar" role="region">
     {{ section.settings.text }}
   </div>
 {% endif %}
 
 {% stylesheet %}
-  body {
-    --announcement-bar-height: 0rem;
-
-    &:has(#announcement_bar) {
-      --announcement-bar-height: 2.5rem;
-    }
-  }
-
   .announcement-bar {
+    z-index: 1000;
+
     position: sticky;
     top: calc(var(--announcement-bar-height) * -1);
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     height: var(--announcement-bar-height);
     padding-inline: 1rem;
+
     background-color: var(--ui-neutral-100);
+
+    /* on the root, not the inner div, so the background moves with the text, above the page */
+    view-transition-name: announcement-bar;
   }
 {% endstylesheet %}
 
