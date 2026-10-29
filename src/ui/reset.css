@@ -1,0 +1,73 @@
+/* reset */
+:root,
+:host {
+  interpolate-size: allow-keywords;
+  text-rendering: geometricprecision;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  -moz-osx-font-smoothing: grayscale;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  font-family: system-ui;
+  font-size: 14px;
+  color-scheme: light dark;
+}
+html {
+  scrollbar-gutter: stable;
+}
+:where(*),
+:where(*):before,
+:where(*):after {
+  box-sizing: border-box;
+  text-wrap-style: pretty;
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap-style: balance;
+  font-weight: 600;
+}
+ul,
+ol {
+  list-style: none;
+  & li {
+    list-style: revert;
+  }
+}
+a {
+  color: var(--ui-primary);
+}
+img {
+  vertical-align: middle;
+  object-fit: cover;
+  max-width: 100%;
+}
+strong {
+  font-weight: 600;
+}
+svg {
+  width: 1lh;
+  height: 1lh;
+}
+::selection {
+  background-color: var(--ui-neutral-200);
+}
+input[type="number"] {
+  appearance: textfield;
+  &::-webkit-inner-spin-button {
+    appearance: none;
+  }
+  &::-webkit-outer-spin-button {
+    appearance: none;
+  }
+}
+a:focus-visible {
+  border-radius: var(--ui-rounded-3);
+  outline: 2px solid var(--ui-neutral-950);
+  outline-offset: 2px;
+}

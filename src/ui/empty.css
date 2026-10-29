@@ -1,0 +1,44 @@
+/* empty */
+.empty {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75em;
+  padding: 2em;
+  color: var(--ui-neutral-500);
+  flex-direction: column;
+  margin: auto;
+
+  &:not([hidden]) {
+    display: flex;
+  }
+
+  & > svg {
+    background: var(--bg, var(--ui-neutral-100));
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--ui-neutral-800);
+    border-radius: var(--ui-rounded-2);
+    padding: 0.5rem;
+  }
+
+  & > :is(h1, h2, h3, h4, h5, h6) {
+    color: var(--ui-neutral-950);
+  }
+
+  & p {
+    max-width: 35ch;
+  }
+
+  & > button,
+  & > a,
+  & > .button,
+  & > footer {
+    margin-top: 0.5em;
+  }
+
+  & > footer {
+    gap: 0.5em;
+    display: flex;
+  }
+}

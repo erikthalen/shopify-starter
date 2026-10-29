@@ -1,0 +1,71 @@
+/* field */
+.field {
+  gap: 0.75em;
+  flex-direction: column;
+  display: flex;
+
+  & > span:not([data-prefix]):not([data-suffix]) {
+    font-weight: 600;
+  }
+
+  & > small {
+    color: var(--ui-neutral-500);
+  }
+
+  &:has(input:required) > span:not([data-prefix]):not([data-suffix]):after {
+    content: " *";
+    color: var(--ui-destructive);
+  }
+
+  & :user-invalid {
+    --border-color: var(--ui-destructive);
+
+    &:focus-visible {
+      box-shadow: 0 0 0 1px var(--ui-destructive) inset;
+    }
+  }
+
+  & > small[data-error] {
+    color: var(--ui-destructive);
+    display: none;
+  }
+
+  :is(
+    &:has(:user-invalid:placeholder-shown) > small[data-error="required"],
+    &:has(:user-invalid:out-of-range) > small[data-error="range"],
+    &:has(:user-invalid:not(:placeholder-shown):not(:out-of-range))
+      > small[data-error="invalid"]
+  ) {
+    opacity: 1;
+    transition:
+      opacity var(--ease-glide-2),
+      translate var(--ease-glide-2),
+      display 0.15s allow-discrete;
+    display: block;
+    translate: 0;
+  }
+
+  @starting-style {
+    :is(
+      &:has(:user-invalid:placeholder-shown) > small[data-error="required"],
+      &:has(:user-invalid:out-of-range) > small[data-error="range"],
+      &:has(:user-invalid:not(:placeholder-shown):not(:out-of-range))
+        > small[data-error="invalid"]
+    ) {
+      opacity: 0;
+      translate: 0 -4px;
+    }
+  }
+
+  &
+    > input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not(
+      .otp
+    ),
+  & > textarea,
+  & > select,
+  & > progress,
+  & > button[popovertarget],
+  & > .file-drop {
+    width: 100%;
+  }
+}

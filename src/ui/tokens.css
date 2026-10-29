@@ -1,0 +1,563 @@
+/* tokens */
+
+:root,
+:host {
+  --ease-glide: linear(
+    0,
+    0.001 0.4%,
+    0.004 0.9%,
+    0.018 1.9%,
+    0.038 2.9%,
+    0.07 4.1%,
+    0.1 5.1%,
+    0.136 6.2%,
+    0.33 11.7%,
+    0.426 14.6%,
+    0.475 16.2%,
+    0.521 17.8%,
+    0.563 19.4%,
+    0.602 21%,
+    0.64 22.7%,
+    0.675 24.4%,
+    0.708 26.2%,
+    0.739 28%,
+    0.767 29.9%,
+    0.793 31.8%,
+    0.817 33.8%,
+    0.838 35.8%,
+    0.859 38.1%,
+    0.879 40.6%,
+    0.897 43.1%,
+    0.913 45.8%,
+    0.927 48.7%,
+    0.939 51.7%,
+    0.95 54.9%,
+    0.96 58.4%,
+    0.975 66%,
+    0.986 74.9%,
+    0.993 85.9%,
+    1
+  );
+  --ease-snap: linear(
+    0,
+    0.03 1.1%,
+    0.125 2.4%,
+    0.906 9.8%,
+    1.046 12.3%,
+    1.11 15%,
+    1.116 16.3%,
+    1.11 17.8%,
+    1.014 25.8%,
+    0.987 31.2%,
+    1.001 47.2%,
+    1
+  );
+  --ease-heavy: linear(
+    0,
+    0.01 0.7%,
+    0.044 1.5%,
+    0.171 3.1%,
+    0.339 4.6%,
+    0.857 8.7%,
+    1.088 11%,
+    1.17 12.1%,
+    1.232 13.2%,
+    1.273 14.3%,
+    1.297 15.5%,
+    1.299 16.9%,
+    1.273 18.5%,
+    1.22 20.3%,
+    1.057 24.6%,
+    0.986 26.8%,
+    0.934 29.2%,
+    0.911 31.7%,
+    0.918 34.8%,
+    1.003 43%,
+    1.027 47.8%,
+    1.025 51.1%,
+    0.992 63.8%,
+    1.002 79.7%,
+    1
+  );
+  --ease-in-sine: cubic-bezier(0.12, 0, 0.39, 0);
+  --ease-out-sine: cubic-bezier(0.61, 1, 0.88, 1);
+  --ease-in-out-sine: cubic-bezier(0.37, 0, 0.63, 1);
+  --ease-in-quad: cubic-bezier(0.11, 0, 0.5, 0);
+  --ease-out-quad: cubic-bezier(0.5, 1, 0.89, 1);
+  --ease-in-out-quad: cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-in-cubic: cubic-bezier(0.32, 0, 0.67, 0);
+  --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-in-quart: cubic-bezier(0.5, 0, 0.75, 0);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-in-quint: cubic-bezier(0.64, 0, 0.78, 0);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+  --ease-in-circ: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-out-circ: cubic-bezier(0, 0.55, 0.45, 1);
+  --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+  --ease-in-back: cubic-bezier(0.36, 0, 0.66, -0.56);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out-back: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  --ease-glide-1: 0.1s var(--ease-glide);
+  --ease-glide-2: 0.15s var(--ease-glide);
+  --ease-glide-3: 0.2s var(--ease-glide);
+  --ease-glide-4: 0.3s var(--ease-glide);
+  --ease-glide-5: 0.4s var(--ease-glide);
+  --ease-snap-1: 0.4s var(--ease-snap);
+  --ease-snap-2: 0.55s var(--ease-snap);
+  --ease-snap-3: 0.75s var(--ease-snap);
+  --ease-snap-4: 1s var(--ease-snap);
+  --ease-snap-5: 1.3s var(--ease-snap);
+  --ease-heavy-1: 0.6s var(--ease-heavy);
+  --ease-heavy-2: 0.7s var(--ease-heavy);
+  --ease-heavy-3: 0.85s var(--ease-heavy);
+  --ease-heavy-4: 1s var(--ease-heavy);
+  --ease-heavy-5: 1.2s var(--ease-heavy);
+}
+
+:root,
+:host,
+[data-ui-theme] {
+  --ui-primary-light: dodgerblue;
+  --ui-primary-dark: oklab(72.1604% -0.0439466 -0.145608);
+  --ui-primary: light-dark(var(--ui-primary-light), var(--ui-primary-dark));
+  --ui-neutral-light: #93949d;
+  --ui-neutral-dark: #8b8c93;
+  --ui-neutral: light-dark(var(--ui-neutral-light), var(--ui-neutral-dark));
+  --ui-destructive: #ef5655;
+  --ui-color-50-light-value: white 95%;
+  --ui-color-100-light-value: white 87%;
+  --ui-color-200-light-value: white 75%;
+  --ui-color-300-light-value: white 60%;
+  --ui-color-400-light-value: white 40%;
+  --ui-color-600-light-value: black 13%;
+  --ui-color-700-light-value: black 25%;
+  --ui-color-800-light-value: black 43.5%;
+  --ui-color-900-light-value: black 58.5%;
+  --ui-color-950-light-value: black 73.75%;
+  --ui-color-50-dark-value: black 77.5%;
+  --ui-color-100-dark-value: black 70%;
+  --ui-color-200-dark-value: black 65%;
+  --ui-color-300-dark-value: black 55%;
+  --ui-color-400-dark-value: black 35%;
+  --ui-color-600-dark-value: white 15%;
+  --ui-color-700-dark-value: white 47%;
+  --ui-color-800-dark-value: white 70%;
+  --ui-color-900-dark-value: white 87%;
+  --ui-color-950-dark-value: white 95%;
+  --ui-primary-300-light: color-mix(
+    in oklab,
+    var(--ui-primary),
+    var(--ui-color-300-light-value)
+  );
+  --ui-primary-300-dark: color-mix(
+    in oklab,
+    var(--ui-primary),
+    var(--ui-color-300-dark-value)
+  );
+  --ui-primary-300: light-dark(
+    var(--ui-primary-300-light),
+    var(--ui-primary-300-dark)
+  );
+  --ui-primary-600-light: color-mix(
+    in oklab,
+    var(--ui-primary),
+    var(--ui-color-600-light-value)
+  );
+  --ui-primary-600-dark: color-mix(
+    in oklab,
+    var(--ui-primary),
+    var(--ui-color-600-dark-value)
+  );
+  --ui-primary-600: light-dark(
+    var(--ui-primary-600-light),
+    var(--ui-primary-600-dark)
+  );
+  --ui-primary-700-light: color-mix(
+    in oklab,
+    var(--ui-primary),
+    var(--ui-color-700-light-value)
+  );
+  --ui-primary-700-dark: color-mix(
+    in oklab,
+    var(--ui-primary),
+    var(--ui-color-700-dark-value)
+  );
+  --ui-primary-700: light-dark(
+    var(--ui-primary-700-light),
+    var(--ui-primary-700-dark)
+  );
+  --ui-neutral-0-light: color-mix(in oklab, var(--ui-neutral), white 100%);
+  --ui-neutral-0-dark: color-mix(in oklab, var(--ui-neutral), black 100%);
+  --ui-neutral-0: light-dark(
+    var(--ui-neutral-0-light),
+    var(--ui-neutral-0-dark)
+  );
+  --ui-neutral-50-light: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-50-light-value)
+  );
+  --ui-neutral-50-dark: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-50-dark-value)
+  );
+  --ui-neutral-50: light-dark(
+    var(--ui-neutral-50-light),
+    var(--ui-neutral-50-dark)
+  );
+  --ui-neutral-100-light: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-100-light-value)
+  );
+  --ui-neutral-100-dark: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-100-dark-value)
+  );
+  --ui-neutral-100: light-dark(
+    var(--ui-neutral-100-light),
+    var(--ui-neutral-100-dark)
+  );
+  --ui-neutral-200-light: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-200-light-value)
+  );
+  --ui-neutral-200-dark: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-200-dark-value)
+  );
+  --ui-neutral-200: light-dark(
+    var(--ui-neutral-200-light),
+    var(--ui-neutral-200-dark)
+  );
+  --ui-neutral-300-light: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-300-light-value)
+  );
+  --ui-neutral-300-dark: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-300-dark-value)
+  );
+  --ui-neutral-300: light-dark(
+    var(--ui-neutral-300-light),
+    var(--ui-neutral-300-dark)
+  );
+  --ui-neutral-400-light: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-400-light-value)
+  );
+  --ui-neutral-400-dark: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-400-dark-value)
+  );
+  --ui-neutral-400: light-dark(
+    var(--ui-neutral-400-light),
+    var(--ui-neutral-400-dark)
+  );
+  --ui-neutral-500: var(--ui-neutral);
+  --ui-neutral-600-light: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-600-light-value)
+  );
+  --ui-neutral-600-dark: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-600-dark-value)
+  );
+  --ui-neutral-600: light-dark(
+    var(--ui-neutral-600-light),
+    var(--ui-neutral-600-dark)
+  );
+  --ui-neutral-700-light: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-700-light-value)
+  );
+  --ui-neutral-700-dark: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-700-dark-value)
+  );
+  --ui-neutral-700: light-dark(
+    var(--ui-neutral-700-light),
+    var(--ui-neutral-700-dark)
+  );
+  --ui-neutral-800-light: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-800-light-value)
+  );
+  --ui-neutral-800-dark: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-800-dark-value)
+  );
+  --ui-neutral-800: light-dark(
+    var(--ui-neutral-800-light),
+    var(--ui-neutral-800-dark)
+  );
+  --ui-neutral-900-light: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-900-light-value)
+  );
+  --ui-neutral-900-dark: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-900-dark-value)
+  );
+  --ui-neutral-900: light-dark(
+    var(--ui-neutral-900-light),
+    var(--ui-neutral-900-dark)
+  );
+  --ui-neutral-950-light: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-950-light-value)
+  );
+  --ui-neutral-950-dark: color-mix(
+    in oklab,
+    var(--ui-neutral),
+    var(--ui-color-950-dark-value)
+  );
+  --ui-neutral-950: light-dark(
+    var(--ui-neutral-950-light),
+    var(--ui-neutral-950-dark)
+  );
+  --ui-neutral-1000-light: color-mix(in oklab, var(--ui-neutral), black 100%);
+  --ui-neutral-1000-dark: color-mix(in oklab, var(--ui-neutral), white 100%);
+  --ui-neutral-1000: light-dark(
+    var(--ui-neutral-1000-light),
+    var(--ui-neutral-1000-dark)
+  );
+  --ui-destructive-100-light: color-mix(
+    in oklab,
+    var(--ui-destructive),
+    var(--ui-color-100-light-value)
+  );
+  --ui-destructive-100-dark: color-mix(
+    in oklab,
+    var(--ui-destructive),
+    var(--ui-color-100-dark-value)
+  );
+  --ui-destructive-100: light-dark(
+    var(--ui-destructive-100-light),
+    var(--ui-destructive-100-dark)
+  );
+  --ui-destructive-200-light: color-mix(
+    in oklab,
+    var(--ui-destructive),
+    var(--ui-color-200-light-value)
+  );
+  --ui-destructive-200-dark: color-mix(
+    in oklab,
+    var(--ui-destructive),
+    var(--ui-color-200-dark-value)
+  );
+  --ui-destructive-200: light-dark(
+    var(--ui-destructive-200-light),
+    var(--ui-destructive-200-dark)
+  );
+  --ui-destructive-300-light: color-mix(
+    in oklab,
+    var(--ui-destructive),
+    var(--ui-color-300-light-value)
+  );
+  --ui-destructive-300-dark: color-mix(
+    in oklab,
+    var(--ui-destructive),
+    var(--ui-color-300-dark-value)
+  );
+  --ui-destructive-300: light-dark(
+    var(--ui-destructive-300-light),
+    var(--ui-destructive-300-dark)
+  );
+  --ui-destructive-600-light: color-mix(
+    in oklab,
+    var(--ui-destructive),
+    var(--ui-color-600-light-value)
+  );
+  --ui-destructive-600-dark: color-mix(
+    in oklab,
+    var(--ui-destructive),
+    var(--ui-color-600-dark-value)
+  );
+  --ui-destructive-600: light-dark(
+    var(--ui-destructive-600-light),
+    var(--ui-destructive-600-dark)
+  );
+  --ui-destructive-700-light: color-mix(
+    in oklab,
+    var(--ui-destructive),
+    var(--ui-color-700-light-value)
+  );
+  --ui-destructive-700-dark: color-mix(
+    in oklab,
+    var(--ui-destructive),
+    var(--ui-color-700-dark-value)
+  );
+  --ui-destructive-700: light-dark(
+    var(--ui-destructive-700-light),
+    var(--ui-destructive-700-dark)
+  );
+  --ui-spacing: 0.25em;
+  --ui-spacing-1: calc(var(--ui-spacing) * 1);
+  --ui-spacing-2: calc(var(--ui-spacing) * 2);
+  --ui-spacing-3: calc(var(--ui-spacing) * 3);
+  --ui-spacing-4: calc(var(--ui-spacing) * 4);
+  --ui-spacing-5: calc(var(--ui-spacing) * 5);
+  --ui-spacing-6: calc(var(--ui-spacing) * 6);
+  --ui-spacing-7: calc(var(--ui-spacing) * 7);
+  --ui-spacing-8: calc(var(--ui-spacing) * 8);
+  --ui-rounded: 2px;
+  --ui-rounded-scale: 1.75;
+  --ui-rounded-1: calc(var(--ui-rounded) * var(--ui-rounded-scale));
+  --ui-rounded-2: calc(
+    (var(--ui-rounded) + var(--ui-spacing-1)) * var(--ui-rounded-scale)
+  );
+  --ui-rounded-3: calc(
+    (var(--ui-rounded) + var(--ui-spacing-2)) * var(--ui-rounded-scale)
+  );
+  --ui-rounded-4: calc(
+    (var(--ui-rounded) + var(--ui-spacing-3)) * var(--ui-rounded-scale)
+  );
+  --ui-rounded-5: calc(
+    (var(--ui-rounded) + var(--ui-spacing-4)) * var(--ui-rounded-scale)
+  );
+  --ui-rounded-6: calc(
+    (var(--ui-rounded) + var(--ui-spacing-5)) * var(--ui-rounded-scale)
+  );
+  --ui-rounded-7: calc(
+    (var(--ui-rounded) + var(--ui-spacing-6)) * var(--ui-rounded-scale)
+  );
+  --ui-rounded-8: calc(
+    (var(--ui-rounded) + var(--ui-spacing-7)) * var(--ui-rounded-scale)
+  );
+  --ui-rounded-full: calc((infinity * 1px) * var(--ui-rounded-scale));
+  --ui-rounded-full-fixed: calc(infinity * 1px);
+  --ui-background-color: var(--ui-neutral-50);
+  --ui-text-color: var(--ui-neutral-950);
+}
+
+:root,
+:host,
+[data-ui-theme],
+.shadow-0,
+.shadow-1,
+.shadow-2,
+.shadow-3,
+.shadow-4,
+.shadow-5,
+.shadow-inset-0,
+.shadow-inset-1,
+.shadow-inset-2,
+.shadow-inset-3,
+.shadow-shiny-0,
+.shadow-shiny-1,
+.shadow-shiny-2,
+.shadow-shiny-3 {
+  --ui-shadow-color-base: var(
+    --ui-shadow-color,
+    light-dark(oklch(0% 0 0 / 0.12), oklch(100% 0 0 / 0.075))
+  );
+  --ui-shadow-color-1: color-mix(
+    in oklch,
+    var(--ui-shadow-color-base) 70%,
+    transparent
+  );
+  --ui-shadow-color-2: color-mix(
+    in oklch,
+    var(--ui-shadow-color-base) 55%,
+    transparent
+  );
+  --ui-shadow-color-3: color-mix(
+    in oklch,
+    var(--ui-shadow-color-base) 40%,
+    transparent
+  );
+  --ui-shadow-color-4: color-mix(
+    in oklch,
+    var(--ui-shadow-color-base) 25%,
+    transparent
+  );
+  --ui-shadow-0:
+    0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent;
+  --ui-shadow-1:
+    0 0.5px 1px var(--ui-shadow-color-1), 0 1px 2px var(--ui-shadow-color-2),
+    0 2px 4px var(--ui-shadow-color-3), 0 4px 8px var(--ui-shadow-color-4);
+  --ui-shadow-2:
+    0 1px 2px var(--ui-shadow-color-1), 0 2px 4px var(--ui-shadow-color-2),
+    0 4px 8px var(--ui-shadow-color-3), 0 8px 16px var(--ui-shadow-color-4);
+  --ui-shadow-3:
+    0 2px 4px var(--ui-shadow-color-1), 0 4px 8px var(--ui-shadow-color-2),
+    0 8px 16px var(--ui-shadow-color-3), 0 16px 32px var(--ui-shadow-color-4);
+  --ui-shadow-4:
+    0 4px 8px var(--ui-shadow-color-1), 0 8px 16px var(--ui-shadow-color-2),
+    0 16px 32px var(--ui-shadow-color-3), 0 32px 64px var(--ui-shadow-color-4);
+  --ui-shadow-5:
+    0 6px 12px var(--ui-shadow-color-1), 0 12px 24px var(--ui-shadow-color-2),
+    0 24px 48px var(--ui-shadow-color-3), 0 48px 96px var(--ui-shadow-color-4);
+  --ui-shadow-inset-0:
+    inset 0 0 0 transparent, inset 0 0 0 transparent, inset 0 0 0 transparent,
+    inset 0 0 0 transparent;
+  --ui-shadow-inset-1:
+    inset 0 0.5px 1px var(--ui-shadow-color-1),
+    inset 0 1px 2px var(--ui-shadow-color-2),
+    inset 0 2px 4px var(--ui-shadow-color-3),
+    inset 0 3px 6px var(--ui-shadow-color-4);
+  --ui-shadow-inset-2:
+    inset 0 1px 2px var(--ui-shadow-color-1),
+    inset 0 2px 4px var(--ui-shadow-color-2),
+    inset 0 4px 8px var(--ui-shadow-color-3),
+    inset 0 6px 12px var(--ui-shadow-color-4);
+  --ui-shadow-inset-3:
+    inset 0 2px 4px var(--ui-shadow-color-1),
+    inset 0 4px 8px var(--ui-shadow-color-2),
+    inset 0 8px 16px var(--ui-shadow-color-3),
+    inset 0 12px 24px var(--ui-shadow-color-4);
+  --ui-shadow-shine-color-1: var(
+    --ui-shadow-shine-color,
+    light-dark(oklch(100% 0 0 / 0.9), oklch(100% 0 0 / 0.3))
+  );
+  --ui-shadow-shine-color-2: color-mix(
+    in oklch,
+    var(--ui-shadow-shine-color-1) 50%,
+    transparent
+  );
+  --ui-shadow-shiny-0:
+    inset 0 0 0 transparent, inset 0 0 0 transparent, inset 0 0 0 0 transparent,
+    inset 0 0 0 transparent, inset 0 0 0 transparent, var(--ui-shadow-0);
+  --ui-shadow-shiny-1:
+    inset 0 -1px 0 var(--ui-shadow-shine-color-1),
+    inset 0 1px 0 var(--ui-shadow-shine-color-2),
+    inset 0 0 0 1px var(--ui-shadow-color-base),
+    inset 0 2px 4px var(--ui-shadow-shine-color-2),
+    inset 0 -2px 4px var(--ui-shadow-color-3), var(--ui-shadow-1);
+  --ui-shadow-shiny-2:
+    inset 0 -1px 0 var(--ui-shadow-shine-color-1),
+    inset 0 1px 0 var(--ui-shadow-shine-color-2),
+    inset 0 0 0 1px var(--ui-shadow-color-base),
+    inset 0 4px 8px var(--ui-shadow-shine-color-2),
+    inset 0 -4px 8px var(--ui-shadow-color-3), var(--ui-shadow-2);
+  --ui-shadow-shiny-3:
+    inset 0 -1px 0 var(--ui-shadow-shine-color-1),
+    inset 0 1px 0 var(--ui-shadow-shine-color-2),
+    inset 0 0 0 1px var(--ui-shadow-color-base),
+    inset 0 8px 16px var(--ui-shadow-shine-color-2),
+    inset 0 -8px 16px var(--ui-shadow-color-3), var(--ui-shadow-3);
+}

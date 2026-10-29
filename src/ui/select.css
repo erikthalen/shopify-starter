@@ -1,0 +1,170 @@
+/* select */
+select {
+  appearance: none;
+  box-shadow: 0 0 0 1px var(--border-color, var(--ui-neutral-300)) inset;
+  padding-block: 0.5em;
+  padding-inline: 0.75em;
+  border-radius: 0.5em;
+  font: inherit;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  field-sizing: content;
+  background-color: var(--ui-background-color);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75em center;
+  background-size: 1lh;
+  border: none;
+  padding-inline-end: calc(1rem + 1.5em);
+
+  &:focus-visible {
+    outline: 2px solid var(--ui-neutral-950);
+    outline-offset: 2px;
+    border-radius: var(--ui-rounded-3);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+@supports (appearance: base-select) {
+  select {
+    appearance: base-select;
+  }
+
+  select::picker(select) {
+    appearance: base-select;
+  }
+
+  select {
+    box-shadow: none;
+    cursor: default;
+    background: none;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  select > button {
+    width: 100%;
+    color: var(--ui-neutral-950);
+    box-shadow: 0 0 0 1px var(--border-color, var(--ui-neutral-300)) inset;
+    background-color: #0000;
+    justify-content: space-between;
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--ui-neutral-100);
+      }
+    }
+
+    &:active {
+      background-color: var(--ui-neutral-200);
+      translate: 0;
+    }
+  }
+
+  select:open > button {
+    background-color: var(--ui-neutral-100);
+  }
+
+  select:disabled > button {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  select > button > svg:last-child {
+    transition: rotate var(--ease-glide-1);
+  }
+
+  select:open > button > svg:last-child {
+    rotate: 180deg;
+  }
+
+  select::picker-icon {
+    display: none;
+  }
+
+  select::picker(select) {
+    padding: 0.25em;
+    border: 1px solid var(--ui-neutral-200);
+    border-radius: calc(var(--ui-rounded-3) + 0.25em);
+    background: var(--ui-background-color);
+    box-shadow: var(--ui-shadow-3);
+    min-width: anchor-size(width);
+    opacity: 0;
+    transition:
+      opacity var(--ease-glide-1),
+      translate var(--ease-glide-1),
+      display 0.1s allow-discrete,
+      overlay 0.1s allow-discrete;
+    margin: 0;
+    translate: 0 -2px;
+  }
+
+  select:open::picker(select) {
+    opacity: 1;
+    translate: 0;
+  }
+
+  @starting-style {
+    select:open::picker(select) {
+      opacity: 0;
+      translate: 0 -2px;
+    }
+  }
+
+  select option {
+    padding-block: 0.5em;
+    padding-inline: 0.75em;
+    border-radius: var(--ui-rounded-3);
+    cursor: pointer;
+    flex-direction: row-reverse;
+    align-items: center;
+    display: flex;
+
+    @media (hover: hover) {
+      &:hover {
+        background: var(--ui-neutral-100);
+      }
+    }
+  }
+
+  option::checkmark {
+    content: "";
+    background-color: currentColor;
+    width: 1lh;
+    height: 1lh;
+    margin-left: auto;
+    display: inline-block;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+    mask-position: center;
+    mask-size: 1lh;
+    mask-repeat: no-repeat;
+  }
+
+  select hr {
+    margin-block: 0.25em;
+  }
+
+  optgroup {
+    color: var(--ui-neutral-500);
+    -webkit-user-select: none;
+    user-select: none;
+    padding-top: 0.5em;
+    font-size: 0.8125rem;
+    font-weight: normal;
+  }
+
+  optgroup > option {
+    color: var(--ui-neutral-950);
+    font-size: 1rem;
+
+    &:first-child {
+      margin-block-start: 0.25em;
+    }
+  }
+}

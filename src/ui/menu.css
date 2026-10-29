@@ -1,0 +1,74 @@
+/* menu */
+menu {
+  & > li {
+    list-style: none;
+
+    & > button,
+    & > .button {
+      white-space: nowrap;
+      justify-content: flex-start;
+      width: 100%;
+    }
+
+    & > label {
+      width: 100%;
+      padding-block: 0.5em;
+      padding-inline: 0.75em;
+      border-radius: var(--ui-rounded-3);
+      white-space: nowrap;
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+
+      & > input[type="radio"],
+      & > input[type="checkbox"] {
+        appearance: none;
+        opacity: 0;
+        pointer-events: none;
+        width: 0;
+        height: 0;
+        position: absolute;
+      }
+
+      @media (hover: hover) {
+        &:hover {
+          background: var(--ui-neutral-100);
+        }
+      }
+
+      &:has(input[type="checkbox"], input[type="radio"]) {
+        &:after {
+          content: "";
+          visibility: hidden;
+          background-color: currentColor;
+          width: 1rem;
+          height: 1rem;
+          margin-left: auto;
+          display: inline-block;
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+          mask-position: center;
+          mask-size: 1rem;
+          mask-repeat: no-repeat;
+        }
+
+        &:has(input:checked):after {
+          visibility: visible;
+        }
+      }
+    }
+
+    & > small:only-child:not(:has(*)) {
+      padding: 0.5em 0.75em 0.25em;
+      color: var(--ui-neutral-500);
+      -webkit-user-select: none;
+      user-select: none;
+      margin-left: 2px;
+      font-size: 0.8125rem;
+      display: block;
+    }
+  }
+
+  & hr {
+    margin-block: 0.25em;
+  }
+}

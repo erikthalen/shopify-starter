@@ -1,4 +1,31 @@
-@import "@erikt/ui";
+@layer ui-reset, ui;
+
+@import "./ui/reset.css" layer(ui-reset);
+@import "./ui/tokens.css" layer(ui);
+
+/* ui components, in dependency order */
+@import "./ui/popover.css" layer(ui);
+@import "./ui/card.css" layer(ui);
+@import "./ui/dialog.css" layer(ui);
+@import "./ui/drawer.css" layer(ui);
+@import "./ui/button.css" layer(ui);
+@import "./ui/menu.css" layer(ui);
+@import "./ui/dropdown.css" layer(ui);
+@import "./ui/pagination.css" layer(ui);
+@import "./ui/select.css" layer(ui);
+@import "./ui/loading.css" layer(ui);
+@import "./ui/text-field.css" layer(ui);
+@import "./ui/checkbox.css" layer(ui);
+@import "./ui/radio.css" layer(ui);
+@import "./ui/slider.css" layer(ui);
+@import "./ui/field.css" layer(ui);
+@import "./ui/fieldset.css" layer(ui);
+@import "./ui/description-list.css" layer(ui);
+@import "./ui/empty.css" layer(ui);
+@import "./ui/heading-group.css" layer(ui);
+@import "./ui/prose.css" layer(ui);
+@import "./ui/tab-links.css" layer(ui);
+
 @import "@blossom-carousel/web/style.css";
 @import "./components/double-range.css";
 

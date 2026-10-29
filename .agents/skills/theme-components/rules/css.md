@@ -478,7 +478,7 @@ a {
 ## Values
 
 - **Spacing and sizes:** raw `rem` (`gap: 1rem`, `padding-block: 4rem 1rem`). Use `px` only for hairlines (`1px solid`).
-- **Colours, radii, shadows, easing:** erikt/ui tokens (`var(--ui-neutral-500)`, `var(--ui-rounded-3)`). See the `erikt-ui` skill.
+- **Colours, radii, shadows, easing:** tokens from `src/ui/tokens.css` (`var(--ui-neutral-500)`, `var(--ui-rounded-3)`, `var(--ui-shadow-2)`, `var(--ease-glide-3)`).
 - **Logical properties** when they read naturally: `padding-inline`, `margin-block`, `inset`.
 
 ---

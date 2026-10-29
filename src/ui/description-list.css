@@ -1,0 +1,28 @@
+/* description-list */
+@scope (dl) to (dl dl) {
+  :scope {
+    --ui-description-list-label: max-content;
+    grid-template-columns: var(--ui-description-list-label) 1fr;
+    align-items: baseline;
+    gap: 0.5em 1.5em;
+    display: grid;
+  }
+
+  div {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+    gap: inherit;
+    display: grid;
+  }
+
+  dt {
+    color: var(--ui-neutral-600);
+    grid-column: 1;
+  }
+
+  dd {
+    color: var(--ui-text-color);
+    grid-column: 2;
+  }
+}

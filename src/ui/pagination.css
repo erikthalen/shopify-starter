@@ -1,0 +1,31 @@
+/* pagination */
+.pagination {
+  & ul {
+    align-items: center;
+    gap: 0.5em;
+    display: flex;
+  }
+
+  & li:not(:has(button, .button)) {
+    color: var(--ui-neutral-400);
+    text-align: center;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  & button,
+  & .button {
+    min-width: calc(1lh + 0.5em * 2);
+  }
+
+  & li:not(:has(button, .button)) {
+    min-width: calc(1lh + 0.5em * 2);
+  }
+
+  & button,
+  & .button {
+    &[aria-current="page"] {
+      text-decoration: underline;
+    }
+  }
+}

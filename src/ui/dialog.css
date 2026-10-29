@@ -1,0 +1,65 @@
+/* dialog */
+dialog {
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  width: 100%;
+  max-width: min(480px, 100vw - 2rem);
+  max-height: none;
+  transition:
+    opacity var(--ease-glide-4),
+    translate var(--ease-glide-4),
+    display 0.3s allow-discrete,
+    overlay 0.3s allow-discrete;
+  background-color: #0000;
+  border: none;
+  margin: auto;
+  padding: 0;
+  position: fixed;
+  inset: 0;
+  translate: 0 4px;
+  container-type: inline-size;
+
+  &[open] {
+    opacity: 1;
+    pointer-events: auto;
+    translate: 0;
+  }
+
+  @starting-style {
+    &[open] {
+      opacity: 0;
+      translate: 0 4px;
+    }
+  }
+
+  &::backdrop {
+    opacity: 0;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    transition:
+      opacity var(--ease-glide-3),
+      display 0.2s allow-discrete,
+      overlay 0.2s allow-discrete;
+    background: oklch(0% 0 0 / 0.4);
+  }
+
+  &[open]::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    &[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  &:not(.drawer) article:not(.secondary):not(.tertiary) {
+    box-shadow: var(--ui-shadow-1);
+  }
+}
+
+body:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
+  touch-action: none;
+  overflow: hidden;
+}

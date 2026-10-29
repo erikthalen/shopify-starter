@@ -1,0 +1,233 @@
+/* button */
+button,
+.button {
+  --contrast-color: light-dark(
+    color-mix(var(--ui-primary), black 15%),
+    color-mix(var(--ui-primary), black 25%)
+  );
+  background-color: var(--ui-primary);
+  color: var(--ui-primary-fg, contrast-color(var(--contrast-color)));
+  min-width: calc(1lh + 0.5em * 2);
+  padding-block: 0.5em;
+  padding-inline: calc(0.75em * clamp(1, var(--ui-rounded-scale) * 0.75, 1.3));
+  border-radius: var(--ui-rounded-3);
+  font: inherit;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 500;
+  line-height: 1.14286rem;
+  text-decoration: none;
+  transition-property: translate, background-color;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-out;
+  display: inline-flex;
+
+  @media (width < 600px) {
+    font-size: 16px;
+  }
+
+  &:not(:disabled):not([aria-disabled="true"]) {
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--ui-primary-600);
+      }
+    }
+
+    &:active {
+      background-color: var(--ui-primary-700);
+      translate: 0 1px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ui-neutral-950);
+      outline-offset: 2px;
+    }
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    cursor: default;
+    opacity: 0.4;
+  }
+
+  & svg {
+    flex-shrink: 0;
+  }
+
+  & kbd,
+  & .badge {
+    margin-right: calc(
+      (0.25em * clamp(0, var(--ui-rounded-scale) * 0.75, 1.3)) * -1
+    );
+    margin-left: auto;
+  }
+
+  &[aria-busy]:not([aria-busy="false"]):before {
+    content: "";
+    mask-image: var(--ui-loading);
+    background-color: currentColor;
+    width: 1rem;
+    height: 1rem;
+    display: inline-block;
+    mask-size: 1rem;
+    mask-repeat: no-repeat;
+  }
+
+  &[popovertarget]:has(+ [popover]:popover-open) {
+    background-color: var(--ui-primary-600);
+    translate: 0 1px;
+  }
+
+  &.square:not(.avatar),
+  &.round {
+    padding-inline: 0.5em;
+  }
+
+  &.round {
+    border-radius: var(--ui-rounded-full);
+  }
+
+  &.outlined {
+    color: var(--ui-neutral-950);
+    box-shadow: 0 0 0 1px var(--border-color, var(--ui-neutral-300)) inset;
+    background-color: #0000;
+
+    &:not(:disabled):not([aria-disabled="true"]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--ui-neutral-100);
+        }
+      }
+
+      &:active {
+        background-color: var(--ui-neutral-200);
+      }
+    }
+
+    &[popovertarget]:has(+ [popover]:popover-open) {
+      background-color: var(--ui-neutral-100);
+    }
+  }
+
+  &.secondary {
+    background-color: var(--bg, var(--ui-neutral-200));
+    color: var(--ui-neutral-950);
+
+    &:not(:disabled):not([aria-disabled="true"]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--ui-neutral-300);
+        }
+      }
+
+      &:active {
+        background-color: var(--ui-neutral-400);
+      }
+    }
+
+    &[popovertarget]:has(+ [popover]:popover-open) {
+      background-color: var(--ui-neutral-400);
+    }
+  }
+
+  &.ghost {
+    color: var(--ui-neutral-950);
+    background-color: #0000;
+
+    &:not(:disabled):not([aria-disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--ui-neutral-100);
+        }
+      }
+
+      &:active {
+        background-color: var(--ui-neutral-200);
+      }
+    }
+
+    &[popovertarget]:has(+ [popover]:popover-open) {
+      background-color: var(--ui-neutral-200);
+    }
+  }
+
+  &.link {
+    color: var(--ui-neutral-950);
+    transition: text-decoration-color var(--ease-glide-2);
+    background-color: #0000;
+    -webkit-text-decoration: underline #0000;
+    text-decoration: underline #0000;
+
+    &:not(:disabled):not([aria-disabled="true"]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: #0000;
+          text-decoration-color: currentColor;
+        }
+      }
+
+      &:active {
+        background-color: #0000;
+        text-decoration-color: currentColor;
+      }
+    }
+  }
+
+  &:not(.secondary):not(.outlined):not(.ghost):not(.link):not(.destructive) {
+    --ui-shadow-shine-color: light-dark(
+      var(--ui-primary-300),
+      var(--ui-primary-700)
+    );
+  }
+
+  &.destructive {
+    --ui-shadow-shine-color: light-dark(
+      var(--ui-destructive-300),
+      var(--ui-destructive-700)
+    );
+    background-color: var(--ui-destructive);
+    color: var(--ui-destructive-100);
+
+    &:not(:disabled):not([aria-disabled="true"]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--ui-destructive-600);
+        }
+      }
+
+      &:active {
+        background-color: var(--ui-destructive-700);
+      }
+    }
+
+    &[popovertarget]:has(+ [popover]:popover-open) {
+      background-color: var(--ui-destructive-600);
+    }
+  }
+
+  &.ghost.destructive {
+    color: var(--ui-destructive);
+    background-color: #0000;
+
+    &:not(:disabled):not([aria-disabled="true"]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--ui-destructive-100);
+        }
+      }
+
+      &:active {
+        background-color: var(--ui-destructive-200);
+      }
+    }
+
+    &[popovertarget]:has(+ [popover]:popover-open) {
+      background-color: var(--ui-destructive-100);
+    }
+  }
+}

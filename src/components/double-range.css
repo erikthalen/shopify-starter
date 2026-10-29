@@ -11,7 +11,7 @@ double-range {
     content: "";
     grid-area: 2 / 1;
     align-self: center;
-    height: var(--ui-spacing-2);
+    height: 0.5em;
     border-radius: var(--ui-rounded-full);
     background: linear-gradient(
       to right,

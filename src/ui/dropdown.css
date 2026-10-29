@@ -1,0 +1,4 @@
+/* dropdown */
+[popover] menu {
+  padding: calc(0.25em * max(1, var(--ui-rounded-scale)));
+}

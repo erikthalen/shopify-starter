@@ -1,0 +1,7 @@
+/* heading-group */
+hgroup {
+  & > p {
+    color: var(--ui-neutral-600);
+    margin-block-start: 0.61em;
+  }
+}

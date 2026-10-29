@@ -22,8 +22,8 @@ npm install @blossom-carousel/core
 Import `Blossom` and the core stylesheet:
 
 ```js
-import { Blossom } from "@blossom-carousel/core";
-import "@blossom-carousel/core/style.css";
+import { Blossom } from "@blossom-carousel/core"
+import "@blossom-carousel/core/style.css"
 ```
 
 The stylesheet should be imported once in the app entry file, layout, or module that owns the carousel setup.
@@ -33,14 +33,14 @@ The stylesheet should be imported once in the app entry file, layout, or module 
 Create a Blossom instance from a carousel root element, then initialize it when ready:
 
 ```js
-import { Blossom } from "@blossom-carousel/core";
-import "@blossom-carousel/core/style.css";
+import { Blossom } from "@blossom-carousel/core"
+import "@blossom-carousel/core/style.css"
 
-const element = document.querySelector("#my-carousel-element");
+const element = document.querySelector("#my-carousel-element")
 
-const blossom = Blossom(element, { repeat: false });
+const blossom = Blossom(element, { repeat: false })
 
-blossom.init();
+blossom.init()
 ```
 
 The selected element should be the carousel root. Its direct children are treated as slides.
@@ -52,15 +52,15 @@ The only documented init-time option today is `repeat`.
 When writing robust examples, check that the element exists before creating the instance:
 
 ```js
-import { Blossom } from "@blossom-carousel/core";
-import "@blossom-carousel/core/style.css";
+import { Blossom } from "@blossom-carousel/core"
+import "@blossom-carousel/core/style.css"
 
-const element = document.querySelector("#my-carousel-element");
+const element = document.querySelector("#my-carousel-element")
 
 if (element) {
-  const blossom = Blossom(element);
+  const blossom = Blossom(element)
 
-  blossom.init();
+  blossom.init()
 }
 ```
 
@@ -77,7 +77,7 @@ If you do not need looping behavior, omit the options object.
 | `repeat` | `boolean` | `false` | Enables repeating carousel behavior and adds repeat padding to the root element. |
 
 ```js
-const blossom = Blossom(element, { repeat: true });
+const blossom = Blossom(element, { repeat: true })
 ```
 
 ## Lazy Loading
@@ -85,19 +85,17 @@ const blossom = Blossom(element, { repeat: true });
 Load Blossom only when the carousel engine is needed. Check pointer capability first, then import Core and initialize the carousel:
 
 ```js
-const hasMouse = window.matchMedia(
-  "(hover: hover) and (pointer: fine)",
-).matches;
+const hasMouse = window.matchMedia("(hover: hover) and (pointer: fine)").matches
 
 if (hasMouse) {
-  const element = document.querySelector("#my-carousel-element");
+  const element = document.querySelector("#my-carousel-element")
 
   if (element) {
-    const { Blossom } = await import("@blossom-carousel/core");
+    const { Blossom } = await import("@blossom-carousel/core")
 
-    const blossom = Blossom(element);
+    const blossom = Blossom(element)
 
-    blossom.init();
+    blossom.init()
   }
 }
 ```
@@ -107,7 +105,7 @@ if (hasMouse) {
 Destroy the Blossom instance when it is no longer needed to free up resources:
 
 ```js
-blossom.destroy();
+blossom.destroy()
 ```
 
 Call `destroy()` during teardown, route changes, component unmounting, or whenever the carousel root will be removed from the DOM.
@@ -117,17 +115,17 @@ Call `destroy()` during teardown, route changes, component unmounting, or whenev
 Listen for the `overscroll` event when the user wants to customize Blossom's drag engine overscroll behavior. Prevent the event to replace Blossom's default rubberbanding effect:
 
 ```js
-const element = document.querySelector("#blossom-carousel");
+const element = document.querySelector("#blossom-carousel")
 
-element.addEventListener("overscroll", (event) => {
-  event.preventDefault();
+element.addEventListener("overscroll", event => {
+  event.preventDefault()
 
-  const overScroll = event.detail.left;
+  const overScroll = event.detail.left
 
-  Array.from(element.children).forEach((slide) => {
-    slide.style.transform = `scale(${1 - overScroll * 0.1})`;
-  });
-});
+  Array.from(element.children).forEach(slide => {
+    slide.style.transform = `scale(${1 - overScroll * 0.1})`
+  })
+})
 ```
 
 Read overscroll values from `event.detail`, such as `event.detail.left`, and apply custom visual effects to the carousel slides or root element.
@@ -170,15 +168,15 @@ Respect reduced motion when you add extra motion around the carousel.
 If the carousel is unstyled, check that the core stylesheet is imported:
 
 ```js
-import "@blossom-carousel/core/style.css";
+import "@blossom-carousel/core/style.css"
 ```
 
 If initialization fails, check that `document.querySelector()` found an element before calling `Blossom(element)`:
 
 ```js
-const element = document.querySelector("#my-carousel-element");
+const element = document.querySelector("#my-carousel-element")
 
-if (!element) return;
+if (!element) return
 ```
 
 If slides are added or removed after initialization, destroy the current instance and create a new one so Blossom can recompute layout.
@@ -186,7 +184,7 @@ If slides are added or removed after initialization, destroy the current instanc
 If carousel behavior is duplicated after page transitions or component remounts, make sure the old instance is destroyed before creating a new one:
 
 ```js
-blossom.destroy();
+blossom.destroy()
 ```
 
 Do not call `init()` more than once per instance, and do not call instance methods after `destroy()`.

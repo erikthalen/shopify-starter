@@ -1,0 +1,90 @@
+/* prose */
+.prose,
+.bubble {
+  & > * + * {
+    margin-block-start: 1em;
+  }
+
+  & > h1,
+  & > h2,
+  & > h3,
+  & > h4,
+  & > h5,
+  & > h6 {
+    line-height: 1.4;
+  }
+
+  & p,
+  & ul,
+  & ol {
+    max-width: 65ch;
+    line-height: 1.6;
+  }
+
+  & ul,
+  & ol {
+    flex-direction: column;
+    gap: 0.5lh;
+    margin-block: 1.61em;
+    list-style-position: outside;
+    display: flex;
+
+    & ul,
+    & ol {
+      margin-block: 0.61em;
+    }
+
+    & li {
+      margin-inline-start: 1.5em;
+
+      &::marker {
+        color: var(--ui-neutral-400);
+        font-variant-numeric: tabular-nums;
+      }
+    }
+  }
+
+  & ul {
+    list-style: outside;
+
+    & ol,
+    & ul {
+      list-style: circle;
+    }
+  }
+
+  & ol {
+    list-style: decimal;
+  }
+
+  & > blockquote {
+    margin-block: 1.61em;
+    padding-inline-start: 1em;
+    position: relative;
+
+    &:before {
+      content: "";
+      background-color: var(--ui-neutral-200);
+      border-radius: var(--ui-rounded-full);
+      width: 3px;
+      height: 100%;
+      display: block;
+      position: absolute;
+      left: 0;
+    }
+
+    & footer,
+    & cite {
+      margin-top: 0.5em;
+      color: var(--ui-neutral-500);
+    }
+  }
+
+  & > hgroup {
+    margin-block-end: 1.61em;
+  }
+
+  & a:not(.button) {
+    color: var(--ui-primary);
+  }
+}

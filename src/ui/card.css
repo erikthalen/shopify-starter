@@ -1,0 +1,92 @@
+/* card */
+article {
+  --border-radius: var(--ui-rounded-5);
+  background-color: var(--ui-neutral-0);
+  border-radius: var(--border-radius);
+  padding: 1.5em;
+  overflow: hidden;
+
+  & article {
+    border-radius: calc(var(--border-radius) - 0.5em);
+  }
+
+  &:not(.secondary):not(.tertiary) {
+    box-shadow: 0 0 0 1px inset var(--border-color, var(--ui-neutral-100));
+
+    & > header,
+    & > footer {
+      box-shadow: 0 0 0 1px inset var(--border-color, var(--ui-neutral-100));
+    }
+  }
+
+  &.secondary {
+    --border-color: var(--ui-neutral-300);
+    --bg: var(--ui-neutral-200);
+    background-color: var(--ui-neutral-100);
+  }
+
+  &.tertiary {
+    --border-color: var(--ui-neutral-400);
+    --bg: var(--ui-neutral-300);
+    background-color: var(--ui-neutral-200);
+  }
+
+  &.transparent {
+    background-color: #0000;
+  }
+
+  &:has(> header, > footer) {
+    padding: 0;
+  }
+
+  & > header,
+  & > footer {
+    align-items: center;
+    gap: 0.5em;
+    display: flex;
+  }
+
+  & > header {
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+  }
+
+  & > footer {
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+  }
+
+  &:has(> header, > footer) > * {
+    padding: 1em 1.5em;
+  }
+
+  &:has(> header, > footer) > :not(header):not(footer) {
+    margin-inline: 1px;
+
+    &:first-child {
+      border-radius: calc(var(--border-radius) + 1px)
+        calc(var(--border-radius) + 1px) 0 0;
+      margin-top: 1px;
+    }
+
+    &:last-child {
+      border-radius: 0 0 calc(var(--border-radius) + 1px)
+        calc(var(--border-radius) + 1px);
+      margin-bottom: 1px;
+    }
+  }
+}
+
+@container (width <= 320px) {
+  article {
+    padding: 0.75em;
+
+    & > header,
+    & > footer {
+      padding: 0.75em;
+      gap: 0.25em;
+    }
+
+    &:has(> header, > footer) > :not(header):not(footer) {
+      padding: 0.75em;
+    }
+  }
+}

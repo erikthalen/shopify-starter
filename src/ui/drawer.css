@@ -1,0 +1,129 @@
+/* drawer */
+.drawer:is(dialog, [popover]) {
+  inset: 0;
+  opacity: 1;
+  width: min(420px, 100vw);
+  max-width: none;
+  height: 100vh;
+  margin: 0;
+  inset-inline-start: auto;
+  translate: 100%;
+
+  &:is([open], :popover-open) {
+    translate: 0;
+  }
+
+  @starting-style {
+    &:is([open], :popover-open) {
+      translate: 100%;
+    }
+  }
+
+  &[popover] {
+    position-try-fallbacks: none;
+    min-width: 0;
+    box-shadow: none;
+    filter: drop-shadow(0 4px 16px oklch(0% 0 0 / 0.08));
+    transition:
+      translate var(--ease-glide-4),
+      display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete;
+    background: none;
+    border-radius: 0;
+    container-type: inline-size;
+  }
+
+  & > article {
+    flex-direction: column;
+    height: -webkit-fill-available;
+    height: -moz-available;
+    height: stretch;
+    display: flex;
+
+    & footer {
+      margin-top: auto;
+    }
+  }
+
+  &:not([data-position]),
+  &[data-position="right"] {
+    & > article,
+    & > article header,
+    & > article footer {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  &[data-position="left"] {
+    inset-inline: 0 auto;
+    translate: -100%;
+
+    &:is([open], :popover-open) {
+      translate: 0;
+    }
+
+    @starting-style {
+      &:is([open], :popover-open) {
+        translate: -100%;
+      }
+    }
+
+    & > article,
+    & > article header,
+    & > article footer {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  &[data-position="top"] {
+    width: 100vw;
+    height: min(420px, 100vh);
+    inset-block: 0 auto;
+    inset-inline: 0;
+    translate: 0 -100%;
+
+    &:is([open], :popover-open) {
+      translate: 0;
+    }
+
+    @starting-style {
+      &:is([open], :popover-open) {
+        translate: 0 -100%;
+      }
+    }
+
+    & > article,
+    & > article header,
+    & > article footer {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+
+  &[data-position="bottom"] {
+    width: 100vw;
+    height: min(420px, 100vh);
+    inset-block: auto 0;
+    inset-inline: 0;
+    translate: 0 100%;
+
+    &:is([open], :popover-open) {
+      translate: 0;
+    }
+
+    @starting-style {
+      &:is([open], :popover-open) {
+        translate: 0 100%;
+      }
+    }
+
+    & > article,
+    & > article header,
+    & > article footer {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}

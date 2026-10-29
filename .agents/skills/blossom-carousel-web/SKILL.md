@@ -22,8 +22,8 @@ npm install @blossom-carousel/web
 Import the custom element definition and `@blossom-carousel/web/style.css`:
 
 ```js
-import "@blossom-carousel/web";
-import "@blossom-carousel/web/style.css";
+import "@blossom-carousel/web"
+import "@blossom-carousel/web/style.css"
 ```
 
 Always include the stylesheet import in code examples. Only omit it if the user explicitly states they have already imported `@blossom-carousel/web/style.css` elsewhere.
@@ -33,8 +33,8 @@ Always include the stylesheet import in code examples. Only omit it if the user 
 Use package imports when the project has a bundler or build tool:
 
 ```js
-import "@blossom-carousel/web";
-import "@blossom-carousel/web/style.css";
+import "@blossom-carousel/web"
+import "@blossom-carousel/web/style.css"
 ```
 
 After `@blossom-carousel/web` is imported, the `<blossom-carousel>` custom element is registered and can be used in HTML.
@@ -133,13 +133,13 @@ For per-slide varying content, set `renderDot` on the `blossom-dots` element —
 
 <script type="module">
   document.getElementById("dots").renderDot = (index, active) => {
-    const button = document.createElement("button");
-    button.setAttribute("data-blossom-dot", "");
-    button.className = "dot";
-    button.dataset.active = String(active);
-    button.innerHTML = `<img src="/thumbs/${index}.jpg" alt="Slide ${index + 1}">`;
-    return button;
-  };
+    const button = document.createElement("button")
+    button.setAttribute("data-blossom-dot", "")
+    button.className = "dot"
+    button.dataset.active = String(active)
+    button.innerHTML = `<img src="/thumbs/${index}.jpg" alt="Slide ${index + 1}">`
+    return button
+  }
 </script>
 ```
 
@@ -161,11 +161,9 @@ These events are not fired by drag or free scrolling. Read `event.command` (or `
 </blossom-carousel>
 
 <script>
-  document
-    .getElementById("my-carousel")
-    .addEventListener("command", (event) => {
-      const command = event?.command || event?.detail?.command;
-    });
+  document.getElementById("my-carousel").addEventListener("command", event => {
+    const command = event?.command || event?.detail?.command
+  })
 </script>
 ```
 
@@ -185,14 +183,14 @@ Tap into Blossom's drag engine overscroll behavior to create your own style. Pre
 <script>
   document
     .getElementById("my-carousel")
-    .addEventListener("overscroll", (event) => {
-      event.preventDefault();
-      const overScroll = event.detail.left;
+    .addEventListener("overscroll", event => {
+      event.preventDefault()
+      const overScroll = event.detail.left
 
-      Array.from(event.currentTarget.children).forEach((slide) => {
-        slide.style.transform = `scale(${1 - overScroll * 0.1})`;
-      });
-    });
+      Array.from(event.currentTarget.children).forEach(slide => {
+        slide.style.transform = `scale(${1 - overScroll * 0.1})`
+      })
+    })
 </script>
 ```
 
@@ -232,13 +230,13 @@ Use the guide for deeper guidance on semantic slide structure, labelled regions,
 If `<blossom-carousel>` does not upgrade into a working component, check that the Web package has been imported:
 
 ```js
-import "@blossom-carousel/web";
+import "@blossom-carousel/web"
 ```
 
 If the carousel is unstyled, check that `@blossom-carousel/web/style.css` is imported or linked:
 
 ```js
-import "@blossom-carousel/web/style.css";
+import "@blossom-carousel/web/style.css"
 ```
 
 ```html

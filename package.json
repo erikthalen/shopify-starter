@@ -11,7 +11,6 @@
   "scripts": {
     "dev": "node esbuild.config.js --watch & shopify theme dev -e development --open",
     "deploy": "node esbuild.config.js && shopify theme push -e production",
-    "docs": "pnpm erikt-ui docs",
     "prettier": "prettier . --write"
   },
   "devDependencies": {
@@ -21,7 +20,6 @@
   },
   "dependencies": {
     "@blossom-carousel/web": "1.6.0",
-    "@erikt/ui": "0.0.44",
     "@videojs/html": "10.2.0",
     "dialog-closedby-polyfill": "1.3.0",
     "htmx.org": "4.0.0"

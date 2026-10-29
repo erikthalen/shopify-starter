@@ -57,7 +57,7 @@ A section or block doesn't. Shopify already wraps it in an element, so the root 
 
 ## Principles
 
-1. **Semantic HTML first.** Pick the element that describes the content (`<article>`, `<nav>`, `<hgroup>`, `<details>`, `<ul>`). It makes the component accessible, and it means most children can be styled by element instead of by class. erikt/ui already styles native elements, see the `erikt-ui` skill.
+1. **Semantic HTML first.** Pick the element that describes the content (`<article>`, `<nav>`, `<hgroup>`, `<details>`, `<ul>`). It makes the component accessible, and it means most children can be styled by element instead of by class. The base styles in `src/ui/` already style native elements (buttons, dialogs, form controls, `<article>`), so check there before adding your own.
 2. **One root element with one root class, everything nested under it.** The component never styles anything outside its root. For sections and blocks the root is Shopify's wrapper, set through the schema.
 3. **Styles live with the component.** Use the file's `{% stylesheet %}` block. Global rules (`:root`, `html`, `body`, bare elements, utilities) and templates without a section go in `src/theme.css`.
 

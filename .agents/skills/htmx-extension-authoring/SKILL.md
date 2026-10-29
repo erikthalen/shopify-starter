@@ -12,46 +12,46 @@ Extensions are global -- they apply page-wide, activated by custom attributes wh
 ## Extension Boilerplate
 
 ```javascript
-(() => {
-    let api;
+;(() => {
+  let api
 
-    htmx.registerExtension('my-ext', {
-        init: (internalAPI) => {
-            api = internalAPI;
-        },
+  htmx.registerExtension("my-ext", {
+    init: internalAPI => {
+      api = internalAPI
+    },
 
-        htmx_after_init: (elt, detail) => {
-            // Check for your custom attribute
-            let value = api.attributeValue(elt, "hx-my-attr");
-            if (!value) return;
-            // Initialize behavior for this element
-        },
+    htmx_after_init: (elt, detail) => {
+      // Check for your custom attribute
+      let value = api.attributeValue(elt, "hx-my-attr")
+      if (!value) return
+      // Initialize behavior for this element
+    },
 
-        htmx_before_request: (elt, detail) => {
-            // Modify request before sending
-            // detail.ctx has request info
-            // Return false to cancel
-        },
+    htmx_before_request: (elt, detail) => {
+      // Modify request before sending
+      // detail.ctx has request info
+      // Return false to cancel
+    },
 
-        htmx_after_request: (elt, detail) => {
-            // After request completes
-            // detail.ctx.text has response text
-            // detail.ctx.response has status, headers
-        },
+    htmx_after_request: (elt, detail) => {
+      // After request completes
+      // detail.ctx.text has response text
+      // detail.ctx.response has status, headers
+    },
 
-        htmx_before_swap: (elt, detail) => {
-            // Before content swap
-        },
+    htmx_before_swap: (elt, detail) => {
+      // Before content swap
+    },
 
-        htmx_after_swap: (elt, detail) => {
-            // After content swap
-        },
+    htmx_after_swap: (elt, detail) => {
+      // After content swap
+    },
 
-        htmx_before_cleanup: (elt, detail) => {
-            // Clean up event listeners, timers, etc.
-        },
-    });
-})();
+    htmx_before_cleanup: (elt, detail) => {
+      // Clean up event listeners, timers, etc.
+    },
+  })
+})()
 ```
 
 ## Loading Extensions
@@ -61,7 +61,7 @@ Include the script after htmx.js. Optionally restrict which extensions can regis
 ```html
 <script src="/path/to/htmx.js"></script>
 <script src="/path/to/hx-my-ext.js"></script>
-<meta name="htmx-config" content='{"extensions": "my-ext"}'>
+<meta name="htmx-config" content='{"extensions": "my-ext"}' />
 ```
 
 When the `extensions` config is set, only listed extensions load. Without it, all registered extensions are active.
@@ -78,65 +78,65 @@ that other extensions dispatch. All hooks receive `(elt, detail)` unless noted.
 
 ### Core Lifecycle
 
-| Hook | Event | Description |
-|------|-------|-------------|
-| `htmx_before_init` | `htmx:before:init` | Before element initialization |
-| `htmx_after_init` | `htmx:after:init` | After element initialization |
-| `htmx_before_process` | `htmx:before:process` | Before processing element |
-| `htmx_after_process` | `htmx:after:process` | After processing element |
-| `htmx_before_cleanup` | `htmx:before:cleanup` | Before cleaning up element |
-| `htmx_after_cleanup` | `htmx:after:cleanup` | After cleaning up element |
+| Hook                  | Event                 | Description                            |
+| --------------------- | --------------------- | -------------------------------------- |
+| `htmx_before_init`    | `htmx:before:init`    | Before element initialization          |
+| `htmx_after_init`     | `htmx:after:init`     | After element initialization           |
+| `htmx_before_process` | `htmx:before:process` | Before processing element              |
+| `htmx_after_process`  | `htmx:after:process`  | After processing element               |
+| `htmx_before_cleanup` | `htmx:before:cleanup` | Before cleaning up element             |
+| `htmx_after_cleanup`  | `htmx:after:cleanup`  | After cleaning up element              |
 | `htmx_before_on_init` | `htmx:before:on:init` | Before an `hx-on` handler is installed |
 
 ### Request Lifecycle
 
-| Hook | Event | Description |
-|------|-------|-------------|
-| `htmx_config_request` | `htmx:config:request` | Configure request (modify headers, body, URL) |
-| `htmx_before_request` | `htmx:before:request` | Before request is sent |
-| `htmx_before_response` | `htmx:before:response` | After fetch response, before body consumed |
-| `htmx_after_request` | `htmx:after:request` | After request completes |
-| `htmx_finally_request` | `htmx:finally:request` | When request completes, fails, or is cancelled |
-| `htmx_confirm` | `htmx:confirm` | After trigger, before request. Detail carries `issueRequest` and `dropRequest` |
-| `htmx_error` | `htmx:error` | On any error |
-| `htmx_response_error` | `htmx:response:error` | The server returned an HTTP error status |
+| Hook                   | Event                  | Description                                                                    |
+| ---------------------- | ---------------------- | ------------------------------------------------------------------------------ |
+| `htmx_config_request`  | `htmx:config:request`  | Configure request (modify headers, body, URL)                                  |
+| `htmx_before_request`  | `htmx:before:request`  | Before request is sent                                                         |
+| `htmx_before_response` | `htmx:before:response` | After fetch response, before body consumed                                     |
+| `htmx_after_request`   | `htmx:after:request`   | After request completes                                                        |
+| `htmx_finally_request` | `htmx:finally:request` | When request completes, fails, or is cancelled                                 |
+| `htmx_confirm`         | `htmx:confirm`         | After trigger, before request. Detail carries `issueRequest` and `dropRequest` |
+| `htmx_error`           | `htmx:error`           | On any error                                                                   |
+| `htmx_response_error`  | `htmx:response:error`  | The server returned an HTTP error status                                       |
 
 ### Swap
 
-| Hook | Event | Description |
-|------|-------|-------------|
-| `htmx_before_swap` | `htmx:before:swap` | Before content swap |
-| `htmx_after_swap` | `htmx:after:swap` | After content swap |
-| `htmx_finally_swap` | `htmx:finally:swap` | After swap (success or error) |
-| `htmx_before_settle` | `htmx:before:settle` | Before settle phase |
-| `htmx_after_settle` | `htmx:after:settle` | After settle phase |
-| `htmx_before_morph_node` | `htmx:before:morph:node` | Before a node is morphed. Cancel to keep the existing node |
-| `htmx_before_morph_attr` | `htmx:before:morph:attr` | Before an attribute is morphed. Cancel to keep the existing value |
-| `handle_swap` | _(direct call)_ | Custom swap handler. Signature: `(swapStyle, target, fragment, swapSpec)`. Return truthy if handled. |
+| Hook                     | Event                    | Description                                                                                          |
+| ------------------------ | ------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `htmx_before_swap`       | `htmx:before:swap`       | Before content swap                                                                                  |
+| `htmx_after_swap`        | `htmx:after:swap`        | After content swap                                                                                   |
+| `htmx_finally_swap`      | `htmx:finally:swap`      | After swap (success or error)                                                                        |
+| `htmx_before_settle`     | `htmx:before:settle`     | Before settle phase                                                                                  |
+| `htmx_after_settle`      | `htmx:after:settle`      | After settle phase                                                                                   |
+| `htmx_before_morph_node` | `htmx:before:morph:node` | Before a node is morphed. Cancel to keep the existing node                                           |
+| `htmx_before_morph_attr` | `htmx:before:morph:attr` | Before an attribute is morphed. Cancel to keep the existing value                                    |
+| `handle_swap`            | _(direct call)_          | Custom swap handler. Signature: `(swapStyle, target, fragment, swapSpec)`. Return truthy if handled. |
 
 ### History
 
-| Hook | Event |
-|------|-------|
-| `htmx_before_history_update` | `htmx:before:history:update` |
-| `htmx_after_history_update` | `htmx:after:history:update` |
-| `htmx_after_history_push` | `htmx:after:history:push` |
-| `htmx_after_history_replace` | `htmx:after:history:replace` |
+| Hook                          | Event                         |
+| ----------------------------- | ----------------------------- |
+| `htmx_before_history_update`  | `htmx:before:history:update`  |
+| `htmx_after_history_update`   | `htmx:after:history:update`   |
+| `htmx_after_history_push`     | `htmx:after:history:push`     |
+| `htmx_after_history_replace`  | `htmx:after:history:replace`  |
 | `htmx_before_history_restore` | `htmx:before:history:restore` |
 
 ### View Transitions
 
-| Hook | Event |
-|------|-------|
+| Hook                         | Event                        |
+| ---------------------------- | ---------------------------- |
 | `htmx_before_viewTransition` | `htmx:before:viewTransition` |
-| `htmx_after_viewTransition` | `htmx:after:viewTransition` |
+| `htmx_after_viewTransition`  | `htmx:after:viewTransition`  |
 
 ### Other
 
-| Hook | Event |
-|------|-------|
+| Hook                             | Event                            |
+| -------------------------------- | -------------------------------- |
 | `htmx_after_implicitInheritance` | `htmx:after:implicitInheritance` |
-| `htmx_process_<type>` | _(extensions only)_ |
+| `htmx_process_<type>`            | _(extensions only)_              |
 
 `htmx_process_<type>` handles a `<template hx type="<type>">` element in a response. `hx-upsert.js` uses
 `htmx_process_upsert` this way. `htmx_before_morph_node`, `htmx_before_morph_attr` and
@@ -166,23 +166,25 @@ init: (internalAPI) => { api = internalAPI; },
 **Available API:**
 
 <!-- check_extension_api:start -->
-| Property | Description |
-|----------|-------------|
-| `api.HCON` | Parse and merge HCON values |
-| `api.attributeValue(elt, name, defaultVal, returnElt)` | Get an attribute value with inheritance support |
-| `api.parseTriggerSpecs(spec)` | Parse a trigger specification |
-| `api.determineMethodAndAction(elt, evt)` | Get `{method, action}` for an element |
-| `api.createRequestContext(elt, evt)` | Create a request context |
-| `api.collectFormData(elt, form, submitter, validate, isGet)` | Collect form data |
-| `api.getAttributeObject(elt, name, callback, scope)` | Read an object-valued attribute |
-| `api.insertContent(task, cssTransition)` | Insert a swap task's content |
-| `api.morph(oldNode, fragment, innerHTML)` | Morph existing content |
-| `api.isSoftMatch(oldNode, newNode)` | Test whether two nodes can be morphed |
-| `api.initSecurity(ttPolicy, syncFn, asyncFn)` | Configure Trusted Types and script constructors |
-| `api.onTrigger(elt, spec, handler)` | Attach a parsed trigger handler |
-| `api.htmxProp(elt)` | Get an element's internal htmx state |
-| `api.triggerHtmxEvent(elt, name, detail, bubbles)` | Dispatch an htmx event |
+
+| Property                                                            | Description                                     |
+| ------------------------------------------------------------------- | ----------------------------------------------- |
+| `api.HCON`                                                          | Parse and merge HCON values                     |
+| `api.attributeValue(elt, name, defaultVal, returnElt)`              | Get an attribute value with inheritance support |
+| `api.parseTriggerSpecs(spec)`                                       | Parse a trigger specification                   |
+| `api.determineMethodAndAction(elt, evt)`                            | Get `{method, action}` for an element           |
+| `api.createRequestContext(elt, evt)`                                | Create a request context                        |
+| `api.collectFormData(elt, form, submitter, validate, isGet)`        | Collect form data                               |
+| `api.getAttributeObject(elt, name, callback, scope)`                | Read an object-valued attribute                 |
+| `api.insertContent(task, cssTransition)`                            | Insert a swap task's content                    |
+| `api.morph(oldNode, fragment, innerHTML)`                           | Morph existing content                          |
+| `api.isSoftMatch(oldNode, newNode)`                                 | Test whether two nodes can be morphed           |
+| `api.initSecurity(ttPolicy, syncFn, asyncFn)`                       | Configure Trusted Types and script constructors |
+| `api.onTrigger(elt, spec, handler)`                                 | Attach a parsed trigger handler                 |
+| `api.htmxProp(elt)`                                                 | Get an element's internal htmx state            |
+| `api.triggerHtmxEvent(elt, name, detail, bubbles)`                  | Dispatch an htmx event                          |
 | `api.executeJavaScript(thisArg, values, code, expression, isAsync)` | Execute JavaScript through htmx security policy |
+
 <!-- check_extension_api:end -->
 
 ## Request Context (`detail.ctx`)
@@ -243,6 +245,7 @@ handle_swap: (swapStyle, target, fragment, swapSpec) => {
 ```
 
 Usage in HTML:
+
 ```html
 <div hx-get="/data" hx-swap="my-custom-swap">Load</div>
 ```
@@ -254,53 +257,56 @@ Usage in HTML:
 From `src/ext/hx-preload.js` -- prefetches requests on trigger events:
 
 ```javascript
-(() => {
-    let api;
+;(() => {
+  let api
 
-    htmx.registerExtension('preload', {
-        init: (internalAPI) => { api = internalAPI; },
+  htmx.registerExtension("preload", {
+    init: internalAPI => {
+      api = internalAPI
+    },
 
-        htmx_after_init: (elt) => {
-            // Check for hx-preload attribute
-            let preloadSpec = api.attributeValue(elt, "hx-preload");
-            if (!preloadSpec) return;
+    htmx_after_init: elt => {
+      // Check for hx-preload attribute
+      let preloadSpec = api.attributeValue(elt, "hx-preload")
+      if (!preloadSpec) return
 
-            let specs = api.parseTriggerSpecs(preloadSpec);
-            let preloadListener = async (evt) => {
-                let {method} = api.determineMethodAndAction(elt, evt);
-                if (method !== 'GET') return;
+      let specs = api.parseTriggerSpecs(preloadSpec)
+      let preloadListener = async evt => {
+        let { method } = api.determineMethodAndAction(elt, evt)
+        if (method !== "GET") return
 
-                let ctx = api.createRequestContext(elt, evt);
-                // ... prefetch logic, store in elt._htmx.preload
-            };
+        let ctx = api.createRequestContext(elt, evt)
+        // ... prefetch logic, store in elt._htmx.preload
+      }
 
-            for (let spec of specs) {
-                elt.addEventListener(spec.name, preloadListener);
-            }
-            elt._htmx.preloadListener = preloadListener;
-        },
+      for (let spec of specs) {
+        elt.addEventListener(spec.name, preloadListener)
+      }
+      elt._htmx.preloadListener = preloadListener
+    },
 
-        htmx_before_request: (elt, detail) => {
-            // Use cached prefetch if available and not expired
-            if (elt._htmx?.preload) {
-                detail.ctx.fetch = () => elt._htmx.preload.prefetch;
-                delete elt._htmx.preload;
-            }
-        },
+    htmx_before_request: (elt, detail) => {
+      // Use cached prefetch if available and not expired
+      if (elt._htmx?.preload) {
+        detail.ctx.fetch = () => elt._htmx.preload.prefetch
+        delete elt._htmx.preload
+      }
+    },
 
-        htmx_before_cleanup: (elt) => {
-            // Remove event listeners
-            if (elt._htmx?.preloadListener) {
-                for (let event of elt._htmx.preloadEvents) {
-                    elt.removeEventListener(event, elt._htmx.preloadListener);
-                }
-            }
-        },
-    });
-})();
+    htmx_before_cleanup: elt => {
+      // Remove event listeners
+      if (elt._htmx?.preloadListener) {
+        for (let event of elt._htmx.preloadEvents) {
+          elt.removeEventListener(event, elt._htmx.preloadListener)
+        }
+      }
+    },
+  })
+})()
 ```
 
 Key patterns:
+
 - Store API reference in closure
 - Use `htmx_after_init` to set up per-element behavior
 - Use `elt._htmx` to store per-element state
@@ -312,25 +318,26 @@ Key patterns:
 From `src/ext/hx-pending.js` -- shows pending content during request:
 
 ```javascript
-(() => {
-    htmx.registerExtension('hx-pending', {
-        htmx_before_request: (elt, detail) => {
-            // Insert pending content before request fires
-            insertPendingContent(detail.ctx);
-        },
-        htmx_error: (elt, detail) => {
-            // Revert on error
-            removePendingContent(detail.ctx);
-        },
-        htmx_before_swap: (elt, detail) => {
-            // Remove pending content before real swap
-            removePendingContent(detail.ctx);
-        },
-    });
-})();
+;(() => {
+  htmx.registerExtension("hx-pending", {
+    htmx_before_request: (elt, detail) => {
+      // Insert pending content before request fires
+      insertPendingContent(detail.ctx)
+    },
+    htmx_error: (elt, detail) => {
+      // Revert on error
+      removePendingContent(detail.ctx)
+    },
+    htmx_before_swap: (elt, detail) => {
+      // Remove pending content before real swap
+      removePendingContent(detail.ctx)
+    },
+  })
+})()
 ```
 
 Key patterns:
+
 - No `init` needed if you don't use the internal API
 - Store state on `detail.ctx` (per-request, not per-element)
 - Handle error case to revert pending changes
@@ -338,15 +345,15 @@ Key patterns:
 
 ## Migrating from htmx 2.x Extensions
 
-| htmx 2.x | htmx 4 | Notes |
-|-----------|---------|-------|
-| `htmx.defineExtension()` | `htmx.registerExtension()` | Different function name |
-| `onEvent(name, evt)` | Specific hooks (`htmx_before_request`, etc.) | Use underscored hook names |
-| `transformResponse(text, xhr, elt)` | `htmx_after_request` | Modify `detail.ctx.text` |
-| `handleSwap(style, target, fragment)` | `handle_swap(style, target, fragment, swapSpec)` | Extra `swapSpec` param, return truthy |
-| `encodeParameters(xhr, params, elt)` | `htmx_before_request` | Modify the final `detail.ctx.request.body` and `.headers` |
-| `getSelectors()` | `htmx_after_init` | Check `api.attributeValue(elt, "attr")` instead |
-| `isInlineSwap(swapStyle)` | Not needed | Move logic into `handle_swap` |
+| htmx 2.x                              | htmx 4                                           | Notes                                                     |
+| ------------------------------------- | ------------------------------------------------ | --------------------------------------------------------- |
+| `htmx.defineExtension()`              | `htmx.registerExtension()`                       | Different function name                                   |
+| `onEvent(name, evt)`                  | Specific hooks (`htmx_before_request`, etc.)     | Use underscored hook names                                |
+| `transformResponse(text, xhr, elt)`   | `htmx_after_request`                             | Modify `detail.ctx.text`                                  |
+| `handleSwap(style, target, fragment)` | `handle_swap(style, target, fragment, swapSpec)` | Extra `swapSpec` param, return truthy                     |
+| `encodeParameters(xhr, params, elt)`  | `htmx_before_request`                            | Modify the final `detail.ctx.request.body` and `.headers` |
+| `getSelectors()`                      | `htmx_after_init`                                | Check `api.attributeValue(elt, "attr")` instead           |
+| `isInlineSwap(swapStyle)`             | Not needed                                       | Move logic into `handle_swap`                             |
 
 ## Distribution Conventions
 
