@@ -2,16 +2,13 @@
 {% assign image = product_variant.featured_image | default: product.featured_image %}
 
 <header>
-  <span class="notification-status">Added to your cart</span>
+  <span>Added to your cart</span>
 
-  <button
-    onclick="this.closest('dialog')?.close()"
-    aria-label="Close cart notification"
-    data-placement="left"
-    class="button ghost square"
-  >
-    {% render 'icon', name: 'cross' %}
-  </button>
+  <form method="dialog">
+    <button class="button ghost square" aria-label="Close cart notification">
+      {% render 'icon', name: 'cross' %}
+    </button>
+  </form>
 </header>
 
 <div class="notification-product">
@@ -21,7 +18,7 @@
     <h2>{{ product.title }}</h2>
 
     <span>
-      {% render 'product-price', product: product %}
+      {% render 'product-price', variant: product_variant %}
     </span>
   </div>
 </div>
@@ -44,10 +41,6 @@
   .cart-notification-content {
     > header {
       justify-content: space-between;
-
-      .notification-status {
-        color: var(--ui-neutral-400);
-      }
     }
 
     .notification-product {
@@ -56,7 +49,6 @@
       gap: 1rem;
 
       .notification-thumbnail {
-        overflow: hidden;
         border-radius: 0.25rem;
       }
 

@@ -1,6 +1,6 @@
 ---
 name: theme-components
-description: How to write sections, snippets and blocks in this Shopify theme, primarily how to structure their CSS. Use whenever creating, editing or reviewing a .liquid file in sections/, snippets/ or blocks/, or any {% stylesheet %} block, even for a small style tweak.
+description: How to write sections, snippets and blocks in this Shopify theme, primarily how to structure their CSS, plus the web components in src/components/ that add their behaviour. Use whenever creating, editing or reviewing a .liquid file in sections/, snippets/ or blocks/, any {% stylesheet %} block, or a custom element in src/components/, even for a small change.
 ---
 
 # Theme components
@@ -64,3 +64,4 @@ A section or block doesn't. Shopify already wraps it in an element, so the root 
 ## Rules
 
 - [CSS](rules/css.md): root class, nesting, selectors, property order, breakpoints, values, and styling nested components.
+- [Web components](rules/web-components.md): when to use a custom element, file and registration, `data-ref-*` refs, listeners and cleanup, and working with htmx.

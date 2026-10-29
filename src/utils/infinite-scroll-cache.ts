@@ -2,7 +2,7 @@
  * infiniteScrollCache
  * saves the items loaded by infinite scroll in sessionStorage,
  * and puts them back when the user navigates back to the page.
- * must run before Alpine and htmx initialize the DOM.
+ * must run before htmx initializes the DOM.
  */
 const LIST_ID = "paginated_items"
 const PAGINATION_ID = "pagination"

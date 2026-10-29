@@ -1,21 +1,22 @@
-// must run before Alpine and htmx initialize the DOM
+// must run before htmx initializes the DOM
 import "./utils/infinite-scroll-cache"
-import alpine from "./alpine"
 import htmx from "htmx.org"
 import "htmx.org/dist/ext/hx-preload.js"
-import "htmx.org/dist/ext/hx-alpine-compat.js"
 import "./utils/vvh"
 import { loadingStates } from "./utils/htmx-ext-loading-states"
 import "dialog-closedby-polyfill"
 
 import "@blossom-carousel/web"
 
+import "./components/cart-notification"
+import "./components/double-range"
+import "./components/inbox-update-cart"
+import "./components/predictive-search"
+import "./components/quantity-selector"
+
 import "@videojs/html/background/player"
 import "@videojs/html/background/video"
 import "@videojs/html/background/skin"
-
-// the hx-alpine-compat extension reads Alpine from window
-window.Alpine = alpine
 
 htmx.config.noSwap = [204, 304, "4xx", "5xx"] as unknown as number[]
 

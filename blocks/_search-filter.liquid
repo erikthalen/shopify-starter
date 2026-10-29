@@ -30,233 +30,236 @@
   class="filter-dialog"
   style="view-transition-name: filter-drawer"
 >
-  <form
-    x-data
-    id="search_filter_form"
-    hx-get="{{ search.url }}"
-    hx-select="#paginated_items"
-    hx-target="#paginated_items"
-    hx-swap="outerHTML transition:true"
-    hx-select-oob="#search_filter_form:outerHTML,#search_filter_button:outerHTML"
-    hx-push-url="true"
-    @change="$el.requestSubmit()"
-    data-loading-states
-  >
-    <div class="filter-fields">
-      {%- for filter in search.filters -%}
-        <div class="field">
-          <p>{{ filter.label }}</p>
-
-          {%- case filter.type -%}
-              {% comment %} BOOLEAN FILTER {% endcomment %}
-            {%- when 'boolean' -%}
-              <input
-                type="checkbox"
-                name="{{ filter.param_name }}"
-                value="{{ filter.true_value.value }}"
-                id="Filter-{{ filter.param_name }}"
-                {% if filter.true_value.active -%}
-                  checked
-                {%- endif %}
-              >
-              {{- filter.true_value.label -}}
-              ({{ filter.true_value.count }})
-              <input
-                type="checkbox"
-                name="{{ filter.param_name }}"
-                value="{{ filter.false_value.value }}"
-                id="Filter-{{ filter.param_name }}"
-                {% if filter.false_value.active -%}
-                  checked
-                {%- endif %}
-              >
-              {{- filter.false_value.label -}}
-              ({{ filter.false_value.count }})
-
-              {% comment %} LIST FILTER {% endcomment %}
-            {%- when 'list' -%}
-              {%- for filter_value in filter.values -%}
-                <div>
-                  <label
-                    {% if filter_value.swatch != blank %}
-                      style="
-                        {%- if filter_value.swatch.color != blank -%}
-                        background-color: {{ filter_value.swatch.color }};
-                        {%- endif -%}
-                        {%- if filter_value.swatch.image != blank -%}
-                        background-image: url({{ filter_value.swatch.image | image_url }});
-                        {%- endif -%}
-                      "
-                    {% endif %}
-                  >
-                    {{ filter_value.swatch.image }}
-                    <input
-                      type="checkbox"
-                      name="{{ filter_value.param_name }}"
-                      value="{{ filter_value.value }}"
-                      {% if filter_value.active -%}
-                        checked
-                      {%- endif %}
-                    >
-                    {{ filter_value.swatch.color }}
-
-                    {% comment %}
-                      To use color swatches:
-                      Create a Metaobject with 3 fields:
-                       1. "Label" - Single line text
-                       2. "Color" - Color
-                       3. "Image" - File (image)
-
-                      Create a Metafield on Variants and add this Metaobject as field value.
-                      Create a new Search & Discovery Filter and choose the Metafield as Source.
-                      Change Display options of the filter to "Swatch color: Color" and "Swatch pattern: Image"
-                    {% endcomment %}
-                    {% if filter.presentation == 'swatch' %}
-                      {% if filter_value.swatch.color != blank %}
-                        <span
-                          style="background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;"
-                        ></span>
-                      {% elsif filter_value.swatch.image != blank %}
-                        {% render 'image',
-                          image: filter_value.swatch.image,
-                          sizes: '30px, 30px',
-                          aspect_ratio: '1/1',
-                          class: 'swatch-image'
-                        %}
-                      {% endif %}
-                    {% else %}
-                      {{ filter_value.label }}
-                      <span class="option-count">({{ filter_value.count }})</span>
-                    {% endif %}
-                  </label>
-                </div>
-              {%- endfor -%}
-
-              {% comment %} PRICE FILTER {% endcomment %}
-            {%- when 'price_range' -%}
-              {% assign low_value = filter.min_value.value
-                | money_without_currency
-                | replace: ',', ''
-                | replace: '.', ''
-                | round
-              %}
-              {% assign high_value = filter.max_value.value
-                | money_without_currency
-                | replace: ',', ''
-                | replace: '.', ''
-                | round
-              %}
-              {% assign max_value = filter.range_max
-                | money_without_currency
-                | replace: ',', ''
-                | replace: '.', ''
-                | round
-              %}
-
-              <label x-data="{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }">
-                <p>
-                  From:
-                  <span x-text="value">
-                    {%- if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif -%}
-                  </span>
-                  {{ cart.currency.symbol }}
-                </p>
-
-                <input
-                  name="filter.v.price.gte"
-                  type="range"
-                  min="0"
-                  @change="value = $el.value"
-                  x-model="value"
-                  max="{{ max_value }}"
-                >
-              </label>
-
-              <label x-data="{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }">
-                <p>
-                  To:
-                  <span x-text="value">
-                    {%- if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif -%}
-                  </span>
-                  {{ cart.currency.symbol }}
-                </p>
-                <input
-                  name="filter.v.price.lte"
-                  type="range"
-                  min="0"
-                  x-model="value"
-                  max="{{ max_value }}"
-                >
-              </label>
-          {%- endcase -%}
-        </div>
-      {%- endfor -%}
-
-      <div class="filter-sort">
-        {%- assign current_sort_label = 'Sort by' -%}
-        {%- for option in search.sort_options -%}
-          {%- if search.sort_by == option.value -%}
-            {%- assign current_sort_label = option.name -%}
-          {%- endif -%}
-        {%- endfor -%}
-
-        <label class="field" data-loading-aria-busy data-loading-target="#search_sort_by_button">
-          <span>Sort by:</span>
-
-          <button id="search_sort_by_button" popovertarget="search_sort_by_select" type="button">
-            <span>{{ current_sort_label }}</span>
-            {% render 'icon', name: 'chevron-down' %}
-          </button>
-
-          <div
-            id="search_sort_by_select"
-            popover
-            onchange="
-              document.querySelector(`[popovertarget=${this.id}] span`).textContent =
-                event.target.closest('label').textContent.trim();
-              this.hidePopover();
-            "
-          >
-            <menu>
-              {%- for option in search.sort_options -%}
-                <li>
-                  <label>
-                    <input
-                      type="radio"
-                      name="sort_by"
-                      value="{{ option.value }}"
-                      {% if search.sort_by == option.value %}
-                        checked
-                      {% endif %}
-                    >
-                    {{- option.name -}}
-                  </label>
-                </li>
-              {%- endfor -%}
-            </menu>
-          </div>
-        </label>
-      </div>
-    </div>
-  </form>
-
-  <div class="filter-actions">
-    <a
-      href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
-      hx-get="{{ collection.url }}?sort_by={{ collection.sort_by }}"
-      hx-select="#main_collection"
-      hx-target="#main_collection"
+  <article>
+    <form
+      id="search_filter_form"
+      hx-get="{{ search.url }}"
+      hx-select="#paginated_items"
+      hx-target="#paginated_items"
       hx-swap="outerHTML transition:true"
-      class="button link"
+      hx-select-oob="#search_filter_form:outerHTML,#search_filter_button:outerHTML"
+      hx-push-url="true"
+      hx-trigger="submit, change"
       data-loading-states
     >
-      Clear all
-    </a>
+      <div class="filter-fields">
+        {%- for filter in search.filters -%}
+          <div class="field">
+            <p>{{ filter.label }}</p>
 
-    <form method="dialog">
-      <button class="button">Apply</button>
+            {%- case filter.type -%}
+                {% comment %} BOOLEAN FILTER {% endcomment %}
+              {%- when 'boolean' -%}
+                <input
+                  type="checkbox"
+                  name="{{ filter.param_name }}"
+                  value="{{ filter.true_value.value }}"
+                  id="Filter-{{ filter.param_name }}"
+                  {% if filter.true_value.active -%}
+                    checked
+                  {%- endif %}
+                >
+                {{- filter.true_value.label -}}
+                ({{ filter.true_value.count }})
+                <input
+                  type="checkbox"
+                  name="{{ filter.param_name }}"
+                  value="{{ filter.false_value.value }}"
+                  id="Filter-{{ filter.param_name }}"
+                  {% if filter.false_value.active -%}
+                    checked
+                  {%- endif %}
+                >
+                {{- filter.false_value.label -}}
+                ({{ filter.false_value.count }})
+
+                {% comment %} LIST FILTER {% endcomment %}
+              {%- when 'list' -%}
+                {%- for filter_value in filter.values -%}
+                  <div>
+                    <label
+                      {% if filter_value.swatch != blank %}
+                        style="
+                          {%- if filter_value.swatch.color != blank -%}
+                          background-color: {{ filter_value.swatch.color }};
+                          {%- endif -%}
+                          {%- if filter_value.swatch.image != blank -%}
+                          background-image: url({{ filter_value.swatch.image | image_url }});
+                          {%- endif -%}
+                        "
+                      {% endif %}
+                    >
+                      {{ filter_value.swatch.image }}
+                      <input
+                        type="checkbox"
+                        name="{{ filter_value.param_name }}"
+                        value="{{ filter_value.value }}"
+                        {% if filter_value.active -%}
+                          checked
+                        {%- endif %}
+                      >
+                      {{ filter_value.swatch.color }}
+
+                      {% comment %}
+                        To use color swatches:
+                        Create a Metaobject with 3 fields:
+                         1. "Label" - Single line text
+                         2. "Color" - Color
+                         3. "Image" - File (image)
+
+                        Create a Metafield on Variants and add this Metaobject as field value.
+                        Create a new Search & Discovery Filter and choose the Metafield as Source.
+                        Change Display options of the filter to "Swatch color: Color" and "Swatch pattern: Image"
+                      {% endcomment %}
+                      {% if filter.presentation == 'swatch' %}
+                        {% if filter_value.swatch.color != blank %}
+                          <span
+                            style="background-color: {{ filter_value.swatch.color }}; height: 30px; width: 30px; display: inline-block;"
+                          ></span>
+                        {% elsif filter_value.swatch.image != blank %}
+                          {% render 'image',
+                            image: filter_value.swatch.image,
+                            sizes: '30px, 30px',
+                            aspect_ratio: '1/1',
+                            class: 'swatch-image'
+                          %}
+                        {% endif %}
+                      {% else %}
+                        {{ filter_value.label }}
+                        <span class="option-count">({{ filter_value.count }})</span>
+                      {% endif %}
+                    </label>
+                  </div>
+                {%- endfor -%}
+
+                {% comment %} PRICE FILTER {% endcomment %}
+              {%- when 'price_range' -%}
+                {% assign low_value = filter.min_value.value
+                  | money_without_currency
+                  | replace: ',', ''
+                  | replace: '.', ''
+                  | round
+                %}
+                {% assign high_value = filter.max_value.value
+                  | money_without_currency
+                  | replace: ',', ''
+                  | replace: '.', ''
+                  | round
+                %}
+                {% assign max_value = filter.range_max
+                  | money_without_currency
+                  | replace: ',', ''
+                  | replace: '.', ''
+                  | round
+                %}
+
+                {%- liquid
+                  assign range_low = 0
+                  if filter.min_value.value != blank
+                    assign range_low = low_value
+                  endif
+
+                  assign range_high = max_value
+                  if filter.max_value.value != blank
+                    assign range_high = high_value
+                  endif
+                -%}
+
+                <double-range>
+                  <p>
+                    From <span data-ref-min-output>{{ range_low }}</span> {{ cart.currency.symbol }} to
+                    <span data-ref-max-output>{{ range_high }}</span> {{ cart.currency.symbol }}
+                  </p>
+
+                  <input
+                    type="range"
+                    name="filter.v.price.gte"
+                    min="0"
+                    max="{{ max_value }}"
+                    value="{{ range_low }}"
+                    aria-label="Minimum price"
+                    data-ref-min
+                  >
+                  <input
+                    type="range"
+                    name="filter.v.price.lte"
+                    min="0"
+                    max="{{ max_value }}"
+                    value="{{ range_high }}"
+                    aria-label="Maximum price"
+                    data-ref-max
+                  >
+                </double-range>
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+
+        <div class="filter-sort">
+          {%- assign current_sort_label = 'Sort by' -%}
+          {%- for option in search.sort_options -%}
+            {%- if search.sort_by == option.value -%}
+              {%- assign current_sort_label = option.name -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          <label class="field" data-loading-aria-busy data-loading-target="#search_sort_by_button">
+            <span>Sort by:</span>
+
+            <button id="search_sort_by_button" popovertarget="search_sort_by_select" type="button">
+              <span>{{ current_sort_label }}</span>
+              {% render 'icon', name: 'chevron-down' %}
+            </button>
+
+            <div
+              id="search_sort_by_select"
+              popover
+              onchange="
+                document.querySelector(`[popovertarget=${this.id}] span`).textContent =
+                  event.target.closest('label').textContent.trim();
+                this.hidePopover();
+              "
+            >
+              <menu>
+                {%- for option in search.sort_options -%}
+                  <li>
+                    <label>
+                      <input
+                        type="radio"
+                        name="sort_by"
+                        value="{{ option.value }}"
+                        {% if search.sort_by == option.value %}
+                          checked
+                        {% endif %}
+                      >
+                      {{- option.name -}}
+                    </label>
+                  </li>
+                {%- endfor -%}
+              </menu>
+            </div>
+          </label>
+        </div>
+      </div>
     </form>
-  </div>
+
+    <div class="filter-actions">
+      <a
+        href="{{ collection.url }}?sort_by={{ collection.sort_by }}"
+        hx-get="{{ collection.url }}?sort_by={{ collection.sort_by }}"
+        hx-select="#main_collection"
+        hx-target="#main_collection"
+        hx-swap="outerHTML transition:true"
+        class="button link"
+        data-loading-states
+      >
+        Clear all
+      </a>
+
+      <form method="dialog">
+        <button class="button">Apply</button>
+      </form>
+    </div>
+  </article>
 </dialog>
 
 {% comment %} backdrop {% endcomment %}

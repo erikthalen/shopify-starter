@@ -15,20 +15,16 @@
     "prettier": "prettier . --write"
   },
   "devDependencies": {
-    "@shopify/prettier-plugin-liquid": "^1.5.2",
-    "@types/alpinejs": "^3.13.11",
-    "@types/alpinejs__intersect": "^3.13.4",
-    "esbuild": "^0.28.2",
-    "prettier": "^3.3.3"
+    "@shopify/prettier-plugin-liquid": "1.10.2",
+    "esbuild": "0.28.2",
+    "prettier": "3.8.3"
   },
   "dependencies": {
-    "@alpinejs/intersect": "^3.14.9",
-    "@blossom-carousel/web": "^1.6.0",
-    "@erikt/ui": "^0.0.44",
-    "@videojs/html": "^10.2.0",
-    "alpinejs": "3.15.11",
-    "dialog-closedby-polyfill": "^1.3.0",
-    "htmx.org": "^4.0.0"
+    "@blossom-carousel/web": "1.6.0",
+    "@erikt/ui": "0.0.44",
+    "@videojs/html": "10.2.0",
+    "dialog-closedby-polyfill": "1.3.0",
+    "htmx.org": "4.0.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

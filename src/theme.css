@@ -1,5 +1,6 @@
 @import "@erikt/ui";
 @import "@blossom-carousel/web/style.css";
+@import "./components/double-range.css";
 
 @view-transition {
   navigation: auto;
@@ -83,6 +84,14 @@ shopify-editor {
 
 .contents {
   display: contents;
+}
+
+::backdrop {
+  view-transition-name: backdrop;
+}
+
+shopify-chat {
+  view-transition-name: shopify-chat;
 }
 
 /* hidden visually, still read by screen readers */

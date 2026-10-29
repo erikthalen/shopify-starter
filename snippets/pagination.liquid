@@ -18,50 +18,40 @@
 {% enddoc %}
 
 {%- if paginate.pages > 1 -%}
-  <nav role="navigation" aria-label="Pagination" class="pagination" x-data>
+  <nav role="navigation" aria-label="Pagination" class="pagination">
     <ol>
       {%- if paginate.previous -%}
         <li>
-          <a
-            class="pagination-step"
-            @mousedown="window.forcePageRefresh = true"
-            href="{{ paginate.previous.url }}"
-          >
-            Previous <span class="sr-only">page</span>
-          </a>
+          <a href="{{ paginate.previous.url }}" class="button ghost"> Previous <span class="sr-only">page</span> </a>
         </li>
       {%- else -%}
-        <li class="disabled-step">Previous <span class="sr-only">page</span></li>
+        <li class="button ghost" aria-disabled="true">Previous <span class="sr-only">page</span></li>
       {%- endif -%}
 
       {%- for part in paginate.parts -%}
         {%- if part.is_link -%}
           <li>
-            <a @mousedown="window.forcePageRefresh = true" href="{{ part.url }}">
+            <a href="{{ part.url }}" class="button ghost square">
               <span class="sr-only">page</span> {{ part.title }}
             </a>
           </li>
         {%- else -%}
           {%- if part.title == paginate.current_page -%}
-            <li aria-current="page"><span class="sr-only">page</span> {{ part.title }}</li>
+            <li class="button ghost square" aria-disabled="true" aria-current="page">
+              <span class="sr-only">page</span> {{ part.title }}
+            </li>
           {%- else -%}
-            <li><span class="sr-only">page</span> {{ part.title }}</li>
+            <li class="button ghost square" aria-disabled="true"><span class="sr-only">page</span> {{ part.title }}</li>
           {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
 
       {%- if paginate.next -%}
         <li>
-          <a
-            class="pagination-step"
-            @mousedown="window.forcePageRefresh = true"
-            href="{{ paginate.next.url }}"
-          >
-            Next <span class="sr-only">page</span>
-          </a>
+          <a href="{{ paginate.next.url }}" class="button ghost"> Next <span class="sr-only">page</span> </a>
         </li>
       {%- else -%}
-        <li class="disabled-step">Next <span class="sr-only">page</span></li>
+        <li class="button ghost" aria-disabled="true">Next <span class="sr-only">page</span></li>
       {%- endif -%}
     </ol>
   </nav>
@@ -78,12 +68,8 @@
       gap: 1rem;
     }
 
-    .pagination-step {
-      border-bottom: 1px dotted;
-    }
-
-    .disabled-step {
-      color: var(--ui-neutral-500);
+    & li:not(:has(button, .button)) {
+      color: currentColor;
     }
   }
 {% endstylesheet %}

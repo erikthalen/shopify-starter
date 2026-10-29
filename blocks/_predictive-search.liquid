@@ -17,7 +17,7 @@
   <span class="mobile-only">{% render 'icon', name: 'magnifier' %}</span>
 </a>
 
-<dialog scroll-lock id="predictive_search" closedby="any" class="search-dialog">
+<dialog scroll-lock id="predictive_search" closedby="any">
   <form method="dialog" class="contents">
     <button class="close-button button ghost square" aria-label="Close search dialog">
       {% render 'icon', name: 'cross' %}
@@ -25,13 +25,11 @@
   </form>
 
   <article>
-    <div
-      x-data="predictiveSearch"
+    <predictive-search
       data-loading-states
       data-loading-target="#predictive_search_input"
       data-loading-aria-busy
       class="search-content"
-      :class="q !== '' && 'has-input'"
     >
       {% comment %} Used as input to the (hidden) predictive search below {% endcomment %}
       <form class="search-form" action="{{ routes.search_url }}">
@@ -44,10 +42,12 @@
             placeholder="Search products and pages"
             autofocus
             name="q"
-            x-model="q"
-            x-ref="input"
-            @input.debounce="search()"
+            data-ref-input
           >
+
+          <button type="reset" data-suffix class="clear-search button square ghost" aria-label="Clear search">
+            {% render 'icon', name: 'cross' %}
+          </button>
 
           <button type="submit" data-suffix class="button">Search</button>
         </label>
@@ -55,7 +55,7 @@
 
       <form
         class="sr-only"
-        x-ref="predictiveSearchForm"
+        data-ref-form
         action="{{ routes.predictive_search_url }}"
         hx-get="{{ routes.predictive_search_url }}"
         hx-select=".predictive-search-results > *"
@@ -63,14 +63,14 @@
         hx-swap="innerHTML"
         hx-sync="this:replace"
       >
-        <input type="search" name="q" x-model="q">
+        <input type="search" name="q">
         <input type="hidden" name="section_id" value="predictive-search-results">
       </form>
 
       <section
         id="predictive-search-results"
-        x-ref="predictiveSearchResults"
-        class="predictive-search-results results-output"
+        data-ref-results
+        class="predictive-search-results"
       ></section>
 
       {%- liquid
@@ -86,16 +86,16 @@
 
             <ul class="suggestion-terms">
               {%- for term in popular_searches -%}
-                {%- assign term = term | strip -%}
-                {%- if term != blank -%}
+                {%- comment -%} a new name, since assigning to `term` doesn't override the loop variable {%- endcomment -%}
+                {%- assign search_term = term | strip -%}
+                {%- if search_term != blank -%}
                   <li>
                     <a
-                      href="{{ routes.search_url }}?q={{ term | url_encode }}"
+                      href="{{ routes.search_url }}?q={{ search_term | url_encode }}"
                       class="button outlined"
-                      data-term="{{ term | escape }}"
-                      @click.prevent="suggest($el.dataset.term)"
+                      data-term="{{ search_term | escape }}"
                     >
-                      {{- term -}}
+                      {{- search_term -}}
                     </a>
                   </li>
                 {%- endif -%}
@@ -118,15 +118,15 @@
           </nav>
         {%- endif -%}
       </section>
-    </div>
+    </predictive-search>
   </article>
 </dialog>
 
 {% stylesheet %}
   .predictive-search {
-    .search-dialog {
-      isolation: isolate;
+    isolation: isolate;
 
+    dialog {
       inset: 1rem 1rem auto;
 
       width: calc(100% - 2rem);
@@ -189,16 +189,14 @@
         color: var(--ui-neutral-500);
       }
 
+      a {
+        display: block;
+      }
+
       .suggestion-terms {
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
-      }
-
-      .suggestion-collections {
-        a {
-          display: block;
-        }
       }
     }
 
@@ -211,6 +209,10 @@
 
       @media (width >= 48rem) {
         padding-top: 7.5rem;
+      }
+
+      label:has(input:placeholder-shown) .clear-search {
+        display: none;
       }
     }
   }
@@ -226,7 +228,7 @@
       "id": "popular_searches",
       "label": "Popular searches",
       "info": "Comma-separated search terms, shown before the customer types",
-      "default": "T-shirt, Hoodie, Sneakers"
+      "default": "Blue, Red, Green"
     },
     {
       "type": "collection_list",

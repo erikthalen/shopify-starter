@@ -27,7 +27,7 @@
       </form>
     </header>
 
-    {% form 'localization', hx-boost: 'true', hx-target: 'body', hx-swap: 'innerMorph' %}
+    {% form 'localization', hx-boost: 'true', hx-target: 'body', data-loading-states: '', data-loading-aria-busy: '' %}
       <div class="locale-setting">
         <p class="setting-label">Language</p>
 
@@ -62,8 +62,13 @@
 
           <select
             name="country_code"
-            onchange="this.closest('dialog')?.close(); this.closest('form').requestSubmit()"
+            onchange="this.closest('form').requestSubmit(); this.closest('dialog')?.close()"
           >
+            <button>
+              <selectedcontent></selectedcontent>
+              {% render 'icon', name: 'chevron-down' %}
+            </button>
+
             {% for country in localization.available_countries %}
               {% unless printed_currencies contains country.currency.name %}
                 <option
@@ -89,13 +94,7 @@
         {% endif %}
       </div>
 
-      <input
-        x-data="{ currentPath: window.location.href }"
-        @htmx:after:swap.window="currentPath = window.location.href"
-        type="hidden"
-        name="return_to"
-        :value="currentPath"
-      >
+      <input type="hidden" name="return_to" value="{{ request.path }}">
     {% endform %}
   </article>
 </dialog>

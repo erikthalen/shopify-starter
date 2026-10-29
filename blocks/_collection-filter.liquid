@@ -32,7 +32,6 @@
 >
   <article>
     <form
-      x-data
       id="filter_form"
       hx-get="{{ collection.url }}"
       hx-select="#filter_result"
@@ -40,7 +39,7 @@
       hx-swap="outerHTML transition:true"
       hx-select-oob="#filter_form:outerHTML,#filter_button:outerHTML"
       hx-push-url="true"
-      @change="$el.requestSubmit()"
+      hx-trigger="submit, change"
       data-loading-states
     >
       <div class="filter-fields">
@@ -154,41 +153,43 @@
                   | round
                 %}
 
-                <label x-data="{ value: {% if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif %} }">
+                {%- liquid
+                  assign range_low = 0
+                  if filter.min_value.value != blank
+                    assign range_low = low_value
+                  endif
+
+                  assign range_high = max_value
+                  if filter.max_value.value != blank
+                    assign range_high = high_value
+                  endif
+                -%}
+
+                <double-range>
                   <p>
-                    From:
-                    <span x-text="value">
-                      {%- if filter.min_value.value != blank %}{{ low_value }}{% else %}0{% endif -%}
-                    </span>
-                    {{ cart.currency.symbol }}
+                    From <span data-ref-min-output>{{ range_low }}</span> {{ cart.currency.symbol }} to
+                    <span data-ref-max-output>{{ range_high }}</span> {{ cart.currency.symbol }}
                   </p>
 
                   <input
+                    type="range"
                     name="filter.v.price.gte"
-                    type="range"
                     min="0"
-                    @change="value = $el.value"
-                    x-model="value"
                     max="{{ max_value }}"
+                    value="{{ range_low }}"
+                    aria-label="Minimum price"
+                    data-ref-min
                   >
-                </label>
-
-                <label x-data="{ value: {% if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif %} }">
-                  <p>
-                    To:
-                    <span x-text="value">
-                      {%- if filter.max_value.value != blank %}{{ high_value }}{% else %}{{ max_value }}{% endif -%}
-                    </span>
-                    {{ cart.currency.symbol }}
-                  </p>
                   <input
-                    name="filter.v.price.lte"
                     type="range"
+                    name="filter.v.price.lte"
                     min="0"
-                    x-model="value"
                     max="{{ max_value }}"
+                    value="{{ range_high }}"
+                    aria-label="Maximum price"
+                    data-ref-max
                   >
-                </label>
+                </double-range>
             {%- endcase -%}
           </div>
         {%- endfor -%}

@@ -1,7 +1,6 @@
 {% doc %}
   Outputs a menu button and a full-screen `<dialog>` that slides in from the left.
-  Contains navigation links. The active link is highlighted using [Alpine.js](https://alpinejs.dev/)
-  and updated on client-side navigation events.
+  Contains navigation links. The active link gets `aria-current="page"`, set from the current path.
 
   @example
   {% content_for 'block', type: '_mobile-menu', id: 'mobile_menu' %}

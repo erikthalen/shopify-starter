@@ -1,8 +1,8 @@
 <div class="search-box">
   <form
-    x-data
     action="{{ routes.search_url }}"
     hx-get="{{ routes.search_url }}"
+    hx-trigger="submit, input delay:250ms"
     hx-select="#search_results"
     hx-target="#search_results"
     hx-swap="outerHTML transition:true"
@@ -13,9 +13,7 @@
     data-loading-aria-busy
   >
     <label>
-      <span data-prefix>
-        {% render 'icon', name: 'magnifier' %}
-      </span>
+      {% render 'icon', name: 'magnifier', attr: 'data-prefix' %}
 
       <input
         id="search_input"
@@ -23,15 +21,24 @@
         placeholder="Search products and pages"
         autofocus
         name="q"
-        @input.debounced="$root.requestSubmit()"
+        value="{{ search.terms }}"
       >
+
+      {% comment %}
+        Not a type="reset": that would restore the prefilled terms. The input event runs the form's search trigger
+      {% endcomment %}
+      <button
+        type="button"
+        data-suffix
+        class="clear-search button square ghost"
+        aria-label="Clear search"
+        onclick="const input = this.form.elements.q; input.value = ''; input.focus(); input.dispatchEvent(new Event('input', { bubbles: true }))"
+      >
+        {% render 'icon', name: 'cross' %}
+      </button>
 
       <button data-suffix class="button">Search</button>
     </label>
-
-    <input type="hidden" name="type" value="product,page">
-    <input type="hidden" name="options[unavailable_products]" value="hide">
-    <input type="hidden" name="options[prefix]" value="last">
   </form>
 </div>
 
@@ -117,7 +124,7 @@
           </div>
         </div>
 
-        {% comment %} {% content_for 'block', type: '_search-filter', id: 'search-filter' %} {% endcomment %}
+        {% content_for 'block', type: '_search-filter', id: 'search-filter' %}
 
         <ol id="paginated_items" class="result-list">
           {%- for item in search.results -%}
@@ -164,6 +171,10 @@
         label {
           width: 100%;
           padding-block: 0.5rem;
+
+          &:has(input:placeholder-shown) .clear-search {
+            display: none;
+          }
         }
       }
     }

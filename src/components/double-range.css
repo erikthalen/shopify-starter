@@ -1,0 +1,42 @@
+/*
+ * Base styles <double-range> needs to work: two range inputs on one shared track.
+ * Imported in src/theme.css, so they load before the first paint. Added from the
+ * module script, they'd arrive after it and the element would flash unstyled
+ */
+double-range {
+  display: grid;
+
+  /* the track, filled between the two handles */
+  &::before {
+    content: "";
+    grid-area: 2 / 1;
+    align-self: center;
+    height: var(--ui-spacing-2);
+    border-radius: var(--ui-rounded-full);
+    background: linear-gradient(
+      to right,
+      var(--ui-neutral-200) calc(var(--min-pct, 0) * 100%),
+      var(--ui-primary) calc(var(--min-pct, 0) * 100%),
+      var(--ui-primary) calc(var(--max-pct, 1) * 100%),
+      var(--ui-neutral-200) calc(var(--max-pct, 1) * 100%)
+    );
+  }
+
+  > input[type="range"] {
+    grid-area: 2 / 1;
+    background: transparent;
+    pointer-events: none;
+
+    &::-webkit-slider-thumb {
+      pointer-events: auto;
+    }
+
+    &::-moz-range-thumb {
+      pointer-events: auto;
+    }
+  }
+
+  &.min-on-top > [data-ref-min] {
+    z-index: 1;
+  }
+}

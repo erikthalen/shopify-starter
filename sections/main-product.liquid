@@ -30,7 +30,7 @@
   <hgroup>
     <h1>{{ product.title }}</h1>
 
-    {% render 'product-price', product: product %}
+    {% render 'product-price', variant: variant %}
   </hgroup>
 
   {%- unless product.description == '<p></p>' -%}
@@ -90,14 +90,38 @@
     hx-post: routes.cart_add_url,
     hx-swap: 'none',
     hx-select-oob: '#cart_drawer:outerMorph transition:true,#cart_section:outerHTML transition:true',
-    data-loading-states: ''
+    data-loading-states: '',
+    data-cart-notification: variant.id
   %}
     <input id="variant_id" type="hidden" name="id" value="{{ variant.id }}">
 
     <fieldset>
       {% comment %} {% assign amount_in_cart = cart.items | where: 'id', product.selected_or_first_available_variant.id | map: 'quantity' | sum %} {% endcomment %}
 
-      {% render 'quantity-selector', min: 1, name: 'quantity', value: 1, id: 'product', attr: 'hx-preserve' %}
+      <quantity-selector
+        id="quantity_selector_product"
+        class="product-quantity"
+        name="quantity"
+        value="1"
+        min="1"
+        hx-preserve
+      >
+        <button
+          type="button"
+          class="outlined square"
+          aria-label="Decrease quantity"
+          data-ref-decrease
+          disabled
+        >
+          {% render 'icon', name: 'minus' %}
+        </button>
+
+        <span data-ref-output>1</span>
+
+        <button type="button" class="outlined square" aria-label="Increase quantity" data-ref-increase>
+          {% render 'icon', name: 'plus' %}
+        </button>
+      </quantity-selector>
 
       <button
         class="add-to-cart"
@@ -221,6 +245,12 @@
           grid-template-columns: 1fr 1fr;
           gap: 1rem;
           margin-block: 1.5rem;
+        }
+
+        .product-quantity {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
         }
       }
     }

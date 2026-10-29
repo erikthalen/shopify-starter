@@ -8,16 +8,14 @@
   {% render 'product-card', product: product %}
 {% enddoc %}
 
+{% assign variant = product.selected_or_first_available_variant %}
+
 <div
   class="product-card"
-  style="--view-transition-name: product-card-{{ product.selected_or_first_available_variant.id }}"
+  style="--view-transition-name: product-card-{{ variant.id }}"
 >
-  {% if product.selected_or_first_available_variant.featured_image != blank %}
-    {% render 'image',
-      image: product.selected_or_first_available_variant.featured_image,
-      sizes: '50vw, 20vw',
-      class: 'card-image'
-    %}
+  {% if variant.featured_image != blank %}
+    {% render 'image', image: variant.featured_image, sizes: '50vw, 20vw', class: 'card-image' %}
   {% else %}
     {% render 'image', image: product.featured_image, sizes: '50vw, 20vw', class: 'card-image' %}
   {% endif %}
@@ -26,9 +24,9 @@
     {{ product.title }}
   </a>
 
-  {% render 'product-price', product: product %}
+  {% render 'product-price', variant: variant %}
 
-  {% render 'quick-buy', product: product %}
+  {% render 'quick-buy', variant: variant %}
 </div>
 
 {% stylesheet %}

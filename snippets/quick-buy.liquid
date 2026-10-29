@@ -1,40 +1,48 @@
 {% doc %}
-  Outputs a minimal add-to-cart button for the selected or first available variant.
+  Outputs a minimal add-to-cart button for a variant, or for a product's selected or first available variant.
   Quantity is fixed at 1. Shows "Sold out" and disables the button when the variant is unavailable.
   Includes a spinner icon that appears while the cart request is pending.
+  Pass either `variant` or `product`. `variant` wins when both are passed.
 
-  @param {object} product - Shopify `product` object.
+  @param {object} [product] - Shopify `product` object. Its selected or first available variant is used.
+  @param {object} [variant] - Shopify `variant` object.
 
   @example
   {% render 'quick-buy', product: product %}
+
+  {% render 'quick-buy', variant: item.variant %}
 {% enddoc %}
 
-{% assign variant = product.selected_or_first_available_variant %}
+{% liquid
+  assign buy_variant = variant | default: product.selected_or_first_available_variant
+  assign buy_product = buy_variant.product
+%}
 
-{% capture aria_label %}Add {{ product.title }} - {{ variant.options | join: ' / ' }} to cart{% endcapture %}
+{% capture aria_label %}Add {{ buy_product.title }} - {{ buy_variant.options | join: ' / ' }} to cart{% endcapture %}
 
 {% form 'product',
-  product,
+  buy_product,
   hx-post: routes.cart_add_url,
   hx-swap: 'none',
   hx-select-oob: '#cart_drawer:outerMorph transition:true,#cart_section:outerHTML transition:true',
   aria-label: aria_label,
   data-loading-states: '',
+  data-cart-notification: buy_variant.id,
   class: 'quick-buy'
 %}
   <input type="hidden" name="quantity" value="1">
-  <input type="hidden" name="id" value="{{ variant.id }}">
+  <input type="hidden" name="id" value="{{ buy_variant.id }}">
 
   <button
     data-loading-aria-busy
     class="button outlined"
     type="submit"
     name="add"
-    {%- unless variant.available -%}
+    {%- unless buy_variant.available -%}
       disabled
     {%- endunless -%}
   >
-    {%- if variant.available -%}
+    {%- if buy_variant.available -%}
       Add to cart
     {%- else -%}
       Sold out

@@ -72,6 +72,7 @@
         method="post"
         action="{{ routes.cart_change_url }}"
         hx-post="{{ routes.cart_change_url }}"
+        hx-trigger="submit, change delay:250ms"
         hx-swap="none"
         hx-sync="this:replace"
         hx-select-oob="#cart_drawer:outerMorph transition:true,#cart_section:outerHTML transition:true"
@@ -81,13 +82,31 @@
       >
         <input type="hidden" name="id" value="{{ item.key }}">
 
-        {% render 'quantity-selector',
-          min: 0,
-          name: 'quantity',
-          value: item.quantity,
-          on-change: '$el.form.requestSubmit()',
-          id: id
-        %}
+        <quantity-selector
+          id="quantity_selector_{{ id }}"
+          class="item-quantity"
+          name="quantity"
+          value="{{ item.quantity }}"
+          min="0"
+        >
+          <button
+            type="button"
+            class="ghost square"
+            aria-label="Decrease quantity"
+            data-ref-decrease
+            {% if item.quantity <= 0 %}
+              disabled
+            {% endif %}
+          >
+            {% render 'icon', name: 'minus' %}
+          </button>
+
+          <span data-ref-output>{{ item.quantity }}</span>
+
+          <button type="button" class="ghost square" aria-label="Increase quantity" data-ref-increase>
+            {% render 'icon', name: 'plus' %}
+          </button>
+        </quantity-selector>
       </form>
 
       <a
@@ -164,6 +183,12 @@
         z-index: 1;
         position: relative;
       }
+    }
+
+    .item-quantity {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
   }
 {% endstylesheet %}
