@@ -9,6 +9,7 @@
 - `&` only when needed
 - Style elements, not classes
 - Classes for nested components
+- Direct children by element
 - Keep class names distinct
 - No BEM
 - Order inside a rule
@@ -296,11 +297,44 @@ Leaf components that render no other components can style bare elements freely.
 
 ---
 
+## Direct children by element
+
+A component that renders other components can still style bare elements, when it targets its own direct children with `>`. The child combinator stops the rule at one level, so it can't leak into a rendered snippet. Use it when the children are semantic and their role is obvious from the element: a dialog's `<article>`, the article's `<header>` and `<footer>`. Nest one `>` per level, so each step reads as "my own X".
+
+**Correct:** `snippets/cart-drawer.liquid` renders `cart-item` snippets, but `> header` and `> footer` only reach the drawer's own header and footer.
+
+```css
+.cart-drawer {
+  dialog {
+    > article {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+
+      > header {
+        position: sticky;
+        top: 0;
+      }
+
+      > footer {
+        position: sticky;
+        bottom: 0;
+      }
+    }
+  }
+
+  .cart-items { ... }
+}
+```
+
+Use a class instead when the element is generic (`<div>`, `<span>`), when the element alone doesn't say what it is, or when two siblings of the same type need different styles.
+
+---
+
 ## Keep class names distinct
 
 Nesting scopes a rule to the root, but not away from the components the root renders. A section's `.content` rule also matches the `.content` inside every snippet it renders. Avoid single generic words like `content`, `inner`, `actions`, `count`, `title`, `info`, `items`, `media`, `label` or `value`. Name the specific thing instead: `.item-actions`, `.result-count`, `.product-info`.
 
-Don't solve clashes with chains of child combinators. `> article > .content > .bar` is hard to read and breaks as soon as the markup is reordered. A single `>` is fine when it really means "direct children", like `> *` in a layout.
+Don't solve clashes with chains of child combinators through generic wrappers. `> article > .content > .bar` is hard to read and breaks as soon as the markup is reordered. A single `>` is fine when it really means "direct children", like `> *` in a layout, or a semantic child like `> header` (see "Direct children by element").
 
 **Incorrect:**
 
@@ -506,6 +540,7 @@ A component should rarely reach into a snippet it renders. Decide per case:
 | Need                                       | Do this                                                                                                            |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | **Stacking**: `z-index`, `isolation`       | Fine to set from the parent.                                                                                       |
+| **Obvious element**: the `<img>` from `image` | Fine to style the element directly from the parent, no modifier class. See below.                               |
 | **Restyling**: how the snippet looks       | Add a modifier class to the snippet and style it in the snippet's own stylesheet. Pass it through a `class` param. |
 | **Layout**: position, size, grid placement | Wrap the snippet in an element owned by the parent, and lay out the wrapper.                                       |
 
@@ -518,6 +553,27 @@ A component should rarely reach into a snippet it renders. Decide per case:
   }
 }
 ```
+
+**Obvious element, fine:** some snippets only wrap one plain element, like `image` (an `<img>`) or `icon` (an `<svg>`). Styling that element from the parent is clear and safe, so a modifier class adds nothing. Keep it to simple, local looks (`border-radius`, `object-fit`, `color`), and scope it under a parent class so it only hits the snippet you mean. From `sections/cart-notification-content.liquid`:
+
+```liquid
+<div class="notification-product">
+  {% render 'image', image: image, sizes: '100px, 100px' %}
+  ...
+</div>
+```
+
+```css
+.cart-notification-content {
+  .notification-product {
+    img {
+      border-radius: 0.25rem;
+    }
+  }
+}
+```
+
+This doesn't apply to snippets with their own structure, like `product-card`. Restyle those through a modifier class.
 
 **Restyling, incorrect:** the section changes how the card looks from the outside.
 

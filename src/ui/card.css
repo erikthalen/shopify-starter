@@ -1,5 +1,5 @@
 /* card */
-article {
+article.card {
   --border-radius: var(--ui-rounded-5);
   background-color: var(--ui-neutral-0);
   border-radius: var(--border-radius);
@@ -76,7 +76,7 @@ article {
 }
 
 @container (width <= 320px) {
-  article {
+  article.card {
     padding: 0.75em;
 
     & > header,

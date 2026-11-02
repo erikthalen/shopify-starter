@@ -19,19 +19,9 @@
           "type": "_account-link",
           "settings": {},
           "blocks": {}
-        },
-        "cart_drawer": {
-          "type": "_cart-drawer",
-          "settings": {},
-          "blocks": {}
         }
       },
-      "block_order": [
-        "localization_form",
-        "predictive_search",
-        "account_link",
-        "cart_drawer"
-      ],
+      "block_order": ["localization_form", "predictive_search", "account_link"],
       "name": "Header",
       "settings": {}
     }

@@ -10,6 +10,7 @@
   "type": "module",
   "scripts": {
     "dev": "node esbuild.config.js --watch & shopify theme dev -e development --open",
+    "build": "node esbuild.config.js",
     "deploy": "node esbuild.config.js && shopify theme push -e production",
     "prettier": "prettier . --write"
   },

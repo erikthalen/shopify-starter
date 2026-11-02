@@ -15,9 +15,9 @@
   style="--view-transition-name: product-card-{{ variant.id }}"
 >
   {% if variant.featured_image != blank %}
-    {% render 'image', image: variant.featured_image, sizes: '50vw, 20vw', class: 'card-image' %}
+    {% render 'image', image: variant.featured_image, sizes: '50vw, 20vw' %}
   {% else %}
-    {% render 'image', image: product.featured_image, sizes: '50vw, 20vw', class: 'card-image' %}
+    {% render 'image', image: product.featured_image, sizes: '50vw, 20vw' %}
   {% endif %}
 
   <a href="{{ product.url }}">
@@ -38,12 +38,14 @@
     justify-items: baseline;
     gap: 0.75rem;
 
-    .card-image {
+    img {
       border-radius: 0.25rem;
     }
 
     /* make the whole card clickable */
     a {
+      text-decoration: none;
+      
       &::before {
         position: absolute;
         inset: 0;

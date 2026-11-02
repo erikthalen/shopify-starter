@@ -10,7 +10,7 @@
   style="--view-transition-name: cart-item-{{ id }}"
 >
   {%- if item.image -%}
-    {% render 'image', image: item.image, sizes: '100px, 100px', class: 'item-image' %}
+    {% render 'image', image: item.image, sizes: '100px, 100px' %}
   {%- endif -%}
 
   <div class="item-details">
@@ -147,7 +147,7 @@
       inset: calc(50% - 0.5lh);
     }
 
-    .item-image {
+    img {
       width: 7.5rem;
       border-radius: 0.25rem;
     }
@@ -167,6 +167,8 @@
       justify-content: space-between;
 
       a {
+        text-decoration: none;
+        
         &::after {
           position: absolute;
           inset: 0;

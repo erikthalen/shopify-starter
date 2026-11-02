@@ -12,7 +12,7 @@
             | default: product.featured_image
           -%}
 
-          {% render 'image', image: image, class: 'result-thumbnail', loading: 'eager', sizes: '100px, 100px' %}
+          {% render 'image', image: image, loading: 'eager', sizes: '100px, 100px' %}
 
           <div class="result-info">
             <span>{{ product.title }}</span>
@@ -66,12 +66,12 @@
       &:hover {
         background-color: var(--ui-neutral-100);
       }
-    }
 
-    .result-thumbnail {
-      align-self: start;
-      border-radius: 0.25rem;
-      width: 5rem;
+      img {
+        align-self: start;
+        width: 5rem;
+        border-radius: 0.25rem;
+      }
     }
 
     .result-info {

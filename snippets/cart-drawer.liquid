@@ -1,14 +1,4 @@
-{% doc %}
-  Outputs a cart icon link and a slide-in `<dialog>` from the right showing the cart contents.
-  Clicking the link opens the drawer instead of navigating to the cart page.
-  Cart items are rendered by the `cart-form` snippet.
-  The cart item count (`#cart_amount`) is updated when products are added via htmx.
-
-  @example
-  {% content_for 'block', type: '_cart-drawer', id: 'cart_drawer' %}
-{% enddoc %}
-
-<div id="cart_drawer">
+<div id="cart_drawer" class="cart-drawer">
   <a
     href="{{ routes.cart_url }}"
     onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('cart_drawer_dialog')?.showModal()"
@@ -18,7 +8,8 @@
     {% endif %}
   >
     <span class="desktop-only">Cart</span>
-    <span class="mobile-only">{% render 'icon', name: 'basket' %}</span>
+
+    {% render 'icon', name: 'basket', class: 'mobile-only' %}
 
     (
     {{- cart.item_count -}}
@@ -31,7 +22,7 @@
     closedby="any"
     class="drawer"
   >
-    <article class="drawer-content">
+    <article>
       <header>
         <span>
           Your cart (
@@ -80,29 +71,39 @@
   .cart-drawer {
     dialog {
       view-transition-name: cart-drawer-dialog;
-    }
 
-    .drawer-content {
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      height: 100%;
-
-      > header {
-        z-index: 1;
-
-        position: sticky;
-        top: 0;
-
-        justify-content: space-between;
-      }
-
-      > footer {
-        z-index: 1;
-
-        position: sticky;
-        bottom: 0;
+      > article {
+        isolation: isolate;
 
         display: grid;
+        grid-template-rows: auto 1fr auto;
+        height: 100%;
+
+        background-color: var(--ui-neutral-0);
+
+        > header {
+          z-index: 1;
+
+          position: sticky;
+          top: 0;
+
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.5rem;
+        }
+
+        > footer {
+          z-index: 1;
+
+          position: sticky;
+          bottom: 0;
+
+          padding: 0.5rem;
+
+          display: grid;
+          gap: 0.5rem;
+        }
       }
     }
 
@@ -115,6 +116,8 @@
       align-content: baseline;
       gap: 0.5rem;
 
+      padding-inline: 0.5rem;
+
       overflow: auto;
       overscroll-behavior: contain;
     }
@@ -125,15 +128,3 @@
     }
   }
 {% endstylesheet %}
-
-{% schema %}
-{
-  "name": "Cart drawer",
-  "class": "cart-drawer",
-  "presets": [
-    {
-      "name": "Cart drawer"
-    }
-  ]
-}
-{% endschema %}

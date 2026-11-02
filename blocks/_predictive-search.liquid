@@ -14,10 +14,11 @@
   onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('predictive_search')?.showModal()"
 >
   <span class="desktop-only">Search</span>
-  <span class="mobile-only">{% render 'icon', name: 'magnifier' %}</span>
+  
+  {% render 'icon', name: 'magnifier', class: 'mobile-only' %}
 </a>
 
-<dialog scroll-lock id="predictive_search" closedby="any">
+<dialog scroll-lock id="predictive_search" closedby="any" class="drawer" data-position="top">
   <form method="dialog" class="contents">
     <button class="close-button button ghost square" aria-label="Close search dialog">
       {% render 'icon', name: 'cross' %}
@@ -127,11 +128,8 @@
     isolation: isolate;
 
     dialog {
-      inset: 1rem 1rem auto;
-
-      width: calc(100% - 2rem);
-      max-width: none;
-      max-height: calc(var(--vvh) - 2rem);
+      height: auto;
+      max-height: var(--vvh);
 
       &:not(:has(.predictive-search-results > *)) {
         touch-action: none;
@@ -153,6 +151,9 @@
         max-height: inherit;
         overflow: auto;
         overscroll-behavior: contain;
+
+        background-color: var(--ui-neutral-0);
+        padding: 0 1rem 1rem;
       }
     }
 
@@ -202,10 +203,10 @@
 
     .search-form {
       position: sticky;
-      top: -1.5rem;
+      top: 0rem;
       background-color: var(--ui-neutral-0);
 
-      padding-block: 1.5rem;
+      padding-block: 3rem 1rem;
 
       @media (width >= 48rem) {
         padding-top: 7.5rem;

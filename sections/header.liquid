@@ -1,37 +1,55 @@
 <nav>
-  <a
-    href="{{ routes.root_url }}"
-    class="home-link button ghost square"
-    {% if request.path == routes.root_url %}
-      aria-current="page"
-    {% endif %}
-  >
-    {% if shop.brand.logo != blank %}
+  {% if shop.brand.logo != blank %}
+    <a
+      href="{{ routes.root_url }}"
+      class="home-link"
+      {% if request.path == routes.root_url %}
+        aria-current="page"
+      {% endif %}
+    >
+      <span class="sr-only">Home</span>
       {% render 'image', image: shop.brand.logo, alt: 'The logo', sizes: '40px, 40px' %}
-    {% else %}
+    </a>
+  {% else %}
+    <a
+      href="{{ routes.root_url }}"
+      class="button ghost"
+      {% if request.path == routes.root_url %}
+        aria-current="page"
+      {% endif %}
+    >
       Home
-    {% endif %}
-  </a>
+    </a>
+  {% endif %}
 
-  <a
-    href="{{ routes.collections_url }}"
-    class="desktop-only button ghost"
-    {% if request.path contains routes.collections_url %}
-      aria-current="page"
-    {% endif %}
-  >
-    Shop
-  </a>
+  {% for link in section.settings.main_menu.links %}
+    <a
+      href="{{ link.url }}"
+      class="desktop-only button ghost"
+      {% if link.current %}
+        aria-current="page"
+      {% endif %}
+      {% if link.active %}
+        aria-current="true"
+      {% endif %}
+    >
+      {{ link.title }}
+    </a>
+  {% endfor %}
 </nav>
 
 <div class="mobile-only">
-  {% content_for 'block', type: '_mobile-menu', id: 'mobile_menu' %}
+  {% render 'mobile-menu', menu: section.settings.main_menu %}
 </div>
 
 <nav>
   <span class="desktop-only">{% render 'account-link' %}</span>
 
   {% content_for 'blocks' %}
+
+  {% render 'localization-form' %}
+
+  {% render 'cart-drawer' %}
 </nav>
 
 {% stylesheet %}
@@ -76,6 +94,7 @@
     .home-link {
       display: flex;
       height: var(--header-height);
+      padding: 0.25rem;
 
       img {
         height: 100%;
@@ -95,13 +114,14 @@
     "groups": ["header"]
   },
   "limit": 1,
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Main menu"
+    }
+  ],
   "blocks": [
-    {
-      "type": "_localization-form"
-    },
-    {
-      "type": "_cart-drawer"
-    },
     {
       "type": "_predictive-search"
     }
@@ -111,13 +131,7 @@
       "name": "Header",
       "blocks": [
         {
-          "type": "_localization-form"
-        },
-        {
           "type": "_predictive-search"
-        },
-        {
-          "type": "_cart-drawer"
         }
       ]
     }

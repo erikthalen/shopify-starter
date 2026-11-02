@@ -12,7 +12,7 @@
 </header>
 
 <div class="notification-product">
-  {% render 'image', image: image, class: 'notification-thumbnail', sizes: '100px, 100px' %}
+  {% render 'image', image: image, sizes: '100px, 100px' %}
 
   <div>
     <h2>{{ product.title }}</h2>
@@ -39,7 +39,12 @@
 
 {% stylesheet %}
   .cart-notification-content {
+    background-color: var(--ui-neutral-0);
+    padding: 0.5rem;
+
     > header {
+      display: flex;
+      align-items: center;
       justify-content: space-between;
     }
 
@@ -47,8 +52,9 @@
       display: grid;
       grid-template-columns: 100px 1fr;
       gap: 1rem;
+      padding-block: 1rem;
 
-      .notification-thumbnail {
+      img {
         border-radius: 0.25rem;
       }
 
@@ -58,6 +64,8 @@
     }
 
     > footer {
+      display: flex;
+      align-items: center;
       justify-content: space-between;
     }
   }

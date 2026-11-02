@@ -1,0 +1,70 @@
+{% doc %}
+  @param {object} menu - A Shopify navigation menu
+{% enddoc %}
+
+<div class="mobile-menu">
+  <button class="button ghost" onclick="document.getElementById('mobile_menu')?.showModal()">Menu</button>
+
+  <dialog
+    scroll-lock
+    id="mobile_menu"
+    closedby="any"
+    class="drawer menu-dialog"
+    data-position="left"
+  >
+    <article>
+      <header>
+        <p>Menu</p>
+
+        <form method="dialog">
+          <button aria-title="Close mobile menu" class="button ghost square">
+            {% render 'icon', name: 'cross' %}
+          </button>
+        </form>
+      </header>
+
+      <nav>
+        {% for link in menu.links %}
+          <a
+            href="{{ link.url }}"
+            class="button secondary"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+            {% if link.active %}
+              aria-current="true"
+            {% endif %}
+          >
+            {{ link.title }}
+          </a>
+        {% endfor %}
+
+        {% render 'account-link' %}
+      </nav>
+    </article>
+  </dialog>
+</div>
+
+{% stylesheet %}
+  .mobile-menu {
+    dialog {
+      > article {
+        background-color: var(--ui-neutral-0);
+        
+        > header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1rem;
+        }
+        
+        > nav {
+          display: grid;
+          justify-items: baseline;
+          gap: 1rem;
+          padding: 1rem;
+        }
+      }
+    }
+  }
+{% endstylesheet %}

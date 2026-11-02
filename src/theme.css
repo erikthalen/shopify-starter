@@ -1,6 +1,6 @@
-@layer ui-reset, ui;
+@layer reset, ui;
 
-@import "./ui/reset.css" layer(ui-reset);
+@import "./ui/reset.css" layer(reset);
 @import "./ui/tokens.css" layer(ui);
 
 /* ui components, in dependency order */
@@ -50,8 +50,8 @@ html {
   --zoom-amount: 0.2;
   --header-height: 2.5rem;
   font-size: max(
-    12px,
-    calc(12px + 12 * var(--zoom-amount) * (100vw - 1440px) / 1440)
+    16px,
+    calc(16px + 16 * var(--zoom-amount) * (100vw - 1440px) / 1440)
   );
 
   overscroll-behavior: none;
