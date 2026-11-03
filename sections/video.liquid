@@ -1,0 +1,50 @@
+{% if section.settings.custom_mobile_media and section.settings.video_mobile != blank %}
+  {% render 'video', video: section.settings.video, class: 'desktop-only', poster: section.settings.custom_poster %}
+  {% assign mobile_poster = section.settings.custom_poster_mobile | default: section.settings.custom_poster %}
+  {% render 'video', video: section.settings.video_mobile, class: 'mobile-only', poster: mobile_poster %}
+{% else %}
+  {% render 'video', video: section.settings.video, poster: section.settings.custom_poster %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_poster",
+      "label": "Custom poster",
+      "info": "Optional. The poster image shown before the video is played. Defaults to the first frame of the video"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_mobile_media",
+      "label": "Custom mobile media",
+      "default": false
+    },
+    {
+      "type": "video",
+      "id": "video_mobile",
+      "label": "Video",
+      "visible_if": "{{ section.settings.custom_mobile_media }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_poster_mobile",
+      "label": "Custom poster",
+      "info": "Optional. The poster image shown before the video is played. Defaults to the first frame of the video",
+      "visible_if": "{{ section.settings.custom_mobile_media }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
+{% endschema %}
